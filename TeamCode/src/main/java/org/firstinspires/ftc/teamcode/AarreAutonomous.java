@@ -54,9 +54,12 @@ public class AarreAutonomous extends LinearOpMode {
     private static final double FORWARD_SPEED;
     private static final double TURN_SPEED;
 
+    private static final double TEST_TIME_SECONDS;
+
     static {
         FORWARD_SPEED = 0.6;
         TURN_SPEED = 0.5;
+        TEST_TIME_SECONDS = 0.5;
     }
 
     private DcMotor leftMotor = null;
@@ -95,20 +98,19 @@ public class AarreAutonomous extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            telemetry.addData("Path", "Complete");
-            telemetry.update();
+            // Drive right wheel forward
+            while (runtime.seconds() < 0.5) {
+                leftMotor.setPower(0);
+                rightMotor.setPower(FORWARD_SPEED);
+            }
+            if (opModeIsActive() && (runtime.seconds() < 0.5)) sleep(1);
 
-            // Step 1:  Drive right wheel forward for 1 second
-            leftMotor.setPower(0);
-            rightMotor.setPower(FORWARD_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-                telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
+            // Drive left wheel forward
+            while (runtime.seconds() >= 0.5 && runtime.seconds() < 1.0) {
+                leftMotor.setPower(FORWARD_SPEED);
+                rightMotor.setPower(0);
             }
 
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.update();
         }
