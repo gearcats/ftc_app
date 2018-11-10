@@ -98,16 +98,22 @@ public class AarreAutonomous extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            // Drive right wheel forward
+            // Drive right wheel forward for half a second
             while (runtime.seconds() < 0.5) {
                 leftMotor.setPower(0);
                 rightMotor.setPower(FORWARD_SPEED);
             }
             if (opModeIsActive() && (runtime.seconds() < 0.5)) sleep(1);
 
-            // Drive left wheel forward
+            // Drive left wheel forward for half a second
             while (runtime.seconds() >= 0.5 && runtime.seconds() < 1.0) {
                 leftMotor.setPower(FORWARD_SPEED);
+                rightMotor.setPower(0);
+            }
+
+            // Stop
+            while (runtime.seconds() >= 1.0) {
+                leftMotor.setPower(0);
                 rightMotor.setPower(0);
             }
 
