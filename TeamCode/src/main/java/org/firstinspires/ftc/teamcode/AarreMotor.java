@@ -86,10 +86,21 @@ class AarreMotor {
      * @return  The number of milliseconds during which the motor must not have moved more than
      *          the stall detection tolerance before we call it a stall.
      */
-    public int getstallTimeLimitInMilliseconds() {
+    public int getStallTimeLimitInMilliseconds() {
         return stallTimeLimitInMilliseconds;
     }
 
+    /**
+     * Get the number of milliseconds for which the motor has been stalled.
+     *
+     * @return  The integer number of milliseconds during which the motor speed has been
+     *          lower than the stall detection tolerance.
+     */
+    public int getTimeStalledInMilliseconds() {
+
+        // Take the time stalled in (double) milliseconds, round to nearest long and cast to int
+        return (int) Math.round(timeStalledInMilliseconds.time());
+    }
     /**
      * Set the stall detection time limit
      *
@@ -153,7 +164,7 @@ class AarreMotor {
      */
     public boolean isStalled() {
 
-        telemetry.addData("time stalled = ", "%d ms", timeStalledInMilliseconds.time());
+        telemetry.addData("time stalled = ", "%d ms", getTimeStalledInMilliseconds());
         telemetry.addData("stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
 
         int newTickNumber = this.getCurrentTickNumber();
