@@ -63,8 +63,6 @@ class AarreRobot {
         rightMotor  = hardwareMap.get(DcMotor.class, "right");
         armMotor    = new AarreMotor(hardwareMap, "arm", telemetry);
         riserMotor  = hardwareMap.get(DcMotor.class, "riser");
-        hookServo   = hardwareMap.get(Servo.class,   "hook");
-        scoopServo  = hardwareMap.get(CRServo.class, "scoop");
 
         // Configure drive motors such that a positive power command moves them forwards
         // and causes the encoders to count UP. Note that, as in most robots, the drive
@@ -101,15 +99,22 @@ class AarreRobot {
 
         // Initialize the servos
 
-        hookServo.setPosition(MID_SERVO);
+        //hookServo.setPosition(MID_SERVO);
         //scoopServo.setPosition(MID_SERVO);
 
         // Save reference to Hardware map
         this.hardwareMap = hardwareMap;
 
+        telemetry.addData("Status", "Lowering arm");
         lowerArm();
+
+        telemetry.addData("Status", "Lowering riser");
         lowerRiser();
+
+        telemetry.addData("Status", "Raising hook");
         raiseHook();
+
+        telemetry.addData("Status", "Reset complete");
 
     }
 
@@ -118,19 +123,21 @@ class AarreRobot {
      */
     public void lowerArm() {
         armMotor.setStallTimeLimitInMilliseconds(100);
-        armMotor.runUntilStalled();
+        armMotor.runUntilStalled(-0.1);
     }
 
     /**
      * TODO Raise the hook to its upward position while avoiding stalling the hook servo
      */
     public void raiseHook() {
+
     }
 
     /**
      * TODO Lower the riser to its downward position while avoiding stalling the riser motor
      */
     public void lowerRiser() {
+
     }
 }
 

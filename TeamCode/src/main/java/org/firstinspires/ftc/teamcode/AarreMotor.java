@@ -153,38 +153,29 @@ class AarreMotor {
      */
     public boolean isStalled() {
 
-        if(telemetry != null) {
-            telemetry.addData("time stalled = ", "%5.2f ms", timeStalledInMilliseconds.time());
-            telemetry.addData("stall time limit = ", "%5.2f ms", stallTimeLimitInMilliseconds);
-        }
+        telemetry.addData("time stalled = ", "%d ms", timeStalledInMilliseconds.time());
+        telemetry.addData("stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
 
         int newTickNumber = this.getCurrentTickNumber();
 
-        if(telemetry != null) {
-            telemetry.addData("checking for a stall", "!");
-        }
+        telemetry.addData("checking for a stall", "!");
 
         // if the motor has not moved since the last time the position was read
 
         if (Math.abs(newTickNumber - oldTickNumber) < stallDetectionToleranceInTicks) {
-            if(telemetry != null) {
-                telemetry.addData("motor is not moving", "!");
-            }
+            telemetry.addData("motor is not moving", "!");
 
             // motor has not moved, checking to see how long the motor has been stalled for
             if (timeStalledInMilliseconds.time() > stallTimeLimitInMilliseconds) {
 
-                if(telemetry != null){
-                    telemetry.addData("stall timer has expired", "!");
-                }
+                telemetry.addData("stall timer has expired", "!");
+
                 // it has been stalled for more than the time limit
                 return true;
 
             } else {
 
-                if(telemetry != null) {
-                    telemetry.addData("stall time has NOT expired", "!");
-                }
+                telemetry.addData("stall time has NOT expired", "!");
 
             }
         } else {
@@ -219,8 +210,18 @@ class AarreMotor {
 
     }
 
-    public void runUntilStalled() {
-        while (!(isStalled())) setPower(0.1);
+    /**
+     * Run this motor until it stalls
+     *
+     * @param power How much power to apply to the motor, in the interval
+     *              [-1,1].
+     */
+    public void runUntilStalled(double power) {
+        setPower(power);
+        while (!(isStalled())) {
+            telemetry.addData("Status", "Not stalled yet...");
+            telemetry.update();
+        }
     }
 
     /**
