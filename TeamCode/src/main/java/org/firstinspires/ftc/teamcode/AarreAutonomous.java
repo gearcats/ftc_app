@@ -41,6 +41,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * declared public.
  *
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 @Autonomous(name="Aarre Autonomous", group="Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
@@ -160,9 +161,6 @@ public class AarreAutonomous extends LinearOpMode {
      *                     Negative values move the riser down.
      */
     public void moveRiser(int revolutions) {
-
-        int newLeftTarget;
-        int newRightTarget;
 
         int startPositionCounts;
         int startPositionRevolutions;

@@ -24,7 +24,7 @@ class AarreRobot {
     public static final double ARM_UP_POWER                 =  0.45 ;
     public static final double ARM_DOWN_POWER               = -0.45 ;
 
-                                HardwareMap hardwareMap     =  null;
+    private HardwareMap hardwareMap     =  null;
 
     private ElapsedTime period          = new ElapsedTime();
 
@@ -118,17 +118,17 @@ class AarreRobot {
      */
     public void lowerArm() {
         armMotor.setStallTimeLimitInMilliseconds(100);
-        //armMotor.runUntilStalled();
+        armMotor.runUntilStalled();
     }
 
     /**
-     * Raise the hook to its upward position while avoiding stalling the hook servo
+     * TODO Raise the hook to its upward position while avoiding stalling the hook servo
      */
     public void raiseHook() {
     }
 
     /**
-     * Lower the riser to its downward position while avoiding stalling the riser motor
+     * TODO Lower the riser to its downward position while avoiding stalling the riser motor
      */
     public void lowerRiser() {
     }

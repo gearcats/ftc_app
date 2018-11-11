@@ -29,7 +29,6 @@ class AarreMotor {
 
    private int oldTickNumber;
 
-   private ElapsedTime  completionTimer;
    private DcMotor      motor;
    private int          stallTimeLimitInMilliseconds = 0;
    private int          stallDetectionToleranceInTicks = 5;
@@ -58,11 +57,11 @@ class AarreMotor {
      * @param motorName
      * @param hardwareMap
      */
+    @SuppressWarnings("unused")
     public AarreMotor(HardwareMap hardwareMap, String motorName) {
 
         motor = hardwareMap.get(DcMotor.class, motorName);
         timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        completionTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
         setDefaults();
     }
 
@@ -80,8 +79,6 @@ class AarreMotor {
         this.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.setPower(0);
     }
-
-
 
     /**
      * Get the stall detection time limit
@@ -124,6 +121,7 @@ class AarreMotor {
      *                                          stallTimeLimitInMilliseconds, then we consider the
      *                                          motor stalled.
      */
+    @SuppressWarnings("WeakerAccess")
     public void setStallDetectionToleranceInTicks(int stallDetectionToleranceInTicks) {
         this.stallDetectionToleranceInTicks = stallDetectionToleranceInTicks;
     }
@@ -214,6 +212,7 @@ class AarreMotor {
      *
      * @return The current reading of the encoder for this motor, in ticks.
      */
+    @SuppressWarnings("WeakerAccess")
     public int getCurrentTickNumber() {
 
         return motor.getCurrentPosition();
@@ -229,6 +228,7 @@ class AarreMotor {
      *
      * @param mode the new current run mode for this motor
      */
+    @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
     void setMode(DcMotor.RunMode mode) {
         motor.setMode(mode);
     }

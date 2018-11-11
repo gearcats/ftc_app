@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This file contains Aarre's experimental code to autonomously "reset" the robot to a state
@@ -13,11 +12,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *
  */
 
+@SuppressWarnings("WeakerAccess")
 @Autonomous(name="Aarre Autonomous Reset", group="Aarre")
 public class AarreAutonomousReset extends LinearOpMode {
 
     private AarreRobot robot = new AarreRobot();
-    private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -26,6 +25,9 @@ public class AarreAutonomousReset extends LinearOpMode {
         telemetry.update();
 
         robot.init(hardwareMap, telemetry);
+
+        // Wait for the driver to press PLAY
+        waitForStart();
 
         robot.lowerArm();
         robot.lowerRiser();
