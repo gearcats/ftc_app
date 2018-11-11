@@ -31,19 +31,20 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * This file contains Aarre's experimental code
+ * This file contains Aarre's experimental code for the autonomous mode
+ *
+ * To avoid issuing an error on the phones, any OpMode class must be
+ * declared public.
  *
  */
-
 @Autonomous(name="Aarre Autonomous", group="Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
+    private AarreRobot robot = new AarreRobot();
     private ElapsedTime runtime = new ElapsedTime();
 
     private static final double DRIVE_SPEED                     = 0.6;      // How fast to move forward or back
@@ -54,64 +55,26 @@ public class AarreAutonomous extends LinearOpMode {
     private static final double WHEEL_DIAMETER_INCHES           = 5.5 ;     // For figuring circumference; could be 5.625, also depends on treads
     private static final double COUNTS_PER_INCH                 = (COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    // TODO: Use Math.PI
-
-    private DcMotor leftMotor = null;
-    private DcMotor rightMotor = null;
-    private DcMotor armMotor = null;
-    private DcMotor riserMotor = null;
-    private Servo   hookServo = null;
-    private CRServo scoopServo = null;
+    // TODO: Use Math.PI above
 
     @Override
     public void runOpMode() {
 
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Initializing robot");
         telemetry.update();
 
-        // Initialize the hardware variables. The strings used here as parameters
-        // to 'get' must correspond to the names assigned in the robot configuration
-        // in the FTC Robot Controller app on the phone
-
-        leftMotor  = hardwareMap.get(DcMotor.class, "left");
-        rightMotor = hardwareMap.get(DcMotor.class, "right");
-        armMotor   = hardwareMap.get(DcMotor.class, "arm");
-        riserMotor = hardwareMap.get(DcMotor.class, "riser");
-        hookServo  = hardwareMap.get(Servo.class, "hook");
-        scoopServo = hardwareMap.get(CRServo.class, "scoop");
-
-        // Configure drive motors such that a positive power command moves them forwards
-        // and causes the encoders to count UP. Note that, as in most robots, the drive
-        // motors are mounted in opposite directions.
-
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightMotor.setDirection(DcMotor.Direction.FORWARD);
-
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Resetting Encoders");    //
-        telemetry.update();
-
-        // This code REQUIRES that you have encoders on the wheel motors
-
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0",  "Starting at %7d :%7d",
-                leftMotor.getCurrentPosition(),
-                rightMotor.getCurrentPosition());
-        telemetry.update();
+        robot.init(hardwareMap, telemetry);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            telemetry.addData("Status", "Ready to run");    //
+            telemetry.update();
 
             // Step through each leg of the path,
             // Note: Reverse movement is obtained by setting a negative distance (not speed)
@@ -142,19 +105,19 @@ public class AarreAutonomous extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            leftMotor.setTargetPosition(newLeftTarget);
-            rightMotor.setTargetPosition(newRightTarget);
+            newLeftTarget = robot.leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightTarget = robot.rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            robot.leftMotor.setTargetPosition(newLeftTarget);
+            robot.rightMotor.setTargetPosition(newRightTarget);
 
             // Turn On RUN_TO_POSITION
-            leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            leftMotor.setPower(Math.abs(speed));
-            rightMotor.setPower(Math.abs(speed));
+            robot.leftMotor.setPower(Math.abs(speed));
+            robot.rightMotor.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -164,21 +127,21 @@ public class AarreAutonomous extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (leftMotor.isBusy() && rightMotor.isBusy())) {
+                    (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d", leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition());
+                telemetry.addData("Path2",  "Running at %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
-            leftMotor.setPower(0);
-            rightMotor.setPower(0);
+            robot.leftMotor.setPower(0);
+            robot.rightMotor.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             //  sleep(250);   // optional pause after each move
         }
@@ -215,7 +178,7 @@ public class AarreAutonomous extends LinearOpMode {
 
             // Determine new target position and pass to motor controller
 
-            startPositionCounts = riserMotor.getCurrentPosition();
+            startPositionCounts = robot.riserMotor.getCurrentPosition();
             startPositionRevolutions = startPositionCounts / COUNTS_PER_MOTOR_REVOLUTION;
 
             targetPositionRevolutions = startPositionRevolutions + 1;
@@ -224,26 +187,26 @@ public class AarreAutonomous extends LinearOpMode {
             //targetPositionInches = leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
             //newRightTarget = rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
 
-            riserMotor.setTargetPosition(targetPositionCounts);
+            robot.riserMotor.setTargetPosition(targetPositionCounts);
 
             // Turn On RUN_TO_POSITION
-            riserMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.riserMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time
             runtime.reset();
 
-            riserMotor.setPower(Math.abs(riserSpeed));
+            robot.riserMotor.setPower(Math.abs(riserSpeed));
 
             // Keep looping while we are still active, and there is time left, and both motors are running.
-
+            //
             //noinspection StatementWithEmptyBody
-            while (opModeIsActive() && (runtime.seconds() < timeoutS) && riserMotor.isBusy());
+            while (opModeIsActive() && (runtime.seconds() < timeoutS) && robot.riserMotor.isBusy());
 
             // Stop all motion;
-            riserMotor.setPower(0);
+            robot.riserMotor.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            riserMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.riserMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             //  sleep(250);   // optional pause after each move
         }
