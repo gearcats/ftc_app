@@ -39,11 +39,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * This file contains Aarre's experimental code
  *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
 @Autonomous(name="Aarre Autonomous", group="Aarre")
@@ -51,22 +46,21 @@ public class AarreAutonomous extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    private static final double FORWARD_SPEED;
-    private static final double TURN_SPEED;
+    private static final double DRIVE_SPEED                     = 0.6;      // How fast to move forward or back
+    private static final double TURN_SPEED                      = 0.5;      // How fast to move when turning
+    private static final double TEST_TIME_SECONDS               = 0.5;
+    private static final int COUNTS_PER_MOTOR_REVOLUTION        = 1440 ;    // eg: TETRIX Motor Encoder, TorqueNado
+    private static final double DRIVE_GEAR_REDUCTION            = 1.0 ;     // This is 1.0 for our direct-drive wheels
+    private static final double WHEEL_DIAMETER_INCHES           = 5.5 ;     // For figuring circumference; could be 5.625, also depends on treads
+    private static final double COUNTS_PER_INCH                 = (COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    private static final double TEST_TIME_SECONDS;
-
-    static {
-        FORWARD_SPEED = 0.6;
-        TURN_SPEED = 0.5;
-        TEST_TIME_SECONDS = 0.5;
-    }
+    // TODO: Use Math.PI
 
     private DcMotor leftMotor = null;
     private DcMotor rightMotor = null;
     private DcMotor armMotor = null;
     private DcMotor riserMotor = null;
-    private Servo hookServo = null;
+    private Servo   hookServo = null;
     private CRServo scoopServo = null;
 
     @Override
@@ -79,17 +73,37 @@ public class AarreAutonomous extends LinearOpMode {
         // to 'get' must correspond to the names assigned in the robot configuration
         // in the FTC Robot Controller app on the phone
 
-        leftMotor = hardwareMap.get(DcMotor.class, "left");
+        leftMotor  = hardwareMap.get(DcMotor.class, "left");
         rightMotor = hardwareMap.get(DcMotor.class, "right");
-        armMotor = hardwareMap.get(DcMotor.class, "arm");
+        armMotor   = hardwareMap.get(DcMotor.class, "arm");
         riserMotor = hardwareMap.get(DcMotor.class, "riser");
-        hookServo = hardwareMap.get(Servo.class, "hook");
+        hookServo  = hardwareMap.get(Servo.class, "hook");
         scoopServo = hardwareMap.get(CRServo.class, "scoop");
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
+        // Configure drive motors such that a positive power command moves them forwards
+        // and causes the encoders to count UP. Note that, as in most robots, the drive
+        // motors are mounted in opposite directions.
+
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
         rightMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Resetting Encoders");    //
+        telemetry.update();
+
+        // This code REQUIRES that you have encoders on the wheel motors
+
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Send telemetry message to indicate successful Encoder reset
+        telemetry.addData("Path0",  "Starting at %7d :%7d",
+                leftMotor.getCurrentPosition(),
+                rightMotor.getCurrentPosition());
+        telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -98,27 +112,140 @@ public class AarreAutonomous extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            // Drive right wheel forward for half a second
-            while (runtime.seconds() < 0.5) {
-                leftMotor.setPower(0);
-                rightMotor.setPower(FORWARD_SPEED);
-            }
-            if (opModeIsActive() && (runtime.seconds() < 0.5)) sleep(1);
 
-            // Drive left wheel forward for half a second
-            while (runtime.seconds() >= 0.5 && runtime.seconds() < 1.0) {
-                leftMotor.setPower(FORWARD_SPEED);
-                rightMotor.setPower(0);
-            }
+            // Step through each leg of the path,
+            // Note: Reverse movement is obtained by setting a negative distance (not speed)
+            encoderDrive(DRIVE_SPEED,  12,  12, 5.0);  // Forward 12 inches with 5 sec timeout
+            encoderDrive(TURN_SPEED,   12, -12, 4.0);  // Turn right 12 inches with 4 sec timeout
+            encoderDrive(DRIVE_SPEED, -12, -12, 4.0);  // Reverse 12 inches with 4 Sec timeout
 
-            // Stop
-            while (runtime.seconds() >= 1.0) {
-                leftMotor.setPower(0);
-                rightMotor.setPower(0);
-            }
-
-            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Path", "Complete");
             telemetry.update();
+        }
+    }
+
+    /*
+     *  Method to perform a relative move, based on encoder counts.
+     *  Encoders are not reset as the move is based on the current position.
+     *  Move will stop if any of three conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Move runs out of time
+     *  3) Driver stops the opmode running.
+     */
+    private void encoderDrive(double speed,
+                             double leftInches, double rightInches,
+                             double timeoutS) {
+        int newLeftTarget;
+        int newRightTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newLeftTarget = leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightTarget = rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            leftMotor.setTargetPosition(newLeftTarget);
+            rightMotor.setTargetPosition(newRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            leftMotor.setPower(Math.abs(speed));
+            rightMotor.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (leftMotor.isBusy() && rightMotor.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d", leftMotor.getCurrentPosition(), rightMotor.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            leftMotor.setPower(0);
+            rightMotor.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after each move
+        }
+    }
+
+    /*
+     *  Move the riser based on encoder counts.
+     *  Encoders are not reset as the move is based on the current position.
+     *  Move will stop if any of three conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Move runs out of time
+     *  3) Driver stops the opmode running.
+     *
+     *  @param revolutions The number of (motor shaft) revolutions to move the riser.
+     *                     Positive values move the riser up.
+     *                     Negative values move the riser down.
+     */
+    public void moveRiser(int revolutions) {
+
+        int newLeftTarget;
+        int newRightTarget;
+
+        int startPositionCounts;
+        int startPositionRevolutions;
+
+        int targetPositionCounts;
+        int targetPositionRevolutions;
+
+        final double riserSpeed         = 0.1;
+        final int    timeoutS           = 1;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position and pass to motor controller
+
+            startPositionCounts = riserMotor.getCurrentPosition();
+            startPositionRevolutions = startPositionCounts / COUNTS_PER_MOTOR_REVOLUTION;
+
+            targetPositionRevolutions = startPositionRevolutions + 1;
+            targetPositionCounts = targetPositionRevolutions * COUNTS_PER_MOTOR_REVOLUTION;
+
+            //targetPositionInches = leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            //newRightTarget = rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+
+            riserMotor.setTargetPosition(targetPositionCounts);
+
+            // Turn On RUN_TO_POSITION
+            riserMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time
+            runtime.reset();
+
+            riserMotor.setPower(Math.abs(riserSpeed));
+
+            // Keep looping while we are still active, and there is time left, and both motors are running.
+
+            //noinspection StatementWithEmptyBody
+            while (opModeIsActive() && (runtime.seconds() < timeoutS) && riserMotor.isBusy());
+
+            // Stop all motion;
+            riserMotor.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            riserMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after each move
         }
     }
 }
