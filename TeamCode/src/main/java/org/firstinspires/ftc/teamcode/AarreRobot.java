@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
@@ -26,34 +25,44 @@ class AarreRobot {
 
     private HardwareMap hardwareMap     =  null;
 
+    private Telemetry telemetry = null;
+
     private ElapsedTime period          = new ElapsedTime();
 
-    public DcMotor leftMotor;
-    public DcMotor rightMotor;
-    public AarreMotor armMotor;
-    public DcMotor riserMotor;
-    public Servo   hookServo;
-    public CRServo scoopServo;
+    /** These properties are package-private so methods of other classes in this package can use them.
+     *
+     *  TODO: Implement getters and setters to keep these properties private.
+     *
+     */
+    @SuppressWarnings("WeakerAccess")
+    DcMotor leftMotor;
+    @SuppressWarnings("WeakerAccess")
+    DcMotor rightMotor;
+    @SuppressWarnings("WeakerAccess")
+    AarreMotor armMotor;
+    @SuppressWarnings("WeakerAccess")
+    DcMotor riserMotor;
+    @SuppressWarnings("WeakerAccess")
+    Servo   hookServo;
+    @SuppressWarnings("WeakerAccess")
+    CRServo scoopServo;
 
     /**
      *
      */
-    public AarreRobot(){
+    AarreRobot(){
 
     }
-
-
-
 
 
     /**
      * Initialize hardware interfaces
      *
      * @param hardwareMap   An instance of {@link HardwareMap}
-     * @param telemetry     An instance of {@Link Telemetry}
+     * @param telemetry     An instance of {@link Telemetry}
      *
      */
-    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+    void init(HardwareMap hardwareMap, Telemetry telemetry) {
 
         // Define and initialize the motors. The strings used here as parameters
         // to 'get' must correspond to the names assigned in the robot configuration
@@ -121,22 +130,43 @@ class AarreRobot {
     /**
      * Lower the arm to its downward position while avoiding stalling the arm motor
      */
-    public void lowerArm() {
+    void lowerArm() {
         armMotor.setStallTimeLimitInMilliseconds(100);
         armMotor.runUntilStalled(-0.1);
     }
 
     /**
-     * TODO Raise the hook to its upward position while avoiding stalling the hook servo
+     * TODO Lower the hook to its downward position while avoiding stalling the hook servo
      */
-    public void raiseHook() {
+    void lowerHook() {
 
     }
 
     /**
      * TODO Lower the riser to its downward position while avoiding stalling the riser motor
      */
-    public void lowerRiser() {
+    void lowerRiser() {
+
+    }
+
+    /**
+     * TODO Raise the arm to its upward position while avoiding stalling the arm motor
+     */
+    void raiseArm() {
+
+    }
+
+    /**
+     * TODO Raise the hook to its upward position while avoiding stalling the hook servo
+     */
+    void raiseHook() {
+
+    }
+
+    /**
+     * TODO Raise the riser to its upward position while avoiding stalling the riser motor
+     */
+    void raiseRiser() {
 
     }
 }

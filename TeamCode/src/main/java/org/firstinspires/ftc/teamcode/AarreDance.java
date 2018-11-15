@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @SuppressWarnings("WeakerAccess")
 @Autonomous(name="Aarre Autonomous Reset", group="Aarre")
-public class AarreAutonomousReset extends LinearOpMode {
+public class AarreDance extends LinearOpMode {
 
     private AarreRobot robot = new AarreRobot();
 
@@ -29,10 +29,10 @@ public class AarreAutonomousReset extends LinearOpMode {
         // Wait for the driver to press PLAY
         waitForStart();
 
-        robot.raiseArm()
+        robot.raiseArm();
         robot.lowerArm();
 
-        robot.raiseRiser;
+        robot.raiseRiser();
         robot.lowerRiser();
 
         robot.raiseHook();
