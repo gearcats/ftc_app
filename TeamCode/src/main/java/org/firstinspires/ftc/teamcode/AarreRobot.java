@@ -114,16 +114,9 @@ class AarreRobot {
         // Save reference to Hardware map
         this.hardwareMap = hardwareMap;
 
-        telemetry.addData("Status", "Lowering arm");
-        lowerArm();
+        // Save reference to telemetry
+        this.telemetry = telemetry;
 
-        telemetry.addData("Status", "Lowering riser");
-        lowerRiser();
-
-        telemetry.addData("Status", "Raising hook");
-        raiseHook();
-
-        telemetry.addData("Status", "Reset complete");
 
     }
 
@@ -160,7 +153,24 @@ class AarreRobot {
      * TODO Raise the hook to its upward position while avoiding stalling the hook servo
      */
     void raiseHook() {
+        this.telemetry.addData("Status", "Raising hook");
+        this.telemetry.update();
 
+        double maximumPosition = hookServo.MAX_POSITION;
+        this.telemetry.addData("Hook servo maximum position is %f", maximumPosition);
+        this.telemetry.update();
+
+        this.telemetry.addData("Status", "Raising hook");
+        this.telemetry.update();
+
+        hookServo.setPosition(maximumPosition);
+
+        this.telemetry.addData("Status", "Hook raised");
+        this.telemetry.update();
+
+        double currentPosition = hookServo.getPosition();
+        this.telemetry.addData("Hook servo current position is %f", currentPosition);
+        this.telemetry.update();
     }
 
     /**
