@@ -38,9 +38,6 @@ public class AarreAutonomousReset extends LinearOpMode {
         betterTelemetry.log("Status", "Lowering arm");
         robot.lowerArm();
 
-//        betterTelemetry.log("Status", "Lowering riser");
-//        robot.lowerRiser();
-
         betterTelemetry.log("Status", "Reset complete");
 
         // Wait until the driver presses STOP

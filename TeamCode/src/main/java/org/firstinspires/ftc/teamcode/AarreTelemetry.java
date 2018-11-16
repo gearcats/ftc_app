@@ -4,7 +4,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData methods.
- * This makes it easier to switch back and forth between Telemetry.addData and Telemetry.log in other classes.
+ *
+ * This makes it easier to log messages to both the driver station phone and the robot controller log and to
+ * switch back and forth between the Telemetry.addData and Telemetry.log message in other classes.
  */
 class AarreTelemetry {
 
@@ -14,6 +16,7 @@ class AarreTelemetry {
     AarreTelemetry(Telemetry ftcTelemetry) {
 
         this.ftcTelemetry = ftcTelemetry;
+        this.ftcTelemetry.setAutoClear(false);
         this.log = ftcTelemetry.log();
 
     }
@@ -21,7 +24,8 @@ class AarreTelemetry {
     /**
      * Add a simple string to telemetry.
      *
-     * In this class, all items added to telemetry are also logged.
+     * In this class, all items added to telemetry are also logged, both to the driver station screen and
+     * to the robot controller log file.
      *
      * @param caption A caption for the telemetry entry.
      * @param message The telemetry message associated with the caption.
@@ -29,14 +33,15 @@ class AarreTelemetry {
     void addData(java.lang.String caption, java.lang.String message) {
 
         ftcTelemetry.addData(caption, message);
-        log.add(caption, message);
+        log(caption, message);
 
     }
 
     /**
      * Add a formatted string to telemetry.
      *
-     * In this class, all items added to telemetry are also logged.
+     * In this class, all items added to telemetry are also logged, both to the driver station screen and
+     * to the robot controller log file.
      *
      * @param caption A caption for the telemetry entry.
      * @param message A printf-formatted telemetry message associated with the caption.
@@ -49,15 +54,26 @@ class AarreTelemetry {
     }
 
     /**
+     * Append a simple message to the log.
+     *
+     * All other methods should ultimately call this one, because it also appends the message to the
+     * robot controller log.
+     *
+     * @param message The message to append to the log.
+     */
+    void log(java.lang.String message) {
+        log.add(message);
+        syslog(message);
+    }
+
+    /**
      * Append a simple message (with a caption) to the log.
      *
      * @param caption A caption for the log entry.
      * @param message The log entry message associated with the caption.
      */
     void log(java.lang.String caption, java.lang.String message) {
-
-        log.add(caption + ": " + message);
-
+        log(caption + ": " + message);
     }
 
     /**
@@ -68,7 +84,8 @@ class AarreTelemetry {
      */
     void log(java.lang.String message, java.lang.Object... args) {
 
-        log.add(message, args);
+        String log_message = String.format(message, args);
+        log(log_message);
 
     }
 
@@ -82,13 +99,25 @@ class AarreTelemetry {
     void log(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
         String log_message = caption + ": " + message;
-        log_message = String.format(log_message, args);
-        log.add(log_message);
+        log(log_message, args);
+
+    }
+
+    /**
+     * Append a message to the robot controller log.
+     *
+     * @param message A message to append to the robot controller log.
+     */
+    void syslog(String message) {
+
+        System.out.println(message);
 
     }
 
     void update() {
+
         this.ftcTelemetry.update();
+
     }
 
 }
