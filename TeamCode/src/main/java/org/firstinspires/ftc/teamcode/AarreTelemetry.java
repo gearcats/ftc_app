@@ -17,8 +17,8 @@ import static java.lang.Thread.sleep;
  */
 class AarreTelemetry {
 
-    private final Telemetry     ftcTelemetry;
-    private final Telemetry.Log ftcLog;
+    private final Telemetry     underlyingTelemetry;
+    private final Telemetry.Log telemetryLog;
 
     private boolean CAREFUL_LOGGING = false;
 
@@ -26,28 +26,28 @@ class AarreTelemetry {
     /**
      * Base constructor.
      *
-     * @param ftcTelemetry The underlying @link{Telemetry} instance.
+     * @param underlyingTelemetry The underlying @link{Telemetry} instance.
      */
-    AarreTelemetry(Telemetry ftcTelemetry) {
+    AarreTelemetry(Telemetry underlyingTelemetry) {
 
-        this.ftcTelemetry = ftcTelemetry;
-        this.ftcTelemetry.setAutoClear(false);
-        this.ftcLog = ftcTelemetry.log();
+        this.underlyingTelemetry = underlyingTelemetry;
+        this.underlyingTelemetry.setAutoClear(false);
+        this.telemetryLog = underlyingTelemetry.log();
 
     }
 
     /**
      * Constructor with flag for careful logging.
      *
-     * @param ftcTelemetry The underlying @link{Telemetry} instance.
+     * @param underlyingTelemetry The underlying @link{Telemetry} instance.
      * @param careful_logging Whether to do logging "carefully." If false, there will be no delays between calls
      *                        to log messages, which can result in "folded" log entries where more than one log
      *                        entry is listed under a given time. If true, there will be a small delay between
      *                        calls to log messages, which will prevent "folded" log entries.
      */
-    AarreTelemetry(Telemetry ftcTelemetry, boolean careful_logging) {
+    AarreTelemetry(Telemetry underlyingTelemetry, boolean careful_logging) {
 
-        this(ftcTelemetry);
+        this(underlyingTelemetry);
         this.CAREFUL_LOGGING = careful_logging;
 
 
@@ -64,7 +64,7 @@ class AarreTelemetry {
      */
     void addData(java.lang.String caption, java.lang.String message) {
 
-        ftcTelemetry.addData(caption, message);
+        underlyingTelemetry.addData(caption, message);
         this.log(caption, message);
 
     }
@@ -81,7 +81,7 @@ class AarreTelemetry {
      */
     void addData(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
-        ftcTelemetry.addData(caption, message, args);
+        underlyingTelemetry.addData(caption, message, args);
         this.log(caption, message, args);
     }
 
@@ -94,17 +94,6 @@ class AarreTelemetry {
      * @param message The message to append to the log.
      */
     void log(java.lang.String message) {
-        ftcLog.add(message);
-        this.syslog(message);
-    }
-
-    /**
-     * Append a simple message (with a caption) to the log.
-     *
-     * @param caption A caption for the log entry.
-     * @param message The log entry message associated with the caption.
-     */
-    void log(java.lang.String caption, java.lang.String message) {
 
         if (CAREFUL_LOGGING) {
 
@@ -119,6 +108,18 @@ class AarreTelemetry {
                 this.log ("Sleep interrupted!");
             }
         }
+
+        telemetryLog.add(message);
+        this.syslog(message);
+    }
+
+    /**
+     * Append a simple message (with a caption) to the log.
+     *
+     * @param caption A caption for the log entry.
+     * @param message The log entry message associated with the caption.
+     */
+    void log(java.lang.String caption, java.lang.String message) {
 
         this.log(caption + ": " + message);
     }
@@ -163,7 +164,7 @@ class AarreTelemetry {
 
     void update() {
 
-        this.ftcTelemetry.update();
+        this.underlyingTelemetry.update();
 
     }
 

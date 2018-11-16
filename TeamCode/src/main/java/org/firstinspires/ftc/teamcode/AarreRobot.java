@@ -127,7 +127,7 @@ class AarreRobot {
 
         raiseHook();
         double maximumServoPosition = hookServo.getPosition();
-        telemetry.log("Hook minimum position is: %f", minimumServoPosition);
+        telemetry.log("Hook maximum position is: %f", minimumServoPosition);
 
         hookServo.scaleRange(minimumServoPosition, maximumServoPosition);
 
