@@ -107,7 +107,7 @@ class AarreRobot {
 
         telemetry.log("Initializing hook");
 
-        hookServo.setDirection(Servo.Direction.REVERSE);
+        hookServo.setDirection(Servo.Direction.FORWARD);
 
         // The hook servo is constrained by hardware
         // When the hook is down, the arm attached to the servo is at about 110 degrees
