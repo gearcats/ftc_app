@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines
@@ -33,7 +32,7 @@ class AarreRobot {
     @SuppressWarnings("WeakerAccess")
     DcMotor riserMotor;
     @SuppressWarnings("WeakerAccess")
-    Servo   hookServo;
+    AarreServo   hookServo;
     @SuppressWarnings("WeakerAccess")
     CRServo scoopServo;
 
@@ -92,7 +91,7 @@ class AarreRobot {
 
         // Define the servos
 
-        hookServo  = hardwareMap.get(Servo.class, "hook");
+        hookServo  = new AarreServo(hardwareMap, "hook", telemetry);
         scoopServo = hardwareMap.get(CRServo.class, "scoop");
 
         // Save reference to telemetry
@@ -100,12 +99,22 @@ class AarreRobot {
     }
 
     /**
-     * Determine minimum position and maximum position of hook servo based on hardware limits
+     * Set minimum position and maximum position of hook servo based on hardware limits, then
+     * exercise the hook by raising it and lowering it.
      */
     void initializeHook() {
 
+        telemetry.log("Initializing hook");
+
         // The hook servo is constrained by hardware
-        hookServo.scaleRange(0.4, 0.99);
+        // When the hook is down, the arm attached to the servo is at about 110 degrees
+        // compared to 0 when the hook is up. Looking at it the other way, the arm attached
+        // to the servo is at about 70 degrees compared to 180 when the hook is up.
+
+        double hook_down_degrees = 70.0;
+        double hook_up_degrees = 180.0;
+        double hook_maximum_degrees = 180.0;
+        hookServo.scaleRange(hook_down_degrees/hook_maximum_degrees, hook_up_degrees/hook_maximum_degrees);
         raiseHook();
         lowerHook();
 
@@ -120,7 +129,9 @@ class AarreRobot {
     }
 
     void lowerHook() {
-        hookServo.setPosition(0.0);
+        telemetry.log("Hook servo - lowering hook");
+        hookServo.reverseServo();
+        telemetry.log("Hook servo - hook lowered");
     }
 
     /**
@@ -141,7 +152,9 @@ class AarreRobot {
 
 
     void raiseHook() {
-        hookServo.setPosition(1.0);
+        telemetry.log("Hook servo - raising hook");
+        hookServo.forwardServo();
+        telemetry.log("Hook servo - hook raised");
     }
 
     /**

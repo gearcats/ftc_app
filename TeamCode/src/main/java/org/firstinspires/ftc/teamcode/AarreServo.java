@@ -104,7 +104,7 @@ public class AarreServo {
     /**
      * Set the stall detection tolerance
      *
-     * @param stallDetectionToleranceInTicks    An integer number of encoder clicks such that,
+     * @param stallDetectionToleranceInRange    An integer number of encoder clicks such that,
      *                                          if the encoder changes fewer than this number of
      *                                          clicks over a period of time defined by
      *                                          stallTimeLimitInMilliseconds, then we consider the
@@ -119,7 +119,7 @@ public class AarreServo {
      * Set up stall detection.
      *
      * @param   stallTimeLimitInMilliseconds      How long does the servo have to be still before we consider it stalled?
-     * @param   double stallDetectionToleranceInRange    An portion of the range in [0,1] such that,
+     * @param   stallDetectionToleranceInRange    An portion of the range in [0,1] such that,
      *                                            if the servo changes less than this over a
      *                                            period of stallTimeLimitInMilliseconds, then we call it a stall.
      */
@@ -198,32 +198,6 @@ public class AarreServo {
 
     }
 
-    /**
-     * Reverse the servo to its lower limit
-     *
-     * TODO: Avoid stalling the servo.
-     *
-     */
-    void reverseServo() {
-
-        telemetry.log("Preparing to reverse servo");
-
-        double startPosition = servo.getPosition();
-        telemetry.log("Servo current position is %f", startPosition);
-
-        double downPosition = servo.MIN_POSITION;
-        telemetry.log("Servo prescriptive down position is %f", downPosition);
-
-        while (!(isStalled())) {
-            servo.setPosition(downPosition);
-            telemetry.log("Servo not stalled yet...");
-        }
-        telemetry.log("Servo stalled");
-
-        double currentPosition = getPurportedPosition();
-        telemetry.log("Servo purported down position is %f", currentPosition);
-
-    }
 
     /**
      * Turn the servo forward to its maximum position.
@@ -238,21 +212,42 @@ public class AarreServo {
         double startPosition = servo.getPosition();
         telemetry.log("Servo current position is %f", startPosition);
 
-        double upPosition = servo.MAX_POSITION;
-        telemetry.log("Servo prescribed up position is %f", upPosition);
+        double maxPosition = servo.MAX_POSITION;
+        telemetry.log("Servo prescriptive max position is %f", maxPosition);
 
-        while (!(isStalled())) {
-            servo.setPosition(upPosition);
-            telemetry.log("Servo not stalled yet...");
-        }
-        servo.setPosition(upPosition);
-        telemetry.log("Servo raised");
+        servo.setPosition(maxPosition);
+        telemetry.log("Servo set to max");
 
         double currentPosition = servo.getPosition();
-        telemetry.log("Servo actual up position is %f", currentPosition);
+        telemetry.log("Servo purported max position is %f", currentPosition);
 
     }
 
+
+
+    /**
+     * Reverse the servo to its lower limit
+     *
+     * TODO: Avoid stalling the servo.
+     *
+     */
+    void reverseServo() {
+
+        telemetry.log("Preparing to reverse the servo");
+
+        double startPosition = servo.getPosition();
+        telemetry.log("Servo current position is %f", startPosition);
+
+        double minPosition = servo.MIN_POSITION;
+        telemetry.log("Servo prescriptive max position is %f", minPosition);
+
+        servo.setPosition(minPosition);
+        telemetry.log("Servo set to min");
+
+        double currentPosition = getPurportedPosition();
+        telemetry.log("Servo purported min position is %f", currentPosition);
+
+    }
 
 
     /**
@@ -275,5 +270,15 @@ public class AarreServo {
         double currentPosition = servo.getPosition();
         telemetry.log("Servo actual middle position is %f", currentPosition);
 
+    }
+
+    /**
+     * Scale the range of the servo, for example to accommodate mechanical limits.
+     *
+     * @param min The minimum position in [0,1] that the servo can actually reach.
+     * @param max The maximum position in [0,1] that the servo can actually reach.
+     */
+    void scaleRange(double min, double max){
+        servo.scaleRange(min, max);
     }
 }
