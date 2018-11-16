@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData methods.
  *
@@ -17,15 +19,37 @@ class AarreTelemetry {
 
     private final Telemetry     ftcTelemetry;
     private final Telemetry.Log ftcLog;
-    private final boolean CAREFUL_LOGGING;
 
+    private boolean CAREFUL_LOGGING = false;
+
+
+    /**
+     * Base constructor.
+     *
+     * @param ftcTelemetry The underlying @link{Telemetry} instance.
+     */
     AarreTelemetry(Telemetry ftcTelemetry) {
 
         this.ftcTelemetry = ftcTelemetry;
         this.ftcTelemetry.setAutoClear(false);
         this.ftcLog = ftcTelemetry.log();
 
-        this.CAREFUL_LOGGING = true;
+    }
+
+    /**
+     * Constructor with flag for careful logging.
+     *
+     * @param ftcTelemetry The underlying @link{Telemetry} instance.
+     * @param careful_logging Whether to do logging "carefully." If false, there will be no delays between calls
+     *                        to log messages, which can result in "folded" log entries where more than one log
+     *                        entry is listed under a given time. If true, there will be a small delay between
+     *                        calls to log messages, which will prevent "folded" log entries.
+     */
+    AarreTelemetry(Telemetry ftcTelemetry, boolean careful_logging) {
+
+        this(ftcTelemetry);
+        this.CAREFUL_LOGGING = careful_logging;
+
 
     }
 
@@ -81,6 +105,21 @@ class AarreTelemetry {
      * @param message The log entry message associated with the caption.
      */
     void log(java.lang.String caption, java.lang.String message) {
+
+        if (CAREFUL_LOGGING) {
+
+            // Wait a couple of milliseconds between log entries to ensure that every entry has its
+            // own line in the log. This can make it easier to find and read log entries. It is probably not
+            // a good idea to have this set during competition, though....
+
+            try {
+                sleep(2);
+            }
+            catch (InterruptedException e) {
+                this.log ("Sleep interrupted!");
+            }
+        }
+
         this.log(caption + ": " + message);
     }
 

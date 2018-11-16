@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class AarreAutonomousReset extends LinearOpMode {
 
     private final AarreRobot robot = new AarreRobot();
-    private final AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
+    private final AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry, true);
 
     @Override
     public void runOpMode() {
