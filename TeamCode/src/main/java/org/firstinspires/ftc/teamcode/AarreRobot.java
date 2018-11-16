@@ -95,15 +95,8 @@ class AarreRobot {
         hookServo  = hardwareMap.get(Servo.class, "hook");
         scoopServo = hardwareMap.get(CRServo.class, "scoop");
 
-        // Initialize the servos
-
-        //hookServo.setPosition(MID_SERVO);
-        //scoopServo.setPosition(MID_SERVO);
-
         // Save reference to telemetry
         this.telemetry = telemetry;
-
-
     }
 
     /**
@@ -111,23 +104,18 @@ class AarreRobot {
      */
     void initializeHook() {
 
-        // Is the hook servo installed "upside down"?
+        // Is the hook servo installed "upside down"? If so, uncomment this line.
+
         //hookServo.setDirection(Servo.Direction.REVERSE);
 
         // Reset the servo to its full range of movement
         hookServo.scaleRange(0.0, 1.0);
 
-        readyHook();
-        double middleServoPosition = hookServo.getPosition();
-        telemetry.log("Hook middle position is: %f", middleServoPosition);
+        raiseHook();
+        double maximumServoPosition = hookServo.getPosition();
 
         lowerHook();
         double minimumServoPosition = hookServo.getPosition();
-        telemetry.log("Hook minimum position is: %f", minimumServoPosition);
-
-        raiseHook();
-        double maximumServoPosition = hookServo.getPosition();
-        telemetry.log("Hook maximum position is: %f", minimumServoPosition);
 
         hookServo.scaleRange(minimumServoPosition, maximumServoPosition);
 
@@ -153,8 +141,6 @@ class AarreRobot {
 
         double downPosition = hookServo.MIN_POSITION;
         telemetry.log("Hook servo prescriptive down position is %f", downPosition);
-
-        telemetry.log("Lowering hook");
 
         hookServo.setPosition(downPosition);
 
@@ -192,16 +178,14 @@ class AarreRobot {
         telemetry.log("Preparing to raise hook");
 
         double upPosition = hookServo.MAX_POSITION;
-        telemetry.log("Hook servo up position is %f", upPosition);
-
-        telemetry.log("Raising hook");
+        telemetry.log("Hook servo prescribed up position is %f", upPosition);
 
         hookServo.setPosition(upPosition);
 
         telemetry.log("Hook raised");
 
         double currentPosition = hookServo.getPosition();
-        telemetry.log("Hook servo up position is %f", currentPosition);
+        telemetry.log("Hook servo actual up position is %f", currentPosition);
 
     }
 
@@ -212,16 +196,15 @@ class AarreRobot {
      */
     void readyHook() {
 
-        telemetry.log("Preparing to ready hook");
+        telemetry.log("Hook servo preparing to move to middle position");
 
         double middlePosition = 0.5;
-        telemetry.log("Hook servo prescribed middle position is %f", middlePosition);
 
-        telemetry.log("Readying hook");
+        telemetry.log("Hook servo prescribed middle position is %f", middlePosition);
 
         hookServo.setPosition(middlePosition);
 
-        telemetry.log("Hook ready");
+        telemetry.log("Hook servo moved to middle position");
 
         double currentPosition = hookServo.getPosition();
         telemetry.log("Hook servo actual middle position is %f", currentPosition);
