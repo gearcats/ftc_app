@@ -45,7 +45,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="Aarre Autonomous", group="Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
+    private AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
+
     private AarreRobot robot = new AarreRobot();
+
     private ElapsedTime runtime = new ElapsedTime();
 
     private static final double DRIVE_SPEED                     = 0.6;      // How fast to move forward or back
@@ -58,13 +61,18 @@ public class AarreAutonomous extends LinearOpMode {
 
     // TODO: Use Math.PI above
 
+    /**
+     * Properties inherited from LinearOpMode include:
+     *
+     * telemetry
+     */
     @Override
     public void runOpMode() {
 
-        telemetry.addData("Status", "Initializing robot");
-        telemetry.update();
+        betterTelemetry.addData("Status", "Initializing robot");
+        betterTelemetry.update();
 
-        robot.init(hardwareMap, telemetry);
+        robot.init(hardwareMap, betterTelemetry);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -74,8 +82,8 @@ public class AarreAutonomous extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            telemetry.addData("Status", "Ready to run");    //
-            telemetry.update();
+            betterTelemetry.addData("Status", "Ready to run");    //
+            betterTelemetry.update();
 
             // Step through each leg of the path,
             // Note: Reverse movement is obtained by setting a negative distance (not speed)
@@ -83,8 +91,8 @@ public class AarreAutonomous extends LinearOpMode {
             encoderDrive(TURN_SPEED,   12, -12, 4.0);  // Turn right 12 inches with 4 sec timeout
             encoderDrive(DRIVE_SPEED, -12, -12, 4.0);  // Reverse 12 inches with 4 Sec timeout
 
-            telemetry.addData("Path", "Complete");
-            telemetry.update();
+            betterTelemetry.addData("Path", "Complete");
+            betterTelemetry.update();
         }
     }
 
@@ -131,9 +139,9 @@ public class AarreAutonomous extends LinearOpMode {
                     (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
-                telemetry.update();
+                betterTelemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                betterTelemetry.addData("Path2",  "Running at %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
+                betterTelemetry.update();
             }
 
             // Stop all motion;

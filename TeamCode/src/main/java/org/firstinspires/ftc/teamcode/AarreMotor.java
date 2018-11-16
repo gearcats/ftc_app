@@ -4,10 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-
-
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
  *
@@ -32,7 +28,7 @@ class AarreMotor {
    private DcMotor      motor;
    private int          stallTimeLimitInMilliseconds = 0;
    private int          stallDetectionToleranceInTicks = 5;
-   private Telemetry    telemetry;
+   private AarreTelemetry    telemetry;
    private ElapsedTime  timeStalledInMilliseconds;
 
     /**
@@ -40,9 +36,9 @@ class AarreMotor {
      *
      * @param motorName
      * @param hardwareMap
-     * @param telemetry
+     * @param AarreTelemetry
      */
-    public AarreMotor(HardwareMap hardwareMap, String motorName, Telemetry telemetry) {
+    public AarreMotor(HardwareMap hardwareMap, String motorName, AarreTelemetry telemetry) {
 
         // Call the other constructor to create the underlying DcMotor member
         this(hardwareMap, motorName);
@@ -96,7 +92,7 @@ class AarreMotor {
      * @return  The integer number of milliseconds during which the motor speed has been
      *          lower than the stall detection tolerance.
      */
-    public int getTimeStalledInMilliseconds() {
+    private int getTimeStalledInMilliseconds() {
 
         // Take the time stalled in (double) milliseconds, round to nearest long and cast to int
         return (int) Math.round(timeStalledInMilliseconds.time());
@@ -163,37 +159,37 @@ class AarreMotor {
      * @return  <code>true</code> if the motor is stalled;
      *          <code>false</code> otherwise.
      */
-    public boolean isStalled() {
+    private boolean isStalled() {
 
-        telemetry.addData("time stalled = ", "%d ms", getTimeStalledInMilliseconds());
-        telemetry.addData("stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
+        telemetry.log("time stalled = ", "%d ms", getTimeStalledInMilliseconds());
+        telemetry.log("stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
 
         int newTickNumber = this.getCurrentTickNumber();
 
-        telemetry.addData("checking for a stall", "!");
+        telemetry.log("checking for a stall", "!");
 
         // if the motor has not moved since the last time the position was read
 
         if (Math.abs(newTickNumber - oldTickNumber) < stallDetectionToleranceInTicks) {
-            telemetry.addData("motor is not moving", "!");
+            telemetry.log("motor is not moving", "!");
 
             // motor has not moved, checking to see how long the motor has been stalled for
             if (timeStalledInMilliseconds.time() > stallTimeLimitInMilliseconds) {
 
-                telemetry.addData("stall timer has expired", "!");
+                telemetry.log("stall timer has expired", "!");
 
                 // it has been stalled for more than the time limit
                 return true;
 
             } else {
 
-                telemetry.addData("stall time has NOT expired", "!");
+                telemetry.log("stall time has NOT expired", "!");
 
             }
         } else {
 
             if(telemetry != null) {
-                telemetry.addData("motor is still moving.", " Resetting stall timer.");
+                telemetry.log("motor is still moving.", " Resetting stall timer.");
             }
 
             // reset the timer because the motor is not stalled
@@ -231,7 +227,7 @@ class AarreMotor {
     public void runUntilStalled(double power) {
         setPower(power);
         while (!(isStalled())) {
-            telemetry.addData("Status", "Not stalled yet...");
+            telemetry.log("Status", "Not stalled yet...");
             telemetry.update();
         }
     }

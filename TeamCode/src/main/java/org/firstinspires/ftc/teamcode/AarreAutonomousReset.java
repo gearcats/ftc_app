@@ -17,34 +17,35 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class AarreAutonomousReset extends LinearOpMode {
 
     private AarreRobot robot = new AarreRobot();
+    private AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
 
     @Override
     public void runOpMode() {
 
-        telemetry.addData("Status", "Initializing robot");
-        telemetry.update();
+        betterTelemetry.log("Status", "Initializing robot");
+        betterTelemetry.update();
 
-        robot.init(hardwareMap, telemetry);
+        robot.init(hardwareMap, betterTelemetry);
 
         // Wait for the driver to press PLAY
         waitForStart();
 
-        telemetry.addData("Status", "Initializing hook");
-        telemetry.update();
+        betterTelemetry.log("Status", "Initializing hook");
+        betterTelemetry.update();
         robot.initializeHook();
 
-        telemetry.addData("Status", "Raising hook");
-        telemetry.update();
+        betterTelemetry.log("Status", "Raising hook");
+        betterTelemetry.update();
         robot.raiseHook();
 
-        telemetry.addData("Status", "Lowering arm");
+        betterTelemetry.log("Status", "Lowering arm");
         robot.lowerArm();
 
-//        telemetry.addData("Status", "Lowering riser");
+//        betterTelemetry.log("Status", "Lowering riser");
 //        robot.lowerRiser();
 
-        telemetry.addData("Status", "Reset complete");
-        telemetry.update();
+        betterTelemetry.log("Status", "Reset complete");
+        betterTelemetry.update();
 
         // Wait until the driver presses STOP
         //noinspection StatementWithEmptyBody

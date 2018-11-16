@@ -17,14 +17,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class AarreDance extends LinearOpMode {
 
     private AarreRobot robot = new AarreRobot();
+    private AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
 
     @Override
     public void runOpMode() {
 
-        telemetry.addData("Status", "Initializing robot");
-        telemetry.update();
+        betterTelemetry.log("Status", "Initializing robot");
+        betterTelemetry.update();
 
-        robot.init(hardwareMap, telemetry);
+        robot.init(hardwareMap, betterTelemetry);
 
         // Wait for the driver to press PLAY
         waitForStart();
@@ -38,8 +39,8 @@ public class AarreDance extends LinearOpMode {
         robot.raiseHook();
         robot.lowerHook();
 
-        telemetry.addData("Status", "Ready to run");    //
-        telemetry.update();
+        betterTelemetry.log("Status", "Ready to run");    //
+        betterTelemetry.update();
 
     }
 
