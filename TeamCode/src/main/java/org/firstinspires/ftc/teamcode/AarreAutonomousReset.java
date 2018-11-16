@@ -22,6 +22,7 @@ public class AarreAutonomousReset extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        betterTelemetry.log("-------------------------------------------------------------------------------");
         betterTelemetry.log("Initializing robot");
 
         robot.init(hardwareMap, betterTelemetry);
@@ -31,12 +32,6 @@ public class AarreAutonomousReset extends LinearOpMode {
 
         betterTelemetry.log("Initializing hook");
         robot.initializeHook();
-
-        betterTelemetry.log("Readying hook");
-        robot.readyHook();
-
-        betterTelemetry.log("Raising hook");
-        robot.raiseHook();
 
         betterTelemetry.log("Lowering arm");
         robot.lowerArm();
