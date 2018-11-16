@@ -90,7 +90,6 @@ class AarreRobot {
         telemetry.log("Status", "Drive motor encoders reset");
         telemetry.log("Left motor start position",  "%7d",  leftMotor.getCurrentPosition());
         telemetry.log("Right motor start position",  "%7d", rightMotor.getCurrentPosition());
-        telemetry.update();
 
         // Define the servos
 
@@ -146,23 +145,18 @@ class AarreRobot {
     void lowerHook() {
 
         telemetry.log("Status", "Preparing to lower hook");
-        telemetry.update();
 
         double downPosition = hookServo.MIN_POSITION;
         telemetry.log("Hook servo down position is %f", downPosition);
-        telemetry.update();
 
         telemetry.log("Status", "Lowering hook");
-        telemetry.update();
 
         hookServo.setPosition(downPosition);
 
         telemetry.log("Status", "Hook lowered");
-        telemetry.update();
 
         double currentPosition = hookServo.getPosition();
         telemetry.log("Hook servo down position is %f", currentPosition);
-        telemetry.update();
 
     }
 
@@ -191,23 +185,18 @@ class AarreRobot {
     void raiseHook() {
 
         telemetry.log("Status", "Preparing to raise hook");
-        telemetry.update();
 
         double upPosition = hookServo.MAX_POSITION;
         telemetry.log("Hook servo up position is %f", upPosition);
-        telemetry.update();
 
         telemetry.log("Status", "Raising hook");
-        telemetry.update();
 
         hookServo.setPosition(upPosition);
 
         telemetry.log("Status", "Hook raised");
-        telemetry.update();
 
         double currentPosition = hookServo.getPosition();
         telemetry.log("Hook servo up position is %f", currentPosition);
-        telemetry.update();
 
     }
 

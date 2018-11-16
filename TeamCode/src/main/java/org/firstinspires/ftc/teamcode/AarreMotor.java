@@ -207,7 +207,6 @@ class AarreMotor {
         setPower(power);
         while (!(isStalled())) {
             telemetry.log("Status", "Not stalled yet...");
-            telemetry.update();
         }
     }
 
