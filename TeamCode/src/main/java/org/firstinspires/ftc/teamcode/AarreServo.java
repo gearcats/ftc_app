@@ -48,6 +48,7 @@ public class AarreServo {
      * @param servoName The name of the servo for which to provide telemetry.
      * @param hardwareMap The hardware map upon which the servo may be found.
      * @param telemetry An instance of AarreTelemetry to associate with this instance.
+     * @param servoDirection Set to Servo.Direction.REVERSE if the servo moves in the wrong direction.
      */
     public AarreServo(HardwareMap hardwareMap, String servoName, AarreTelemetry telemetry) {
 
@@ -57,11 +58,9 @@ public class AarreServo {
         // Add a telemetry member
         this.telemetry = telemetry;
 
-        // Is the servo installed "backwards"? If so, uncomment this line.
-        // TODO: Parameterize this variable
-        //servo.setDirection(Servo.Direction.REVERSE);
+        servo.setDirection(Servo.Direction.FORWARD);
 
-        // Reset the servo to its full range of movement
+        // Upon construction, reset the servo to its full range of movement
         servo.scaleRange(0.0, 1.0);
     }
 
@@ -281,4 +280,19 @@ public class AarreServo {
     void scaleRange(double min, double max){
         servo.scaleRange(min, max);
     }
+
+    /**
+     * Set the servo direction.
+     *
+     * The servo direction is set to @link{Servo.Direction.FORWARD} by default. If the servo is turning the
+     * "wrong way," then set it to @link{Servo.Direction.REVERSE}
+     *
+     * @param direction An instance of @link{Servo.Direction}
+     */
+    void setDirection(Servo.Direction direction) {
+
+        servo.setDirection(direction);
+
+    }
+
 }

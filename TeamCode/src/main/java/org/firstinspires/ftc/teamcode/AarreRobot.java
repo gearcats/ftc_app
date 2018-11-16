@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines
@@ -106,6 +107,8 @@ class AarreRobot {
 
         telemetry.log("Initializing hook");
 
+        hookServo.setDirection(Servo.Direction.REVERSE);
+
         // The hook servo is constrained by hardware
         // When the hook is down, the arm attached to the servo is at about 110 degrees
         // compared to 0 when the hook is up. Looking at it the other way, the arm attached
@@ -115,6 +118,7 @@ class AarreRobot {
         double hook_up_degrees = 180.0;
         double hook_maximum_degrees = 180.0;
         hookServo.scaleRange(hook_down_degrees/hook_maximum_degrees, hook_up_degrees/hook_maximum_degrees);
+
         raiseHook();
         lowerHook();
 
