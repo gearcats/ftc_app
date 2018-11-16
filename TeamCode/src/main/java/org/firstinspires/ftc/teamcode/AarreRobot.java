@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines
@@ -50,7 +49,7 @@ class AarreRobot {
      * Initialize hardware interfaces
      *
      * @param hardwareMap   An instance of {@link HardwareMap}
-     * @param telemetry     An instance of {@link Telemetry}
+     * @param telemetry     An instance of {@link AarreTelemetry}
      *
      */
     void init(HardwareMap hardwareMap, AarreTelemetry telemetry) {
@@ -153,7 +152,7 @@ class AarreRobot {
         telemetry.log("Status", "Preparing to lower hook");
 
         double downPosition = hookServo.MIN_POSITION;
-        telemetry.log("Hook servo down position is %f", downPosition);
+        telemetry.log("Hook servo prescriptive down position is %f", downPosition);
 
         telemetry.log("Status", "Lowering hook");
 
@@ -162,7 +161,7 @@ class AarreRobot {
         telemetry.log("Status", "Hook lowered");
 
         double currentPosition = hookServo.getPosition();
-        telemetry.log("Hook servo down position is %f", currentPosition);
+        telemetry.log("Hook servo actual down position is %f", currentPosition);
 
     }
 
@@ -213,7 +212,7 @@ class AarreRobot {
      */
     void readyHook() {
 
-        telemetry.log("Status", "Preparing to raise hook");
+        telemetry.log("Status", "Preparing to ready hook");
 
         double middlePosition = 0.5;
         telemetry.log("Hook servo prescribed middle position is %f", middlePosition);

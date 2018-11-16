@@ -16,13 +16,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 class AarreTelemetry {
 
     private final Telemetry     ftcTelemetry;
-    private final Telemetry.Log log;
+    private final Telemetry.Log ftcLog;
+    private final boolean CAREFUL_LOGGING;
 
     AarreTelemetry(Telemetry ftcTelemetry) {
 
         this.ftcTelemetry = ftcTelemetry;
         this.ftcTelemetry.setAutoClear(false);
-        this.log = ftcTelemetry.log();
+        this.ftcLog = ftcTelemetry.log();
+
+        this.CAREFUL_LOGGING = true;
 
     }
 
@@ -38,7 +41,7 @@ class AarreTelemetry {
     void addData(java.lang.String caption, java.lang.String message) {
 
         ftcTelemetry.addData(caption, message);
-        log(caption, message);
+        this.log(caption, message);
 
     }
 
@@ -55,7 +58,7 @@ class AarreTelemetry {
     void addData(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
         ftcTelemetry.addData(caption, message, args);
-        log(caption, message, args);
+        this.log(caption, message, args);
     }
 
     /**
@@ -67,8 +70,8 @@ class AarreTelemetry {
      * @param message The message to append to the log.
      */
     void log(java.lang.String message) {
-        log.add(message);
-        syslog(message);
+        ftcLog.add(message);
+        this.syslog(message);
     }
 
     /**
@@ -78,7 +81,7 @@ class AarreTelemetry {
      * @param message The log entry message associated with the caption.
      */
     void log(java.lang.String caption, java.lang.String message) {
-        log(caption + ": " + message);
+        this.log(caption + ": " + message);
     }
 
     /**
@@ -90,7 +93,7 @@ class AarreTelemetry {
     void log(java.lang.String message, java.lang.Object... args) {
 
         String log_message = String.format(message, args);
-        log(log_message);
+        this.log(log_message);
 
     }
 
@@ -104,7 +107,7 @@ class AarreTelemetry {
     void log(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
         String log_message = caption + ": " + message;
-        log(log_message, args);
+        this.log(log_message, args);
 
     }
 
