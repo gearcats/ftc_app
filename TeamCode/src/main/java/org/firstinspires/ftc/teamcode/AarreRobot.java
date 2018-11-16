@@ -129,9 +129,31 @@ class AarreRobot {
     }
 
     /**
-     * TODO Lower the hook to its downward position while avoiding stalling the hook servo
+     * Lower the hook to its downward position.
+     *
+     * TODO: Avoid stalling the hook servo.
+     *
      */
     void lowerHook() {
+
+        this.telemetry.addData("Status", "Preparing to lower hook");
+        this.telemetry.update();
+
+        double downPosition = hookServo.MAX_POSITION;
+        this.telemetry.addData("Hook servo down position is %f", downPosition);
+        this.telemetry.update();
+
+        this.telemetry.addData("Status", "Lowering hook");
+        this.telemetry.update();
+
+        hookServo.setPosition(downPosition);
+
+        this.telemetry.addData("Status", "Hook lowered");
+        this.telemetry.update();
+
+        double currentPosition = hookServo.getPosition();
+        this.telemetry.addData("Hook servo down position is %f", currentPosition);
+        this.telemetry.update();
 
     }
 
@@ -150,27 +172,32 @@ class AarreRobot {
     }
 
     /**
-     * TODO Raise the hook to its upward position while avoiding stalling the hook servo
+     * Raise the hook to its upward position.
+     *
+     * TODO: Avoid stalling the hook servo.
+     *
      */
     void raiseHook() {
+
+        this.telemetry.addData("Status", "Preparing to raise hook");
+        this.telemetry.update();
+
+        double upPosition = hookServo.MIN_POSITION;
+        this.telemetry.addData("Hook servo up position is %f", upPosition);
+        this.telemetry.update();
+
         this.telemetry.addData("Status", "Raising hook");
         this.telemetry.update();
 
-        double maximumPosition = hookServo.MAX_POSITION;
-        this.telemetry.addData("Hook servo maximum position is %f", maximumPosition);
-        this.telemetry.update();
-
-        this.telemetry.addData("Status", "Raising hook");
-        this.telemetry.update();
-
-        hookServo.setPosition(maximumPosition);
+        hookServo.setPosition(upPosition);
 
         this.telemetry.addData("Status", "Hook raised");
         this.telemetry.update();
 
         double currentPosition = hookServo.getPosition();
-        this.telemetry.addData("Hook servo current position is %f", currentPosition);
+        this.telemetry.addData("Hook servo up position is %f", currentPosition);
         this.telemetry.update();
+
     }
 
     /**
