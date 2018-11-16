@@ -114,7 +114,7 @@ class AarreRobot {
         // compared to 0 when the hook is up. Looking at it the other way, the arm attached
         // to the servo is at about 70 degrees compared to 180 when the hook is up.
 
-        double hook_down_degrees = 70.0;
+        double hook_down_degrees = 80.0;
         double hook_up_degrees = 180.0;
         double hook_maximum_degrees = 180.0;
         hookServo.scaleRange(hook_down_degrees/hook_maximum_degrees, hook_up_degrees/hook_maximum_degrees);

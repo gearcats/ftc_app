@@ -238,7 +238,7 @@ public class AarreServo {
         telemetry.log("Servo current position is %f", startPosition);
 
         double minPosition = servo.MIN_POSITION;
-        telemetry.log("Servo prescriptive max position is %f", minPosition);
+        telemetry.log("Servo prescriptive min position is %f", minPosition);
 
         servo.setPosition(minPosition);
         telemetry.log("Servo set to min");
