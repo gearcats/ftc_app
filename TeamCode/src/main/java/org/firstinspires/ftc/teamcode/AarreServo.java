@@ -295,4 +295,10 @@ public class AarreServo {
 
     }
 
+    void setPosition(double position) {
+
+        servo.setPosition(position);
+
+    }
+
 }

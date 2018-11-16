@@ -36,6 +36,7 @@ class AarreRobot {
     AarreServo   hookServo;
     @SuppressWarnings("WeakerAccess")
     CRServo scoopServo;
+    AarreServo    testServo;
 
     /**
      *
@@ -94,6 +95,7 @@ class AarreRobot {
 
         hookServo  = new AarreServo(hardwareMap, "hook", telemetry);
         scoopServo = hardwareMap.get(CRServo.class, "scoop");
+        testServo = new AarreServo(hardwareMap, "test", telemetry);
 
         // Save reference to telemetry
         this.telemetry = telemetry;
@@ -125,6 +127,17 @@ class AarreRobot {
         lowerHook();
         raiseHook();
 
+    }
+
+    void initializeTestServo() {
+
+        telemetry.log("Test servo: initializing");
+
+        hookServo.setPosition(0);
+        hookServo.setPosition(1);
+        hookServo.setPosition(0.5);
+
+        telemetry.log("Test servo: done initializing");
     }
 
     /**

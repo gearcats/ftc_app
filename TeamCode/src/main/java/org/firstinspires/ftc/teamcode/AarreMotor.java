@@ -29,7 +29,7 @@ class AarreMotor {
    private int          stallTimeLimitInMilliseconds = 0;
    private int          stallDetectionToleranceInTicks = 5;
    private AarreTelemetry    telemetry;
-   private final ElapsedTime  timeStalledInMilliseconds;
+   private ElapsedTime  timeStalledInMilliseconds;
 
     /**
      * Construct an instance of AarreMotor with telemetry.
@@ -57,7 +57,6 @@ class AarreMotor {
     public AarreMotor(HardwareMap hardwareMap, String motorName) {
 
         motor = hardwareMap.get(DcMotor.class, motorName);
-        timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         setDefaults();
     }
 
@@ -204,6 +203,7 @@ class AarreMotor {
      *              [-1,1].
      */
     public void runUntilStalled(double power) {
+        timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         setPower(power);
         while (!(isStalled())) {
             telemetry.log("Not stalled yet...");

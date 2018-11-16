@@ -32,6 +32,8 @@ public class AarreAutonomousReset extends LinearOpMode {
 
         robot.initializeHook();
 
+        robot.initializeTestServo();
+
         betterTelemetry.log("Lowering arm");
         robot.lowerArm();
 
