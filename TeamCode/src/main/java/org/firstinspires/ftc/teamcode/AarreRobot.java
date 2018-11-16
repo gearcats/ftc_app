@@ -121,6 +121,28 @@ class AarreRobot {
     }
 
     /**
+     * Determine minimum position and maximum position of hook servo based on hardware limits
+     */
+    void initializeHook() {
+
+        // The hook servo is installed "upside down"
+        hookServo.setDirection(Servo.Direction.REVERSE);
+
+        // Reset the servo to its full range of movement
+        hookServo.scaleRange(0.0, 1.0);
+
+        //
+        lowerHook();
+        double minimumServoPosition = hookServo.getPosition();
+
+        raiseHook();
+        double maximumServoPosition = hookServo.getPosition();
+
+        hookServo.scaleRange(minimumServoPosition, maximumServoPosition);
+
+    }
+
+    /**
      * Lower the arm to its downward position while avoiding stalling the arm motor
      */
     void lowerArm() {
@@ -136,24 +158,24 @@ class AarreRobot {
      */
     void lowerHook() {
 
-        this.telemetry.addData("Status", "Preparing to lower hook");
-        this.telemetry.update();
+        telemetry.addData("Status", "Preparing to lower hook");
+        telemetry.update();
 
-        double downPosition = hookServo.MAX_POSITION;
-        this.telemetry.addData("Hook servo down position is %f", downPosition);
-        this.telemetry.update();
+        double downPosition = hookServo.MIN_POSITION;
+        telemetry.addData("Hook servo down position is %f", downPosition);
+        telemetry.update();
 
-        this.telemetry.addData("Status", "Lowering hook");
-        this.telemetry.update();
+        telemetry.addData("Status", "Lowering hook");
+        telemetry.update();
 
         hookServo.setPosition(downPosition);
 
-        this.telemetry.addData("Status", "Hook lowered");
-        this.telemetry.update();
+        telemetry.addData("Status", "Hook lowered");
+        telemetry.update();
 
         double currentPosition = hookServo.getPosition();
-        this.telemetry.addData("Hook servo down position is %f", currentPosition);
-        this.telemetry.update();
+        telemetry.addData("Hook servo down position is %f", currentPosition);
+        telemetry.update();
 
     }
 
@@ -179,24 +201,24 @@ class AarreRobot {
      */
     void raiseHook() {
 
-        this.telemetry.addData("Status", "Preparing to raise hook");
-        this.telemetry.update();
+        telemetry.addData("Status", "Preparing to raise hook");
+        telemetry.update();
 
-        double upPosition = hookServo.MIN_POSITION;
-        this.telemetry.addData("Hook servo up position is %f", upPosition);
-        this.telemetry.update();
+        double upPosition = hookServo.MAX_POSITION;
+        telemetry.addData("Hook servo up position is %f", upPosition);
+        telemetry.update();
 
-        this.telemetry.addData("Status", "Raising hook");
-        this.telemetry.update();
+        telemetry.addData("Status", "Raising hook");
+        telemetry.update();
 
         hookServo.setPosition(upPosition);
 
-        this.telemetry.addData("Status", "Hook raised");
-        this.telemetry.update();
+        telemetry.addData("Status", "Hook raised");
+        telemetry.update();
 
         double currentPosition = hookServo.getPosition();
-        this.telemetry.addData("Hook servo up position is %f", currentPosition);
-        this.telemetry.update();
+        telemetry.addData("Hook servo up position is %f", currentPosition);
+        telemetry.update();
 
     }
 

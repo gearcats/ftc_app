@@ -101,6 +101,7 @@ class AarreMotor {
         // Take the time stalled in (double) milliseconds, round to nearest long and cast to int
         return (int) Math.round(timeStalledInMilliseconds.time());
     }
+
     /**
      * Set the stall detection time limit
      *
