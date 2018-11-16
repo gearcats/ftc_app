@@ -204,7 +204,7 @@ public class AarreServo {
      * TODO: Avoid stalling the hook servo.
      *
      */
-    void forwardServo() {
+    void forward() {
 
         telemetry.log("Preparing to forward the servo");
 
@@ -230,7 +230,7 @@ public class AarreServo {
      * TODO: Avoid stalling the servo.
      *
      */
-    void reverseServo() {
+    void reverse() {
 
         telemetry.log("Preparing to reverse the servo");
 

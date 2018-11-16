@@ -122,8 +122,8 @@ class AarreRobot {
         double hook_maximum_degrees = 180.0;
         hookServo.scaleRange(hook_up_degrees/hook_maximum_degrees, hook_down_degrees/hook_maximum_degrees);
 
-        raiseHook();
         lowerHook();
+        raiseHook();
 
     }
 
@@ -137,7 +137,7 @@ class AarreRobot {
 
     void lowerHook() {
         telemetry.log("Hook servo - lowering hook");
-        hookServo.reverseServo();
+        hookServo.reverse();
         telemetry.log("Hook servo - hook lowered");
     }
 
@@ -160,7 +160,7 @@ class AarreRobot {
 
     void raiseHook() {
         telemetry.log("Hook servo - raising hook");
-        hookServo.forwardServo();
+        hookServo.forward();
         telemetry.log("Hook servo - hook raised");
     }
 
