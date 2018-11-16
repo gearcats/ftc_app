@@ -104,20 +104,10 @@ class AarreRobot {
      */
     void initializeHook() {
 
-        // Is the hook servo installed "upside down"? If so, uncomment this line.
-
-        //hookServo.setDirection(Servo.Direction.REVERSE);
-
-        // Reset the servo to its full range of movement
-        hookServo.scaleRange(0.0, 1.0);
-
+        // The hook servo is constrained by hardware
+        hookServo.scaleRange(0.4, 0.99);
         raiseHook();
-        double maximumServoPosition = hookServo.getPosition();
-
         lowerHook();
-        double minimumServoPosition = hookServo.getPosition();
-
-        hookServo.scaleRange(minimumServoPosition, maximumServoPosition);
 
     }
 
@@ -129,26 +119,8 @@ class AarreRobot {
         armMotor.runUntilStalled(-0.1);
     }
 
-    /**
-     * Lower the hook to its downward position.
-     *
-     * TODO: Avoid stalling the hook servo.
-     *
-     */
     void lowerHook() {
-
-        telemetry.log("Preparing to lower hook");
-
-        double downPosition = hookServo.MIN_POSITION;
-        telemetry.log("Hook servo prescriptive down position is %f", downPosition);
-
-        hookServo.setPosition(downPosition);
-
-        telemetry.log("Hook lowered");
-
-        double currentPosition = hookServo.getPosition();
-        telemetry.log("Hook servo actual down position is %f", currentPosition);
-
+        hookServo.setPosition(0.0);
     }
 
     /**
@@ -167,48 +139,9 @@ class AarreRobot {
 
     }
 
-    /**
-     * Raise the hook to its upward position.
-     *
-     * TODO: Avoid stalling the hook servo.
-     *
-     */
+
     void raiseHook() {
-
-        telemetry.log("Preparing to raise hook");
-
-        double upPosition = hookServo.MAX_POSITION;
-        telemetry.log("Hook servo prescribed up position is %f", upPosition);
-
-        hookServo.setPosition(upPosition);
-
-        telemetry.log("Hook raised");
-
-        double currentPosition = hookServo.getPosition();
-        telemetry.log("Hook servo actual up position is %f", currentPosition);
-
-    }
-
-    /**
-     * Put the hook in its middle position so that we can both lower and raise it.
-     *
-     * TODO: Avoid stalling the hook servo.
-     */
-    void readyHook() {
-
-        telemetry.log("Hook servo preparing to move to middle position");
-
-        double middlePosition = 0.5;
-
-        telemetry.log("Hook servo prescribed middle position is %f", middlePosition);
-
-        hookServo.setPosition(middlePosition);
-
-        telemetry.log("Hook servo moved to middle position");
-
-        double currentPosition = hookServo.getPosition();
-        telemetry.log("Hook servo actual middle position is %f", currentPosition);
-
+        hookServo.setPosition(1.0);
     }
 
     /**

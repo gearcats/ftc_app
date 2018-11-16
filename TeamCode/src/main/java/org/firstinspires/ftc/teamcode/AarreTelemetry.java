@@ -50,7 +50,6 @@ class AarreTelemetry {
         this(underlyingTelemetry);
         this.CAREFUL_LOGGING = careful_logging;
 
-
     }
 
     /**
@@ -156,7 +155,7 @@ class AarreTelemetry {
      *
      * @param message A message to append to the robot controller log.
      */
-    void syslog(String message) {
+    private void syslog(String message) {
 
         System.out.println(message);
 
