@@ -5,8 +5,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData methods.
  *
- * This makes it easier to log messages to both the driver station phone and the robot controller log and to
- * switch back and forth between the Telemetry.addData and Telemetry.log message in other classes.
+ * This makes it easier to log messages to both the driver station phone and the robot controller log. This is
+ * convenient because it (a) allows visibility into more messages than fit on the driver station phone and
+ * (b) provides a longer-lasting record of messages than the driver station phone, which resets after
+ * 30 seconds in the autonomous mode.
+ *
+ * This also makes it easier to switch back and forth between calling the Telemetry.addData and Telemetry.log
+ * methods in other classes.
  */
 class AarreTelemetry {
 

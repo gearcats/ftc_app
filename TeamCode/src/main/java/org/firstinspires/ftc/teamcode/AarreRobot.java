@@ -118,11 +118,17 @@ class AarreRobot {
         // Reset the servo to its full range of movement
         hookServo.scaleRange(0.0, 1.0);
 
+        readyHook();
+        double middleServoPosition = hookServo.getPosition();
+        telemetry.log("Hook middle position is: %f", middleServoPosition);
+
         lowerHook();
         double minimumServoPosition = hookServo.getPosition();
+        telemetry.log("Hook minimum position is: %f", minimumServoPosition);
 
         raiseHook();
         double maximumServoPosition = hookServo.getPosition();
+        telemetry.log("Hook minimum position is: %f", minimumServoPosition);
 
         hookServo.scaleRange(minimumServoPosition, maximumServoPosition);
 
@@ -197,6 +203,29 @@ class AarreRobot {
 
         double currentPosition = hookServo.getPosition();
         telemetry.log("Hook servo up position is %f", currentPosition);
+
+    }
+
+    /**
+     * Put the hook in its middle position so that we can both lower and raise it.
+     *
+     * TODO: Avoid stalling the hook servo.
+     */
+    void readyHook() {
+
+        telemetry.log("Status", "Preparing to raise hook");
+
+        double middlePosition = 0.5;
+        telemetry.log("Hook servo prescribed middle position is %f", middlePosition);
+
+        telemetry.log("Status", "Readying hook");
+
+        hookServo.setPosition(middlePosition);
+
+        telemetry.log("Status", "Hook ready");
+
+        double currentPosition = hookServo.getPosition();
+        telemetry.log("Hook servo actual middle position is %f", currentPosition);
 
     }
 

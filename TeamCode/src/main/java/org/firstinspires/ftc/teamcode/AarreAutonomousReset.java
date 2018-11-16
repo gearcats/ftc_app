@@ -32,6 +32,9 @@ public class AarreAutonomousReset extends LinearOpMode {
         betterTelemetry.log("Status", "Initializing hook");
         robot.initializeHook();
 
+        betterTelemetry.log("Status", "Readying hook");
+        robot.readyHook();
+
         betterTelemetry.log("Status", "Raising hook");
         robot.raiseHook();
 
