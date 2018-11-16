@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  */
 
 @SuppressWarnings("WeakerAccess")
-@Autonomous(name="Aarre Autonomous Reset", group="Aarre")
+@Autonomous(name="Aarre Dance", group="Aarre")
 public class AarreDance extends LinearOpMode {
 
     private AarreRobot robot = new AarreRobot();

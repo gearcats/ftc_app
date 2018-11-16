@@ -29,12 +29,18 @@ public class AarreAutonomousReset extends LinearOpMode {
         // Wait for the driver to press PLAY
         waitForStart();
 
-        robot.lowerArm();
-        robot.lowerRiser();
+        //robot.lowerArm();
+        //robot.lowerRiser();
         robot.raiseHook();
 
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
+
+        // Wait until the driver presses STOP
+        //noinspection StatementWithEmptyBody
+        while (opModeIsActive()) {
+
+        }
 
     }
 
