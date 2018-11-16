@@ -111,8 +111,8 @@ class AarreRobot {
      */
     void initializeHook() {
 
-        // The hook servo is installed "upside down"
-        hookServo.setDirection(Servo.Direction.REVERSE);
+        // Is the hook servo installed "upside down"?
+        //hookServo.setDirection(Servo.Direction.REVERSE);
 
         // Reset the servo to its full range of movement
         hookServo.scaleRange(0.0, 1.0);
