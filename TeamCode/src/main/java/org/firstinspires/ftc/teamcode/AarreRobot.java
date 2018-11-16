@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
@@ -12,22 +11,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * all the specific hardware for the 2018-2019 robot.
  *
  * Pulling it out into a separate class makes it possible to use the same code from
- * different opmodes (such as {@link AarreAutonomous}and {@link AarreAutonomousReset}).
+ * different OpModes (such as {@link AarreAutonomous}and {@link AarreAutonomousReset}).
  *
- * This is NOT an opmode itself.
+ * This is NOT an OpMode itself.
  *
  */
 class AarreRobot {
 
-    private static final double MID_SERVO                    =  0.5 ;
-    public static final double ARM_UP_POWER                 =  0.45 ;
-    public static final double ARM_DOWN_POWER               = -0.45 ;
-
-    private HardwareMap hardwareMap     =  null;
-
-    private AarreTelemetry telemetry = null;
-
-    private ElapsedTime period          = new ElapsedTime();
+    private AarreTelemetry telemetry;
 
     /** These properties are package-private so methods of other classes in this package can use them.
      *
@@ -111,9 +102,6 @@ class AarreRobot {
         //hookServo.setPosition(MID_SERVO);
         //scoopServo.setPosition(MID_SERVO);
 
-        // Save reference to Hardware map
-        this.hardwareMap = hardwareMap;
-
         // Save reference to telemetry
         this.telemetry = telemetry;
 
@@ -181,6 +169,7 @@ class AarreRobot {
     /**
      * TODO Lower the riser to its downward position while avoiding stalling the riser motor
      */
+    @SuppressWarnings("EmptyMethod")
     void lowerRiser() {
 
     }
@@ -188,6 +177,7 @@ class AarreRobot {
     /**
      * TODO Raise the arm to its upward position while avoiding stalling the arm motor
      */
+    @SuppressWarnings("EmptyMethod")
     void raiseArm() {
 
     }
@@ -224,6 +214,7 @@ class AarreRobot {
     /**
      * TODO Raise the riser to its upward position while avoiding stalling the riser motor
      */
+    @SuppressWarnings("EmptyMethod")
     void raiseRiser() {
 
     }

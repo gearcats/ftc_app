@@ -25,18 +25,18 @@ class AarreMotor {
 
    private int oldTickNumber;
 
-   private DcMotor      motor;
+   private final DcMotor      motor;
    private int          stallTimeLimitInMilliseconds = 0;
    private int          stallDetectionToleranceInTicks = 5;
    private AarreTelemetry    telemetry;
-   private ElapsedTime  timeStalledInMilliseconds;
+   private final ElapsedTime  timeStalledInMilliseconds;
 
     /**
-     * Construct an instance with telemetry from a motor name and hardware map
+     * Construct an instance of AarreMotor with telemetry.
      *
-     * @param motorName
-     * @param hardwareMap
-     * @param AarreTelemetry
+     * @param motorName The name of the motor for which to provide telemetry.
+     * @param hardwareMap The hardware map upon which the motor may be found.
+     * @param telemetry An instance of AarreTelemetry to associate with the
      */
     public AarreMotor(HardwareMap hardwareMap, String motorName, AarreTelemetry telemetry) {
 
@@ -48,10 +48,10 @@ class AarreMotor {
     }
 
     /**
-     * Construct an instance without telemetry from a motor name and hardware map
+     * Construct an instance of AarreMotor without telemetry.
      *
-     * @param motorName
-     * @param hardwareMap
+     * @param motorName The name of the motor.
+     * @param hardwareMap The hardware map upon which the motor may be found.
      */
     @SuppressWarnings("unused")
     public AarreMotor(HardwareMap hardwareMap, String motorName) {
@@ -74,16 +74,6 @@ class AarreMotor {
         // Reset the encoder and force the motor to be stopped
         this.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.setPower(0);
-    }
-
-    /**
-     * Get the stall detection time limit
-     *
-     * @return  The number of milliseconds during which the motor must not have moved more than
-     *          the stall detection tolerance before we call it a stall.
-     */
-    public int getStallTimeLimitInMilliseconds() {
-        return stallTimeLimitInMilliseconds;
     }
 
     /**
@@ -110,22 +100,11 @@ class AarreMotor {
     }
 
     /**
-     * Get the stall detection tolerance
-     *
-     * @return  An integer number of encoder clicks such that, if the encoder changes fewer than this
-     *          number of clicks since the last time we read it, then we consider the motor
-     *          stalled.
-     */
-    public int getStallDetectionToleranceInTicks() {
-        return stallDetectionToleranceInTicks;
-    }
-
-    /**
      * Set the stall detection tolerance
      *
      * @param stallDetectionToleranceInTicks    An integer number of encoder clicks such that,
      *                                          if the encoder changes fewer than this number of
-     *                                          clics over a period of time defined by
+     *                                          clicks over a period of time defined by
      *                                          stallTimeLimitInMilliseconds, then we consider the
      *                                          motor stalled.
      */

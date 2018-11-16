@@ -102,7 +102,7 @@ public class AarreAutonomous extends LinearOpMode {
      *  Move will stop if any of three conditions occur:
      *  1) Move gets to the desired position
      *  2) Move runs out of time
-     *  3) Driver stops the opmode running.
+     *  3) Driver stops the OpMode running.
      */
     private void encoderDrive(double speed,
                              double leftInches, double rightInches,
@@ -110,7 +110,7 @@ public class AarreAutonomous extends LinearOpMode {
         int newLeftTarget;
         int newRightTarget;
 
-        // Ensure that the opmode is still active
+        // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
@@ -162,7 +162,7 @@ public class AarreAutonomous extends LinearOpMode {
      *  Move will stop if any of three conditions occur:
      *  1) Move gets to the desired position
      *  2) Move runs out of time
-     *  3) Driver stops the opmode running.
+     *  3) Driver stops the OpMode running.
      *
      *  @param revolutions The number of (motor shaft) revolutions to move the riser.
      *                     Positive values move the riser up.
@@ -179,7 +179,7 @@ public class AarreAutonomous extends LinearOpMode {
         final double riserSpeed         = 0.1;
         final int    timeoutS           = 1;
 
-        // Ensure that the opmode is still active
+        // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
             // Determine new target position and pass to motor controller

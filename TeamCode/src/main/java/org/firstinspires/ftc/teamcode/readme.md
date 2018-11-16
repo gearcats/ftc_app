@@ -10,7 +10,7 @@ process for adding OpModes is straightforward.
 
 The easiest way to create your own OpMode is to copy a Sample OpMode and make it your own.
 
-Sample opmodes exist in the FtcRobotController module.
+Sample OpModes exist in the FtcRobotController module.
 To locate these samples, find the FtcRobotController module in the "Project/Android" tab.
 
 Expand the following tree elements:
@@ -69,9 +69,9 @@ Each OpMode sample class begins with several lines of code like the ones shown b
  @Disabled
 ```
 
-The name that will appear on the driver station's "opmode list" is defined by the code:
+The name that will appear on the driver station's "OpMode list" is defined by the code:
  ``name="Template: Linear OpMode"``
-You can change what appears between the quotes to better describe your opmode.
+You can change what appears between the quotes to better describe your OpMode.
 The "group=" portion of the code can be used to help organize your list of OpModes.
 
 As shown, the current OpMode will NOT appear on the driver station's OpMode list because of the

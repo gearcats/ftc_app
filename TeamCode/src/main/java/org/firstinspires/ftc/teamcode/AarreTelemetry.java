@@ -4,12 +4,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData methods.
- * This makes it easier to switch back and forth between Telemetry.addData and Telementry.log in other classes.
+ * This makes it easier to switch back and forth between Telemetry.addData and Telemetry.log in other classes.
  */
 class AarreTelemetry {
 
-    Telemetry ftcTelemetry = null;
-    Telemetry.Log log = null;
+    private final Telemetry     ftcTelemetry;
+    private final Telemetry.Log log;
 
     AarreTelemetry(Telemetry ftcTelemetry) {
 
@@ -44,8 +44,8 @@ class AarreTelemetry {
      */
     void addData(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
-            ftcTelemetry.addData(caption, message, args);
-            log(caption, message, args);
+        ftcTelemetry.addData(caption, message, args);
+        log(caption, message, args);
     }
 
     /**
@@ -81,14 +81,14 @@ class AarreTelemetry {
      */
     void log(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
-        String log_message = "Caption: " + message;
+        String log_message = caption + ": " + message;
         log_message = String.format(log_message, args);
         log.add(log_message);
 
     }
 
     void update() {
-        update();
+        this.ftcTelemetry.update();
     }
 
 }

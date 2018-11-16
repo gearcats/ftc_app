@@ -12,12 +12,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  *
  */
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 @Autonomous(name="Aarre Autonomous Reset", group="Aarre")
 public class AarreAutonomousReset extends LinearOpMode {
 
-    private AarreRobot robot = new AarreRobot();
-    private AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
+    private final AarreRobot robot = new AarreRobot();
+    private final AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
 
     @Override
     public void runOpMode() {
