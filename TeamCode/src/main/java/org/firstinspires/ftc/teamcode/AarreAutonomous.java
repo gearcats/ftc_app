@@ -69,7 +69,7 @@ public class AarreAutonomous extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        betterTelemetry.log("Status", "Initializing robot");
+        betterTelemetry.log("Initializing robot");
 
         robot.init(hardwareMap, betterTelemetry);
 
@@ -81,7 +81,7 @@ public class AarreAutonomous extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            betterTelemetry.addData("Status", "Ready to run");    //
+            betterTelemetry.log("Ready to run");    //
 
             // Step through each leg of the path,
             // Note: Reverse movement is obtained by setting a negative distance (not speed)
@@ -89,7 +89,7 @@ public class AarreAutonomous extends LinearOpMode {
             encoderDrive(TURN_SPEED,   12, -12, 4.0);  // Turn right 12 inches with 4 sec timeout
             encoderDrive(DRIVE_SPEED, -12, -12, 4.0);  // Reverse 12 inches with 4 Sec timeout
 
-            betterTelemetry.addData("Path", "Complete");
+            betterTelemetry.log("Path", "Complete");
         }
     }
 
@@ -136,8 +136,8 @@ public class AarreAutonomous extends LinearOpMode {
                     (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // Display it for the driver.
-                betterTelemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                betterTelemetry.addData("Path2",  "Running at %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
+                betterTelemetry.log("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                betterTelemetry.log("Path2",  "Running at %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
             }
 
             // Stop all motion;

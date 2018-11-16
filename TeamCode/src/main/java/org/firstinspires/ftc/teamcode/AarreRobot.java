@@ -86,7 +86,7 @@ class AarreRobot {
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful encoder reset
-        telemetry.log("Status", "Drive motor encoders reset");
+        telemetry.log( "Drive motor encoders reset");
         telemetry.log("Left motor start position",  "%7d",  leftMotor.getCurrentPosition());
         telemetry.log("Right motor start position",  "%7d", rightMotor.getCurrentPosition());
 
@@ -149,16 +149,16 @@ class AarreRobot {
      */
     void lowerHook() {
 
-        telemetry.log("Status", "Preparing to lower hook");
+        telemetry.log("Preparing to lower hook");
 
         double downPosition = hookServo.MIN_POSITION;
         telemetry.log("Hook servo prescriptive down position is %f", downPosition);
 
-        telemetry.log("Status", "Lowering hook");
+        telemetry.log("Lowering hook");
 
         hookServo.setPosition(downPosition);
 
-        telemetry.log("Status", "Hook lowered");
+        telemetry.log("Hook lowered");
 
         double currentPosition = hookServo.getPosition();
         telemetry.log("Hook servo actual down position is %f", currentPosition);
@@ -189,16 +189,16 @@ class AarreRobot {
      */
     void raiseHook() {
 
-        telemetry.log("Status", "Preparing to raise hook");
+        telemetry.log("Preparing to raise hook");
 
         double upPosition = hookServo.MAX_POSITION;
         telemetry.log("Hook servo up position is %f", upPosition);
 
-        telemetry.log("Status", "Raising hook");
+        telemetry.log("Raising hook");
 
         hookServo.setPosition(upPosition);
 
-        telemetry.log("Status", "Hook raised");
+        telemetry.log("Hook raised");
 
         double currentPosition = hookServo.getPosition();
         telemetry.log("Hook servo up position is %f", currentPosition);
@@ -212,16 +212,16 @@ class AarreRobot {
      */
     void readyHook() {
 
-        telemetry.log("Status", "Preparing to ready hook");
+        telemetry.log("Preparing to ready hook");
 
         double middlePosition = 0.5;
         telemetry.log("Hook servo prescribed middle position is %f", middlePosition);
 
-        telemetry.log("Status", "Readying hook");
+        telemetry.log("Readying hook");
 
         hookServo.setPosition(middlePosition);
 
-        telemetry.log("Status", "Hook ready");
+        telemetry.log("Hook ready");
 
         double currentPosition = hookServo.getPosition();
         telemetry.log("Hook servo actual middle position is %f", currentPosition);

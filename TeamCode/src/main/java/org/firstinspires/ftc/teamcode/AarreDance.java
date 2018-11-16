@@ -22,7 +22,7 @@ public class AarreDance extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        betterTelemetry.log("Status", "Initializing robot");
+        betterTelemetry.log("Initializing robot");
 
         robot.init(hardwareMap, betterTelemetry);
 
@@ -38,7 +38,7 @@ public class AarreDance extends LinearOpMode {
         robot.raiseHook();
         robot.lowerHook();
 
-        betterTelemetry.log("Status", "Ready to run");    //
+        betterTelemetry.log("Ready to run");    //
 
     }
 

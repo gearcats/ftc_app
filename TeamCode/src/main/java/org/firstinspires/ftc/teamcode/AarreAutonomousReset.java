@@ -22,26 +22,26 @@ public class AarreAutonomousReset extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        betterTelemetry.log("Status", "Initializing robot");
+        betterTelemetry.log("Initializing robot");
 
         robot.init(hardwareMap, betterTelemetry);
 
         // Wait for the driver to press PLAY
         waitForStart();
 
-        betterTelemetry.log("Status", "Initializing hook");
+        betterTelemetry.log("Initializing hook");
         robot.initializeHook();
 
-        betterTelemetry.log("Status", "Readying hook");
+        betterTelemetry.log("Readying hook");
         robot.readyHook();
 
-        betterTelemetry.log("Status", "Raising hook");
+        betterTelemetry.log("Raising hook");
         robot.raiseHook();
 
-        betterTelemetry.log("Status", "Lowering arm");
+        betterTelemetry.log("Lowering arm");
         robot.lowerArm();
 
-        betterTelemetry.log("Status", "Reset complete");
+        betterTelemetry.log("Reset complete");
 
         // Wait until the driver presses STOP
         //noinspection StatementWithEmptyBody
