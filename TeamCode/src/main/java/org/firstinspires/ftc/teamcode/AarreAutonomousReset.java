@@ -30,9 +30,11 @@ public class AarreAutonomousReset extends LinearOpMode {
         // Wait for the driver to press PLAY
         waitForStart();
 
+        robot.initializeTestServo();
+
         robot.initializeHook();
 
-        robot.initializeTestServo();
+
 
         betterTelemetry.log("Lowering arm");
         robot.lowerArm();

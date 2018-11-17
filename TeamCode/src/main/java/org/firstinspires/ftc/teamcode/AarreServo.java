@@ -206,19 +206,19 @@ public class AarreServo {
      */
     void forward() {
 
-        telemetry.log("Preparing to forward the servo");
+        telemetry.log("Servo - Preparing to move forward");
 
         double startPosition = servo.getPosition();
-        telemetry.log("Servo current position is %f", startPosition);
+        telemetry.log("Servo - Current position is %f", startPosition);
 
         double maxPosition = servo.MAX_POSITION;
-        telemetry.log("Servo prescriptive max position is %f", maxPosition);
+        telemetry.log("Servo - Prescriptive max position is %f", maxPosition);
 
-        servo.setPosition(maxPosition);
-        telemetry.log("Servo set to max");
+        setPosition(maxPosition);
+        telemetry.log("Servo - Set to max");
 
         double currentPosition = servo.getPosition();
-        telemetry.log("Servo purported max position is %f", currentPosition);
+        telemetry.log("Servo - Purported max position is %f", currentPosition);
 
     }
 
@@ -240,7 +240,7 @@ public class AarreServo {
         double minPosition = servo.MIN_POSITION;
         telemetry.log("Servo prescriptive min position is %f", minPosition);
 
-        servo.setPosition(minPosition);
+        setPosition(minPosition);
         telemetry.log("Servo set to min");
 
         double currentPosition = getPurportedPosition();
@@ -278,7 +278,9 @@ public class AarreServo {
      * @param max The maximum position in [0,1] that the servo can actually reach.
      */
     void scaleRange(double min, double max){
+
         servo.scaleRange(min, max);
+
     }
 
     /**
@@ -295,9 +297,18 @@ public class AarreServo {
 
     }
 
+    /**
+     * Set the servo position.
+     *
+     * @param position Where to set the servo relative to its available range.
+     *                 A value in the interval [0,1] where 0 is the minimum available position
+     *                 and 1 is the maximum available position.
+     */
     void setPosition(double position) {
 
+        telemetry.log("Setting servo to position %f", position);
         servo.setPosition(position);
+        telemetry.log("Done setting servo to position %f", position);
 
     }
 

@@ -133,9 +133,11 @@ class AarreRobot {
 
         telemetry.log("Test servo: initializing");
 
-        hookServo.setPosition(0);
-        hookServo.setPosition(1);
-        hookServo.setPosition(0.5);
+        testServo.scaleRange(0.0,1.0);
+
+        testServo.setPosition(0);
+        testServo.setPosition(1);
+        testServo.setPosition(0.5);
 
         telemetry.log("Test servo: done initializing");
     }
@@ -150,7 +152,7 @@ class AarreRobot {
 
     void lowerHook() {
         telemetry.log("Hook servo - lowering hook");
-        hookServo.reverse();
+        hookServo.forward();
         telemetry.log("Hook servo - hook lowered");
     }
 
@@ -170,10 +172,9 @@ class AarreRobot {
 
     }
 
-
     void raiseHook() {
         telemetry.log("Hook servo - raising hook");
-        hookServo.forward();
+        hookServo.reverse();
         telemetry.log("Hook servo - hook raised");
     }
 
