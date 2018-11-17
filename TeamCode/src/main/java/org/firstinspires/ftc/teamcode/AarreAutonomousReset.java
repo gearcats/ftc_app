@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Autonomous(name="Aarre Autonomous Reset", group="Aarre")
 public class AarreAutonomousReset extends LinearOpMode {
 
-    private final AarreTelemetry betterTelemetry;
+    private AarreTelemetry betterTelemetry;
     private AarreRobot robot;
 
     AarreAutonomousReset() {
