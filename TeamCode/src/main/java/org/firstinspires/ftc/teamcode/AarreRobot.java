@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines
@@ -25,23 +26,76 @@ class AarreRobot {
      *
      */
     @SuppressWarnings("WeakerAccess")
-    DcMotor leftMotor;
+    AarreMotor leftMotor;
     @SuppressWarnings("WeakerAccess")
-    DcMotor rightMotor;
+    AarreMotor rightMotor;
     @SuppressWarnings("WeakerAccess")
     AarreMotor armMotor;
     @SuppressWarnings("WeakerAccess")
-    DcMotor riserMotor;
+    AarreMotor riserMotor;
     @SuppressWarnings("WeakerAccess")
-    AarreServo   hookServo;
+    AarreServo hookServo;
     @SuppressWarnings("WeakerAccess")
     CRServo scoopServo;
-    AarreServo    testServo;
 
     /**
      *
      */
     AarreRobot(){
+
+    }
+
+
+    /*
+     *  Method to perform a relative move, based on encoder counts.
+     *  Encoders are not reset as the move is based on the current position.
+     *  Move will stop if any of three conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Move runs out of time
+     *  3) Driver stops the OpMode running.
+     */
+    void encoderDrive(double speed,
+                             double leftInches, double rightInches,
+                             double timeoutS) {
+        int newLeftTarget;
+        int newRightTarget;
+
+
+        // Determine new target position, and pass to motor controller
+        newLeftTarget = leftMotor.getCurrentTickNumber() + (int)(leftInches * leftMotor.COUNTS_PER_INCH);
+        newRightTarget = rightMotor.getCurrentTickNumber() + (int)(rightInches * rightMotor.COUNTS_PER_INCH);
+        leftMotor.setTargetPosition(newLeftTarget);
+        rightMotor.setTargetPosition(newRightTarget);
+
+        // Turn On RUN_TO_POSITION
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+        ElapsedTime runtime = new ElapsedTime();
+        leftMotor.setPower(Math.abs(speed));
+        rightMotor.setPower(Math.abs(speed));
+
+        // keep looping while we are still active, and there is time left, and both motors are running.
+        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+        // its target position, the motion will stop.  This is "safer" in the event that the robot will
+        // always end the motion as soon as possible.
+        // However, if you require that BOTH motors have finished their moves before the robot continues
+        // onto the next step, use (isBusy() || isBusy()) in the loop test.
+        while ((runtime.seconds() < timeoutS) && (leftMotor.isBusy() && rightMotor.isBusy())) {
+
+            telemetry.log("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+            telemetry.log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor.getCurrentTickNumber());
+
+        }
+
+        // Stop all motion;
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -59,10 +113,10 @@ class AarreRobot {
         // to 'get' must correspond to the names assigned in the robot configuration
         // in the FTC Robot Controller app on the phone
 
-        leftMotor   = hardwareMap.get(DcMotor.class, "left");
-        rightMotor  = hardwareMap.get(DcMotor.class, "right");
+        leftMotor   = new AarreMotor(hardwareMap, "left", telemetry);
+        rightMotor  = new AarreMotor(hardwareMap, "right", telemetry);
         armMotor    = new AarreMotor(hardwareMap, "arm", telemetry);
-        riserMotor  = hardwareMap.get(DcMotor.class, "riser");
+        riserMotor  = new AarreMotor(hardwareMap, "riser", telemetry);
 
         // Configure drive motors such that a positive power command moves them forwards
         // and causes the encoders to count UP. Note that, as in most robots, the drive
@@ -88,59 +142,39 @@ class AarreRobot {
 
         // Send telemetry message to indicate successful encoder reset
         telemetry.log( "Drive motor encoders reset");
-        telemetry.log("Left motor start position",  "%7d",  leftMotor.getCurrentPosition());
-        telemetry.log("Right motor start position",  "%7d", rightMotor.getCurrentPosition());
+        telemetry.log("Left motor start position",  "%7d",  leftMotor.getCurrentTickNumber());
+        telemetry.log("Right motor start position",  "%7d", rightMotor.getCurrentTickNumber());
 
         // Define the servos
 
         hookServo  = new AarreServo(hardwareMap, "hook", telemetry);
+        initializeHook();
+
         scoopServo = hardwareMap.get(CRServo.class, "scoop");
-        testServo = new AarreServo(hardwareMap, "test", telemetry);
 
         // Save reference to telemetry
         this.telemetry = telemetry;
     }
 
     /**
-     * Set minimum position and maximum position of hook servo based on hardware limits, then
-     * exercise the hook by raising it and lowering it.
+     * Set minimum position and maximum position of hook servo based on hardware limits.
      */
-    void initializeHook() {
+    private void initializeHook() {
 
-        telemetry.log("Initializing hook");
+        this.telemetry.log("Initializing hook");
 
         hookServo.setDirection(Servo.Direction.FORWARD);
 
-        // The hook servo is constrained by hardware
-        // When the hook is down, the arm attached to the servo is at about 110 degrees
-        // compared to 0 when the hook is up. Looking at it the other way, the arm attached
-        // to the servo is at about 70 degrees compared to 180 when the hook is up.
-
         // With the hook up, the servo is at 0 degrees.
-        // With the hook down, the servo is at 100 degrees.
+        // With the hook down, the servo is at about 100 degrees.
 
         double hook_down_degrees = 100.0;
         double hook_up_degrees = 0.0;
         double hook_maximum_degrees = 180.0;
         hookServo.scaleRange(hook_up_degrees/hook_maximum_degrees, hook_down_degrees/hook_maximum_degrees);
 
-        lowerHook();
-        raiseHook();
-
     }
 
-    void initializeTestServo() {
-
-        telemetry.log("Test servo: initializing");
-
-        testServo.scaleRange(0.0,1.0);
-
-        testServo.setPosition(0);
-        testServo.setPosition(1);
-        testServo.setPosition(0.5);
-
-        telemetry.log("Test servo: done initializing");
-    }
 
     /**
      * Lower the arm to its downward position while avoiding stalling the arm motor
@@ -157,19 +191,80 @@ class AarreRobot {
     }
 
     /**
-     * TODO Lower the riser to its downward position while avoiding stalling the riser motor
+     * Lower the riser to its downward position while avoiding stalling the riser motor
      */
     @SuppressWarnings("EmptyMethod")
     void lowerRiser() {
+        riserMotor.setStallTimeLimitInMilliseconds(100);
+        riserMotor.runUntilStalled(-0.1);
+    }
+
+    /**
+     *  Move the riser based on encoder counts.
+     *  Encoders are not reset as the move is based on the current position.
+     *  Move will stop if any of three conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Move runs out of time
+     *  3) Driver stops the OpMode running.
+     *
+     *  This method does not do stall detection
+     *
+     *  @param revolutions The number of (motor shaft) revolutions to move the riser.
+     *                     Positive values move the riser up.
+     *                     Negative values move the riser down.
+     */
+    public void moveRiser(int revolutions) {
+
+        int startPositionCounts;
+        int startPositionRevolutions;
+
+        int targetPositionCounts;
+        int targetPositionRevolutions;
+
+        final double riserSpeed         = 0.1;
+        final int    timeoutS           = 1;
+
+        // Determine new target position and pass to motor controller
+
+        startPositionCounts = riserMotor.getCurrentTickNumber();
+        startPositionRevolutions = startPositionCounts / riserMotor.COUNTS_PER_MOTOR_REVOLUTION;
+
+        targetPositionRevolutions = startPositionRevolutions + 1;
+        targetPositionCounts = targetPositionRevolutions * riserMotor.COUNTS_PER_MOTOR_REVOLUTION;
+
+        //targetPositionInches = leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+        //newRightTarget = rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+
+        riserMotor.setTargetPosition(targetPositionCounts);
+
+        // Turn On RUN_TO_POSITION
+        riserMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time
+        ElapsedTime runtime = new ElapsedTime();
+
+        riserMotor.setPower(Math.abs(riserSpeed));
+
+        // Keep looping while we are still active, and there is time left, and both motors are running.
+        //
+        //noinspection StatementWithEmptyBody
+        while ((runtime.seconds() < timeoutS) && riserMotor.isBusy());
+
+        // Stop all motion;
+        riserMotor.setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        riserMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
     /**
-     * TODO Raise the arm to its upward position while avoiding stalling the arm motor
+     * Raise the arm to its upward position while avoiding stalling the arm motor
      */
     @SuppressWarnings("EmptyMethod")
     void raiseArm() {
-
+        armMotor.setStallTimeLimitInMilliseconds(100);
+        armMotor.runUntilStalled(0.1);
     }
 
     void raiseHook() {
@@ -179,11 +274,12 @@ class AarreRobot {
     }
 
     /**
-     * TODO Raise the riser to its upward position while avoiding stalling the riser motor
+     * Raise the riser to its upward position while avoiding stalling the riser motor
      */
     @SuppressWarnings("EmptyMethod")
     void raiseRiser() {
-
+        riserMotor.setStallTimeLimitInMilliseconds(100);
+        riserMotor.runUntilStalled(0.1);
     }
 }
 

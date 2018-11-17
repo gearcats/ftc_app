@@ -48,7 +48,6 @@ public class AarreServo {
      * @param servoName The name of the servo for which to provide telemetry.
      * @param hardwareMap The hardware map upon which the servo may be found.
      * @param telemetry An instance of AarreTelemetry to associate with this instance.
-     * @param servoDirection Set to Servo.Direction.REVERSE if the servo moves in the wrong direction.
      */
     public AarreServo(HardwareMap hardwareMap, String servoName, AarreTelemetry telemetry) {
 
@@ -291,6 +290,7 @@ public class AarreServo {
      *
      * @param direction An instance of @link{Servo.Direction}
      */
+    @SuppressWarnings("SameParameterValue")
     void setDirection(Servo.Direction direction) {
 
         servo.setDirection(direction);

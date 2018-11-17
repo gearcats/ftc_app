@@ -43,6 +43,7 @@ class AarreTelemetry {
      *                        entry is listed under a given time. If true, there will be a small delay between
      *                        calls to log messages, which will prevent "folded" log entries.
      */
+    @SuppressWarnings("SameParameterValue")
     AarreTelemetry(Telemetry underlyingTelemetry, boolean careful_logging) {
 
         this(underlyingTelemetry);
