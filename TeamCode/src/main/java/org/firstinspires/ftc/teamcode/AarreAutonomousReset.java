@@ -18,10 +18,6 @@ public class AarreAutonomousReset extends LinearOpMode {
     private AarreTelemetry betterTelemetry;
     private AarreRobot robot;
 
-    AarreAutonomousReset() {
-
-    }
-
     @Override
     public void runOpMode() {
 
