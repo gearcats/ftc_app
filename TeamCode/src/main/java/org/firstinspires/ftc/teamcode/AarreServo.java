@@ -311,7 +311,7 @@ public class AarreServo {
 
         // Wait for the hardware to catch up
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         }
         catch (InterruptedException e) {
             telemetry.log ("Sleep interrupted!");
