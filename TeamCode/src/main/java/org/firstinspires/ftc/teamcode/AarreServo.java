@@ -72,8 +72,6 @@ class AarreServo {
     /**
      * Turn the servo forward to its maximum position.
      *
-     * TODO: Avoid stalling the hook servo.
-     *
      */
     void forward() {
 

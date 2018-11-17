@@ -65,6 +65,8 @@ class AarreRobot {
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
         rightMotor.setDirection(DcMotor.Direction.FORWARD);
 
+        riserMotor.setDirection(DcMotor.Direction.REVERSE);
+
         // Set all motors to zero power
 
         leftMotor.setPower(0);
