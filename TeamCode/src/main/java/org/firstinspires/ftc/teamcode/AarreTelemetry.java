@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import static java.lang.Thread.sleep;
-
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData methods.
  *
@@ -101,7 +99,7 @@ class AarreTelemetry {
             // a good idea to have this set during competition, though....
 
             try {
-                sleep(2);
+                Thread.sleep(2);
             }
             catch (InterruptedException e) {
                 this.log ("Sleep interrupted!");

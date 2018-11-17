@@ -308,6 +308,15 @@ public class AarreServo {
 
         telemetry.log("Setting servo to position %f", position);
         servo.setPosition(position);
+
+        // Wait for the hardware to catch up
+        try {
+            Thread.sleep(500);
+        }
+        catch (InterruptedException e) {
+            telemetry.log ("Sleep interrupted!");
+        }
+
         telemetry.log("Done setting servo to position %f", position);
 
     }
