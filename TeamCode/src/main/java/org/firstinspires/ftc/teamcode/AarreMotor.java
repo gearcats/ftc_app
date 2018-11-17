@@ -30,7 +30,7 @@ class AarreMotor {
    private AarreTelemetry    telemetry;
    private ElapsedTime  timeStalledInMilliseconds;
 
-    final int COUNTS_PER_MOTOR_REVOLUTION        = 1440 ;    // eg: TETRIX Motor Encoder, TorqueNado
+    private final int COUNTS_PER_MOTOR_REVOLUTION        = 1440 ;    // eg: TETRIX Motor Encoder, TorqueNado
     private static final double DRIVE_GEAR_REDUCTION            = 1.0 ;     // This is 1.0 for our direct-drive wheels
     private static final double WHEEL_DIAMETER_INCHES           = 5.5 ;     // For figuring circumference; could be 5.625, also depends on treads
     final double COUNTS_PER_INCH                 = (COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -42,7 +42,7 @@ class AarreMotor {
      * @param hardwareMap The hardware map upon which the motor may be found.
      */
     @SuppressWarnings("unused")
-    public AarreMotor(HardwareMap hardwareMap, String motorName) {
+    private AarreMotor(HardwareMap hardwareMap, String motorName) {
 
         motor = hardwareMap.get(DcMotor.class, motorName);
         setDefaults();
@@ -55,7 +55,7 @@ class AarreMotor {
      * @param hardwareMap The hardware map upon which the motor may be found.
      * @param telemetry An instance of AarreTelemetry to associate with the
      */
-    public AarreMotor(HardwareMap hardwareMap, String motorName, AarreTelemetry telemetry) {
+    AarreMotor(HardwareMap hardwareMap, String motorName, AarreTelemetry telemetry) {
 
         // Call the other constructor to create the underlying DcMotor member
         this(hardwareMap, motorName);
@@ -157,7 +157,7 @@ class AarreMotor {
      * @param power How much power to apply to the motor, in the interval
      *              [-1,1].
      */
-    public void runUntilStalled(double power) {
+    void runUntilStalled(double power) {
         timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         setPower(power);
         while (!(isStalled())) {
@@ -233,7 +233,7 @@ class AarreMotor {
      *                                     not have moved more than the stall detection tolerance
      *                                     before we call it a stall.
      */
-    public void setStallTimeLimitInMilliseconds(int stallTimeLimitInMilliseconds) {
+    void setStallTimeLimitInMilliseconds(int stallTimeLimitInMilliseconds) {
         this.stallTimeLimitInMilliseconds = stallTimeLimitInMilliseconds;
     }
 
@@ -253,7 +253,7 @@ class AarreMotor {
     }
 
 
-    public void setTargetPosition(int targetPositionTicks) {
+    void setTargetPosition(int targetPositionTicks) {
         motor.setTargetPosition(targetPositionTicks);
     }
 }

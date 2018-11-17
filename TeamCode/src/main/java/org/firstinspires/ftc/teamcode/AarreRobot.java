@@ -35,7 +35,7 @@ class AarreRobot {
     AarreMotor riserMotor;
     @SuppressWarnings("WeakerAccess")
     AarreServo hookServo;
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "unused"})
     CRServo scoopServo;
 
     /**
@@ -197,65 +197,6 @@ class AarreRobot {
     void lowerRiser() {
         riserMotor.setStallTimeLimitInMilliseconds(100);
         riserMotor.runUntilStalled(-0.1);
-    }
-
-    /**
-     *  Move the riser based on encoder counts.
-     *  Encoders are not reset as the move is based on the current position.
-     *  Move will stop if any of three conditions occur:
-     *  1) Move gets to the desired position
-     *  2) Move runs out of time
-     *  3) Driver stops the OpMode running.
-     *
-     *  This method does not do stall detection
-     *
-     *  @param revolutions The number of (motor shaft) revolutions to move the riser.
-     *                     Positive values move the riser up.
-     *                     Negative values move the riser down.
-     */
-    public void moveRiser(int revolutions) {
-
-        int startPositionCounts;
-        int startPositionRevolutions;
-
-        int targetPositionCounts;
-        int targetPositionRevolutions;
-
-        final double riserSpeed         = 0.1;
-        final int    timeoutS           = 1;
-
-        // Determine new target position and pass to motor controller
-
-        startPositionCounts = riserMotor.getCurrentTickNumber();
-        startPositionRevolutions = startPositionCounts / riserMotor.COUNTS_PER_MOTOR_REVOLUTION;
-
-        targetPositionRevolutions = startPositionRevolutions + 1;
-        targetPositionCounts = targetPositionRevolutions * riserMotor.COUNTS_PER_MOTOR_REVOLUTION;
-
-        //targetPositionInches = leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-        //newRightTarget = rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-
-        riserMotor.setTargetPosition(targetPositionCounts);
-
-        // Turn On RUN_TO_POSITION
-        riserMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // reset the timeout time
-        ElapsedTime runtime = new ElapsedTime();
-
-        riserMotor.setPower(Math.abs(riserSpeed));
-
-        // Keep looping while we are still active, and there is time left, and both motors are running.
-        //
-        //noinspection StatementWithEmptyBody
-        while ((runtime.seconds() < timeoutS) && riserMotor.isBusy());
-
-        // Stop all motion;
-        riserMotor.setPower(0);
-
-        // Turn off RUN_TO_POSITION
-        riserMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
     }
 
     /**

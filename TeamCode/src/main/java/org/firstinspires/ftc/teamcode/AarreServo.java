@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -12,20 +11,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *     <li>Provide telemetry</li>
  * </ul>
  *
- * TODO: Refactor so both this and AarreMotor inherit from something more general like "AarreActuator" -- these two classes share a lot of code
  */
 
-public class AarreServo {
-
-    private int oldTickNumber;
+class AarreServo {
 
     private final Servo      servo;
-    private int          stallTimeLimitInMilliseconds = 0;
-    private double          stallDetectionToleranceRange = 0.01;
     private AarreTelemetry    telemetry;
-    private final ElapsedTime  timeStalledInMilliseconds;
-    private double previousPosition;
-
 
     /**
      * Construct an instance of AarreMotor without telemetry.
@@ -34,11 +25,9 @@ public class AarreServo {
      * @param hardwareMap The hardware map upon which the motor may be found.
      */
     @SuppressWarnings("unused")
-    public AarreServo(HardwareMap hardwareMap, String servoName) {
+    private AarreServo(HardwareMap hardwareMap, String servoName) {
 
         servo = hardwareMap.get(Servo.class, servoName);
-        timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        setDefaults();
     }
 
 
@@ -49,7 +38,7 @@ public class AarreServo {
      * @param hardwareMap The hardware map upon which the servo may be found.
      * @param telemetry An instance of AarreTelemetry to associate with this instance.
      */
-    public AarreServo(HardwareMap hardwareMap, String servoName, AarreTelemetry telemetry) {
+    AarreServo(HardwareMap hardwareMap, String servoName, AarreTelemetry telemetry) {
 
         // Call the other constructor to create the underlying Servo member
         this(hardwareMap, servoName);
@@ -61,123 +50,6 @@ public class AarreServo {
 
         // Upon construction, reset the servo to its full range of movement
         servo.scaleRange(0.0, 1.0);
-    }
-
-
-
-    /**
-     * Set some reasonable defaults for a servo. The user should then set the real values.
-     */
-    private void setDefaults() {
-
-        setStallDetectionToleranceInRange(0.05);
-        setStallTimeLimitInMilliseconds(0);
-
-    }
-
-    /**
-     * Get the number of milliseconds for which the servo has been stalled.
-     *
-     * @return  The integer number of milliseconds during which the servo speed has been
-     *          lower than the stall detection tolerance.
-     */
-    private int getTimeStalledInMilliseconds() {
-
-        // Take the time stalled in (double) milliseconds, round to nearest long and cast to int
-        return (int) Math.round(timeStalledInMilliseconds.time());
-    }
-
-    /**
-     * Set the stall detection time limit
-     *
-     * @param stallTimeLimitInMilliseconds The number of milliseconds during which the servo must
-     *                                     not have moved more than the stall detection tolerance
-     *                                     before we call it a stall.
-     */
-    @SuppressWarnings("WeakerAccess")
-    public void setStallTimeLimitInMilliseconds(int stallTimeLimitInMilliseconds) {
-        this.stallTimeLimitInMilliseconds = stallTimeLimitInMilliseconds;
-    }
-
-    /**
-     * Set the stall detection tolerance
-     *
-     * @param stallDetectionToleranceInRange    An integer number of encoder clicks such that,
-     *                                          if the encoder changes fewer than this number of
-     *                                          clicks over a period of time defined by
-     *                                          stallTimeLimitInMilliseconds, then we consider the
-     *                                          servo stalled.
-     */
-    @SuppressWarnings("WeakerAccess")
-    public void setStallDetectionToleranceInRange(double stallDetectionToleranceInRange) {
-        this.stallDetectionToleranceRange = stallDetectionToleranceInRange;
-    }
-
-    /**
-     * Set up stall detection.
-     *
-     * @param   stallTimeLimitInMilliseconds      How long does the servo have to be still before we consider it stalled?
-     * @param   stallDetectionToleranceInRange    An portion of the range in [0,1] such that,
-     *                                            if the servo changes less than this over a
-     *                                            period of stallTimeLimitInMilliseconds, then we call it a stall.
-     */
-    public void setupStallDetection(int stallTimeLimitInMilliseconds, double stallDetectionToleranceInRange) {
-        setStallDetectionToleranceInRange(stallDetectionToleranceInRange);
-        setStallTimeLimitInMilliseconds(stallTimeLimitInMilliseconds);
-        timeStalledInMilliseconds.reset();
-        previousPosition = this.getPurportedPosition();
-    }
-
-    /**
-     * Detect whether the servo is stalled.
-     *
-     * The servo must not have moved more than a certain number of encoder clicks during a period
-     * of at least so many milliseconds before we consider it stalled.
-     *
-     * @return  <code>true</code> if the servo is stalled;
-     *          <code>false</code> otherwise.
-     */
-    private boolean isStalled() {
-
-        telemetry.log("Time stalled = ", "%d ms", getTimeStalledInMilliseconds());
-        telemetry.log("Stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
-
-        double newPosition = this.getPurportedPosition();
-
-        telemetry.log("Checking for a servo stall", "!");
-
-        // if the servo has not moved since the last time the position was read
-
-        if (Math.abs(newPosition - previousPosition) < stallDetectionToleranceRange) {
-            telemetry.log("Servo is not moving", "!");
-
-            // Servo has not moved, checking to see how long the servo has been stalled for
-            if (timeStalledInMilliseconds.time() > stallTimeLimitInMilliseconds) {
-
-                telemetry.log("Servo stall timer has expired", "!");
-
-                // it has been stalled for more than the time limit
-                return true;
-
-            } else {
-
-                telemetry.log("Servo stall time has NOT expired", "!");
-
-            }
-        } else {
-
-            if(telemetry != null) {
-                telemetry.log("Servo is still moving.", " Resetting stall timer.");
-            }
-
-            // reset the timer because the servo is not stalled
-            timeStalledInMilliseconds.reset();
-        }
-
-        // Save the new tick number as baseline for the next iteration
-        this.previousPosition = newPosition;
-
-        return false;
     }
 
     /**
@@ -247,29 +119,6 @@ public class AarreServo {
 
     }
 
-
-    /**
-     * Put the servo in its middle position so that we can both lower and raise it.
-     *
-     * TODO: Avoid stalling the servo.
-     */
-    void readyServo() {
-
-        telemetry.log("Servo preparing to move to middle position");
-
-        double middlePosition = 0.5;
-
-        telemetry.log("Servo prescribed middle position is %f", middlePosition);
-
-        servo.setPosition(middlePosition);
-
-        telemetry.log("Servo moved to middle position");
-
-        double currentPosition = servo.getPosition();
-        telemetry.log("Servo actual middle position is %f", currentPosition);
-
-    }
-
     /**
      * Scale the range of the servo, for example to accommodate mechanical limits.
      *
@@ -304,7 +153,7 @@ public class AarreServo {
      *                 A value in the interval [0,1] where 0 is the minimum available position
      *                 and 1 is the maximum available position.
      */
-    void setPosition(double position) {
+    private void setPosition(double position) {
 
         telemetry.log("Setting servo to position %f", position);
         servo.setPosition(position);
