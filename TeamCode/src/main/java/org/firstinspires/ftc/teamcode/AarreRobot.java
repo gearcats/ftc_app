@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 class AarreRobot {
 
-    private AarreTelemetry telemetry;
+    private final AarreTelemetry telemetry;
 
     /** These properties are package-private so methods of other classes in this package can use them.
      *
