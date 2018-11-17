@@ -16,16 +16,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Autonomous(name="Aarre Autonomous Reset", group="Aarre")
 public class AarreAutonomousReset extends LinearOpMode {
 
-    private final AarreRobot robot = new AarreRobot();
-    private final AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry, true);
+    private final AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
+    private final AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
 
     @Override
     public void runOpMode() {
 
         betterTelemetry.log("-------------------------------------------------------------------------------");
         betterTelemetry.log("Resetting robot for autonomous mode");
-
-        robot.init(hardwareMap, betterTelemetry);
 
         // Wait for the driver to press PLAY
         waitForStart();

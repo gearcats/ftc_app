@@ -39,9 +39,70 @@ class AarreRobot {
     CRServo scoopServo;
 
     /**
+     * Constructor
+     *
+     * @param hardwareMap   An instance of {@link HardwareMap}
+     * @param telemetry     An instance of {@link AarreTelemetry}
      *
      */
-    AarreRobot(){
+    AarreRobot(HardwareMap hardwareMap, AarreTelemetry telemetry){
+
+        this.telemetry = telemetry;
+
+        // Define and initialize the motors. The strings used here as parameters
+        // must correspond to the names assigned in the robot configuration
+        // in the FTC Robot Controller app on the phone
+
+        leftMotor   = new AarreMotor(hardwareMap, "left", telemetry);
+        rightMotor  = new AarreMotor(hardwareMap, "right", telemetry);
+        armMotor    = new AarreMotor(hardwareMap, "arm", telemetry);
+        riserMotor  = new AarreMotor(hardwareMap, "riser", telemetry);
+
+        // Configure drive motors such that a positive power command moves them forwards
+        // and causes the encoders to count UP. Note that, as in most robots, the drive
+        // motors are mounted in opposite directions. May need to be reversed if using AndyMark motors.
+
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        // Set all motors to zero power
+
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+        armMotor.setPower(0);
+        riserMotor.setPower(0);
+
+        // This code REQUIRES that you have encoders on the wheel motors
+
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Send telemetry message to indicate successful encoder reset
+        telemetry.log( "Drive motor encoders reset");
+        telemetry.log("Left motor start position",  "%7d",  leftMotor.getCurrentTickNumber());
+        telemetry.log("Right motor start position",  "%7d", rightMotor.getCurrentTickNumber());
+
+        // Define the servos
+
+        hookServo  = new AarreServo(hardwareMap, "hook", telemetry);
+
+        this.telemetry.log("Initializing hook");
+
+        hookServo.setDirection(Servo.Direction.FORWARD);
+
+        // With the hook up, the servo is at 0 degrees.
+        // With the hook down, the servo is at about 100 degrees.
+
+        double hook_down_degrees = 100.0;
+        double hook_up_degrees = 0.0;
+        double hook_maximum_degrees = 180.0;
+        hookServo.scaleRange(hook_up_degrees/hook_maximum_degrees, hook_down_degrees/hook_maximum_degrees);
+
+        // TODO: Initialize scoop servo
+        scoopServo = hardwareMap.get(CRServo.class, "scoop");
 
     }
 
@@ -99,83 +160,6 @@ class AarreRobot {
 
     }
 
-
-    /**
-     * Initialize hardware interfaces
-     *
-     * @param hardwareMap   An instance of {@link HardwareMap}
-     * @param telemetry     An instance of {@link AarreTelemetry}
-     *
-     */
-    void init(HardwareMap hardwareMap, AarreTelemetry telemetry) {
-
-        // Define and initialize the motors. The strings used here as parameters
-        // to 'get' must correspond to the names assigned in the robot configuration
-        // in the FTC Robot Controller app on the phone
-
-        leftMotor   = new AarreMotor(hardwareMap, "left", telemetry);
-        rightMotor  = new AarreMotor(hardwareMap, "right", telemetry);
-        armMotor    = new AarreMotor(hardwareMap, "arm", telemetry);
-        riserMotor  = new AarreMotor(hardwareMap, "riser", telemetry);
-
-        // Configure drive motors such that a positive power command moves them forwards
-        // and causes the encoders to count UP. Note that, as in most robots, the drive
-        // motors are mounted in opposite directions. May need to be reversed if using AndyMark motors.
-
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightMotor.setDirection(DcMotor.Direction.FORWARD);
-
-        // Set all motors to zero power
-
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
-        armMotor.setPower(0);
-        riserMotor.setPower(0);
-
-        // This code REQUIRES that you have encoders on the wheel motors
-
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Send telemetry message to indicate successful encoder reset
-        telemetry.log( "Drive motor encoders reset");
-        telemetry.log("Left motor start position",  "%7d",  leftMotor.getCurrentTickNumber());
-        telemetry.log("Right motor start position",  "%7d", rightMotor.getCurrentTickNumber());
-
-        // Define the servos
-
-        hookServo  = new AarreServo(hardwareMap, "hook", telemetry);
-        initializeHook();
-
-        scoopServo = hardwareMap.get(CRServo.class, "scoop");
-
-        // Save reference to telemetry
-        this.telemetry = telemetry;
-    }
-
-    /**
-     * Set minimum position and maximum position of hook servo based on hardware limits.
-     */
-    private void initializeHook() {
-
-        this.telemetry.log("Initializing hook");
-
-        hookServo.setDirection(Servo.Direction.FORWARD);
-
-        // With the hook up, the servo is at 0 degrees.
-        // With the hook down, the servo is at about 100 degrees.
-
-        double hook_down_degrees = 100.0;
-        double hook_up_degrees = 0.0;
-        double hook_maximum_degrees = 180.0;
-        hookServo.scaleRange(hook_up_degrees/hook_maximum_degrees, hook_down_degrees/hook_maximum_degrees);
-
-    }
-
-
     /**
      * Lower the arm to its downward position while avoiding stalling the arm motor
      */
@@ -184,6 +168,9 @@ class AarreRobot {
         armMotor.runUntilStalled(-0.1);
     }
 
+    /**
+     * Lower the hook to its downward position
+     */
     void lowerHook() {
         telemetry.log("Hook servo - lowering hook");
         hookServo.forward();
@@ -193,21 +180,24 @@ class AarreRobot {
     /**
      * Lower the riser to its downward position while avoiding stalling the riser motor
      */
-    @SuppressWarnings("EmptyMethod")
     void lowerRiser() {
+        telemetry.log("Riser - lowering riser");
         riserMotor.setStallTimeLimitInMilliseconds(100);
         riserMotor.runUntilStalled(-0.1);
+        telemetry.log("Riser - riser lowered");
     }
 
     /**
      * Raise the arm to its upward position while avoiding stalling the arm motor
      */
-    @SuppressWarnings("EmptyMethod")
     void raiseArm() {
         armMotor.setStallTimeLimitInMilliseconds(100);
         armMotor.runUntilStalled(0.1);
     }
 
+    /**
+     * Raise the hook to its upward position
+     */
     void raiseHook() {
         telemetry.log("Hook servo - raising hook");
         hookServo.reverse();

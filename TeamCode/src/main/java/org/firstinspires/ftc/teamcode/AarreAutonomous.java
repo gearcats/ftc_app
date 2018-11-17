@@ -46,12 +46,15 @@ public class AarreAutonomous extends LinearOpMode {
 
     private AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
 
-    private AarreRobot robot = new AarreRobot();
+    private AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    private static final double DRIVE_SPEED                     = 0.6;      // How fast to move forward or back
-    private static final double TURN_SPEED                      = 0.5;      // How fast to move when turning
+    // How fast to move forward or back
+    private static final double DRIVE_SPEED                     = 0.6;
+
+    // How fast to move when turning
+    private static final double TURN_SPEED                      = 0.5;
     private static final double TEST_TIME_SECONDS               = 0.5;
 
 
@@ -67,8 +70,6 @@ public class AarreAutonomous extends LinearOpMode {
 
         betterTelemetry.log("Initializing robot");
 
-        robot.init(hardwareMap, betterTelemetry);
-
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
@@ -81,9 +82,15 @@ public class AarreAutonomous extends LinearOpMode {
 
             // Step through each leg of the path,
             // Note: Reverse movement is obtained by setting a negative distance (not speed)
-           robot.encoderDrive(DRIVE_SPEED,  12,  12, 5.0);  // Forward 12 inches with 5 sec timeout
-            robot.encoderDrive(TURN_SPEED,   12, -12, 4.0);  // Turn right 12 inches with 4 sec timeout
-            robot.encoderDrive(DRIVE_SPEED, -12, -12, 4.0);  // Reverse 12 inches with 4 Sec timeout
+
+            // // Forward 12 inches with 5 sec timeout
+           robot.encoderDrive(DRIVE_SPEED,  12,  12, 5.0);
+
+            // Turn right 12 inches with 4 sec timeout
+            robot.encoderDrive(TURN_SPEED,   12, -12, 4.0);
+
+            // Reverse 12 inches with 4 Sec timeout
+            robot.encoderDrive(DRIVE_SPEED, -12, -12, 4.0);
 
             betterTelemetry.log("Path", "Complete");
         }

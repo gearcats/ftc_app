@@ -16,15 +16,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Autonomous(name="Aarre Dance", group="Aarre")
 public class AarreDance extends LinearOpMode {
 
-    private final AarreRobot robot = new AarreRobot();
     private final AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
+    private final AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
+
 
     @Override
     public void runOpMode() {
 
         betterTelemetry.log("Initializing robot");
-
-        robot.init(hardwareMap, betterTelemetry);
 
         // Wait for the driver to press PLAY
         waitForStart();
