@@ -66,8 +66,11 @@ public class AarreDance extends LinearOpMode {
         //robot.raiseRiserUntilStall();
         //robot.lowerRiserUntilStall();
 
-        robot.raiseRiserByTicks();
-        robot.lowerRiserByTicks();
+        //robot.raiseRiserByTicks();
+        //robot.lowerRiserByTicks();
+
+        robot.raiseRiserByRevolutions();
+        robot.lowerRiserByRevolutions();
 
         robot.lowerHook();
         robot.raiseHook();

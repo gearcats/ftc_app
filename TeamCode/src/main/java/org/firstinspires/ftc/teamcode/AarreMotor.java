@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.ElapsedTime.Resolution;
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -25,7 +25,6 @@ import com.qualcomm.robotcore.util.ElapsedTime.Resolution;
  */
 class AarreMotor {
 
-    private static final double COUNTS_PER_INCH = ((double) COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
     private final DcMotor motor;
     private int oldTickNumber;
     private int stallTimeLimitInMilliseconds = 0;
@@ -35,6 +34,8 @@ class AarreMotor {
     private static final int COUNTS_PER_MOTOR_REVOLUTION = 1440;    // eg: TETRIX Motor Encoder, TorqueNado
     private static final double DRIVE_GEAR_REDUCTION            = 1.0 ;     // This is 1.0 for our direct-drive wheels
     private static final double WHEEL_DIAMETER_INCHES           = 5.5 ;     // For figuring circumference; could be 5.625, also depends on treads
+    private static final double COUNTS_PER_INCH = ((double) COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+
     private ElapsedTime timeStalledInMilliseconds;
 
     /**
@@ -53,7 +54,7 @@ class AarreMotor {
         setStallTimeLimitInMilliseconds(100);
 
         // Reset the encoder and force the motor to be stopped
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(RunMode.STOP_AND_RESET_ENCODER);
         motor.setPower(0);
     }
 
@@ -192,7 +193,7 @@ class AarreMotor {
         int targetTicks = getCurrentTickNumber() + (int) Math.signum(speed) * ticks;
 
         setTargetPosition(targetTicks);
-        setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        setMode(RunMode.RUN_TO_POSITION);
 
         // reset the timeout time and start motion.
         ElapsedTime runtime = new ElapsedTime();
@@ -209,8 +210,14 @@ class AarreMotor {
         setPower(0.0);
 
         // Turn off RUN_TO_POSITION
-        setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setMode(RunMode.RUN_USING_ENCODER);
 
+    }
+
+    final void runByRevolutions(double speed, double revolutions, double timeoutS) {
+
+        int ticks = (int) Math.round(COUNTS_PER_MOTOR_REVOLUTION * revolutions);
+        runByEncoderTicks(speed, ticks, timeoutS);
     }
 
     /**
@@ -220,7 +227,7 @@ class AarreMotor {
      *              [-1,1].
      */
     void runUntilStalled(double power) {
-        timeStalledInMilliseconds = new ElapsedTime(Resolution.MILLISECONDS);
+        timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         setPower(power);
         //noinspection StatementWithEmptyBody
         while (!(isStalled())) {
@@ -233,7 +240,7 @@ class AarreMotor {
      *
      * @param direction The logical direction in which this motor operates.
      */
-    void setDirection(DcMotorSimple.Direction direction) {
+    void setDirection(Direction direction) {
         motor.setDirection(direction);
     }
 
@@ -243,7 +250,7 @@ class AarreMotor {
      * @param mode the new current run mode for this motor
      */
     @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-    void setMode(DcMotor.RunMode mode) {
+    void setMode(RunMode mode) {
         motor.setMode(mode);
     }
 
