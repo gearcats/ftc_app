@@ -4,6 +4,7 @@
 
 Builds (reverse chronological order)
 
+* 0.00.004.0001 Try speeding up riser motor and giving it a longer timeout
 * 0.00.003 Aarre Dance: drive works, hook words, riser does not go far enough
 * 0.00.002 Aarre Dance: drive works, hook works, riser wrong direction
 * 0.00.001.0001 Hook works under AarreDance.
