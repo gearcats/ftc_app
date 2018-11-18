@@ -22,10 +22,11 @@ public class AarreAutonomousReset extends LinearOpMode {
     public void runOpMode() {
 
         betterTelemetry = new AarreTelemetry(telemetry);
-        robot = new AarreRobot(hardwareMap, betterTelemetry);
 
         betterTelemetry.log("-------------------------------------------------------------------------------");
         betterTelemetry.log("Resetting robot for autonomous mode");
+
+        robot = new AarreRobot(hardwareMap, betterTelemetry);
 
         // Wait for the driver to press PLAY
         waitForStart();

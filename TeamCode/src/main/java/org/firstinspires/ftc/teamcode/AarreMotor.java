@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.ElapsedTime.Resolution;
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -35,7 +35,7 @@ class AarreMotor {
     private final int COUNTS_PER_MOTOR_REVOLUTION        = 1440 ;    // eg: TETRIX Motor Encoder, TorqueNado
     private static final double DRIVE_GEAR_REDUCTION            = 1.0 ;     // This is 1.0 for our direct-drive wheels
     private static final double WHEEL_DIAMETER_INCHES           = 5.5 ;     // For figuring circumference; could be 5.625, also depends on treads
-    final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REVOLUTION * AarreMotor.DRIVE_GEAR_REDUCTION) / (AarreMotor.WHEEL_DIAMETER_INCHES * 3.1415);
+    final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     /**
      * Construct an instance of AarreMotor without telemetry.
@@ -165,10 +165,10 @@ class AarreMotor {
      *              [-1,1].
      */
     void runUntilStalled(double power) {
-        timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        timeStalledInMilliseconds = new ElapsedTime(Resolution.MILLISECONDS);
         setPower(power);
         while (!(isStalled())) {
-            telemetry.log("Not stalled yet...");
+            //telemetry.log("Not stalled yet...");
         }
     }
 
@@ -181,7 +181,7 @@ class AarreMotor {
         setStallTimeLimitInMilliseconds(0);
 
         // Reset the encoder and force the motor to be stopped
-        setMode(RunMode.STOP_AND_RESET_ENCODER);
+        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setPower(0);
     }
 
@@ -190,7 +190,7 @@ class AarreMotor {
      *
      * @param direction The logical direction in which this motor operates.
      */
-    void setDirection(Direction direction) {
+    void setDirection(DcMotorSimple.Direction direction) {
         motor.setDirection(direction);
     }
 
@@ -200,7 +200,7 @@ class AarreMotor {
      * @param mode the new current run mode for this motor
      */
     @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-    void setMode(RunMode mode) {
+    void setMode(DcMotor.RunMode mode) {
         motor.setMode(mode);
     }
 

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo.Direction;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -77,16 +77,11 @@ class AarreRobot {
 
         // This code REQUIRES that you have encoders on the wheel motors
 
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(RunMode.STOP_AND_RESET_ENCODER);
 
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Send telemetry message to indicate successful encoder reset
-        telemetry.log( "Drive motor encoders reset");
-        telemetry.log("Left motor start position", "%7d", leftMotor.getCurrentTickNumber());
-        telemetry.log("Right motor start position",  "%7d", rightMotor.getCurrentTickNumber());
+        leftMotor.setMode(RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(RunMode.RUN_USING_ENCODER);
 
         // Define the servos
 
@@ -94,15 +89,15 @@ class AarreRobot {
 
         this.telemetry.log("Initializing hook");
 
-        hookServo.setDirection(Direction.FORWARD);
+        hookServo.setDirection(Servo.Direction.FORWARD);
 
         // With the hook up, the servo is at 0 degrees.
         // With the hook down, the servo is at about 100 degrees.
 
-        double hook_down_degrees = 100.0;
-        double hook_up_degrees = 0.0;
-        double hook_maximum_degrees = 180.0;
-        hookServo.scaleRange(hook_up_degrees/hook_maximum_degrees, hook_down_degrees/hook_maximum_degrees);
+        double hookDownDegrees = 100.0;
+        double hookUpDegrees = 0.0;
+        double hookMaximumDegrees = 180.0;
+        hookServo.scaleRange(hookUpDegrees / hookMaximumDegrees, hookDownDegrees / hookMaximumDegrees);
 
         // TODO: Initialize scoop servo
         scoopServo = hardwareMap.get(CRServo.class, "scoop");
@@ -132,8 +127,8 @@ class AarreRobot {
         rightMotor.setTargetPosition(newRightTarget);
 
         // Turn On RUN_TO_POSITION
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftMotor.setMode(RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(RunMode.RUN_TO_POSITION);
 
         // reset the timeout time and start motion.
         ElapsedTime runtime = new ElapsedTime();
@@ -158,8 +153,8 @@ class AarreRobot {
         rightMotor.setPower(0);
 
         // Turn off RUN_TO_POSITION
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotor.setMode(RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(RunMode.RUN_USING_ENCODER);
 
     }
 
