@@ -1,5 +1,13 @@
 ## TeamCode Module
 
+
+
+Builds (reverse chronological order)
+
+* 0.00.002 Aarre Dance: drive works, hook works, riser wrong direction
+* 0.00.001.0001 Hook works under AarreDance.
+* 0.00.000.0001 First build with version number tracking.
+
 Numbering scheme
 
 *   1-digit major version number (for any version that is a major overhaul
@@ -7,11 +15,18 @@ Numbering scheme
 *   3-digit bugfix number (for any version that improves on a previous one)
 *   4-digit build number (for any version that builds)
 
-Builds (reverse chronological order)
+Development cycle
 
-* 0.00.002 Aarre Dance: drive works, hook works, riser wrong direction
-* 0.00.001.0001 Hook works under AarreDance.
-* 0.00.000.0001 First build with version number tracking.
+1. Make changes to code
+
+2. Build the project. If it doesn't build, go back to step 1.
+
+3. If the project builds, check it in with a new build number.
+
+4. Run the code. If it doesn't work, go back to step 1.
+
+5. If the code works (and improves on a previous bugfix release), update this list and
+then tag it with a new bugfix version number.
 
 Welcome!
 
