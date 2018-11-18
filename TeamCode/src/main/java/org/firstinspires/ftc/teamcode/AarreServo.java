@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  *
  */
 
-class AarreServo {
+public class AarreServo {
 
     private final Servo      servo;
     private AarreTelemetry    telemetry;
@@ -25,7 +25,7 @@ class AarreServo {
      * @param hardwareMap The hardware map upon which the motor may be found.
      */
     @SuppressWarnings("unused")
-    private AarreServo(HardwareMap hardwareMap, String servoName) {
+    public AarreServo(HardwareMap hardwareMap, String servoName) {
 
         servo = hardwareMap.get(Servo.class, servoName);
     }
@@ -38,7 +38,7 @@ class AarreServo {
      * @param hardwareMap The hardware map upon which the servo may be found.
      * @param telemetry An instance of AarreTelemetry to associate with this instance.
      */
-    AarreServo(HardwareMap hardwareMap, String servoName, AarreTelemetry telemetry) {
+    public AarreServo(HardwareMap hardwareMap, String servoName, AarreTelemetry telemetry) {
 
         // Call the other constructor to create the underlying Servo member
         this(hardwareMap, servoName);
