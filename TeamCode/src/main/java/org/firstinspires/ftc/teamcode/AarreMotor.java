@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -33,7 +35,7 @@ class AarreMotor {
     private final int COUNTS_PER_MOTOR_REVOLUTION        = 1440 ;    // eg: TETRIX Motor Encoder, TorqueNado
     private static final double DRIVE_GEAR_REDUCTION            = 1.0 ;     // This is 1.0 for our direct-drive wheels
     private static final double WHEEL_DIAMETER_INCHES           = 5.5 ;     // For figuring circumference; could be 5.625, also depends on treads
-    final double COUNTS_PER_INCH                 = (COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REVOLUTION * AarreMotor.DRIVE_GEAR_REDUCTION) / (AarreMotor.WHEEL_DIAMETER_INCHES * 3.1415);
 
     /**
      * Construct an instance of AarreMotor without telemetry.
@@ -87,7 +89,9 @@ class AarreMotor {
     private int getTimeStalledInMilliseconds() {
 
         // Take the time stalled in (double) milliseconds, round to nearest long and cast to int
-        return (int) Math.round(timeStalledInMilliseconds.time());
+        double dblTimeStalledInMilliseconds = timeStalledInMilliseconds.time();
+        int intTimeStalledInMilliseconds = (int) Math.round(dblTimeStalledInMilliseconds);
+        return intTimeStalledInMilliseconds;
     }
 
     /**
@@ -177,7 +181,7 @@ class AarreMotor {
         setStallTimeLimitInMilliseconds(0);
 
         // Reset the encoder and force the motor to be stopped
-        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setMode(RunMode.STOP_AND_RESET_ENCODER);
         setPower(0);
     }
 
@@ -186,7 +190,7 @@ class AarreMotor {
      *
      * @param direction The logical direction in which this motor operates.
      */
-    void setDirection(DcMotor.Direction direction)  {
+    void setDirection(Direction direction) {
         motor.setDirection(direction);
     }
 
@@ -196,7 +200,7 @@ class AarreMotor {
      * @param mode the new current run mode for this motor
      */
     @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-    void setMode(DcMotor.RunMode mode) {
+    void setMode(RunMode mode) {
         motor.setMode(mode);
     }
 
@@ -216,43 +220,58 @@ class AarreMotor {
     }
 
     /**
+     * Set the power level of the motor to an integer level.
+     * <p>
+     * Syntactic sugar when we are stopping the motor (0) or going at max speed (1).
+     *
+     * @param power The new power level of the motor.
+     *              Either 0 or 1.
+     */
+    void setPower(int power) {
+        double dblPower = (double) power;
+        motor.setPower(dblPower);
+    }
+
+    /**
      * Set the stall detection tolerance
      *
-     * @param stallDetectionToleranceInTicks    An integer number of encoder clicks such that,
+     * @param ticks    An integer number of encoder clicks such that,
      *                                          if the encoder changes fewer than this number of
      *                                          clicks over a period of time defined by
      *                                          stallTimeLimitInMilliseconds, then we consider the
      *                                          motor stalled.
      */
     @SuppressWarnings("WeakerAccess")
-    public void setStallDetectionToleranceInTicks(int stallDetectionToleranceInTicks) {
-        this.stallDetectionToleranceInTicks = stallDetectionToleranceInTicks;
+    public void setStallDetectionToleranceInTicks(int ticks) {
+        stallDetectionToleranceInTicks = ticks;
     }
 
     /**
      * Set the stall detection time limit
      *
-     * @param stallTimeLimitInMilliseconds The number of milliseconds during which the motor must
+     * @param milliseconds The number of milliseconds during which the motor must
      *                                     not have moved more than the stall detection tolerance
      *                                     before we call it a stall.
      */
-    void setStallTimeLimitInMilliseconds(int stallTimeLimitInMilliseconds) {
-        this.stallTimeLimitInMilliseconds = stallTimeLimitInMilliseconds;
+    void setStallTimeLimitInMilliseconds(int milliseconds) {
+        stallTimeLimitInMilliseconds = milliseconds;
     }
 
     /**
      * Set up stall detection.
      *
-     * @param   stallTimeLimitInMilliseconds      How long does the motor have to be still before we consider it stalled?
-     * @param   stallDetectionToleranceInTicks    An integer number of encoder clicks such that,
+     * @param   timeLimitMilliseconds      How long does the motor have to be still before we consider it stalled?
+     * @param   detectionToleranceTicks    An integer number of encoder clicks such that,
      *                                            if the encoder changes less than this over a
      *                                            period of stallTimeLimitInMilliseconds, then we call it a stall.
      */
-    public void setupStallDetection(int stallTimeLimitInMilliseconds, int stallDetectionToleranceInTicks) {
-        setStallDetectionToleranceInTicks(stallDetectionToleranceInTicks);
-        setStallTimeLimitInMilliseconds(stallTimeLimitInMilliseconds);
+    public void setupStallDetection(int timeLimitMilliseconds, int detectionToleranceTicks) {
+
+        setStallDetectionToleranceInTicks(detectionToleranceTicks);
+        setStallTimeLimitInMilliseconds(timeLimitMilliseconds);
         timeStalledInMilliseconds.reset();
         oldTickNumber = getCurrentTickNumber();
+
     }
 
 

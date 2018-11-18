@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.Telemetry.Log;
 
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData methods.
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 class AarreTelemetry {
 
     private final Telemetry     underlyingTelemetry;
-    private final Telemetry.Log telemetryLog;
+    private final Log telemetryLog;
 
     private boolean CAREFUL_LOGGING = false;
 

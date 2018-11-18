@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.Servo.Direction;
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -28,7 +29,7 @@ public class AarreServo {
 
         servo = hardwareMap.get(Servo.class, servoName);
 
-        servo.setDirection(Servo.Direction.FORWARD);
+        servo.setDirection(Direction.FORWARD);
 
         // Upon construction, reset the servo to its full range of movement
         servo.scaleRange(0.0, 1.0);
@@ -138,7 +139,7 @@ public class AarreServo {
      * @param direction An instance of @link{Servo.Direction}
      */
     @SuppressWarnings("SameParameterValue")
-    void setDirection(Servo.Direction direction) {
+    void setDirection(Direction direction) {
 
         servo.setDirection(direction);
 

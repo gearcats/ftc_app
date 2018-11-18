@@ -2,8 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.Servo.Direction;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -45,7 +46,7 @@ class AarreRobot {
      * @param telemetry     An instance of {@link AarreTelemetry}
      *
      */
-    AarreRobot(HardwareMap hardwareMap, AarreTelemetry telemetry){
+    AarreRobot(HardwareMap hardwareMap, AarreTelemetry telemetry) {
 
         this.telemetry = telemetry;
 
@@ -62,10 +63,10 @@ class AarreRobot {
         // and causes the encoders to count UP. Note that, as in most robots, the drive
         // motors are mounted in opposite directions. May need to be reversed if using AndyMark motors.
 
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        riserMotor.setDirection(DcMotor.Direction.REVERSE);
+        riserMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Set all motors to zero power
 
@@ -93,7 +94,7 @@ class AarreRobot {
 
         this.telemetry.log("Initializing hook");
 
-        hookServo.setDirection(Servo.Direction.FORWARD);
+        hookServo.setDirection(Direction.FORWARD);
 
         // With the hook up, the servo is at 0 degrees.
         // With the hook down, the servo is at about 100 degrees.

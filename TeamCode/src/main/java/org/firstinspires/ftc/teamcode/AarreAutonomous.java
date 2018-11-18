@@ -44,11 +44,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="Aarre Autonomous", group="Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
-    private AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
+    private final AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
 
-    private AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
+    private final AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
 
-    private ElapsedTime runtime = new ElapsedTime();
+    private final ElapsedTime runtime = new ElapsedTime();
 
     // How fast to move forward or back
     private static final double DRIVE_SPEED                     = 0.6;
@@ -84,13 +84,13 @@ public class AarreAutonomous extends LinearOpMode {
             // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
             // // Forward 12 inches with 5 sec timeout
-            robot.encoderDrive(DRIVE_SPEED, 12, 12, 5.0);
+            robot.encoderDrive(AarreAutonomous.DRIVE_SPEED, 12.0, 12.0, 5.0);
 
             // Turn right 12 inches with 4 sec timeout
-            robot.encoderDrive(TURN_SPEED,   12, -12, 4.0);
+            robot.encoderDrive(AarreAutonomous.TURN_SPEED, 12.0, -12.0, 4.0);
 
             // Reverse 12 inches with 4 Sec timeout
-            robot.encoderDrive(DRIVE_SPEED, -12, -12, 4.0);
+            robot.encoderDrive(AarreAutonomous.DRIVE_SPEED, -12.0, -12.0, 4.0);
 
             betterTelemetry.log("Path", "Complete");
         }
