@@ -16,24 +16,26 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Autonomous(name="Aarre Dance", group="Aarre")
 public class AarreDance extends LinearOpMode {
 
-
-
+    private AarreTelemetry betterTelemetry;
+    private AarreRobot robot;
 
     @Override
     public void runOpMode() {
 
         // 'telemetry' comes from FTC....
+        // It is only available in runOpMode
 
-        if (null == telemetry) throw new AssertionError("Unexpected null object: telemetry");
+        if (telemetry == null) throw new AssertionError("Unexpected null object: telemetry");
         AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
-        if (null == betterTelemetry)
+        if (betterTelemetry == null)
             throw new AssertionError("Unexpected null object: betterTelemetry");
 
         // 'hardwareMap comes from FTC....
+        // It is only available in runOpMode
 
-        if (null == hardwareMap) throw new AssertionError("Unexpected null object: hardwareMap");
+        if (hardwareMap == null) throw new AssertionError("Unexpected null object: hardwareMap");
         AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
-        if (null == robot) throw new AssertionError("Unexpected null object: robot");
+        if (robot == null) throw new AssertionError("Unexpected null object: robot");
 
         betterTelemetry.log("Initializing robot");
 

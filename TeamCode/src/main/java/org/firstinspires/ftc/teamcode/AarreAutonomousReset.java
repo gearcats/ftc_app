@@ -21,12 +21,22 @@ public class AarreAutonomousReset extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        betterTelemetry = new AarreTelemetry(telemetry);
+        // 'telemetry' comes from FTC....
+        // It is only available in runOpMode
 
-        betterTelemetry.log("-------------------------------------------------------------------------------");
-        betterTelemetry.log("Resetting robot for autonomous mode");
+        if (telemetry == null) throw new AssertionError("Unexpected null object: telemetry");
+        AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
+        if (betterTelemetry == null)
+            throw new AssertionError("Unexpected null object: betterTelemetry");
 
-        robot = new AarreRobot(hardwareMap, betterTelemetry);
+        // 'hardwareMap comes from FTC....
+        // It is only available in runOpMode
+
+        if (hardwareMap == null) throw new AssertionError("Unexpected null object: hardwareMap");
+        AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
+        if (robot == null) throw new AssertionError("Unexpected null object: robot");
+
+        betterTelemetry.log("Initializing robot");
 
         // Wait for the driver to press PLAY
         waitForStart();

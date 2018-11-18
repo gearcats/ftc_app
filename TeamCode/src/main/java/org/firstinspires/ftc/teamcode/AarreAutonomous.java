@@ -44,9 +44,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="Aarre Autonomous", group="Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
-    private final AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
-
-    private final AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
+    private AarreTelemetry betterTelemetry;
+    private AarreRobot robot;
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -68,9 +67,24 @@ public class AarreAutonomous extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        // 'telemetry' comes from FTC....
+        // It is only available in runOpMode
+
+        if (telemetry == null) throw new AssertionError("Unexpected null object: telemetry");
+        AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
+        if (betterTelemetry == null)
+            throw new AssertionError("Unexpected null object: betterTelemetry");
+
+        // 'hardwareMap comes from FTC....
+        // It is only available in runOpMode
+
+        if (hardwareMap == null) throw new AssertionError("Unexpected null object: hardwareMap");
+        AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
+        if (robot == null) throw new AssertionError("Unexpected null object: robot");
+
         betterTelemetry.log("Initializing robot");
 
-        // Wait for the game to start (driver presses PLAY)
+        // Wait for the driver to press PLAY
         waitForStart();
 
         runtime.reset();
@@ -84,13 +98,13 @@ public class AarreAutonomous extends LinearOpMode {
             // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
             // // Forward 12 inches with 5 sec timeout
-            robot.encoderDrive(AarreAutonomous.DRIVE_SPEED, 12.0, 12.0, 5.0);
+            robot.encoderDrive(DRIVE_SPEED, 12.0, 12.0, 5.0);
 
             // Turn right 12 inches with 4 sec timeout
-            robot.encoderDrive(AarreAutonomous.TURN_SPEED, 12.0, -12.0, 4.0);
+            robot.encoderDrive(TURN_SPEED, 12.0, -12.0, 4.0);
 
             // Reverse 12 inches with 4 Sec timeout
-            robot.encoderDrive(AarreAutonomous.DRIVE_SPEED, -12.0, -12.0, 4.0);
+            robot.encoderDrive(DRIVE_SPEED, -12.0, -12.0, 4.0);
 
             betterTelemetry.log("Path", "Complete");
         }
