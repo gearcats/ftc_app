@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.Servo.Direction;
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -29,7 +28,7 @@ public class AarreServo {
 
         servo = hardwareMap.get(Servo.class, servoName);
 
-        servo.setDirection(Direction.FORWARD);
+        servo.setDirection(Servo.Direction.FORWARD);
 
         // Upon construction, reset the servo to its full range of movement
         servo.scaleRange(0.0, 1.0);
@@ -56,14 +55,14 @@ public class AarreServo {
     /**
      * Get the current position of this servo.
      *
-     * Despite its name, the {@link Servo} method <code>getPosition</code>
+     * Despite its name, the {@link Servo} method {@code getPosition}
      * is often wrong about the servo's position, especially if there are mechanical obstacles stalling
      * the servo. Therefore, we use a different name here.
      *
      * @return The current (purported) position of this server in the interval [0,1]
      */
     @SuppressWarnings("WeakerAccess")
-    public double getPurportedPosition() {
+    public final double getPurportedPosition() {
 
         return servo.getPosition();
 
@@ -79,7 +78,7 @@ public class AarreServo {
         telemetry.log("Servo - Preparing to move forward");
 
         double startPosition = servo.getPosition();
-        telemetry.log("Servo - Current position is %f", startPosition);
+        telemetry.log("Servo - Current position is %f", Double.valueOf(startPosition));
 
         double maxPosition = servo.MAX_POSITION;
         telemetry.log("Servo - Prescriptive max position is %f", maxPosition);
@@ -139,7 +138,7 @@ public class AarreServo {
      * @param direction An instance of @link{Servo.Direction}
      */
     @SuppressWarnings("SameParameterValue")
-    void setDirection(Direction direction) {
+    void setDirection(Servo.Direction direction) {
 
         servo.setDirection(direction);
 
@@ -159,7 +158,7 @@ public class AarreServo {
 
         // Wait for the hardware to catch up
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1000L);
         }
         catch (InterruptedException e) {
             telemetry.log ("Sleep interrupted!");

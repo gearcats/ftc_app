@@ -113,16 +113,16 @@ class AarreRobot {
      *  2) Move runs out of time
      *  3) Driver stops the OpMode running.
      */
-    void encoderDrive(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) {
+    final void encoderDrive(double speed,
+                            double leftInches, double rightInches,
+                            double timeoutS) {
         int newLeftTarget;
         int newRightTarget;
 
 
         // Determine new target position, and pass to motor controller
-        newLeftTarget = leftMotor.getCurrentTickNumber() + (int)(leftInches * leftMotor.COUNTS_PER_INCH);
-        newRightTarget = rightMotor.getCurrentTickNumber() + (int)(rightInches * rightMotor.COUNTS_PER_INCH);
+        newLeftTarget = leftMotor.getCurrentTickNumber() + (int) (leftInches * AarreMotor.getCountsPerInch());
+        newRightTarget = rightMotor.getCurrentTickNumber() + (int) (rightInches * AarreMotor.getCountsPerInch());
         leftMotor.setTargetPosition(newLeftTarget);
         rightMotor.setTargetPosition(newRightTarget);
 
@@ -143,7 +143,7 @@ class AarreRobot {
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while ((runtime.seconds() < timeoutS) && (leftMotor.isBusy() && rightMotor.isBusy())) {
 
-            telemetry.log("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+            telemetry.log("Path1", "Running to %7d :%7d", Integer.valueOf(newLeftTarget), newRightTarget);
             telemetry.log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor.getCurrentTickNumber());
 
         }

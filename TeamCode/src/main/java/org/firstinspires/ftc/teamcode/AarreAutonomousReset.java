@@ -18,23 +18,31 @@ public class AarreAutonomousReset extends LinearOpMode {
     private AarreTelemetry betterTelemetry;
     private AarreRobot robot;
 
+    public AarreAutonomousReset() {
+    }
+
+    /**
+     * Properties inherited from LinearOpMode include:
+     * <p>
+     * hardwareMap
+     * telemetry
+     */
     @Override
     public void runOpMode() {
 
         // 'telemetry' comes from FTC....
         // It is only available in runOpMode
 
-        if (telemetry == null) throw new AssertionError("Unexpected null object: telemetry");
-        AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
-        if (betterTelemetry == null)
-            throw new AssertionError("Unexpected null object: betterTelemetry");
+        if (telemetry == null)
+            throw new AssertionError("Unexpected null object: telemetry");
+        betterTelemetry = new AarreTelemetry(telemetry);
 
         // 'hardwareMap comes from FTC....
         // It is only available in runOpMode
 
-        if (hardwareMap == null) throw new AssertionError("Unexpected null object: hardwareMap");
-        AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
-        if (robot == null) throw new AssertionError("Unexpected null object: robot");
+        if (hardwareMap == null)
+            throw new AssertionError("Unexpected null object: hardwareMap");
+        robot = new AarreRobot(hardwareMap, betterTelemetry);
 
         betterTelemetry.log("Initializing robot");
 

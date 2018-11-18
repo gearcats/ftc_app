@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.Telemetry.Log;
 
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData methods.
@@ -17,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry.Log;
 class AarreTelemetry {
 
     private final Telemetry     underlyingTelemetry;
-    private final Log telemetryLog;
+    private final Telemetry.Log telemetryLog;
 
     private boolean CAREFUL_LOGGING = false;
 
@@ -25,13 +24,13 @@ class AarreTelemetry {
     /**
      * Base constructor.
      *
-     * @param underlyingTelemetry The underlying @link{Telemetry} instance.
+     * @param telemetry The underlying @link{Telemetry} instance.
      */
-    AarreTelemetry(Telemetry underlyingTelemetry) {
+    AarreTelemetry(Telemetry telemetry) {
 
-        this.underlyingTelemetry = underlyingTelemetry;
-        this.underlyingTelemetry.setAutoClear(false);
-        telemetryLog = underlyingTelemetry.log();
+        underlyingTelemetry = telemetry;
+        underlyingTelemetry.setAutoClear(false);
+        telemetryLog = telemetry.log();
 
     }
 
@@ -39,16 +38,16 @@ class AarreTelemetry {
      * Constructor with flag for careful logging.
      *
      * @param underlyingTelemetry The underlying @link{Telemetry} instance.
-     * @param careful_logging Whether to do logging "carefully." If false, there will be no delays between calls
+     * @param carefulLogging Whether to do logging "carefully." If false, there will be no delays between calls
      *                        to log messages, which can result in "folded" log entries where more than one log
      *                        entry is listed under a given time. If true, there will be a small delay between
      *                        calls to log messages, which will prevent "folded" log entries.
      */
     @SuppressWarnings("SameParameterValue")
-    AarreTelemetry(Telemetry underlyingTelemetry, boolean careful_logging) {
+    AarreTelemetry(Telemetry underlyingTelemetry, boolean carefulLogging) {
 
         this(underlyingTelemetry);
-        CAREFUL_LOGGING = careful_logging;
+        CAREFUL_LOGGING = carefulLogging;
 
     }
 
@@ -78,7 +77,7 @@ class AarreTelemetry {
      * @param message A printf-formatted telemetry message associated with the caption.
      * @param args Arguments to the printf-formatted message.
      */
-    void addData(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
+    final void addData(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
         underlyingTelemetry.addData(caption, message, args);
         log(caption, message, args);
@@ -101,7 +100,7 @@ class AarreTelemetry {
             // a good idea to have this set during competition, though....
 
             try {
-                Thread.sleep(2);
+                Thread.sleep(2L);
             }
             catch (InterruptedException e) {
                 log("Sleep interrupted!");
@@ -131,8 +130,8 @@ class AarreTelemetry {
      */
     void log(java.lang.String message, java.lang.Object... args) {
 
-        String log_message = String.format(message, args);
-        log(log_message);
+        String logMessage = String.format(message, args);
+        log(logMessage);
 
     }
 
@@ -145,8 +144,8 @@ class AarreTelemetry {
      */
     void log(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
-        String log_message = caption + ": " + message;
-        log(log_message, args);
+        String logMessage = caption + ": " + message;
+        log(logMessage, args);
 
     }
 

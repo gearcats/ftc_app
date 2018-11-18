@@ -44,6 +44,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="Aarre Autonomous", group="Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
+    public static final double INCHES = 12.0;
     private AarreTelemetry betterTelemetry;
     private AarreRobot robot;
 
@@ -54,7 +55,11 @@ public class AarreAutonomous extends LinearOpMode {
 
     // How fast to move when turning
     private static final double TURN_SPEED                      = 0.5;
+
     private static final double TEST_TIME_SECONDS               = 0.5;
+
+    public AarreAutonomous() {
+    }
 
 
     // TODO: Use Math.PI above
@@ -62,7 +67,9 @@ public class AarreAutonomous extends LinearOpMode {
     /**
      * Properties inherited from LinearOpMode include:
      *
+     * hardwareMap
      * telemetry
+     *
      */
     @Override
     public void runOpMode() {
@@ -70,17 +77,16 @@ public class AarreAutonomous extends LinearOpMode {
         // 'telemetry' comes from FTC....
         // It is only available in runOpMode
 
-        if (telemetry == null) throw new AssertionError("Unexpected null object: telemetry");
-        AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
-        if (betterTelemetry == null)
-            throw new AssertionError("Unexpected null object: betterTelemetry");
+        if (telemetry == null)
+            throw new AssertionError("Unexpected null object: telemetry");
+        betterTelemetry = new AarreTelemetry(telemetry);
 
         // 'hardwareMap comes from FTC....
         // It is only available in runOpMode
 
-        if (hardwareMap == null) throw new AssertionError("Unexpected null object: hardwareMap");
-        AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
-        if (robot == null) throw new AssertionError("Unexpected null object: robot");
+        if (hardwareMap == null)
+            throw new AssertionError("Unexpected null object: hardwareMap");
+        robot = new AarreRobot(hardwareMap, betterTelemetry);
 
         betterTelemetry.log("Initializing robot");
 
@@ -97,14 +103,14 @@ public class AarreAutonomous extends LinearOpMode {
             // Step through each leg of the path,
             // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
-            // // Forward 12 inches with 5 sec timeout
-            robot.encoderDrive(DRIVE_SPEED, 12.0, 12.0, 5.0);
+            double INCHES = 12.0;
+            double TIMEOUT = 5.0;
 
-            // Turn right 12 inches with 4 sec timeout
-            robot.encoderDrive(TURN_SPEED, 12.0, -12.0, 4.0);
+            robot.encoderDrive(DRIVE_SPEED, INCHES, INCHES, TIMEOUT);
 
-            // Reverse 12 inches with 4 Sec timeout
-            robot.encoderDrive(DRIVE_SPEED, -12.0, -12.0, 4.0);
+            robot.encoderDrive(TURN_SPEED, INCHES, -INCHES, TIMEOUT);
+
+            robot.encoderDrive(DRIVE_SPEED, -INCHES, -INCHES, TIMEOUT);
 
             betterTelemetry.log("Path", "Complete");
         }

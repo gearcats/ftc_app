@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.ElapsedTime.Resolution;
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -32,10 +32,10 @@ class AarreMotor {
    private AarreTelemetry    telemetry;
    private ElapsedTime  timeStalledInMilliseconds;
 
-    private final int COUNTS_PER_MOTOR_REVOLUTION        = 1440 ;    // eg: TETRIX Motor Encoder, TorqueNado
+    private static final int COUNTS_PER_MOTOR_REVOLUTION = 1440;    // eg: TETRIX Motor Encoder, TorqueNado
     private static final double DRIVE_GEAR_REDUCTION            = 1.0 ;     // This is 1.0 for our direct-drive wheels
     private static final double WHEEL_DIAMETER_INCHES           = 5.5 ;     // For figuring circumference; could be 5.625, also depends on treads
-    final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    private static final double COUNTS_PER_INCH = ((double) AarreMotor.COUNTS_PER_MOTOR_REVOLUTION * AarreMotor.DRIVE_GEAR_REDUCTION) / (AarreMotor.WHEEL_DIAMETER_INCHES * 3.1415);
 
     /**
      * Construct an instance of AarreMotor without telemetry.
@@ -67,16 +67,25 @@ class AarreMotor {
     }
 
     /**
+     * Get counts per inch.
+     *
+     * @return The number of encoder ticks (counts) required to make the robot travel one inch.
+     */
+    public static final double getCountsPerInch() {
+        return AarreMotor.COUNTS_PER_INCH;
+    }
+
+    /**
      * Get the current reading of the encoder for this motor.
      *
-     * Despite its name, the {@link DcMotor} method <code>getCurrentPosition</code>
+     * Despite its name, the {@link DcMotor} method {@code getCurrentPosition}
      * provides almost no information about position. Therefore, we use a
      * different name here.
      *
      * @return The current reading of the encoder for this motor, in ticks.
      */
     @SuppressWarnings("WeakerAccess")
-    public int getCurrentTickNumber() {
+    public final int getCurrentTickNumber() {
         return motor.getCurrentPosition();
     }
 
@@ -89,9 +98,9 @@ class AarreMotor {
     private int getTimeStalledInMilliseconds() {
 
         // Take the time stalled in (double) milliseconds, round to nearest long and cast to int
-        double dblTimeStalledInMilliseconds = timeStalledInMilliseconds.time();
-        int intTimeStalledInMilliseconds = (int) Math.round(dblTimeStalledInMilliseconds);
-        return intTimeStalledInMilliseconds;
+        double msStalledDbl = timeStalledInMilliseconds.time();
+        int msStalledInt = (int) Math.round(msStalledDbl);
+        return msStalledInt;
     }
 
     /**
@@ -119,6 +128,7 @@ class AarreMotor {
         //telemetry.log("time stalled = ", "%d ms", getTimeStalledInMilliseconds());
         //telemetry.log("stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
 
+        boolean stalled = false;
         int newTickNumber = getCurrentTickNumber();
 
         //telemetry.log("checking for a stall", "!");
@@ -131,11 +141,7 @@ class AarreMotor {
 
                 // The motor has been stalled for more than the time limit
 
-                return true;
-
-            } else {
-
-                // The motor has not moved but the time limit has not yet expired
+                stalled = true;
 
             }
 
@@ -152,9 +158,9 @@ class AarreMotor {
 
         oldTickNumber = newTickNumber;
 
-        // Notify caller that the motor is not stalled
+        // Notify caller whether or not the motor is not stalled
 
-        return false;
+        return stalled;
 
     }
 
@@ -165,8 +171,9 @@ class AarreMotor {
      *              [-1,1].
      */
     void runUntilStalled(double power) {
-        timeStalledInMilliseconds = new ElapsedTime(Resolution.MILLISECONDS);
+        timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         setPower(power);
+        //noinspection StatementWithEmptyBody
         while (!(isStalled())) {
             //telemetry.log("Not stalled yet...");
         }
@@ -181,7 +188,7 @@ class AarreMotor {
         setStallTimeLimitInMilliseconds(0);
 
         // Reset the encoder and force the motor to be stopped
-        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setMode(RunMode.STOP_AND_RESET_ENCODER);
         setPower(0);
     }
 
@@ -190,7 +197,7 @@ class AarreMotor {
      *
      * @param direction The logical direction in which this motor operates.
      */
-    void setDirection(DcMotorSimple.Direction direction) {
+    void setDirection(Direction direction) {
         motor.setDirection(direction);
     }
 
@@ -200,7 +207,7 @@ class AarreMotor {
      * @param mode the new current run mode for this motor
      */
     @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-    void setMode(DcMotor.RunMode mode) {
+    void setMode(RunMode mode) {
         motor.setMode(mode);
     }
 
@@ -260,15 +267,15 @@ class AarreMotor {
     /**
      * Set up stall detection.
      *
-     * @param   timeLimitMilliseconds      How long does the motor have to be still before we consider it stalled?
-     * @param   detectionToleranceTicks    An integer number of encoder clicks such that,
+     * @param   timeLimitMs      How long does the motor have to be still before we consider it stalled?
+     * @param   toleranceTicks    An integer number of encoder clicks such that,
      *                                            if the encoder changes less than this over a
      *                                            period of stallTimeLimitInMilliseconds, then we call it a stall.
      */
-    public void setupStallDetection(int timeLimitMilliseconds, int detectionToleranceTicks) {
+    public void setupStallDetection(int timeLimitMs, int toleranceTicks) {
 
-        setStallDetectionToleranceInTicks(detectionToleranceTicks);
-        setStallTimeLimitInMilliseconds(timeLimitMilliseconds);
+        setStallDetectionToleranceInTicks(toleranceTicks);
+        setStallTimeLimitInMilliseconds(timeLimitMs);
         timeStalledInMilliseconds.reset();
         oldTickNumber = getCurrentTickNumber();
 

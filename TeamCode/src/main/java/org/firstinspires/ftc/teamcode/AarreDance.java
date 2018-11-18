@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 /**
- * This file contains Aarre's experimental code to autonomously "reset" the robot to a state
- * suitable for running the autonomous game mode
+ * This file contains Aarre's experimental code to make the robot "dance" autonomously (that it,
+ * to make it exercise all of its functions).
  *
  * To avoid issuing an error on the phones, any OpMode class must be
  * declared public.
@@ -19,23 +19,31 @@ public class AarreDance extends LinearOpMode {
     private AarreTelemetry betterTelemetry;
     private AarreRobot robot;
 
+    public AarreDance() {
+    }
+
+    /**
+     * Properties inherited from LinearOpMode include:
+     * <p>
+     * hardwareMap
+     * telemetry
+     */
     @Override
     public void runOpMode() {
 
         // 'telemetry' comes from FTC....
         // It is only available in runOpMode
 
-        if (telemetry == null) throw new AssertionError("Unexpected null object: telemetry");
-        AarreTelemetry betterTelemetry = new AarreTelemetry(telemetry);
-        if (betterTelemetry == null)
-            throw new AssertionError("Unexpected null object: betterTelemetry");
+        if (telemetry == null)
+            throw new AssertionError("Unexpected null object: telemetry");
+        betterTelemetry = new AarreTelemetry(telemetry);
 
         // 'hardwareMap comes from FTC....
         // It is only available in runOpMode
 
-        if (hardwareMap == null) throw new AssertionError("Unexpected null object: hardwareMap");
-        AarreRobot robot = new AarreRobot(hardwareMap, betterTelemetry);
-        if (robot == null) throw new AssertionError("Unexpected null object: robot");
+        if (hardwareMap == null)
+            throw new AssertionError("Unexpected null object: hardwareMap");
+        robot = new AarreRobot(hardwareMap, betterTelemetry);
 
         betterTelemetry.log("Initializing robot");
 
