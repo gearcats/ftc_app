@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -50,7 +50,7 @@ class AarreRobot {
      * @param telemetry     An instance of {@link AarreTelemetry}
      *
      */
-    AarreRobot(HardwareMap hardwareMap, AarreTelemetry telemetry) {
+    AarreRobot(final HardwareMap hardwareMap, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry) {
 
         if (telemetry == null)
             throw new AssertionError("Unexpected null object: telemetry");
@@ -83,13 +83,13 @@ class AarreRobot {
 
         // This code REQUIRES that you have encoders on the wheel motors
 
-        leftMotor.setMode(RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(RunMode.STOP_AND_RESET_ENCODER);
-        riserMotor.setMode(RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        riserMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftMotor.setMode(RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(RunMode.RUN_USING_ENCODER);
-        riserMotor.setMode(RunMode.RUN_USING_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        riserMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define the servos
 
@@ -102,9 +102,9 @@ class AarreRobot {
         // With the hook up, the servo is at 0 degrees.
         // With the hook down, the servo is at about 100 degrees.
 
-        double hookDownDegrees = 100.0;
-        double hookUpDegrees = 0.0;
-        double hookMaximumDegrees = 180.0;
+        final double hookDownDegrees = 100.0;
+        final double hookUpDegrees = 0.0;
+        final double hookMaximumDegrees = 180.0;
         hookServo.scaleRange(hookUpDegrees / hookMaximumDegrees, hookDownDegrees / hookMaximumDegrees);
 
         // TODO: Initialize scoop servo
@@ -121,11 +121,11 @@ class AarreRobot {
      *  2) Move runs out of time
      *  3) Driver stops the OpMode running.
      */
-    final void encoderDrive(double speed,
-                            double leftInches, double rightInches,
-                            double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
+    final void encoderDrive(final double speed,
+                            final double leftInches, final double rightInches,
+                            final double timeoutS) {
+        final int newLeftTarget;
+        final int newRightTarget;
 
 
         // Determine new target position, and pass to motor controller
@@ -135,11 +135,11 @@ class AarreRobot {
         rightMotor.setTargetPosition(newRightTarget);
 
         // Turn On RUN_TO_POSITION
-        leftMotor.setMode(RunMode.RUN_TO_POSITION);
-        rightMotor.setMode(RunMode.RUN_TO_POSITION);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // reset the timeout time and start motion.
-        ElapsedTime runtime = new ElapsedTime();
+        final ElapsedTime runtime = new ElapsedTime();
         leftMotor.setPower(Math.abs(speed));
         rightMotor.setPower(Math.abs(speed));
 
@@ -151,7 +151,7 @@ class AarreRobot {
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while ((runtime.seconds() < timeoutS) && (leftMotor.isBusy() && rightMotor.isBusy())) {
 
-            telemetry.log("Path1", "Running to %7d :%7d", Integer.valueOf(newLeftTarget), newRightTarget);
+            telemetry.log("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
             telemetry.log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor.getCurrentTickNumber());
 
         }
@@ -161,15 +161,15 @@ class AarreRobot {
         rightMotor.setPower(0.0);
 
         // Turn off RUN_TO_POSITION
-        leftMotor.setMode(RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(RunMode.RUN_USING_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
     /**
      * Lower the arm to its downward position while avoiding stalling the arm motor
      */
-    void lowerArm() {
+    final void lowerArm() {
         armMotor.setStallTimeLimitInMilliseconds(100);
         armMotor.runUntilStalled(-0.1);
     }

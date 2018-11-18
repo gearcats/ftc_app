@@ -24,7 +24,7 @@ public class AarreServo {
      * @param servoName The name of the motor.
      * @param hardwareMap The hardware map upon which the motor may be found.
      */
-    public AarreServo(HardwareMap hardwareMap, String servoName) {
+    public AarreServo(final HardwareMap hardwareMap, final String servoName) {
 
         servo = hardwareMap.get(Servo.class, servoName);
 
@@ -42,7 +42,7 @@ public class AarreServo {
      * @param hardwareMap The hardware map upon which the servo may be found.
      * @param telemetry An instance of AarreTelemetry to associate with this instance.
      */
-    public AarreServo(HardwareMap hardwareMap, String servoName, AarreTelemetry telemetry) {
+    public AarreServo(final HardwareMap hardwareMap, final String servoName, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry) {
 
         // Call the other constructor to create the underlying Servo member
         this(hardwareMap, servoName);
@@ -73,20 +73,20 @@ public class AarreServo {
      * Turn the servo forward to its maximum position.
      *
      */
-    void forward() {
+    final void forward() {
 
         telemetry.log("Servo - Preparing to move forward");
 
-        double startPosition = servo.getPosition();
-        telemetry.log("Servo - Current position is %f", Double.valueOf(startPosition));
+        final double startPosition = servo.getPosition();
+        telemetry.log("Servo - Current position is %f", startPosition);
 
-        double maxPosition = servo.MAX_POSITION;
+        final double maxPosition = servo.MAX_POSITION;
         telemetry.log("Servo - Prescriptive max position is %f", maxPosition);
 
         setPosition(maxPosition);
         telemetry.log("Servo - Set to max");
 
-        double currentPosition = servo.getPosition();
+        final double currentPosition = servo.getPosition();
         telemetry.log("Servo - Purported max position is %f", currentPosition);
 
     }
@@ -103,16 +103,16 @@ public class AarreServo {
 
         telemetry.log("Preparing to reverse the servo");
 
-        double startPosition = servo.getPosition();
+        final double startPosition = servo.getPosition();
         telemetry.log("Servo current position is %f", startPosition);
 
-        double minPosition = servo.MIN_POSITION;
+        final double minPosition = servo.MIN_POSITION;
         telemetry.log("Servo prescriptive min position is %f", minPosition);
 
         setPosition(minPosition);
         telemetry.log("Servo set to min");
 
-        double currentPosition = getPurportedPosition();
+        final double currentPosition = getPurportedPosition();
         telemetry.log("Servo purported min position is %f", currentPosition);
 
     }
@@ -123,7 +123,7 @@ public class AarreServo {
      * @param min The minimum position in [0,1] that the servo can actually reach.
      * @param max The maximum position in [0,1] that the servo can actually reach.
      */
-    void scaleRange(double min, double max){
+    void scaleRange(final double min, final double max) {
 
         servo.scaleRange(min, max);
 
@@ -138,7 +138,7 @@ public class AarreServo {
      * @param direction An instance of @link{Servo.Direction}
      */
     @SuppressWarnings("SameParameterValue")
-    void setDirection(Servo.Direction direction) {
+    void setDirection(final Servo.Direction direction) {
 
         servo.setDirection(direction);
 
@@ -151,7 +151,7 @@ public class AarreServo {
      *                 A value in the interval [0,1] where 0 is the minimum available position
      *                 and 1 is the maximum available position.
      */
-    private void setPosition(double position) {
+    private void setPosition(final double position) {
 
         telemetry.log("Setting servo to position %f", position);
         servo.setPosition(position);
@@ -159,8 +159,7 @@ public class AarreServo {
         // Wait for the hardware to catch up
         try {
             Thread.sleep(1000L);
-        }
-        catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             telemetry.log ("Sleep interrupted!");
         }
 

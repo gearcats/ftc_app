@@ -28,7 +28,7 @@ public class AarreAutonomousReset extends LinearOpMode {
      * telemetry
      */
     @Override
-    public void runOpMode() {
+    public final void runOpMode() {
 
         // 'telemetry' comes from FTC....
         // It is only available in runOpMode

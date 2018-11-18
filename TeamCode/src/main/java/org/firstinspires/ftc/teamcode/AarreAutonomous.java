@@ -44,7 +44,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="Aarre Autonomous", group="Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
-    public static final double INCHES = 12.0;
+    private static final double INCHES = 12.0;
+    private static final double TIMEOUT = 5.0;
+
     private AarreTelemetry betterTelemetry;
     private AarreRobot robot;
 
@@ -72,7 +74,7 @@ public class AarreAutonomous extends LinearOpMode {
      *
      */
     @Override
-    public void runOpMode() {
+    public final void runOpMode() {
 
         // 'telemetry' comes from FTC....
         // It is only available in runOpMode
@@ -103,8 +105,7 @@ public class AarreAutonomous extends LinearOpMode {
             // Step through each leg of the path,
             // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
-            double INCHES = 12.0;
-            double TIMEOUT = 5.0;
+            final double TIMEOUT = 5.0;
 
             robot.encoderDrive(DRIVE_SPEED, INCHES, INCHES, TIMEOUT);
 

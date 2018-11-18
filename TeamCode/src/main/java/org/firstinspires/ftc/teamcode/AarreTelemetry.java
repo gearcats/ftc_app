@@ -26,7 +26,7 @@ class AarreTelemetry {
      *
      * @param telemetry The underlying @link{Telemetry} instance.
      */
-    AarreTelemetry(Telemetry telemetry) {
+    AarreTelemetry(final Telemetry telemetry) {
 
         underlyingTelemetry = telemetry;
         underlyingTelemetry.setAutoClear(false);
@@ -44,7 +44,7 @@ class AarreTelemetry {
      *                        calls to log messages, which will prevent "folded" log entries.
      */
     @SuppressWarnings("SameParameterValue")
-    AarreTelemetry(Telemetry underlyingTelemetry, boolean carefulLogging) {
+    AarreTelemetry(@SuppressWarnings("ParameterHidesMemberVariable") final Telemetry underlyingTelemetry, final boolean carefulLogging) {
 
         this(underlyingTelemetry);
         CAREFUL_LOGGING = carefulLogging;
@@ -60,7 +60,7 @@ class AarreTelemetry {
      * @param caption A caption for the telemetry entry.
      * @param message The telemetry message associated with the caption.
      */
-    void addData(java.lang.String caption, java.lang.String message) {
+    final void addData(final java.lang.String caption, final java.lang.String message) {
 
         underlyingTelemetry.addData(caption, message);
         log(caption, message);
@@ -77,7 +77,7 @@ class AarreTelemetry {
      * @param message A printf-formatted telemetry message associated with the caption.
      * @param args Arguments to the printf-formatted message.
      */
-    final void addData(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
+    final void addData(final java.lang.String caption, final java.lang.String message, final java.lang.Object... args) {
 
         underlyingTelemetry.addData(caption, message, args);
         log(caption, message, args);
@@ -91,7 +91,7 @@ class AarreTelemetry {
      *
      * @param message The message to append to the log.
      */
-    void log(java.lang.String message) {
+    void log(final java.lang.String message) {
 
         if (CAREFUL_LOGGING) {
 
@@ -101,8 +101,7 @@ class AarreTelemetry {
 
             try {
                 Thread.sleep(2L);
-            }
-            catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 log("Sleep interrupted!");
             }
         }
@@ -117,7 +116,7 @@ class AarreTelemetry {
      * @param caption A caption for the log entry.
      * @param message The log entry message associated with the caption.
      */
-    void log(java.lang.String caption, java.lang.String message) {
+    void log(final java.lang.String caption, final java.lang.String message) {
 
         log(caption + ": " + message);
     }
@@ -128,9 +127,9 @@ class AarreTelemetry {
      * @param message A printf-formatted message to be logged.
      * @param args Arguments to the printf-formatted message.
      */
-    void log(java.lang.String message, java.lang.Object... args) {
+    void log(final java.lang.String message, final java.lang.Object... args) {
 
-        String logMessage = String.format(message, args);
+        final String logMessage = String.format(message, args);
         log(logMessage);
 
     }
@@ -142,9 +141,9 @@ class AarreTelemetry {
      * @param message A printf-formatted message associated with the caption.
      * @param args Arguments to the printf-formatted message.
      */
-    void log(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
+    void log(final java.lang.String caption, final java.lang.String message, final java.lang.Object... args) {
 
-        String logMessage = caption + ": " + message;
+        final String logMessage = caption + ": " + message;
         log(logMessage, args);
 
     }
@@ -154,7 +153,7 @@ class AarreTelemetry {
      *
      * @param message A message to append to the robot controller log.
      */
-    private void syslog(String message) {
+    private void syslog(final String message) {
 
         System.out.println(message);
 

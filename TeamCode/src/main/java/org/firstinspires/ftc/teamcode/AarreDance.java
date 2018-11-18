@@ -29,7 +29,7 @@ public class AarreDance extends LinearOpMode {
      * telemetry
      */
     @Override
-    public void runOpMode() {
+    public final void runOpMode() {
 
         // 'telemetry' comes from FTC....
         // It is only available in runOpMode
@@ -50,15 +50,15 @@ public class AarreDance extends LinearOpMode {
         // Wait for the driver to press PLAY
         waitForStart();
 
-        double DRIVE_SPEED = 0.5;
-        double TURN_SPEED = 0.5;
-        double INCHES = 12.0;
-        double TIMEOUT = 5.0;
+        final double driveSpeed = 0.5;
+        final double turnSpeed = 0.5;
+        final double inches = 12.0;
+        final double timeout = 5.0;
 
-        robot.encoderDrive(DRIVE_SPEED, INCHES, INCHES, TIMEOUT);
-        robot.encoderDrive(DRIVE_SPEED, -INCHES, -INCHES, TIMEOUT);
-        robot.encoderDrive(TURN_SPEED, INCHES, -INCHES, TIMEOUT);
-        robot.encoderDrive(TURN_SPEED, -INCHES, INCHES, TIMEOUT);
+        robot.encoderDrive(driveSpeed, inches, inches, timeout);
+        robot.encoderDrive(driveSpeed, -inches, -inches, timeout);
+        robot.encoderDrive(turnSpeed, inches, -inches, timeout);
+        robot.encoderDrive(turnSpeed, -inches, inches, timeout);
 
         robot.raiseArm();
         robot.lowerArm();

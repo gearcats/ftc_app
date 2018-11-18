@@ -33,7 +33,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -92,8 +92,19 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
     HardwarePushbot robot = new HardwarePushbot();   // Use a Pushbot's hardware
     ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
 
+    /**
+     * Get desired steering force.
+     *
+     * @param error  Error angle in robot relative degrees
+     * @param PCoeff Proportional Gain Coefficient
+     * @return Desired steering force.  +/- 1 range.  +ve = steer left
+     */
+    public static double getSteer(final double error, final double PCoeff) {
+        return Range.clip(error * PCoeff, -1, 1);
+    }
+
     @Override
-    public void runOpMode() {
+    public final void runOpMode() {
 
         /*
          * Initialize the standard drive system variables.
@@ -103,8 +114,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
 
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
-        robot.leftDrive.setMode(RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightDrive.setMode(RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
@@ -121,8 +132,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
 
-        robot.leftDrive.setMode(RunMode.RUN_USING_ENCODER);
-        robot.rightDrive.setMode(RunMode.RUN_USING_ENCODER);
+        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
@@ -149,7 +160,6 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         telemetry.update();
     }
 
-
     /**
      * Method to drive on a fixed compass bearing (angle), based on encoder counts.
      * Move will stop if either of these conditions occur:
@@ -162,13 +172,13 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
      *                 0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *                 If a relative angle is required, add/subtract from current heading.
      */
-    public void gyroDrive(double speed,
-                          double distance,
-                          double angle) {
+    public void gyroDrive(final double speed,
+                          final double distance,
+                          final double angle) {
 
-        int newLeftTarget;
-        int newRightTarget;
-        int moveCounts;
+        final int newLeftTarget;
+        final int newRightTarget;
+        final int moveCounts;
         double max;
         double error;
         double steer;
@@ -179,6 +189,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
+            //noinspection NumericCastThatLosesPrecision
             moveCounts = (int) (distance * COUNTS_PER_INCH);
             newLeftTarget = robot.leftDrive.getCurrentPosition() + moveCounts;
             newRightTarget = robot.rightDrive.getCurrentPosition() + moveCounts;
@@ -187,13 +198,13 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
             robot.leftDrive.setTargetPosition(newLeftTarget);
             robot.rightDrive.setTargetPosition(newRightTarget);
 
-            robot.leftDrive.setMode(RunMode.RUN_TO_POSITION);
-            robot.rightDrive.setMode(RunMode.RUN_TO_POSITION);
+            robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // start motion.
-            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
-            robot.leftDrive.setPower(speed);
-            robot.rightDrive.setPower(speed);
+            final double adjustedSpeed = Range.clip(Math.abs(speed), 0.0, 1.0);
+            robot.leftDrive.setPower(adjustedSpeed);
+            robot.rightDrive.setPower(adjustedSpeed);
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
@@ -207,8 +218,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
                 if (distance < 0)
                     steer *= -1.0;
 
-                leftSpeed = speed - steer;
-                rightSpeed = speed + steer;
+                leftSpeed = adjustedSpeed - steer;
+                rightSpeed = adjustedSpeed + steer;
 
                 // Normalize speeds if either one exceeds +/- 1.0;
                 max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
@@ -234,8 +245,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
             robot.rightDrive.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            robot.leftDrive.setMode(RunMode.RUN_USING_ENCODER);
-            robot.rightDrive.setMode(RunMode.RUN_USING_ENCODER);
+            robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -250,10 +261,10 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
      *              0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *              If a relative angle is required, add/subtract from current heading.
      */
-    public void gyroTurn(double speed, double angle) {
+    public void gyroTurn(final double speed, final double angle) {
 
         // keep looping while we are still active, and not on heading.
-        while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
+        while (opModeIsActive() && !isOnHeading(speed, angle, P_TURN_COEFF)) {
             // Update telemetry & Allow time for other processes to run.
             telemetry.update();
         }
@@ -269,15 +280,15 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
      *                 If a relative angle is required, add/subtract from current heading.
      * @param holdTime Length of time (in seconds) to hold the specified heading.
      */
-    public void gyroHold(double speed, double angle, double holdTime) {
+    public void gyroHold(final double speed, final double angle, final double holdTime) {
 
-        ElapsedTime holdTimer = new ElapsedTime();
+        final ElapsedTime holdTimer = new ElapsedTime();
 
         // keep looping while we have time remaining.
         holdTimer.reset();
         while (opModeIsActive() && (holdTimer.time() < holdTime)) {
             // Update telemetry & Allow time for other processes to run.
-            onHeading(speed, angle, P_TURN_COEFF);
+            isOnHeading(speed, angle, P_TURN_COEFF);
             telemetry.update();
         }
 
@@ -294,14 +305,16 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
      *               0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *               If a relative angle is required, add/subtract from current heading.
      * @param PCoeff Proportional Gain coefficient
-     * @return
+     * @return {@code true} if the angular error is less than the heading threshold
+     *         (i.e., the robot is on the right heading).
+     *         {@code false} otherwise.
      */
-    boolean onHeading(double speed, double angle, double PCoeff) {
-        double error;
-        double steer;
+    boolean isOnHeading(final double speed, final double angle, final double PCoeff) {
+        final double error;
+        final double steer;
         boolean onTarget = false;
-        double leftSpeed;
-        double rightSpeed;
+        final double leftSpeed;
+        final double rightSpeed;
 
         // determine turn power based on +/- error
         error = getError(angle);
@@ -336,7 +349,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
      * @return error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
      * +ve error means the robot should turn LEFT (CCW) to reduce error.
      */
-    public double getError(double targetAngle) {
+    public double getError(final double targetAngle) {
 
         double robotError;
 
@@ -345,17 +358,6 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         while (robotError > 180) robotError -= 360;
         while (robotError <= -180) robotError += 360;
         return robotError;
-    }
-
-    /**
-     * returns desired steering force.  +/- 1 range.  +ve = steer left
-     *
-     * @param error  Error angle in robot relative degrees
-     * @param PCoeff Proportional Gain Coefficient
-     * @return
-     */
-    public double getSteer(double error, double PCoeff) {
-        return Range.clip(error * PCoeff, -1, 1);
     }
 
 }
