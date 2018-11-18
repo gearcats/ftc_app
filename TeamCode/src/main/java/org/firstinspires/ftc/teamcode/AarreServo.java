@@ -24,10 +24,14 @@ public class AarreServo {
      * @param servoName The name of the motor.
      * @param hardwareMap The hardware map upon which the motor may be found.
      */
-    @SuppressWarnings("unused")
     public AarreServo(HardwareMap hardwareMap, String servoName) {
 
         servo = hardwareMap.get(Servo.class, servoName);
+
+        servo.setDirection(Servo.Direction.FORWARD);
+
+        // Upon construction, reset the servo to its full range of movement
+        servo.scaleRange(0.0, 1.0);
     }
 
 
@@ -46,10 +50,6 @@ public class AarreServo {
         // Add a telemetry member
         this.telemetry = telemetry;
 
-        servo.setDirection(Servo.Direction.FORWARD);
-
-        // Upon construction, reset the servo to its full range of movement
-        servo.scaleRange(0.0, 1.0);
     }
 
     /**

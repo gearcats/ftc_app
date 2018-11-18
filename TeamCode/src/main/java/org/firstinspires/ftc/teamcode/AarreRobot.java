@@ -53,10 +53,10 @@ class AarreRobot {
         // must correspond to the names assigned in the robot configuration
         // in the FTC Robot Controller app on the phone
 
-        leftMotor   = new AarreMotor(hardwareMap, "left", telemetry);
-        rightMotor  = new AarreMotor(hardwareMap, "right", telemetry);
-        armMotor    = new AarreMotor(hardwareMap, "arm", telemetry);
-        riserMotor  = new AarreMotor(hardwareMap, "riser", telemetry);
+        leftMotor = new AarreMotor(hardwareMap, "left", telemetry);
+        rightMotor = new AarreMotor(hardwareMap, "right", telemetry);
+        armMotor = new AarreMotor(hardwareMap, "arm", telemetry);
+        riserMotor = new AarreMotor(hardwareMap, "riser", telemetry);
 
         // Configure drive motors such that a positive power command moves them forwards
         // and causes the encoders to count UP. Note that, as in most robots, the drive
@@ -84,12 +84,12 @@ class AarreRobot {
 
         // Send telemetry message to indicate successful encoder reset
         telemetry.log( "Drive motor encoders reset");
-        telemetry.log("Left motor start position",  "%7d",  leftMotor.getCurrentTickNumber());
+        telemetry.log("Left motor start position", "%7d", leftMotor.getCurrentTickNumber());
         telemetry.log("Right motor start position",  "%7d", rightMotor.getCurrentTickNumber());
 
         // Define the servos
 
-        hookServo  = new AarreServo(hardwareMap, "hook", telemetry);
+        hookServo = new AarreServo(hardwareMap, "hook", telemetry);
 
         this.telemetry.log("Initializing hook");
 

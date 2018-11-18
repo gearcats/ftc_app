@@ -99,6 +99,7 @@ class AarreMotor {
         return motor.isBusy();
     }
 
+
     /**
      * Detect whether the motor is stalled.
      *
@@ -110,45 +111,47 @@ class AarreMotor {
      */
     private boolean isStalled() {
 
-        telemetry.log("time stalled = ", "%d ms", getTimeStalledInMilliseconds());
-        telemetry.log("stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
+        // TODO: Implement logging framework to allow logging by severity level
+        //telemetry.log("time stalled = ", "%d ms", getTimeStalledInMilliseconds());
+        //telemetry.log("stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
 
-        int newTickNumber = this.getCurrentTickNumber();
+        int newTickNumber = getCurrentTickNumber();
 
-        telemetry.log("checking for a stall", "!");
-
-        // if the motor has not moved since the last time the position was read
+        //telemetry.log("checking for a stall", "!");
 
         if (Math.abs(newTickNumber - oldTickNumber) < stallDetectionToleranceInTicks) {
-            telemetry.log("motor is not moving", "!");
 
-            // motor has not moved, checking to see how long the motor has been stalled for
+            // The motor has not moved since the last time the position was read.
+
             if (timeStalledInMilliseconds.time() > stallTimeLimitInMilliseconds) {
 
-                telemetry.log("stall timer has expired", "!");
+                // The motor has been stalled for more than the time limit
 
-                // it has been stalled for more than the time limit
                 return true;
 
             } else {
 
-                telemetry.log("stall time has NOT expired", "!");
+                // The motor has not moved but the time limit has not yet expired
 
             }
+
         } else {
 
-            if(telemetry != null) {
-                telemetry.log("motor is still moving.", " Resetting stall timer.");
-            }
+            // The motor has moved since the last time we checked the position
 
-            // reset the timer because the motor is not stalled
+            // Reset the timer
+
             timeStalledInMilliseconds.reset();
         }
 
         // Save the new tick number as baseline for the next iteration
-        this.oldTickNumber = newTickNumber;
+
+        oldTickNumber = newTickNumber;
+
+        // Notify caller that the motor is not stalled
 
         return false;
+
     }
 
     /**
@@ -174,8 +177,8 @@ class AarreMotor {
         setStallTimeLimitInMilliseconds(0);
 
         // Reset the encoder and force the motor to be stopped
-        this.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.setPower(0);
+        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setPower(0);
     }
 
     /**
@@ -249,7 +252,7 @@ class AarreMotor {
         setStallDetectionToleranceInTicks(stallDetectionToleranceInTicks);
         setStallTimeLimitInMilliseconds(stallTimeLimitInMilliseconds);
         timeStalledInMilliseconds.reset();
-        this.oldTickNumber = this.getCurrentTickNumber();
+        oldTickNumber = getCurrentTickNumber();
     }
 
 

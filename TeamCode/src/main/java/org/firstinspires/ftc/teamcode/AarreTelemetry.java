@@ -30,7 +30,7 @@ class AarreTelemetry {
 
         this.underlyingTelemetry = underlyingTelemetry;
         this.underlyingTelemetry.setAutoClear(false);
-        this.telemetryLog = underlyingTelemetry.log();
+        telemetryLog = underlyingTelemetry.log();
 
     }
 
@@ -47,7 +47,7 @@ class AarreTelemetry {
     AarreTelemetry(Telemetry underlyingTelemetry, boolean careful_logging) {
 
         this(underlyingTelemetry);
-        this.CAREFUL_LOGGING = careful_logging;
+        CAREFUL_LOGGING = careful_logging;
 
     }
 
@@ -63,7 +63,7 @@ class AarreTelemetry {
     void addData(java.lang.String caption, java.lang.String message) {
 
         underlyingTelemetry.addData(caption, message);
-        this.log(caption, message);
+        log(caption, message);
 
     }
 
@@ -80,7 +80,7 @@ class AarreTelemetry {
     void addData(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
         underlyingTelemetry.addData(caption, message, args);
-        this.log(caption, message, args);
+        log(caption, message, args);
     }
 
     /**
@@ -103,12 +103,12 @@ class AarreTelemetry {
                 Thread.sleep(2);
             }
             catch (InterruptedException e) {
-                this.log ("Sleep interrupted!");
+                log("Sleep interrupted!");
             }
         }
 
         telemetryLog.add(message);
-        this.syslog(message);
+        syslog(message);
     }
 
     /**
@@ -119,7 +119,7 @@ class AarreTelemetry {
      */
     void log(java.lang.String caption, java.lang.String message) {
 
-        this.log(caption + ": " + message);
+        log(caption + ": " + message);
     }
 
     /**
@@ -131,7 +131,7 @@ class AarreTelemetry {
     void log(java.lang.String message, java.lang.Object... args) {
 
         String log_message = String.format(message, args);
-        this.log(log_message);
+        log(log_message);
 
     }
 
@@ -145,7 +145,7 @@ class AarreTelemetry {
     void log(java.lang.String caption, java.lang.String message, java.lang.Object... args) {
 
         String log_message = caption + ": " + message;
-        this.log(log_message, args);
+        log(log_message, args);
 
     }
 
@@ -162,7 +162,7 @@ class AarreTelemetry {
 
     void update() {
 
-        this.underlyingTelemetry.update();
+        underlyingTelemetry.update();
 
     }
 

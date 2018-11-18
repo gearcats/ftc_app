@@ -21,8 +21,8 @@ public class AarreAutonomousReset extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        this.betterTelemetry = new AarreTelemetry(telemetry);
-        this.robot = new AarreRobot(hardwareMap, betterTelemetry);
+        betterTelemetry = new AarreTelemetry(telemetry);
+        robot = new AarreRobot(hardwareMap, betterTelemetry);
 
         betterTelemetry.log("-------------------------------------------------------------------------------");
         betterTelemetry.log("Resetting robot for autonomous mode");

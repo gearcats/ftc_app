@@ -84,7 +84,7 @@ public class AarreAutonomous extends LinearOpMode {
             // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
             // // Forward 12 inches with 5 sec timeout
-           robot.encoderDrive(DRIVE_SPEED,  12,  12, 5.0);
+            robot.encoderDrive(DRIVE_SPEED, 12, 12, 5.0);
 
             // Turn right 12 inches with 4 sec timeout
             robot.encoderDrive(TURN_SPEED,   12, -12, 4.0);
