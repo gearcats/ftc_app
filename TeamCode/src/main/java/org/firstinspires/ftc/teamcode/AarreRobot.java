@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.Servo.Direction;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -52,6 +52,9 @@ class AarreRobot {
      */
     AarreRobot(HardwareMap hardwareMap, AarreTelemetry telemetry) {
 
+        if (telemetry == null)
+            throw new AssertionError("Unexpected null object: telemetry");
+
         this.telemetry = telemetry;
 
         // Define and initialize the motors. The strings used here as parameters
@@ -73,20 +76,20 @@ class AarreRobot {
 
         // Set all motors to zero power
 
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
-        armMotor.setPower(0);
-        riserMotor.setPower(0);
+        leftMotor.setPower(0.0);
+        rightMotor.setPower(0.0);
+        armMotor.setPower(0.0);
+        riserMotor.setPower(0.0);
 
         // This code REQUIRES that you have encoders on the wheel motors
 
-        leftMotor.setMode(RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(RunMode.STOP_AND_RESET_ENCODER);
-        riserMotor.setMode(RunMode.STOP_AND_RESET_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        riserMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftMotor.setMode(RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(RunMode.RUN_USING_ENCODER);
-        riserMotor.setMode(RunMode.RUN_USING_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        riserMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define the servos
 
@@ -94,7 +97,7 @@ class AarreRobot {
 
         this.telemetry.log("Initializing hook");
 
-        hookServo.setDirection(Servo.Direction.FORWARD);
+        hookServo.setDirection(Direction.FORWARD);
 
         // With the hook up, the servo is at 0 degrees.
         // With the hook down, the servo is at about 100 degrees.
@@ -132,8 +135,8 @@ class AarreRobot {
         rightMotor.setTargetPosition(newRightTarget);
 
         // Turn On RUN_TO_POSITION
-        leftMotor.setMode(RunMode.RUN_TO_POSITION);
-        rightMotor.setMode(RunMode.RUN_TO_POSITION);
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // reset the timeout time and start motion.
         ElapsedTime runtime = new ElapsedTime();
@@ -154,12 +157,12 @@ class AarreRobot {
         }
 
         // Stop all motion;
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
+        leftMotor.setPower(0.0);
+        rightMotor.setPower(0.0);
 
         // Turn off RUN_TO_POSITION
-        leftMotor.setMode(RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(RunMode.RUN_USING_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -181,13 +184,20 @@ class AarreRobot {
     }
 
     /**
+     * Lower the riser by enough ticks to put it in its downward position
+     */
+    void lowerRiserByTicks() {
+        riserMotor.runByEncoderTicks(0.9, -3000, 2.0);
+    }
+
+    /**
      * Lower the riser to its downward position while avoiding stalling the riser motor
      */
-    void lowerRiser() {
+    void lowerRiserUntilStall() {
         telemetry.log("Riser - lowering riser");
-        riserMotor.setStallTimeLimitInMilliseconds(RISER_TIMEOUT_MS);
-        riserMotor.setStallDetectionToleranceInTicks(RISER_STALL_TOLERANCE);
-        riserMotor.runUntilStalled(-RISER_SPEED_PROPORTION);
+        riserMotor.setStallTimeLimitInMilliseconds(200);
+        riserMotor.setStallDetectionToleranceInTicks(15);
+        riserMotor.runUntilStalled(-1.0);
         telemetry.log("Riser - riser lowered");
     }
 
@@ -209,13 +219,21 @@ class AarreRobot {
     }
 
     /**
+     * Raise the riser by enough ticks to put it in its upward position
+     *
+     */
+    void raiseRiserByTicks() {
+        riserMotor.runByEncoderTicks(0.9, 3000, 2.0);
+    }
+
+    /**
      * Raise the riser to its upward position while avoiding stalling the riser motor
      */
-    void raiseRiser() {
+    void raiseRiserUntilStall() {
         telemetry.log("Riser - raising riser");
-        riserMotor.setStallTimeLimitInMilliseconds(RISER_TIMEOUT_MS);
-        riserMotor.setStallDetectionToleranceInTicks(RISER_STALL_TOLERANCE);
-        riserMotor.runUntilStalled(RISER_SPEED_PROPORTION);
+        riserMotor.setStallTimeLimitInMilliseconds(200);
+        riserMotor.setStallDetectionToleranceInTicks(15);
+        riserMotor.runUntilStalled(1.0);
         telemetry.log("Riser - riser raised");
     }
 }

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.ElapsedTime.Resolution;
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -25,17 +25,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 class AarreMotor {
 
-   private final DcMotor      motor;
-   private int oldTickNumber;
-   private int          stallTimeLimitInMilliseconds = 0;
-   private int          stallDetectionToleranceInTicks = 5;
-   private AarreTelemetry    telemetry;
-   private ElapsedTime  timeStalledInMilliseconds;
+    private static final double COUNTS_PER_INCH = ((double) COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    private final DcMotor motor;
+    private int oldTickNumber;
+    private int stallTimeLimitInMilliseconds = 0;
+    private int stallDetectionToleranceInTicks = 5;
+    private AarreTelemetry telemetry;
 
     private static final int COUNTS_PER_MOTOR_REVOLUTION = 1440;    // eg: TETRIX Motor Encoder, TorqueNado
     private static final double DRIVE_GEAR_REDUCTION            = 1.0 ;     // This is 1.0 for our direct-drive wheels
     private static final double WHEEL_DIAMETER_INCHES           = 5.5 ;     // For figuring circumference; could be 5.625, also depends on treads
-    private static final double COUNTS_PER_INCH = ((double) AarreMotor.COUNTS_PER_MOTOR_REVOLUTION * AarreMotor.DRIVE_GEAR_REDUCTION) / (AarreMotor.WHEEL_DIAMETER_INCHES * 3.1415);
+    private ElapsedTime timeStalledInMilliseconds;
 
     /**
      * Construct an instance of AarreMotor without telemetry.
@@ -47,7 +47,14 @@ class AarreMotor {
     private AarreMotor(HardwareMap hardwareMap, String motorName) {
 
         motor = hardwareMap.get(DcMotor.class, motorName);
-        setDefaults();
+
+        // These are defaults. The user should customize them
+        setStallDetectionToleranceInTicks(5);
+        setStallTimeLimitInMilliseconds(100);
+
+        // Reset the encoder and force the motor to be stopped
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setPower(0);
     }
 
     /**
@@ -63,6 +70,8 @@ class AarreMotor {
         this(hardwareMap, motorName);
 
         // Add a telemetry member
+        if (telemetry == null)
+            throw new AssertionError("Unexpected null object: telemetry");
         this.telemetry = telemetry;
     }
 
@@ -72,7 +81,7 @@ class AarreMotor {
      * @return The number of encoder ticks (counts) required to make the robot travel one inch.
      */
     public static final double getCountsPerInch() {
-        return AarreMotor.COUNTS_PER_INCH;
+        return COUNTS_PER_INCH;
     }
 
     /**
@@ -125,8 +134,8 @@ class AarreMotor {
     private boolean isStalled() {
 
         // TODO: Implement logging framework to allow logging by severity level
-        //telemetry.log("time stalled = ", "%d ms", getTimeStalledInMilliseconds());
-        //telemetry.log("stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
+        //telemetry.log("Time stalled = ", "%d ms", getTimeStalledInMilliseconds());
+        //telemetry.log("Stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
 
         boolean stalled = false;
         int newTickNumber = getCurrentTickNumber();
@@ -141,6 +150,7 @@ class AarreMotor {
 
                 // The motor has been stalled for more than the time limit
 
+                //telemetry.log("Motor stalled");
                 stalled = true;
 
             }
@@ -165,13 +175,52 @@ class AarreMotor {
     }
 
     /**
+     * Rotate this motor a certain number of ticks
+     *
+     * @param speed    The power at which to rotate, in the interval [-1.0, 1.0].
+     * @param ticks    Maximum number of ticks to rotate. Must be positive.
+     * @param timeoutS Maximum number of seconds to rotate. Must be positive
+     */
+    final void runByEncoderTicks(double speed, int ticks, double timeoutS) {
+
+        if ((speed < -1.0) || (speed > 1.0))
+            throw new AssertionError("Speed out of range [-1.0, 1.0]");
+
+        if (timeoutS < 0)
+            throw new AssertionError("timeoutS must be positive");
+
+        int targetTicks = getCurrentTickNumber() + (int) Math.signum(speed) * ticks;
+
+        setTargetPosition(targetTicks);
+        setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // reset the timeout time and start motion.
+        ElapsedTime runtime = new ElapsedTime();
+        setPower(speed);
+
+        // Keep looping while we are still active, and there is time left, and the motor is running.
+        while ((runtime.seconds() < timeoutS) && (isBusy())) {
+
+            telemetry.log("Motor", "Running to %7d", targetTicks);
+
+        }
+
+        // Stop all motion;
+        setPower(0.0);
+
+        // Turn off RUN_TO_POSITION
+        setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+
+    /**
      * Run this motor until it stalls
      *
      * @param power How much power to apply to the motor, in the interval
      *              [-1,1].
      */
     void runUntilStalled(double power) {
-        timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        timeStalledInMilliseconds = new ElapsedTime(Resolution.MILLISECONDS);
         setPower(power);
         //noinspection StatementWithEmptyBody
         while (!(isStalled())) {
@@ -180,24 +229,11 @@ class AarreMotor {
     }
 
     /**
-     * Set some reasonable defaults for a motor. The user should then set the real values.
-     */
-    private void setDefaults() {
-
-        setStallDetectionToleranceInTicks(5);
-        setStallTimeLimitInMilliseconds(0);
-
-        // Reset the encoder and force the motor to be stopped
-        setMode(RunMode.STOP_AND_RESET_ENCODER);
-        setPower(0);
-    }
-
-    /**
      * Set the logical direction in which this motor operates.
      *
      * @param direction The logical direction in which this motor operates.
      */
-    void setDirection(Direction direction) {
+    void setDirection(DcMotorSimple.Direction direction) {
         motor.setDirection(direction);
     }
 
@@ -207,7 +243,7 @@ class AarreMotor {
      * @param mode the new current run mode for this motor
      */
     @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
-    void setMode(RunMode mode) {
+    void setMode(DcMotor.RunMode mode) {
         motor.setMode(mode);
     }
 
@@ -224,19 +260,7 @@ class AarreMotor {
      */
     void setPower(double power) {
         motor.setPower(power);
-    }
-
-    /**
-     * Set the power level of the motor to an integer level.
-     * <p>
-     * Syntactic sugar when we are stopping the motor (0) or going at max speed (1).
-     *
-     * @param power The new power level of the motor.
-     *              Either 0 or 1.
-     */
-    void setPower(int power) {
-        double dblPower = (double) power;
-        motor.setPower(dblPower);
+        telemetry.log("Motor power set to %f", power);
     }
 
     /**
