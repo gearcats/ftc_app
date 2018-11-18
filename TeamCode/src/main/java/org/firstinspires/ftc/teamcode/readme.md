@@ -1,5 +1,17 @@
 ## TeamCode Module
 
+Numbering scheme
+
+*   1-digit major version number (for any version that is a major overhaul
+*   2-digit minor version number (for any version that introduces new features
+*   3-digit bugfix number (for any version that improves on a previous one)
+*   4-digit build number (for any version that builds)
+
+Builds (reverse chronological order)
+
+* 0.00.001.0001 Hook works under AarreDance.
+* 0.00.000.0001 First build with version number tracking.
+
 Welcome!
 
 This module, TeamCode, is the place where you will write/paste the code for your team's
