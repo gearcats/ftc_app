@@ -50,6 +50,16 @@ public class AarreDance extends LinearOpMode {
         // Wait for the driver to press PLAY
         waitForStart();
 
+        double DRIVE_SPEED = 0.5;
+        double TURN_SPEED = 0.5;
+        double INCHES = 12.0;
+        double TIMEOUT = 5.0;
+
+        robot.encoderDrive(DRIVE_SPEED, INCHES, INCHES, TIMEOUT);
+        robot.encoderDrive(DRIVE_SPEED, -INCHES, -INCHES, TIMEOUT);
+        robot.encoderDrive(TURN_SPEED, INCHES, -INCHES, TIMEOUT);
+        robot.encoderDrive(TURN_SPEED, -INCHES, INCHES, TIMEOUT);
+
         robot.raiseArm();
         robot.lowerArm();
 
