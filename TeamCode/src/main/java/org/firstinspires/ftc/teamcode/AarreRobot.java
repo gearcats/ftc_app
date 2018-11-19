@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * This is NOT an OpMode itself.
  *
  */
-class AarreRobot {
+public class AarreRobot {
 
     private final AarreTelemetry telemetry;
 
@@ -50,7 +50,7 @@ class AarreRobot {
      * @param telemetry     An instance of {@link AarreTelemetry}
      *
      */
-    AarreRobot(final HardwareMap hardwareMap, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry) {
+    public AarreRobot(final HardwareMap hardwareMap, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry) {
 
         if (telemetry == null)
             throw new AssertionError("Unexpected null object: telemetry");
@@ -166,6 +166,15 @@ class AarreRobot {
 
     }
 
+    public AarreMotor getLeftMotor() {
+        return leftMotor;
+    }
+
+    public AarreMotor getRightMotor() {
+        return rightMotor;
+    }
+
+
     /**
      * Lower the arm to its downward position while avoiding stalling the arm motor
      */
@@ -231,5 +240,6 @@ class AarreRobot {
         riserMotor.runUntilStalled(1.0);
         telemetry.log("Riser - riser raised");
     }
+
 }
 

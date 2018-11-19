@@ -7,12 +7,13 @@ import org.testng.annotations.Test;
 /**
  * Test constructing an instance of AarreAutonomousDriveByGyra
  */
-public class AarreUnitTest001 {
+public class AarreAutonomousDriveByGyroUnitTests {
 
     @Test
-    public void AarreUnitTest001() {
+    public void testNewGyroObjectNotNull() {
         AarreAutonomousDriveByGyro driveByGyro = new AarreAutonomousDriveByGyro();
         Assert.assertNotNull(driveByGyro);
     }
+
 
 }

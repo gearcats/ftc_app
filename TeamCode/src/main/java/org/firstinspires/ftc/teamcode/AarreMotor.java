@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Stall detection and telemetry code adapted from
  * <a href="https://github.com/TullyNYGuy/FTC8863_ftc_app/blob/master/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Lib/FTCLib/DcMotor8863.java"></a>
  */
-class AarreMotor {
+public class AarreMotor {
 
     private final DcMotor motor;
     private int oldTickNumber;
@@ -96,6 +96,10 @@ class AarreMotor {
     @SuppressWarnings("WeakerAccess")
     public final int getCurrentTickNumber() {
         return motor.getCurrentPosition();
+    }
+
+    public double getPower() {
+        return motor.getPower();
     }
 
     /**

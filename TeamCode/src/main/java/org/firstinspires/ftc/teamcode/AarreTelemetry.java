@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * This also makes it easier to switch back and forth between calling the Telemetry.addData and Telemetry.log
  * methods in other classes.
  */
-class AarreTelemetry {
+public class AarreTelemetry {
 
     private final Telemetry     underlyingTelemetry;
     private final Telemetry.Log telemetryLog;
@@ -26,11 +26,12 @@ class AarreTelemetry {
      *
      * @param telemetry The underlying @link{Telemetry} instance.
      */
-    AarreTelemetry(final Telemetry telemetry) {
+    public AarreTelemetry(final Telemetry telemetry) {
 
         underlyingTelemetry = telemetry;
         underlyingTelemetry.setAutoClear(false);
         telemetryLog = telemetry.log();
+        CAREFUL_LOGGING = false;
 
     }
 

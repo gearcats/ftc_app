@@ -14,12 +14,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 @Autonomous(name="Aarre Dance", group="Aarre")
-public class AarreDance extends LinearOpMode {
+public class AarreAutonomousDance extends LinearOpMode {
 
     private AarreTelemetry betterTelemetry;
     private AarreRobot robot;
 
-    public AarreDance() {
+    public AarreAutonomousDance() {
     }
 
     /**

@@ -37,8 +37,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
-
 /**
  * This file illustrates the concept of driving a path based on Gyro heading and encoder counts.
  * It uses the common Pushbot hardware class to define the drive on the robot.
@@ -89,8 +87,11 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
     /* Declare OpMode members. */
-    HardwarePushbot robot = new HardwarePushbot();   // Use a Pushbot's hardware
     ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
+
+    private AarreTelemetry aarreTelemetry;
+    private AarreRobot robot;
+
 
     /**
      * Get desired steering force.
@@ -106,16 +107,14 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
     @Override
     public final void runOpMode() {
 
-        /*
-         * Initialize the standard drive system variables.
-         * The init() method of the hardware class does most of the work here
-         */
-        robot.init(hardwareMap);
+        aarreTelemetry = new AarreTelemetry(telemetry);
+        robot = new AarreRobot(hardwareMap, aarreTelemetry);
+
         gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
 
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
-        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.getLeftMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.getRightMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
@@ -132,8 +131,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
 
-        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.getLeftMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.getRightMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
@@ -191,24 +190,24 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
             // Determine new target position, and pass to motor controller
             //noinspection NumericCastThatLosesPrecision
             moveCounts = (int) (distance * COUNTS_PER_INCH);
-            newLeftTarget = robot.leftDrive.getCurrentPosition() + moveCounts;
-            newRightTarget = robot.rightDrive.getCurrentPosition() + moveCounts;
+            newLeftTarget = robot.getLeftMotor().getCurrentTickNumber() + moveCounts;
+            newRightTarget = robot.getRightMotor().getCurrentTickNumber() + moveCounts;
 
             // Set Target and Turn On RUN_TO_POSITION
-            robot.leftDrive.setTargetPosition(newLeftTarget);
-            robot.rightDrive.setTargetPosition(newRightTarget);
+            robot.getLeftMotor().setTargetPosition(newLeftTarget);
+            robot.getRightMotor().setTargetPosition(newRightTarget);
 
-            robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.getLeftMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.getRightMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // start motion.
             final double adjustedSpeed = Range.clip(Math.abs(speed), 0.0, 1.0);
-            robot.leftDrive.setPower(adjustedSpeed);
-            robot.rightDrive.setPower(adjustedSpeed);
+            robot.getLeftMotor().setPower(adjustedSpeed);
+            robot.getRightMotor().setPower(adjustedSpeed);
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                    (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
+                    (robot.getLeftMotor().isBusy() && robot.getRightMotor().isBusy())) {
 
                 // adjust relative speed based on heading error.
                 error = getError(angle);
@@ -228,25 +227,25 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
                     rightSpeed /= max;
                 }
 
-                robot.leftDrive.setPower(leftSpeed);
-                robot.rightDrive.setPower(rightSpeed);
+                robot.getLeftMotor().setPower(leftSpeed);
+                robot.getRightMotor().setPower(rightSpeed);
 
                 // Display drive status for the driver.
                 telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
                 telemetry.addData("Target", "%7d:%7d", newLeftTarget, newRightTarget);
-                telemetry.addData("Actual", "%7d:%7d", robot.leftDrive.getCurrentPosition(),
-                        robot.rightDrive.getCurrentPosition());
+                telemetry.addData("Actual", "%7d:%7d", robot.getLeftMotor().getCurrentTickNumber(),
+                        robot.getRightMotor().getCurrentTickNumber());
                 telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
                 telemetry.update();
             }
 
             // Stop all motion;
-            robot.leftDrive.setPower(0);
-            robot.rightDrive.setPower(0);
+            robot.getLeftMotor().setPower(0);
+            robot.getRightMotor().setPower(0);
 
             // Turn off RUN_TO_POSITION
-            robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.getLeftMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.getRightMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -293,8 +292,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         }
 
         // Stop all motion;
-        robot.leftDrive.setPower(0);
-        robot.rightDrive.setPower(0);
+        robot.getLeftMotor().setPower(0);
+        robot.getRightMotor().setPower(0);
     }
 
     /**
@@ -331,8 +330,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         }
 
         // Send desired speeds to motors.
-        robot.leftDrive.setPower(leftSpeed);
-        robot.rightDrive.setPower(rightSpeed);
+        robot.getLeftMotor().setPower(leftSpeed);
+        robot.getRightMotor().setPower(rightSpeed);
 
         // Display it for the driver.
         telemetry.addData("Target", "%5.2f", angle);
