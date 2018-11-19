@@ -21,9 +21,11 @@ public class AarreRobot {
 
     private final AarreTelemetry telemetry;
 
-    private static final double RISER_SPEED_PROPORTION = 0.2;
-    private static final int RISER_TIMEOUT_MS = 100;
-    private static final int RISER_STALL_TOLERANCE = 5;
+    private static final double DEFAULT_PROPORTION_RISER_POWER = 1.0;
+    private static final int DEFAULT_MILLISECONDS_RISER_TIMEOUT = 5000;
+    private static final double DEFAULT_SECONDS_RISER_TIMEOUT = (double) DEFAULT_MILLISECONDS_RISER_TIMEOUT / 1000.0;
+    private static final int DEFAULT_TICKS_RISER_STALL_TOLERANCE = 15;
+    private static final double DEFAULT_REVOLUTIONS_RISER_RANGE = 5.0;
 
     /** These properties are package-private so methods of other classes in this package can use them.
      *
@@ -192,8 +194,26 @@ public class AarreRobot {
         telemetry.log("Hook servo - hook lowered");
     }
 
-    void lowerRiserByRevolutions() {
-        riserMotor.runByRevolutions(1.0, -5.0, 4.0);
+    public void lowerRiser() {
+        lowerRiserByRevolutions();
+    }
+
+    /**
+     * Lower the riser by default parameters
+     */
+    private void lowerRiserByRevolutions() {
+        lowerRiserByRevolutions(DEFAULT_PROPORTION_RISER_POWER, DEFAULT_REVOLUTIONS_RISER_RANGE, DEFAULT_MILLISECONDS_RISER_TIMEOUT);
+    }
+
+    /**
+     * Lower the riser by a certain number of revolutions of the motor shaft
+     *
+     * @param proportionMotorPower
+     * @param numberOfRevolutions
+     * @param secondsTimeout
+     */
+    private void lowerRiserByRevolutions(final double proportionMotorPower, final double numberOfRevolutions, final double secondsTimeout) {
+        riserMotor.runByRevolutions(proportionMotorPower, -numberOfRevolutions, secondsTimeout);
     }
 
 
@@ -225,18 +245,47 @@ public class AarreRobot {
         telemetry.log("Hook servo - hook raised");
     }
 
-    void raiseRiserByRevolutions() {
-        riserMotor.runByRevolutions(1.0, 5.0, 4.0);
+    /**
+     * Raise the riser. This public method will use the best available method to raise the
+     * riser at any given point in code development.
+     */
+    public void raiseRiser() {
+        raiseRiserByRevolutions();
+    }
+
+    /**
+     * Raise the riser by revolutions using default parameters.
+     */
+    private void raiseRiserByRevolutions() {
+        raiseRiserByRevolutions(DEFAULT_PROPORTION_RISER_POWER, DEFAULT_REVOLUTIONS_RISER_RANGE, DEFAULT_SECONDS_RISER_TIMEOUT);
+    }
+
+    /**
+     * Raise the riser by a certain number of motor shaft numberOfRevolutions.
+     *
+     * @param proportionMotorPower Apply this proportion of power to the motor.
+     * @param numberOfRevolutions  Turn the motor shaft this number of revolutions.
+     * @param secondsTimeout       Shut off the motor shuts off after this many seconds
+     *                             regardless of whether it has reached the requested number
+     *                             of revolutions. The idea is to prevent burning out motors
+     *                             by stalling them for long periods of time or breaking other
+     *                             components by applying too much force to them for too long.
+     */
+    private final void raiseRiserByRevolutions(final double proportionMotorPower, final double numberOfRevolutions, final double secondsTimeout) {
+        riserMotor.runByRevolutions(proportionMotorPower, numberOfRevolutions, secondsTimeout);
     }
 
 
     /**
-     * Raise the riser to its upward position while avoiding stalling the riser motor
+     * Raise the riser to its upward position while avoiding stalling the riser motor.
+     *
+     * This method does not work very well. The riser motor does not really 'stall'. Instead, it
+     * continues to run irregularly as it attempts to push the riser higher than it can go.
      */
-    void raiseRiserUntilStall() {
+    private void raiseRiserUntilStall() {
         telemetry.log("Riser - raising riser");
-        riserMotor.setStallTimeLimitInMilliseconds(200);
-        riserMotor.setStallDetectionToleranceInTicks(15);
+        riserMotor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_RISER_TIMEOUT);
+        riserMotor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_RISER_STALL_TOLERANCE);
         riserMotor.runUntilStalled(1.0);
         telemetry.log("Riser - riser raised");
     }

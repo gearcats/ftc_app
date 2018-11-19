@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  */
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-@Autonomous(name="Aarre Dance", group="Aarre")
+@Autonomous(name = "Aarre Autonomous Dance", group = "Aarre")
 public class AarreAutonomousDance extends LinearOpMode {
 
     private AarreTelemetry betterTelemetry;
@@ -63,14 +63,8 @@ public class AarreAutonomousDance extends LinearOpMode {
         robot.raiseArm();
         robot.lowerArm();
 
-        //robot.raiseRiserUntilStall();
-        //robot.lowerRiserUntilStall();
-
-        //robot.raiseRiserByTicks();
-        //robot.lowerRiserByTicks();
-
-        robot.raiseRiserByRevolutions();
-        robot.lowerRiserByRevolutions();
+        robot.raiseRiser();
+        robot.lowerRiser();
 
         robot.lowerHook();
         robot.raiseHook();

@@ -178,31 +178,41 @@ public class AarreMotor {
     }
 
     /**
-     * Rotate this motor a certain number of ticks
-     *
-     * @param speed    The power at which to rotate, in the interval [-1.0, 1.0].
-     * @param ticks    Maximum number of ticks to rotate. Must be positive.
-     * @param timeoutS Maximum number of seconds to rotate. Must be positive
+     * Provide a version that allows the user to specify timeout by milliseconds instead of seconds.
      */
-    final void runByEncoderTicks(final double speed, final int ticks, final double timeoutS) {
+    final void runByEncoderTicks(final double proportionPower, final int ticks, final int millisecondsTimeout) {
+        final double secondsTimeout = (double) millisecondsTimeout / 1000.0;
+        runByEncoderTicks(proportionPower, ticks, secondsTimeout);
+    }
 
-        if ((speed < -1.0) || (speed > 1.0))
-            throw new AssertionError("Speed out of range [-1.0, 1.0]");
 
-        if (timeoutS < 0.0)
-            throw new AssertionError("timeoutS must be positive");
+    /**
+     * Rotate this motor a certain number of ticks. This version allows the user to specify timeout
+     * by seconds instead of milliseconds.
+     *
+     * @param proportionPower    The power at which to rotate, in the interval [-1.0, 1.0].
+     * @param ticks    Maximum number of ticks to rotate. Must be positive.
+     * @param secondsTimeout Maximum number of seconds to rotate. Must be positive
+     */
+    final void runByEncoderTicks(final double proportionPower, final int ticks, final double secondsTimeout) {
 
-        @SuppressWarnings("NumericCastThatLosesPrecision") final int targetTicks = getCurrentTickNumber() + ((int) Math.signum(speed) * ticks);
+        if ((proportionPower < -1.0) || (proportionPower > 1.0))
+            throw new AssertionError("Power out of range [-1.0, 1.0]");
+
+        if (secondsTimeout < 0.0)
+            throw new AssertionError("secondsTimeout must be positive");
+
+        @SuppressWarnings("NumericCastThatLosesPrecision") final int targetTicks = getCurrentTickNumber() + ((int) Math.signum(proportionPower) * ticks);
 
         setTargetPosition(targetTicks);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // reset the timeout time and start motion.
         final ElapsedTime runtime = new ElapsedTime();
-        setPower(speed);
+        setPower(proportionPower);
 
         // Keep looping while we are still active, and there is time left, and the motor is running.
-        while ((runtime.seconds() < timeoutS) && (isBusy())) {
+        while ((runtime.seconds() < secondsTimeout) && (isBusy())) {
 
             telemetry.log("Motor", "Running to %7d", targetTicks);
 
