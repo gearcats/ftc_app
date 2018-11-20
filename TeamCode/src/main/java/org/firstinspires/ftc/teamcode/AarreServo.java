@@ -153,7 +153,7 @@ public class AarreServo {
      */
     private void setPosition(final double position) {
 
-        telemetry.log("Setting servo to position %f", position);
+        //telemetry.log("Setting servo to position %f", position);
         servo.setPosition(position);
 
         // Wait for the hardware to catch up
@@ -163,7 +163,7 @@ public class AarreServo {
             telemetry.log ("Sleep interrupted!");
         }
 
-        telemetry.log("Done setting servo to position %f", position);
+        //telemetry.log("Done setting servo to position %f", position);
 
     }
 

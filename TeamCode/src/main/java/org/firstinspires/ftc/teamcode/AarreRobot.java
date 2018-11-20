@@ -147,8 +147,8 @@ public class AarreRobot {
         // onto the next step, use (isBusy() || isBusy()) in the loop test.
         while ((runtime.seconds() < timeoutS) && (leftMotor.isBusy() && rightMotor.isBusy())) {
 
-            telemetry.log("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-            telemetry.log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor.getCurrentTickNumber());
+            //telemetry.log("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
+            //telemetry.log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor.getCurrentTickNumber());
 
         }
 
@@ -176,7 +176,7 @@ public class AarreRobot {
      */
     final void lowerArm() {
         armMotor.setStallTimeLimitInMilliseconds(100);
-        armMotor.runUntilStalled(-0.1);
+        armMotor.runUntilStalled(-1.0);
     }
 
     /**
@@ -203,7 +203,7 @@ public class AarreRobot {
      */
     void raiseArm() {
         armMotor.setStallTimeLimitInMilliseconds(100);
-        armMotor.runUntilStalled(0.1);
+        armMotor.runUntilStalled(1.0);
     }
 
     /**

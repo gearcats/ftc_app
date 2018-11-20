@@ -138,8 +138,8 @@ public class AarreMotor {
     private boolean isStalled() {
 
         // TODO: Implement logging framework to allow logging by severity level
-        //telemetry.log("Time stalled = ", "%d ms", getTimeStalledInMilliseconds());
-        //telemetry.log("Stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
+        telemetry.log("Time stalled = ", "%d ms", getTimeStalledInMilliseconds());
+        telemetry.log("Stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
 
         boolean stalled = false;
         final int newTickNumber = getCurrentTickNumber();
@@ -154,7 +154,7 @@ public class AarreMotor {
 
                 // The motor has been stalled for more than the time limit
 
-                //telemetry.log("Motor stalled");
+                telemetry.log("Motor stalled");
                 stalled = true;
 
             }
@@ -218,8 +218,6 @@ public class AarreMotor {
         // Keep looping while we are still active, and there is time left, and the motor is running.
         while ((runtime.seconds() < secondsTimeout) && (isBusy())) {
 
-            telemetry.log("Motor", "Running to %7d", targetTicks);
-
         }
 
         // Stop all motion;
@@ -245,7 +243,6 @@ public class AarreMotor {
     void runUntilStalled(final double power) {
         timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         setPower(power);
-        //noinspection StatementWithEmptyBody
         while (!(isStalled())) {
             //telemetry.log("Not stalled yet...");
         }
@@ -283,7 +280,6 @@ public class AarreMotor {
      */
     void setPower(final double power) {
         motor.setPower(power);
-        telemetry.log("Motor power set to %f", power);
     }
 
     /**
