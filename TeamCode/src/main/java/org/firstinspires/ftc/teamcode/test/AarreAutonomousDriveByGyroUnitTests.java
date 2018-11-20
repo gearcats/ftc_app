@@ -5,7 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
- * Test constructing an instance of AarreAutonomousDriveByGyra
+ * Test constructing an instance of AarreAutonomousDriveByGyro
  */
 public class AarreAutonomousDriveByGyroUnitTests {
 

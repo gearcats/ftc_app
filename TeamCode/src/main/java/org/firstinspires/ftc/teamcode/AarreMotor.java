@@ -72,6 +72,7 @@ public class AarreMotor {
         // Add a telemetry member
         if (telemetry == null)
             throw new AssertionError("Unexpected null object: telemetry");
+
         this.telemetry = telemetry;
     }
 

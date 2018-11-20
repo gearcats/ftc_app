@@ -12,14 +12,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  *
  */
 
-@Autonomous(name="Aarre Autonomous Reset", group="Aarre")
-public class AarreAutonomousReset extends LinearOpMode {
+@Autonomous(name = "Aarre Autonomous Ready", group = "Aarre")
+public class AarreAutonomousReady extends LinearOpMode {
 
     private AarreTelemetry betterTelemetry;
     private AarreRobot robot;
-
-    public AarreAutonomousReset() {
-    }
 
     /**
      * Properties inherited from LinearOpMode include:

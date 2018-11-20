@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * all the specific hardware for the 2018-2019 robot.
  *
  * Pulling it out into a separate class makes it possible to use the same code from
- * different OpModes (such as {@link AarreAutonomous}and {@link AarreAutonomousReset}).
+ * different OpModes (such as {@link AarreAutonomous}and {@link AarreAutonomousReady}).
  *
  * This is NOT an OpMode itself.
  *
@@ -20,12 +20,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class AarreRobot {
 
     private final AarreTelemetry telemetry;
-
-    private static final double DEFAULT_PROPORTION_RISER_POWER = 1.0;
-    private static final int DEFAULT_MILLISECONDS_RISER_TIMEOUT = 5000;
-    private static final double DEFAULT_SECONDS_RISER_TIMEOUT = (double) DEFAULT_MILLISECONDS_RISER_TIMEOUT / 1000.0;
-    private static final int DEFAULT_TICKS_RISER_STALL_TOLERANCE = 15;
-    private static final double DEFAULT_REVOLUTIONS_RISER_RANGE = 5.0;
 
     /** These properties are package-private so methods of other classes in this package can use them.
      *
@@ -39,7 +33,7 @@ public class AarreRobot {
     @SuppressWarnings("WeakerAccess")
     AarreMotor armMotor;
     @SuppressWarnings("WeakerAccess")
-    AarreMotor riserMotor;
+    AarreRiser riser;
     @SuppressWarnings("WeakerAccess")
     AarreServo hookServo;
     @SuppressWarnings({"WeakerAccess", "unused"})
@@ -66,7 +60,7 @@ public class AarreRobot {
         leftMotor = new AarreMotor(hardwareMap, "left", telemetry);
         rightMotor = new AarreMotor(hardwareMap, "right", telemetry);
         armMotor = new AarreMotor(hardwareMap, "arm", telemetry);
-        riserMotor = new AarreMotor(hardwareMap, "riser", telemetry);
+        riser = new AarreRiser(hardwareMap, "riser", telemetry);
 
         // Configure drive motors such that a positive power command moves them forwards
         // and causes the encoders to count UP. Note that, as in most robots, the drive
@@ -74,24 +68,24 @@ public class AarreRobot {
 
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        riserMotor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises riser
+
 
         // Set all motors to zero power
 
         leftMotor.setPower(0.0);
         rightMotor.setPower(0.0);
         armMotor.setPower(0.0);
-        riserMotor.setPower(0.0);
+
 
         // This code REQUIRES that you have encoders on the wheel motors
 
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        riserMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        riserMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         // Define the servos
 
@@ -194,56 +188,15 @@ public class AarreRobot {
         telemetry.log("Hook servo - hook lowered");
     }
 
-    public void lowerRiser() {
-        lowerRiserByRevolutions();
-    }
-
     /**
-     * Lower the riser by default parameters
+     * Lower the riser to its downward (least extended) position. This is the position that it
+     * will need to be in at the beginning of the autonomous game when it is hanging from the
+     * lander.
      */
-    private void lowerRiserByRevolutions() {
-        lowerRiserByRevolutions(DEFAULT_PROPORTION_RISER_POWER, DEFAULT_REVOLUTIONS_RISER_RANGE, DEFAULT_MILLISECONDS_RISER_TIMEOUT);
+    void lowerRiser() {
+        riser.lower();
     }
 
-    /**
-     * Lower the riser by a certain number of revolutions of the motor shaft
-     *
-     * @param proportionMotorPower Apply this proportion of power to the motor. In this method
-     *                             (where we have already specified by the method name that the
-     *                             intent is to "lower" the riser), we expect this value to be
-     *                             non-negative. It tells us how much power to apply, not which
-     *                             direction to apply it.
-     * @param numberOfRevolutions  Turn the motor shaft this number of revolutions. Also always
-     *                             non-negative.
-     * @param secondsTimeout       Shut off the motor after this many seconds
-     *                             regardless of whether it has reached the requested number
-     *                             of revolutions. The idea is to prevent burning out motors
-     *                             by stalling them for long periods of time or breaking other
-     *                             components by applying too much force to them for too long.
-     */
-    private void lowerRiserByRevolutions(final double proportionMotorPower, final double numberOfRevolutions, final double secondsTimeout) {
-
-        if (proportionMotorPower < 0.0)
-            throw new IllegalArgumentException("proportionMotorPower expected to be non-negative");
-        if (numberOfRevolutions < 0.0)
-            throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
-        if (secondsTimeout < 0.0)
-            throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
-
-        riserMotor.runByRevolutions(-proportionMotorPower, numberOfRevolutions, secondsTimeout);
-    }
-
-
-    /**
-     * Lower the riser to its downward position while avoiding stalling the riser motor
-     */
-    void lowerRiserUntilStall() {
-        telemetry.log("Riser - lowering riser");
-        riserMotor.setStallTimeLimitInMilliseconds(200);
-        riserMotor.setStallDetectionToleranceInTicks(15);
-        riserMotor.runUntilStalled(-1.0);
-        telemetry.log("Riser - riser lowered");
-    }
 
     /**
      * Raise the arm to its upward position while avoiding stalling the arm motor
@@ -263,65 +216,28 @@ public class AarreRobot {
     }
 
     /**
-     * Raise the riser. This public method will use the best available method to raise the
-     * riser at any given point in code development.
+     * Raise the riser to its upward (most extended) position. This is the position that it will
+     * need to be in near the end of the game just before it latches on to the lander.
      */
-    public void raiseRiser() {
-        raiseRiserByRevolutions();
+    void raiseRiser() {
+        riser.raise();
     }
 
     /**
-     * Raise the riser by revolutions using default parameters.
+     * Prepare the robot for transportation.
      */
-    private void raiseRiserByRevolutions() {
-        raiseRiserByRevolutions(DEFAULT_PROPORTION_RISER_POWER, DEFAULT_REVOLUTIONS_RISER_RANGE, DEFAULT_SECONDS_RISER_TIMEOUT);
-    }
-
-    /**
-     * Raise the riser by a certain number of motor shaft revolutions.
-     *
-     * @param proportionMotorPower Apply this proportion of power to the motor. In this method
-     *                             (to "raise" the riser), we expect this value to be non-negative.
-     * @param numberOfRevolutions  Turn the motor shaft this number of revolutions.
-     * @param secondsTimeout       Shut off the motor shuts off after this many seconds
-     *                             regardless of whether it has reached the requested number
-     *                             of revolutions. The idea is to prevent burning out motors
-     *                             by stalling them for long periods of time or breaking other
-     *                             components by applying too much force to them for too long.
-     */
-    private final void raiseRiserByRevolutions(final double proportionMotorPower, final double numberOfRevolutions, final double secondsTimeout) {
-
-        if (proportionMotorPower < 0.0)
-            throw new IllegalArgumentException("proportionMotorPower expected to be non-negative");
-        if (numberOfRevolutions < 0.0)
-            throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
-        if (secondsTimeout < 0.0)
-            throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
-
-        riserMotor.runByRevolutions(proportionMotorPower, numberOfRevolutions, secondsTimeout);
-    }
-
-
-    /**
-     * Raise the riser to its upward position while avoiding stalling the riser motor.
-     *
-     * This method does not work very well. The riser motor does not really 'stall'. Instead, it
-     * continues to run irregularly as it attempts to push the riser higher than it can go.
-     */
-    private void raiseRiserUntilStall() {
-        telemetry.log("Riser - raising riser");
-        riserMotor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_RISER_TIMEOUT);
-        riserMotor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_RISER_STALL_TOLERANCE);
-        riserMotor.runUntilStalled(1.0);
-        telemetry.log("Riser - riser raised");
+    public void readyForTransportation() {
+        lowerArm();
+        lowerRiser();
+        lowerHook();
     }
 
     /**
      * Prepare the robot to play the autonomous portion of the game.
      */
     public void resetForAutonomousGame() {
-        raiseHook();
         lowerArm();
+        raiseHook();
         lowerRiser();
     }
 
