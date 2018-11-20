@@ -74,7 +74,7 @@ public class AarreRobot {
 
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        riserMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        riserMotor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises riser
 
         // Set all motors to zero power
 
@@ -131,8 +131,8 @@ public class AarreRobot {
 
 
         // Determine new target position, and pass to motor controller
-        newLeftTarget = leftMotor.getCurrentTickNumber() + (int) (leftInches * AarreMotor.getCountsPerInch());
-        newRightTarget = rightMotor.getCurrentTickNumber() + (int) (rightInches * AarreMotor.getCountsPerInch());
+        newLeftTarget = leftMotor.getCurrentTickNumber() + (int) (leftInches * AarreMotor.getTicksPerInch());
+        newRightTarget = rightMotor.getCurrentTickNumber() + (int) (rightInches * AarreMotor.getTicksPerInch());
         leftMotor.setTargetPosition(newLeftTarget);
         rightMotor.setTargetPosition(newRightTarget);
 
@@ -208,12 +208,29 @@ public class AarreRobot {
     /**
      * Lower the riser by a certain number of revolutions of the motor shaft
      *
-     * @param proportionMotorPower
-     * @param numberOfRevolutions
-     * @param secondsTimeout
+     * @param proportionMotorPower Apply this proportion of power to the motor. In this method
+     *                             (where we have already specified by the method name that the
+     *                             intent is to "lower" the riser), we expect this value to be
+     *                             non-negative. It tells us how much power to apply, not which
+     *                             direction to apply it.
+     * @param numberOfRevolutions  Turn the motor shaft this number of revolutions. Also always
+     *                             non-negative.
+     * @param secondsTimeout       Shut off the motor after this many seconds
+     *                             regardless of whether it has reached the requested number
+     *                             of revolutions. The idea is to prevent burning out motors
+     *                             by stalling them for long periods of time or breaking other
+     *                             components by applying too much force to them for too long.
      */
     private void lowerRiserByRevolutions(final double proportionMotorPower, final double numberOfRevolutions, final double secondsTimeout) {
-        riserMotor.runByRevolutions(proportionMotorPower, -numberOfRevolutions, secondsTimeout);
+
+        if (proportionMotorPower < 0.0)
+            throw new IllegalArgumentException("proportionMotorPower expected to be non-negative");
+        if (numberOfRevolutions < 0.0)
+            throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
+        if (secondsTimeout < 0.0)
+            throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
+
+        riserMotor.runByRevolutions(-proportionMotorPower, numberOfRevolutions, secondsTimeout);
     }
 
 
@@ -261,9 +278,10 @@ public class AarreRobot {
     }
 
     /**
-     * Raise the riser by a certain number of motor shaft numberOfRevolutions.
+     * Raise the riser by a certain number of motor shaft revolutions.
      *
-     * @param proportionMotorPower Apply this proportion of power to the motor.
+     * @param proportionMotorPower Apply this proportion of power to the motor. In this method
+     *                             (to "raise" the riser), we expect this value to be non-negative.
      * @param numberOfRevolutions  Turn the motor shaft this number of revolutions.
      * @param secondsTimeout       Shut off the motor shuts off after this many seconds
      *                             regardless of whether it has reached the requested number
@@ -272,6 +290,14 @@ public class AarreRobot {
      *                             components by applying too much force to them for too long.
      */
     private final void raiseRiserByRevolutions(final double proportionMotorPower, final double numberOfRevolutions, final double secondsTimeout) {
+
+        if (proportionMotorPower < 0.0)
+            throw new IllegalArgumentException("proportionMotorPower expected to be non-negative");
+        if (numberOfRevolutions < 0.0)
+            throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
+        if (secondsTimeout < 0.0)
+            throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
+
         riserMotor.runByRevolutions(proportionMotorPower, numberOfRevolutions, secondsTimeout);
     }
 
@@ -288,6 +314,15 @@ public class AarreRobot {
         riserMotor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_RISER_STALL_TOLERANCE);
         riserMotor.runUntilStalled(1.0);
         telemetry.log("Riser - riser raised");
+    }
+
+    /**
+     * Prepare the robot to play the autonomous portion of the game.
+     */
+    public void resetForAutonomousGame() {
+        raiseHook();
+        lowerArm();
+        lowerRiser();
     }
 
 }

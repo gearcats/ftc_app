@@ -30,10 +30,10 @@ public class AarreMotor {
     private int stallDetectionToleranceInTicks = 5;
     private AarreTelemetry telemetry;
 
-    private static final int COUNTS_PER_MOTOR_REVOLUTION = 1440;    // eg: TETRIX Motor Encoder, TorqueNado
+    private static final int TICKS_PER_MOTOR_REVOLUTION = 1440;    // eg: TETRIX Motor Encoder, TorqueNado
     private static final double DRIVE_GEAR_REDUCTION            = 1.0 ;     // This is 1.0 for our direct-drive wheels
     private static final double WHEEL_DIAMETER_INCHES           = 5.5 ;     // For figuring circumference; could be 5.625, also depends on treads
-    private static final double COUNTS_PER_INCH = ((double) COUNTS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    private static final double TICKS_PER_INCH = ((double) TICKS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     private ElapsedTime timeStalledInMilliseconds;
 
@@ -80,8 +80,8 @@ public class AarreMotor {
      *
      * @return The number of encoder ticks (counts) required to make the robot travel one inch.
      */
-    public static final double getCountsPerInch() {
-        return COUNTS_PER_INCH;
+    public static final double getTicksPerInch() {
+        return TICKS_PER_INCH;
     }
 
     /**
@@ -191,18 +191,21 @@ public class AarreMotor {
      * by seconds instead of milliseconds.
      *
      * @param proportionPower    The power at which to rotate, in the interval [-1.0, 1.0].
-     * @param ticks    Maximum number of ticks to rotate. Must be positive.
-     * @param secondsTimeout Maximum number of seconds to rotate. Must be positive
+     * @param numberOfTicks    Maximum number of ticks to rotate. Must be non-negative.
+     * @param secondsTimeout Maximum number of seconds to rotate. Must be non-negative.
      */
-    final void runByEncoderTicks(final double proportionPower, final int ticks, final double secondsTimeout) {
+    final void runByEncoderTicks(final double proportionPower, final int numberOfTicks, final double secondsTimeout) {
 
         if ((proportionPower < -1.0) || (proportionPower > 1.0))
             throw new AssertionError("Power out of range [-1.0, 1.0]");
 
         if (secondsTimeout < 0.0)
-            throw new AssertionError("secondsTimeout must be positive");
+            throw new AssertionError("secondsTimeout must non-negative");
 
-        @SuppressWarnings("NumericCastThatLosesPrecision") final int targetTicks = getCurrentTickNumber() + ((int) Math.signum(proportionPower) * ticks);
+        if (numberOfTicks < 0)
+            throw new AssertionError("numberOfTicks must be non-negative");
+
+        @SuppressWarnings("NumericCastThatLosesPrecision") final int targetTicks = getCurrentTickNumber() + ((int) Math.signum(proportionPower) * numberOfTicks);
 
         setTargetPosition(targetTicks);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -226,10 +229,10 @@ public class AarreMotor {
 
     }
 
-    final void runByRevolutions(final double speed, final double revolutions, final double timeoutS) {
+    final void runByRevolutions(final double proportionMotorPower, final double numberOfRevolutions, final double secondsTimeout) {
 
-        @SuppressWarnings("NumericCastThatLosesPrecision") final int ticks = (int) Math.round((double) COUNTS_PER_MOTOR_REVOLUTION * revolutions);
-        runByEncoderTicks(speed, ticks, timeoutS);
+        final int numberOfTicks = (int) Math.round((double) TICKS_PER_MOTOR_REVOLUTION * numberOfRevolutions);
+        runByEncoderTicks(proportionMotorPower, numberOfTicks, secondsTimeout);
     }
 
     /**
