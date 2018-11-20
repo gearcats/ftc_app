@@ -237,8 +237,8 @@ public class AarreRobot {
      */
     public void resetForAutonomousGame() {
         lowerArm();
-        raiseHook();
         lowerRiser();
+        raiseHook();
     }
 
 }

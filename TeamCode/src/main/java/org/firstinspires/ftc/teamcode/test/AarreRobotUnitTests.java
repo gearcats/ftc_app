@@ -4,9 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.AarreTelemetry;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Unit tests for AarreRobot class
@@ -26,13 +27,13 @@ public class AarreRobotUnitTests extends LinearOpMode {
     @Override
     public final void runOpMode() {
 
-        Assert.assertNotNull(telemetry);
+        assertNotNull(telemetry);
         AarreTelemetry aarreTelemetry = new AarreTelemetry(telemetry);
-        Assert.assertNotNull(aarreTelemetry);
+        assertNotNull(aarreTelemetry);
 
         // Unfortunately 'hardwareMap' us null when testing, so this is all the testing
         // that we can do
-        Assert.assertNull(hardwareMap, "hardwareMap");
+        assertNull(hardwareMap, "hardwareMap");
 
     }
 

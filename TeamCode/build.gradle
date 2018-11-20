@@ -18,6 +18,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    compileSdkVersion 24
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/LICENSE-notice.md'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
 }
 
 repositories {
@@ -25,8 +38,6 @@ repositories {
 }
 
 dependencies {
-    //implementation 'org.junit.jupiter:junit-jupiter-api'
-    api 'org.testng:testng:7.0.0-beta1'
-    //api 'com.google.guava:guava:27.0-jre'
-    //api 'com.google.guava:guava:27.0-jre'
+    implementation 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    api 'org.junit.jupiter:junit-jupiter-api:5.3.1'
 }

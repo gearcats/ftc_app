@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.test;
 
 import org.firstinspires.ftc.teamcode.AarreRiser;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 
 public class AarreRiserUnitTests {
@@ -15,18 +18,23 @@ public class AarreRiserUnitTests {
 
     @Test
     public void testNewAarreRiserObjectNotNull() {
-        Assert.assertNotNull(riser);
+        assertNotNull(riser);
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test
     public void testLowerMethod() {
-        riser.lower();
+        assertThrows(NullPointerException.class, () -> {
+            riser.lower();
+        });
+
         double position = riser.getCurrentPosition();
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test
     public void testRaiseMethod() {
-        riser.raise();
+        assertThrows(NullPointerException.class, () -> {
+            riser.raise();
+        });
         double position = riser.getCurrentPosition();
     }
 
