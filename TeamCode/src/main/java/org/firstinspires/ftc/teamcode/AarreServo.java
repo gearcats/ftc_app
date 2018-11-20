@@ -94,7 +94,7 @@ public class AarreServo {
 
 
     /**
-     * Reverse the servo to its lower limit
+     * Reverse the servo to its lowerUntilStalled limit
      *
      * TODO: Avoid stalling the servo.
      *

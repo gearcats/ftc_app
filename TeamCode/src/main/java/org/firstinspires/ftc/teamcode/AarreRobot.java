@@ -168,9 +168,12 @@ public class AarreRobot {
         return rightMotor;
     }
 
-    void lowerArm() {
-        arm.lower();
-    }
+	/**
+	 * Lower the arm to its downward position
+	 */
+	void lowerArm() {
+		arm.lower();
+	}
 
     /**
      * Lower the hook to its downward position
@@ -190,7 +193,9 @@ public class AarreRobot {
         riser.lower();
     }
 
-
+	/**
+	 * Raise the arm to its upward position
+	 */
     void raiseArm() {
         arm.raise();
     }
