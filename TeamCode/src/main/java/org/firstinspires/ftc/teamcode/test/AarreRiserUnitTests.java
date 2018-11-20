@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.test;
 
-import com.google.common.base.VerifyException;
-
 import org.firstinspires.ftc.teamcode.AarreRiser;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -20,13 +18,13 @@ public class AarreRiserUnitTests {
         Assert.assertNotNull(riser);
     }
 
-    @Test(expectedExceptions = VerifyException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testLowerMethod() {
         riser.lower();
         double position = riser.getCurrentPosition();
     }
 
-    @Test(expectedExceptions = VerifyException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testRaiseMethod() {
         riser.raise();
         double position = riser.getCurrentPosition();

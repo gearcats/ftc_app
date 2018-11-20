@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.google.common.base.VerifyException;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -108,11 +107,8 @@ public class AarreRiser {
         if (secondsTimeout < 0.0)
             throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 
-        try {
-            motor.runByRevolutions(-proportionMotorPower, numberOfRevolutions, secondsTimeout);
-        } catch (NullPointerException e) {
-            throw new VerifyException("Objects that depend on hardwareMap are null when running off-robot");
-        }
+        motor.runByRevolutions(-proportionMotorPower, numberOfRevolutions, secondsTimeout);
+
     }
 
     /**
@@ -164,12 +160,7 @@ public class AarreRiser {
         if (secondsTimeout < 0.0)
             throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 
-        try {
-            motor.runByRevolutions(proportionMotorPower, numberOfRevolutions, secondsTimeout);
-        } catch (NullPointerException e) {
-            throw new VerifyException("Objects that depend on hardwareMap are null when running off-robot");
-        }
-
+        motor.runByRevolutions(proportionMotorPower, numberOfRevolutions, secondsTimeout);
     }
 
 
