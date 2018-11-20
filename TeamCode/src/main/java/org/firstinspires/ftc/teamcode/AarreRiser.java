@@ -62,9 +62,9 @@ public class AarreRiser {
      * because the riser starts in an unknown physical position upon software initialization
      * and does not store any state information.) A value of 0.0 indicates that we believe the
      * riser is fully lowered, and a value of 1.0 indicates that we believe the riser is fully
-     * raised. The riser generally should be either up or down (except when it is in motion),
-     * so values in the middle when the riser is stationary suggest uncertaintly about where
-     * the riser really is.
+     * raised. The riser generally should be either fully lowered or fully raised (except when
+     * it is in motion), so values in the middle when the riser is stationary suggest uncertainty
+     * about where the riser really is.
      */
     public double getCurrentPosition() {
         return currentPosition;

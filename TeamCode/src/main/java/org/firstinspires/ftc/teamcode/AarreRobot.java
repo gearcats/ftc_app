@@ -31,7 +31,7 @@ public class AarreRobot {
     @SuppressWarnings("WeakerAccess")
     AarreMotor rightMotor;
     @SuppressWarnings("WeakerAccess")
-    AarreMotor armMotor;
+    AarreArm arm;
     @SuppressWarnings("WeakerAccess")
     AarreRiser riser;
     @SuppressWarnings("WeakerAccess")
@@ -59,7 +59,7 @@ public class AarreRobot {
 
         leftMotor = new AarreMotor(hardwareMap, "left", telemetry);
         rightMotor = new AarreMotor(hardwareMap, "right", telemetry);
-        armMotor = new AarreMotor(hardwareMap, "arm", telemetry);
+        arm = new AarreArm(hardwareMap, "arm", telemetry);
         riser = new AarreRiser(hardwareMap, "riser", telemetry);
 
         // Configure drive motors such that a positive power command moves them forwards
@@ -74,8 +74,6 @@ public class AarreRobot {
 
         leftMotor.setPower(0.0);
         rightMotor.setPower(0.0);
-        armMotor.setPower(0.0);
-
 
         // This code REQUIRES that you have encoders on the wheel motors
 
@@ -170,13 +168,8 @@ public class AarreRobot {
         return rightMotor;
     }
 
-
-    /**
-     * Lower the arm to its downward position while avoiding stalling the arm motor
-     */
-    final void lowerArm() {
-        armMotor.setStallTimeLimitInMilliseconds(100);
-        armMotor.runUntilStalled(-1.0);
+    void lowerArm() {
+        arm.lower();
     }
 
     /**
@@ -198,12 +191,8 @@ public class AarreRobot {
     }
 
 
-    /**
-     * Raise the arm to its upward position while avoiding stalling the arm motor
-     */
     void raiseArm() {
-        armMotor.setStallTimeLimitInMilliseconds(100);
-        armMotor.runUntilStalled(1.0);
+        arm.raise();
     }
 
     /**
