@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class AarreRiser {
 
 	private static final double DEFAULT_PROPORTION_POWER               = 1.0;
-	private static final double DEFAULT_MILLISECONDS_STALL_TIME_WINDOW = 200;
+	private static final int    DEFAULT_MILLISECONDS_STALL_TIME_WINDOW = 200;
 	private static final int    DEFAULT_MILLISECONDS_TIMEOUT           = 5000;
 	private static final double DEFAULT_SECONDS_TIMEOUT                = (double) DEFAULT_MILLISECONDS_TIMEOUT / 1000.0;
 	private static final int    DEFAULT_TICKS_STALL_TOLERANCE          = 15;
@@ -77,7 +77,7 @@ public class AarreRiser {
 	public final void lower() {
 
 		telemetry.log("Riser - lowering riser");
-		lowerUntilStall();
+		lowerByRevolutions();
 		telemetry.log("Riser - riser lowered");
 
 		currentPosition = 0.0;
@@ -157,7 +157,7 @@ public class AarreRiser {
 	 */
 	public void raise() {
 		telemetry.log("Riser - raising riser");
-		raiseUntilStall();
+		raiseByRevolutions();
 		telemetry.log("Riser - riser raised");
 		currentPosition = 1.0;
 	}

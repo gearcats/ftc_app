@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class AarreArm {
 
-	private static final double PROPORTION_POWER_DEFAULT = 1.0;
-	private static final double SECONDS_TO_RUN_DEFAULT = 1.0;
+	private static final double PROPORTION_POWER_DEFAULT       = 1.0;
+	private static final double SECONDS_TO_RUN_DEFAULT         = 2.0;
 	private static final double SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
 
 	private AarreMotor motor;
