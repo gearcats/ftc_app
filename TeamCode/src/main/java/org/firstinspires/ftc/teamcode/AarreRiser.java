@@ -9,14 +9,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  */
 public class AarreRiser {
 
-	private static final double DEFAULT_PROPORTION_RISER_POWER = 1.0;
-	private static final int DEFAULT_MILLISECONDS_RISER_TIMEOUT = 5000;
-	private static final double DEFAULT_SECONDS_RISER_TIMEOUT = (double) DEFAULT_MILLISECONDS_RISER_TIMEOUT / 1000.0;
-	private static final int DEFAULT_TICKS_RISER_STALL_TOLERANCE = 15;
-	private static final double DEFAULT_REVOLUTIONS_RISER_RANGE = 5.0;
+	private static final double DEFAULT_PROPORTION_POWER               = 1.0;
+	private static final double DEFAULT_MILLISECONDS_STALL_TIME_WINDOW = 200;
+	private static final int    DEFAULT_MILLISECONDS_TIMEOUT           = 5000;
+	private static final double DEFAULT_SECONDS_TIMEOUT                = (double) DEFAULT_MILLISECONDS_TIMEOUT / 1000.0;
+	private static final int    DEFAULT_TICKS_STALL_TOLERANCE          = 15;
+	private static final double DEFAULT_REVOLUTIONS_RANGE              = 5.0;
 
-	private double currentPosition;
-	private AarreMotor motor;
+	private double         currentPosition;
+	private AarreMotor     motor;
 	private AarreTelemetry telemetry;
 
 	/**
@@ -109,9 +110,7 @@ public class AarreRiser {
 	 * Lower the riser by revolutions using default parameters
 	 */
 	private void lowerByRevolutions() {
-		lowerByRevolutions(DEFAULT_PROPORTION_RISER_POWER,
-				DEFAULT_REVOLUTIONS_RISER_RANGE,
-				DEFAULT_SECONDS_RISER_TIMEOUT);
+		lowerByRevolutions(DEFAULT_PROPORTION_POWER, DEFAULT_REVOLUTIONS_RANGE, DEFAULT_SECONDS_TIMEOUT);
 	}
 
 	/**
@@ -147,9 +146,9 @@ public class AarreRiser {
 	 * Lower the riser to its downward position while avoiding stalling the riser motor
 	 */
 	private void lowerUntilStall() {
-		motor.setStallTimeLimitInMilliseconds(200);
-		motor.setStallDetectionToleranceInTicks(15);
-		motor.runUntilStalled(-DEFAULT_PROPORTION_RISER_POWER);
+		motor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_STALL_TIME_WINDOW);
+		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_STALL_TOLERANCE);
+		motor.runUntilStalled(-DEFAULT_PROPORTION_POWER);
 	}
 
 
@@ -189,9 +188,7 @@ public class AarreRiser {
 	 * Raise the riser by revolutions using default parameters.
 	 */
 	private void raiseByRevolutions() {
-		raiseByRevolutions(DEFAULT_PROPORTION_RISER_POWER,
-				DEFAULT_REVOLUTIONS_RISER_RANGE,
-				DEFAULT_SECONDS_RISER_TIMEOUT);
+		raiseByRevolutions(DEFAULT_PROPORTION_POWER, DEFAULT_REVOLUTIONS_RANGE, DEFAULT_SECONDS_TIMEOUT);
 	}
 
 	/**
@@ -228,9 +225,9 @@ public class AarreRiser {
 	 * continues to run irregularly as it attempts to push the riser higher than it can go.
 	 */
 	private void raiseUntilStall() {
-		motor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_RISER_TIMEOUT);
-		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_RISER_STALL_TOLERANCE);
-		motor.runUntilStalled(DEFAULT_PROPORTION_RISER_POWER);
+		motor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_TIMEOUT);
+		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_STALL_TOLERANCE);
+		motor.runUntilStalled(DEFAULT_PROPORTION_POWER);
 	}
 
 }
