@@ -73,8 +73,12 @@ public class AarreRiser {
 		return currentPosition;
 	}
 
-	public void lower() {
-		lowerByRevolutions();
+	public final void lower() {
+
+		telemetry.log("Riser - lowering riser");
+		lowerUntilStall();
+		telemetry.log("Riser - riser lowered");
+
 		currentPosition = 0.0;
 	}
 
@@ -88,7 +92,7 @@ public class AarreRiser {
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm.
 	 */
-	private final void lowerByTime(double absolutePowerProportion, double secondsToRun) {
+	private void lowerByTime(double absolutePowerProportion, double secondsToRun) {
 
 		if (absolutePowerProportion < 0.0)
 			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");
@@ -102,10 +106,12 @@ public class AarreRiser {
 
 
 	/**
-	 * Lower the riser by default parameters
+	 * Lower the riser by revolutions using default parameters
 	 */
 	private void lowerByRevolutions() {
-		lowerByRevolutions(DEFAULT_PROPORTION_RISER_POWER, DEFAULT_REVOLUTIONS_RISER_RANGE, DEFAULT_MILLISECONDS_RISER_TIMEOUT);
+		lowerByRevolutions(DEFAULT_PROPORTION_RISER_POWER,
+				DEFAULT_REVOLUTIONS_RISER_RANGE,
+				DEFAULT_SECONDS_RISER_TIMEOUT);
 	}
 
 	/**
@@ -141,20 +147,19 @@ public class AarreRiser {
 	 * Lower the riser to its downward position while avoiding stalling the riser motor
 	 */
 	private void lowerUntilStall() {
-		telemetry.log("Riser - lowering riser");
 		motor.setStallTimeLimitInMilliseconds(200);
 		motor.setStallDetectionToleranceInTicks(15);
-		motor.runUntilStalled(-1.0);
-		telemetry.log("Riser - riser lowered");
+		motor.runUntilStalled(-DEFAULT_PROPORTION_RISER_POWER);
 	}
 
 
 	/**
-	 * Raise the riser. This public method will use the best available method to raiseUntilStalled
-	 * the riser at any given point in code development.
+	 * Raise the riser using the default method.
 	 */
 	public void raise() {
-		raiseByRevolutions();
+		telemetry.log("Riser - raising riser");
+		raiseUntilStall();
+		telemetry.log("Riser - riser raised");
 		currentPosition = 1.0;
 	}
 
@@ -168,7 +173,7 @@ public class AarreRiser {
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm. Must be non-negative.
 	 */
-	private final void raiseByTime(double absolutePowerProportion, double secondsToRun) {
+	private void raiseByTime(double absolutePowerProportion, double secondsToRun) {
 
 		if (absolutePowerProportion < 0.0)
 			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");
@@ -184,7 +189,9 @@ public class AarreRiser {
 	 * Raise the riser by revolutions using default parameters.
 	 */
 	private void raiseByRevolutions() {
-		raiseByRevolutions(DEFAULT_PROPORTION_RISER_POWER, DEFAULT_REVOLUTIONS_RISER_RANGE, DEFAULT_SECONDS_RISER_TIMEOUT);
+		raiseByRevolutions(DEFAULT_PROPORTION_RISER_POWER,
+				DEFAULT_REVOLUTIONS_RISER_RANGE,
+				DEFAULT_SECONDS_RISER_TIMEOUT);
 	}
 
 	/**
@@ -221,11 +228,9 @@ public class AarreRiser {
 	 * continues to run irregularly as it attempts to push the riser higher than it can go.
 	 */
 	private void raiseUntilStall() {
-		telemetry.log("Riser - raising riser");
 		motor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_RISER_TIMEOUT);
 		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_RISER_STALL_TOLERANCE);
-		motor.runUntilStalled(1.0);
-		telemetry.log("Riser - riser raised");
+		motor.runUntilStalled(DEFAULT_PROPORTION_RISER_POWER);
 	}
 
 }

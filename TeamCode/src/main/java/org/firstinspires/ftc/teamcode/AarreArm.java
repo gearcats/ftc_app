@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class AarreArm {
 
-	private static final double PROPORTION_POWER_DEFAULT = 0.5;
+	private static final double PROPORTION_POWER_DEFAULT = 1.0;
 	private static final double SECONDS_TO_RUN_DEFAULT = 1.0;
 	private static final double SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
 
@@ -73,7 +73,14 @@ public class AarreArm {
 	 * Lower the arm by the default method.
 	 */
 	public final void lower() {
-		lowerUntilStalled();
+		lowerByTime();
+	}
+
+	/**
+	 * Lower the arm by the default amount of time.
+	 */
+	private void lowerByTime() {
+		lowerByTime(PROPORTION_POWER_DEFAULT, SECONDS_TO_RUN_DEFAULT);
 	}
 
 	/**
@@ -85,7 +92,7 @@ public class AarreArm {
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm.
 	 */
-	private final void lowerByTime(double absolutePowerProportion, double secondsToRun) {
+	private void lowerByTime(double absolutePowerProportion, double secondsToRun) {
 
 		if (absolutePowerProportion < 0.0)
 			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");
@@ -100,14 +107,14 @@ public class AarreArm {
 	/**
 	 * Lower the arm to its downward position while avoiding stalling the arm motor
 	 */
-	private final void lowerUntilStalled() {
+	private void lowerUntilStalled() {
 		lowerUntilStalled(PROPORTION_POWER_DEFAULT, SECONDS_TO_RUN_DEFAULT);
 	}
 
 	/**
 	 * Lower the arm to its downward position while avoiding stalling the arm motor
 	 */
-	private final void lowerUntilStalled(double absolutePowerProportion, double secondsToRun) {
+	private void lowerUntilStalled(double absolutePowerProportion, double secondsToRun) {
 
 		if (absolutePowerProportion < 0.0)
 			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");
@@ -123,7 +130,14 @@ public class AarreArm {
 	 * Raise the arm using the default method.
 	 */
 	public final void raise() {
-		raiseUntilStalled();
+		raiseByTime();
+	}
+
+	/**
+	 * Raise the arm by the default amount of time.
+	 */
+	private void raiseByTime() {
+		raiseByTime(PROPORTION_POWER_DEFAULT, SECONDS_TO_RUN_DEFAULT);
 	}
 
 	/**
@@ -135,7 +149,7 @@ public class AarreArm {
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm. Must be non-negative.
 	 */
-	private final void raiseByTime(double absolutePowerProportion, double secondsToRun) {
+	private void raiseByTime(double absolutePowerProportion, double secondsToRun) {
 
 		if (absolutePowerProportion < 0.0)
 			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");
@@ -150,14 +164,14 @@ public class AarreArm {
 	/**
 	 * Raise the arm to its upward position while avoiding stalling the arm motor
 	 */
-	private final void raiseUntilStalled() {
+	private void raiseUntilStalled() {
 		raiseUntilStalled(PROPORTION_POWER_DEFAULT, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 
 	/**
 	 * Raise the arm to its upward position while avoiding stalling the arm motor
 	 */
-	private final void raiseUntilStalled(double absolutePowerProportion, double secondsBeforeTimeout) {
+	private void raiseUntilStalled(double absolutePowerProportion, double secondsBeforeTimeout) {
 
 		if (absolutePowerProportion < 0.0)
 			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");

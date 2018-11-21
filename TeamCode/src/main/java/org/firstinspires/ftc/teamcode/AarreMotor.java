@@ -252,23 +252,24 @@ public class AarreMotor {
 	 * an encoder.
 	 *
 	 * @param proportionPower
-	 * 		Proportion of power to apply to the motor, in the range [-1.0, 1.0]. Negative values run
-	 * 		the motor backward.
+	 * 		Proportion of power to apply to the motor, in the range [-1.0, 1.0].
+	 * 		Negative values run the motor backward.
 	 * @param secondsToRun
 	 * 		Number of seconds for which to run the motor.
 	 */
 	final void runByTime(final double proportionPower, final double secondsToRun) {
 
 		if ((proportionPower < -1.0) || (proportionPower > 1.0))
-			throw new IllegalArgumentException("Power out of range [-1.0, 1.0]");
+			throw new IllegalArgumentException("Power expected to be in range [-1.0, 1.0]");
 
 		if (secondsToRun < 0.0)
-			throw new IllegalArgumentException("secondsTimeout must non-negative");
+			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 
 		final ElapsedTime runtime;
 		double secondsRunning;
 
 		setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 		setPower(proportionPower);
 		runtime = new ElapsedTime();
 		secondsRunning = runtime.seconds();
