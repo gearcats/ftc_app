@@ -78,22 +78,20 @@ public class AarreRobot {
 
 		// Set all motors to zero power
 
-		leftMotor.setPower(0.0);
-		rightMotor.setPower(0.0);
+		leftMotor.rampPowerTo(0.0);
+		rightMotor.rampPowerTo(0.0);
 
 		// This code REQUIRES that you have encoders on the wheel motors
 
 		leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
 		// Define the servos
 
-		hookServo = new AarreServo(hardwareMap, "hook", telemetry);
+		hookServo = new AarreServo(hardwareMap, "hook", telemetry, opMode);
 
 		this.telemetry.log("Initializing hook");
 
@@ -138,8 +136,8 @@ public class AarreRobot {
 
 		// reset the timeout time and start motion.
 		final ElapsedTime runtime = new ElapsedTime();
-		leftMotor.setPower(Math.abs(speed));
-		rightMotor.setPower(Math.abs(speed));
+		leftMotor.rampPowerTo(Math.abs(speed));
+		rightMotor.rampPowerTo(Math.abs(speed));
 
 		// keep looping while we are still active, and there is time left, and both motors are running.
 		// Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -147,7 +145,7 @@ public class AarreRobot {
 		// always end the motion as soon as possible.
 		// However, if you require that BOTH motors have finished their moves before the robot continues
 		// onto the next step, use (isBusy() || isBusy()) in the loop test.
-		while ((runtime.seconds() < timeoutS) && (leftMotor.isBusy() && rightMotor.isBusy())) {
+		while ((runtime.seconds() < timeoutS) && leftMotor.isBusy() && rightMotor.isBusy() && opMode.opModeIsActive()) {
 
 			//telemetry.log("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
 			//telemetry.log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor.getCurrentTickNumber());
@@ -155,8 +153,8 @@ public class AarreRobot {
 		}
 
 		// Stop all motion;
-		leftMotor.setPower(0.0);
-		rightMotor.setPower(0.0);
+		leftMotor.rampPowerTo(0.0);
+		rightMotor.rampPowerTo(0.0);
 
 		// Turn off RUN_TO_POSITION
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

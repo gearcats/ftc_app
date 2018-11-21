@@ -202,8 +202,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 
             // start motion.
             final double adjustedSpeed = Range.clip(Math.abs(speed), 0.0, 1.0);
-            robot.getLeftMotor().setPower(adjustedSpeed);
-            robot.getRightMotor().setPower(adjustedSpeed);
+            robot.getLeftMotor().rampPowerTo(adjustedSpeed);
+            robot.getRightMotor().rampPowerTo(adjustedSpeed);
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
@@ -227,8 +227,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
                     rightSpeed /= max;
                 }
 
-                robot.getLeftMotor().setPower(leftSpeed);
-                robot.getRightMotor().setPower(rightSpeed);
+                robot.getLeftMotor().rampPowerTo(leftSpeed);
+                robot.getRightMotor().rampPowerTo(rightSpeed);
 
                 // Display drive status for the driver.
                 telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
@@ -240,8 +240,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
             }
 
             // Stop all motion;
-            robot.getLeftMotor().setPower(0);
-            robot.getRightMotor().setPower(0);
+            robot.getLeftMotor().rampPowerTo(0);
+            robot.getRightMotor().rampPowerTo(0);
 
             // Turn off RUN_TO_POSITION
             robot.getLeftMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -292,8 +292,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         }
 
         // Stop all motion;
-        robot.getLeftMotor().setPower(0);
-        robot.getRightMotor().setPower(0);
+        robot.getLeftMotor().rampPowerTo(0);
+        robot.getRightMotor().rampPowerTo(0);
     }
 
     /**
@@ -330,8 +330,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         }
 
         // Send desired speeds to motors.
-        robot.getLeftMotor().setPower(leftSpeed);
-        robot.getRightMotor().setPower(rightSpeed);
+        robot.getLeftMotor().rampPowerTo(leftSpeed);
+        robot.getRightMotor().rampPowerTo(rightSpeed);
 
         // Display it for the driver.
         telemetry.addData("Target", "%5.2f", angle);

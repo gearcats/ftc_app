@@ -51,7 +51,7 @@ public class AarreArm {
 
 		motor = new AarreMotor(hardwareMap, nameOfRiserMotor, telemetry, opMode);
 
-		motor.setPower(0.0);
+		motor.rampPowerTo(0.0);
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises arm
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

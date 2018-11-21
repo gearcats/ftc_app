@@ -22,13 +22,13 @@ public class AarreRiser {
 	 * These values affect the methods that move the riser by using the
 	 * encoder to run a fixed number of revolutions.
 	 */
-	private static final double DEFAULT_REVOLUTIONS_LOWER = 12.0;
-	private static final double DEFAULT_REVOLUTIONS_RAISE = 12.0;
+	private static final double DEFAULT_REVOLUTIONS_LOWER = 7.0;
+	private static final double DEFAULT_REVOLUTIONS_RAISE = 7.0;
 
 	/**
 	 * This value affects all methods that move the riser.
 	 */
-	private static final double DEFAULT_SECONDS_TO_RUN_MAXIMUM = 10.0;
+	private static final double DEFAULT_SECONDS_TO_RUN_MAXIMUM = 7.0;
 	private static final double DEFAULT_PROPORTION_POWER       = 1.0;
 
 
@@ -76,7 +76,7 @@ public class AarreRiser {
 
 		motor = new AarreMotor(hardwareMap, nameOfRiserMotor, telemetry, opMode);
 
-		motor.setPower(0.0);
+		motor.rampPowerTo(0.0);
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises riser
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
