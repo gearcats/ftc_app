@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -27,14 +28,15 @@ public class AarreMotor {
 	private static final int MILLISECONDS_PER_SECOND = 1000;
 	private static final int TICKS_PER_MOTOR_REVOLUTION = 1440;    // eg: TETRIX Motor Encoder, TorqueNado
 	private static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is 1.0 for our direct-drive wheels
-	private static final double WHEEL_DIAMETER_INCHES = 5.5;     // For figuring circumference; could be 5.625, also depends on treads
-	private static final double TICKS_PER_INCH = ((double) TICKS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-	private final DcMotor motor;
-	private int oldTickNumber;
-	private int stallTimeLimitInMilliseconds = 0;
-	private int stallDetectionToleranceInTicks = 5;
-	private AarreTelemetry telemetry;
-	private ElapsedTime timeStalledInMilliseconds;
+	private static final double         WHEEL_DIAMETER_INCHES = 5.5;     // For figuring circumference; could be 5.625, also depends on treads
+	private static final double         TICKS_PER_INCH = ((double) TICKS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+	private final        DcMotor        motor;
+	private              int            oldTickNumber;
+	private              int            stallTimeLimitInMilliseconds = 0;
+	private              int            stallDetectionToleranceInTicks = 5;
+	private              AarreTelemetry telemetry;
+	private              ElapsedTime    timeStalledInMilliseconds;
+	private              LinearOpMode   opMode;
 
 	/**
 	 * Construct an instance of AarreMotor without telemetry.
@@ -45,9 +47,10 @@ public class AarreMotor {
 	 * 		The hardware map upon which the motor may be found.
 	 */
 	@SuppressWarnings("unused")
-	private AarreMotor(final HardwareMap hardwareMap, final String motorName) {
+	private AarreMotor(final HardwareMap hardwareMap, final String motorName, LinearOpMode opMode) {
 
 		motor = hardwareMap.get(DcMotor.class, motorName);
+		this.opMode = opMode;
 
 		// These are defaults. The user should customize them
 		stallDetectionToleranceInTicks = 5;
@@ -68,10 +71,10 @@ public class AarreMotor {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with the
 	 */
-	AarreMotor(final HardwareMap hardwareMap, final String motorName, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry) {
+	AarreMotor(final HardwareMap hardwareMap, final String motorName, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry, LinearOpMode opMode) {
 
 		// Call the other constructor to create the underlying DcMotor member
-		this(hardwareMap, motorName);
+		this(hardwareMap, motorName, opMode);
 
 		// Add a telemetry member
 		if (telemetry == null)
@@ -228,7 +231,7 @@ public class AarreMotor {
 		isMotorBusy = isBusy();
 
 		// Keep looping while we are still active, and there is time left, and the motor is running.
-		while ((secondsRunning < secondsTimeout) && isMotorBusy) {
+		while ((secondsRunning < secondsTimeout) && isMotorBusy && opMode.opModeIsActive()) {
 			secondsRunning = runtime.seconds();
 			isMotorBusy = isBusy();
 		}
@@ -274,7 +277,7 @@ public class AarreMotor {
 		runtime = new ElapsedTime();
 		secondsRunning = runtime.seconds();
 
-		while (secondsRunning < secondsToRun) {
+		while (secondsRunning < secondsToRun && opMode.opModeIsActive()) {
 			//telemetry.log("Motor::runByTime", "%2.5f S Elapsed", secondsRunning);
 			secondsRunning = runtime.seconds();
 		}
@@ -293,7 +296,7 @@ public class AarreMotor {
 	void runUntilStalled(final double power) {
 		timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 		setPower(power);
-		while (!(isStalled())) {
+		while (!(isStalled()) && opMode.opModeIsActive()) {
 			//telemetry.log("Not stalled yet...");
 		}
 	}

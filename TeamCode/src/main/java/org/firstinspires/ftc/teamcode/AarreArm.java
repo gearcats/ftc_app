@@ -1,17 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class AarreArm {
 
-	private static final double PROPORTION_POWER_DEFAULT       = 1.0;
-	private static final double SECONDS_TO_RUN_DEFAULT         = 2.0;
+	private static final double PROPORTION_POWER_DEFAULT       = 0.5;
+	private static final double SECONDS_TO_RUN_DEFAULT         = 1.0;
 	private static final double SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
 
-	private AarreMotor motor;
+	private AarreMotor     motor;
 	private AarreTelemetry telemetry;
+	private LinearOpMode   opMode;
 
 	private double currentPosition;
 
@@ -32,7 +34,7 @@ public class AarreArm {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with the
 	 */
-	public AarreArm(final HardwareMap hardwareMap, final String nameOfRiserMotor, final AarreTelemetry telemetry) {
+	public AarreArm(final HardwareMap hardwareMap, final String nameOfRiserMotor, final AarreTelemetry telemetry, final LinearOpMode opMode) {
 
 		currentPosition = 0.5; // We have no idea where the arm is
 
@@ -40,14 +42,14 @@ public class AarreArm {
 		if (hardwareMap == null)
 			throw new IllegalArgumentException("Unexpected null parameter: hardwareMap");
 
-
 		// Make sure there is a telemetry parameter
 		if (telemetry == null)
 			throw new AssertionError("Unexpected null parameter: telemetry");
 
 		this.telemetry = telemetry;
+		this.opMode = opMode;
 
-		motor = new AarreMotor(hardwareMap, nameOfRiserMotor, telemetry);
+		motor = new AarreMotor(hardwareMap, nameOfRiserMotor, telemetry, opMode);
 
 		motor.setPower(0.0);
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

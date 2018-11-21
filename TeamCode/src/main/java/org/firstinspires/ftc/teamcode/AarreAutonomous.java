@@ -88,7 +88,7 @@ public class AarreAutonomous extends LinearOpMode {
 
         if (hardwareMap == null)
             throw new AssertionError("Unexpected null object: hardwareMap");
-        robot = new AarreRobot(hardwareMap, betterTelemetry);
+        robot = new AarreRobot(hardwareMap, betterTelemetry, this);
 
         betterTelemetry.log("Initializing robot");
 

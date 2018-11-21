@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -38,6 +39,7 @@ public class AarreRobot {
 	AarreServo hookServo;
 	@SuppressWarnings({"WeakerAccess", "unused"})
 	CRServo    scoopServo;
+	LinearOpMode opMode;
 
 	/**
 	 * Constructor
@@ -47,21 +49,24 @@ public class AarreRobot {
 	 * @param telemetry
 	 * 		An instance of {@link AarreTelemetry}
 	 */
-	public AarreRobot(final HardwareMap hardwareMap, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry) {
+	public AarreRobot(final HardwareMap hardwareMap, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry, LinearOpMode opMode) {
 
-		if (telemetry == null)
+		if (telemetry == null) {
 			throw new AssertionError("Unexpected null object: telemetry");
+		}
 
 		this.telemetry = telemetry;
+
+		this.opMode = opMode;
 
 		// Define and initialize the motors. The strings used here as parameters
 		// must correspond to the names assigned in the robot configuration
 		// in the FTC Robot Controller app on the phone
 
-		leftMotor = new AarreMotor(hardwareMap, "left", telemetry);
-		rightMotor = new AarreMotor(hardwareMap, "right", telemetry);
-		arm = new AarreArm(hardwareMap, "arm", telemetry);
-		riser = new AarreRiser(hardwareMap, "riser", telemetry);
+		leftMotor = new AarreMotor(hardwareMap, "left", telemetry, opMode);
+		rightMotor = new AarreMotor(hardwareMap, "right", telemetry, opMode);
+		arm = new AarreArm(hardwareMap, "arm", telemetry, opMode);
+		riser = new AarreRiser(hardwareMap, "riser", telemetry, opMode);
 
 		// Configure drive motors such that a positive power command moves them forwards
 		// and causes the encoders to count UP. Note that, as in most robots, the drive
@@ -216,7 +221,53 @@ public class AarreRobot {
 	}
 
 	/**
-	 * Prepare the robot for transportation.
+	 * Put the robot in the state it should be in at the end of the
+	 * game, when it is preparing to latch to the lander.
+	 * <p>
+	 * <ul>
+	 * <li>The arm is lowered.</li>
+	 * <li>The riser is raised, as it would need to be when attaching to the lander.</li>
+	 * <li>The hook is raised, as it would need to be when attaching to the lander.</li>
+	 * </ul>
+	 * </p>
+	 * The difference between this and {@code readyForTransportation} is that this
+	 * mode raises the hook.
+	 */
+	public void readyForAutonomousEndgame() {
+		lowerArm();
+		raiseRiser();
+		raiseHook();
+	}
+
+	/**
+	 * Prepare the robot to play the autonomous portion of the game.
+	 * <p>
+	 * <ul>
+	 * <li>The arm is lowered, as it would be when attached to the lander.</li>
+	 * <li>The riser is lowered, as it would be when attached to the lander.</li>
+	 * <li>The hook is raised, as it would be when attached to the lander.</li>
+	 * </ul>
+	 * </p>
+	 * The difference between this and {@code readyForTransportation} is that this
+	 * mode raises the hook.
+	 */
+	public void readyForAutonomousGame() {
+		lowerArm();
+		lowerRiser();
+		raiseHook();
+	}
+
+	/**
+	 * Prepare the robot for transportation by putting it in its most compact state.
+	 * <p>
+	 * <ul>
+	 * <li>The arm is lowered, which is its most compact position.</li>
+	 * <li>The riser is lowered, which is its most compact position.</li>
+	 * <li>The hook is lowered, which is its most compact position.</li>
+	 * </ul>
+	 * </p>
+	 * The difference between this and {@code readyForAutonomousGame} is that
+	 * this mode lowers the hook.
 	 */
 	public void readyForTransportation() {
 		lowerArm();
@@ -224,14 +275,6 @@ public class AarreRobot {
 		lowerHook();
 	}
 
-	/**
-	 * Prepare the robot to play the autonomous portion of the game.
-	 */
-	public void resetForAutonomousGame() {
-		lowerArm();
-		lowerRiser();
-		raiseHook();
-	}
 
 }
 

@@ -40,14 +40,14 @@ public class AarreAutonomousReady extends LinearOpMode {
         if (hardwareMap == null)
             throw new AssertionError("Unexpected null object: hardwareMap");
 
-        robot = new AarreRobot(hardwareMap, betterTelemetry);
+        robot = new AarreRobot(hardwareMap, betterTelemetry, this);
 
         betterTelemetry.log("Initializing robot");
 
         // Wait for the driver to press PLAY
         waitForStart();
 
-        robot.resetForAutonomousGame();
+        robot.readyForAutonomousGame();
 
         betterTelemetry.log("Reset complete - robot is ready for autonomous mode");
 

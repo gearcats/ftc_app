@@ -23,9 +23,10 @@ public class AarreAutonomousDance extends LinearOpMode {
     }
 
     /**
-     * Properties inherited from LinearOpMode include:
-     * <p>
+     * Properties and methods inherited from LinearOpMode include:
+     *
      * hardwareMap
+     * opModeIsActive
      * telemetry
      */
     @Override
@@ -43,7 +44,7 @@ public class AarreAutonomousDance extends LinearOpMode {
 
         if (hardwareMap == null)
             throw new AssertionError("Unexpected null object: hardwareMap");
-        robot = new AarreRobot(hardwareMap, betterTelemetry);
+	    robot = new AarreRobot(hardwareMap, betterTelemetry, this);
 
         betterTelemetry.log("Initializing robot");
 

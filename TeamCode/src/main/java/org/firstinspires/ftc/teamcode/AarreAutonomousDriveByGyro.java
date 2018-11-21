@@ -108,7 +108,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
     public final void runOpMode() {
 
         aarreTelemetry = new AarreTelemetry(telemetry);
-        robot = new AarreRobot(hardwareMap, aarreTelemetry);
+        robot = new AarreRobot(hardwareMap, aarreTelemetry, this);
 
         gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
 
