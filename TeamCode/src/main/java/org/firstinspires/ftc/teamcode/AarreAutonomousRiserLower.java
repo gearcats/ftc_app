@@ -37,7 +37,7 @@ public class AarreAutonomousRiserLower extends LinearOpMode {
 			throw new AssertionError("Unexpected null object: hardwareMap");
 		}
 
-		robot = new AarreRobot(hardwareMap, betterTelemetry, this);
+		robot = new AarreRobot(this);
 
 		betterTelemetry.log("Initializing robot");
 

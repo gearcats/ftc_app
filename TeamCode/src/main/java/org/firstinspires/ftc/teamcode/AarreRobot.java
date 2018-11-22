@@ -27,37 +27,33 @@ public class AarreRobot {
 	 * <p>
 	 * TODO: Implement getters and setters to keep these properties private.
 	 */
-	@SuppressWarnings("WeakerAccess")
-	AarreMotor leftMotor;
-	@SuppressWarnings("WeakerAccess")
-	AarreMotor rightMotor;
-	@SuppressWarnings("WeakerAccess")
-	AarreArm   arm;
-	@SuppressWarnings("WeakerAccess")
-	AarreRiser riser;
-	@SuppressWarnings("WeakerAccess")
-	AarreServo hookServo;
-	@SuppressWarnings({"WeakerAccess", "unused"})
-	CRServo    scoopServo;
+	AarreMotor   leftMotor;
+	AarreMotor   rightMotor;
+	AarreArm     arm;
+	AarreRiser   riser;
+	AarreServo   hookServo;
+	CRServo      scoopServo;
 	LinearOpMode opMode;
+	HardwareMap  hardwareMap;
+
 
 	/**
-	 * Constructor
+	 * Construct from opMode only
 	 *
-	 * @param hardwareMap
-	 * 		An instance of {@link HardwareMap}
-	 * @param telemetry
-	 * 		An instance of {@link AarreTelemetry}
+	 * @param opMode
+	 * 		The FTC opMode inside which this robot is running.
 	 */
-	public AarreRobot(final HardwareMap hardwareMap, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry, LinearOpMode opMode) {
+	public AarreRobot(final LinearOpMode opMode) {
 
+		this.telemetry = new AarreTelemetry(opMode.telemetry);
 		if (telemetry == null) {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
 
-		this.telemetry = telemetry;
-
-		this.opMode = opMode;
+		this.hardwareMap = opMode.hardwareMap;
+		if (hardwareMap == null) {
+			throw new AssertionError("Unexpected null object: hardwareMap");
+		}
 
 		// Define and initialize the motors. The strings used here as parameters
 		// must correspond to the names assigned in the robot configuration
@@ -78,6 +74,7 @@ public class AarreRobot {
 
 		// Set all motors to zero power
 
+		// TODO: Ramp power on the motors simultaneously to avoid swerving
 		leftMotor.rampPowerTo(0.0);
 		rightMotor.rampPowerTo(0.0);
 
@@ -111,9 +108,9 @@ public class AarreRobot {
 	}
 
 
-	/*
-	 *  Method to perform a relative move, based on encoder counts.
-	 *  Encoders are not reset as the move is based on the current position.
+	/**
+	 *  Perform a relative move, based on encoder counts.
+	 *  Encoders are not reset because the move is based on the current position.
 	 *  Move will stop if any of three conditions occur:
 	 *  1) Move gets to the desired position
 	 *  2) Move runs out of time
@@ -162,12 +159,20 @@ public class AarreRobot {
 
 	}
 
+	public HardwareMap getHardwareMap() {
+		return hardwareMap;
+	}
+
 	public AarreMotor getLeftMotor() {
 		return leftMotor;
 	}
 
 	public AarreMotor getRightMotor() {
 		return rightMotor;
+	}
+
+	public AarreTelemetry getTelemetry() {
+		return (telemetry);
 	}
 
 	/**
