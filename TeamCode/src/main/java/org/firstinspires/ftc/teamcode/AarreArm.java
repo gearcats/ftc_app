@@ -49,7 +49,7 @@ public class AarreArm {
 		this.telemetry = telemetry;
 		this.opMode = opMode;
 
-		motor = new AarreMotor(hardwareMap, nameOfRiserMotor, telemetry, opMode);
+		motor = new AarreMotor(opMode, nameOfRiserMotor);
 
 		motor.rampPowerTo(0.0);
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

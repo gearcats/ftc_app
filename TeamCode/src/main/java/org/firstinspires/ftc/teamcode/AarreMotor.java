@@ -47,20 +47,23 @@ public class AarreMotor {
 	private       AarreTelemetry telemetry;
 	private       ElapsedTime    timeStalledInMilliseconds;
 	private       LinearOpMode   opMode;
+	private       HardwareMap    hardwareMap;
 
-	/**
-	 * Construct an instance of AarreMotor without telemetry.
-	 *
-	 * @param motorName
-	 * 		The name of the motor.
-	 * @param hardwareMap
-	 * 		The hardware map upon which the motor may be found.
-	 */
-	@SuppressWarnings("unused")
-	private AarreMotor(final HardwareMap hardwareMap, final String motorName, LinearOpMode opMode) {
+	public AarreMotor(LinearOpMode opMode, final String motorName) {
+
+		this.opMode = opMode;
+
+		this.telemetry = new AarreTelemetry(opMode.telemetry);
+		if (telemetry == null) {
+			throw new AssertionError("Unexpected null object: telemetry");
+		}
+
+		this.hardwareMap = opMode.hardwareMap;
+		if (hardwareMap == null) {
+			throw new AssertionError("Unexpected null object: hardwareMap");
+		}
 
 		motor = hardwareMap.get(DcMotor.class, motorName);
-		this.opMode = opMode;
 
 		// These are defaults. The user should customize them
 		stallDetectionToleranceInTicks = 5;
@@ -68,30 +71,9 @@ public class AarreMotor {
 
 		// Reset the encoder and force the motor to be stopped
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 	}
 
-	/**
-	 * Construct an instance of AarreMotor with telemetry.
-	 *
-	 * @param motorName
-	 * 		The name of the motor for which to provide telemetry.
-	 * @param hardwareMap
-	 * 		The hardware map upon which the motor may be found.
-	 * @param telemetry
-	 * 		An instance of AarreTelemetry to associate with the
-	 */
-	AarreMotor(final HardwareMap hardwareMap, final String motorName, @SuppressWarnings("ParameterHidesMemberVariable") final AarreTelemetry telemetry, LinearOpMode opMode) {
-
-		// Call the other constructor to create the underlying DcMotor member
-		this(hardwareMap, motorName, opMode);
-
-		// Add a telemetry member
-		if (telemetry == null) {
-			throw new AssertionError("Unexpected null object: telemetry");
-		}
-
-		this.telemetry = telemetry;
-	}
 
 	/**
 	 * Get counts per inch.

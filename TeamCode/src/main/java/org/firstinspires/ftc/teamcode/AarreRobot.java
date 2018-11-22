@@ -59,8 +59,7 @@ public class AarreRobot {
 		// must correspond to the names assigned in the robot configuration
 		// in the FTC Robot Controller app on the phone
 
-		leftMotor = new AarreMotor(hardwareMap, "left", telemetry, opMode);
-		rightMotor = new AarreMotor(hardwareMap, "right", telemetry, opMode);
+		AarreDrive drive = new AarreDrive(opMode);
 		arm = new AarreArm(hardwareMap, "arm", telemetry, opMode);
 		riser = new AarreRiser(hardwareMap, "riser", telemetry, opMode);
 
