@@ -32,7 +32,7 @@ public class AarreMotor {
 	private static final double DRIVE_GEAR_REDUCTION       = 1.0;     // This is 1.0 for our direct-drive wheels
 	private static final double WHEEL_DIAMETER_INCHES      = 5.5;     // For figuring circumference; could be 5.625, also depends on treads
 
-	static final double TICKS_PER_INCH = ((double) TICKS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+	static final double TICKS_PER_INCH = (TICKS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
 	/**
 	 * These fields relate to ramping motor power gradually
@@ -45,21 +45,21 @@ public class AarreMotor {
 	private       int            oldTickNumber;
 	private       int            stallTimeLimitInMilliseconds   = 0;
 	private       int            stallDetectionToleranceInTicks = 5;
-	private       AarreTelemetry telemetry;
+	private final AarreTelemetry telemetry;
 	private       ElapsedTime    timeStalledInMilliseconds;
-	private       LinearOpMode   opMode;
-	private       HardwareMap    hardwareMap;
+	private final LinearOpMode   opMode;
+	private final HardwareMap    hardwareMap;
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
 
 		this.opMode = opMode;
 
-		this.telemetry = new AarreTelemetry(opMode.telemetry);
+		telemetry = new AarreTelemetry(opMode.telemetry);
 		if (telemetry == null) {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
 
-		this.hardwareMap = opMode.hardwareMap;
+		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {
 			throw new AssertionError("Unexpected null object: hardwareMap");
 		}
@@ -159,7 +159,7 @@ public class AarreMotor {
 
 			// The motor has not moved since the last time the position was read.
 
-			if (timeStalledInMilliseconds.time() > (double) stallTimeLimitInMilliseconds) {
+			if (timeStalledInMilliseconds.time() > stallTimeLimitInMilliseconds) {
 
 				// The motor has been stalled for more than the time limit
 
@@ -246,7 +246,7 @@ public class AarreMotor {
 			runtime = new ElapsedTime();
 			millisecondsSinceChange = 0.0;
 
-			while ((millisecondsSinceChange < millisecondsCycleLength) && opMode.opModeIsActive()) {
+			while ((millisecondsSinceChange < (double) millisecondsCycleLength) && opMode.opModeIsActive()) {
 				// Wait until it is time for next power increment
 				opMode.sleep((long) millisecondsSinceChange);
 				millisecondsSinceChange = runtime.milliseconds();
@@ -261,7 +261,7 @@ public class AarreMotor {
 	 * seconds.
 	 */
 	final void runByEncoderTicks(final double proportionPower, final int ticks, final int millisecondsTimeout) {
-		final double secondsTimeout = (double) millisecondsTimeout / 1000.0;
+		final double secondsTimeout = millisecondsTimeout / 1000.0;
 		runByEncoderTicks(proportionPower, ticks, secondsTimeout);
 	}
 

@@ -18,7 +18,7 @@ public class AarreTelemetry {
     private final Telemetry     underlyingTelemetry;
     private final Telemetry.Log telemetryLog;
 
-    private boolean CAREFUL_LOGGING = false;
+	private boolean carefulLogging = false;
 
 
     /**
@@ -31,7 +31,7 @@ public class AarreTelemetry {
         underlyingTelemetry = telemetry;
         underlyingTelemetry.setAutoClear(false);
         telemetryLog = telemetry.log();
-        CAREFUL_LOGGING = false;
+	    carefulLogging = false;
 
     }
 
@@ -48,7 +48,7 @@ public class AarreTelemetry {
     AarreTelemetry(@SuppressWarnings("ParameterHidesMemberVariable") final Telemetry underlyingTelemetry, final boolean carefulLogging) {
 
         this(underlyingTelemetry);
-        CAREFUL_LOGGING = carefulLogging;
+	    this.carefulLogging = carefulLogging;
 
     }
 
@@ -94,7 +94,7 @@ public class AarreTelemetry {
      */
     void log(final java.lang.String message) {
 
-        if (CAREFUL_LOGGING) {
+	    if (carefulLogging) {
 
             // Wait a couple of milliseconds between log entries to ensure that every entry has its
             // own line in the log. This can make it easier to find and read log entries. It is probably not

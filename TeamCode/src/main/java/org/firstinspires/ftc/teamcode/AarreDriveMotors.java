@@ -13,9 +13,14 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class AarreDriveMotors {
 
-	static final         double P_TURN_COEFF                       = 0.1;     // Larger is more responsive, but also less stable
-	static final         double P_DRIVE_COEFF                      = 0.15;     // Larger is more responsive, but also less stable
-	static final         double HEADING_THRESHOLD                  = 1;      // As tight as we can make it with an integer gyro
+	static final double P_TURN_COEFF  = 0.1;     // Larger is more responsive, but also less stable
+	static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
+
+	/**
+	 * As tight as we can make it with an integer gyro
+	 */
+	static final double HEADING_THRESHOLD = 1.0;
+
 	private static final double DEFAULT_POWER_INCREMENT_ABSOLUTE   = 0.1;
 	private static final int    DEFAULT_MILLISECONDS_CYCLE_LENGTH  = 50;
 	private static final double DEFAULT_PROPORTION_POWER_TOLERANCE = 0.01;
@@ -28,12 +33,12 @@ public class AarreDriveMotors {
 
 	public AarreDriveMotors(LinearOpMode opMode) {
 
-		this.telemetry = new AarreTelemetry(opMode.telemetry);
+		telemetry = new AarreTelemetry(opMode.telemetry);
 		if (telemetry == null) {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
 
-		this.hardwareMap = opMode.hardwareMap;
+		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {
 			throw new AssertionError("Unexpected null object: hardwareMap");
 		}
@@ -57,7 +62,6 @@ public class AarreDriveMotors {
 
 		// Set all motors to zero power
 
-		// TODO: Ramp power on the motors simultaneously to avoid swerving
 		rampPowerTo(0.0);
 
 		// This code REQUIRES that you have encoders on the wheel motors
@@ -80,7 +84,7 @@ public class AarreDriveMotors {
 	 * @return Desired steering force.  +/- 1 range.  +ve = steer left
 	 */
 	public static double getSteer(final double error, final double PCoeff) {
-		return Range.clip(error * PCoeff, -1, 1);
+		return Range.clip(error * PCoeff, -1.0, 1.0);
 	}
 
 	/**
@@ -148,11 +152,11 @@ public class AarreDriveMotors {
 
 		// calculate error in -179 to +180 range  (
 		robotError = targetAngle - gyro.getIntegratedZValue();
-		while (robotError > 180) {
-			robotError -= 360;
+		while (robotError > 180.0) {
+			robotError -= 360.0;
 		}
-		while (robotError <= -180) {
-			robotError += 360;
+		while (robotError <= -180.0) {
+			robotError += 360.0;
 		}
 		return robotError;
 	}
@@ -213,7 +217,7 @@ public class AarreDriveMotors {
 				steer = getSteer(error, P_DRIVE_COEFF);
 
 				// if driving in reverse, the motor correction also needs to be reversed
-				if (distance < 0) {
+				if (distance < 0.0) {
 					steer *= -1.0;
 				}
 
@@ -239,8 +243,8 @@ public class AarreDriveMotors {
 			}
 
 			// Stop all motion;
-			leftMotor.rampPowerTo(0);
-			rightMotor.rampPowerTo(0);
+			leftMotor.rampPowerTo(0.0);
+			rightMotor.rampPowerTo(0.0);
 
 			// Turn off RUN_TO_POSITION
 			leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -275,8 +279,8 @@ public class AarreDriveMotors {
 		}
 
 		// Stop all motion;
-		leftMotor.rampPowerTo(0);
-		rightMotor.rampPowerTo(0);
+		leftMotor.rampPowerTo(0.0);
+		rightMotor.rampPowerTo(0.0);
 	}
 
 	/**
@@ -448,7 +452,7 @@ public class AarreDriveMotors {
 			runtime = new ElapsedTime();
 			millisecondsSinceChange = 0.0;
 
-			while ((millisecondsSinceChange < millisecondsCycleLength) && opMode.opModeIsActive()) {
+			while ((millisecondsSinceChange < (double) millisecondsCycleLength) && opMode.opModeIsActive()) {
 				// Wait until it is time for next power increment
 				opMode.sleep((long) millisecondsSinceChange);
 				millisecondsSinceChange = runtime.milliseconds();

@@ -41,12 +41,12 @@ public class AarreRobot {
 	 */
 	public AarreRobot(final LinearOpMode opMode) {
 
-		this.telemetry = new AarreTelemetry(opMode.telemetry);
+		telemetry = new AarreTelemetry(opMode.telemetry);
 		if (telemetry == null) {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
 
-		this.hardwareMap = opMode.hardwareMap;
+		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {
 			throw new AssertionError("Unexpected null object: hardwareMap");
 		}
@@ -66,7 +66,7 @@ public class AarreRobot {
 
 		hookServo = new AarreServo(hardwareMap, "hook", telemetry, opMode);
 
-		this.telemetry.log("Initializing hook");
+		telemetry.log("Initializing hook");
 
 		hookServo.setDirection(Servo.Direction.FORWARD);
 
@@ -160,13 +160,13 @@ public class AarreRobot {
 	/**
 	 * Put the robot in the state it should be in at the end of the
 	 * game, when it is preparing to latch to the lander.
-	 * <p>
+	 *
 	 * <ul>
 	 * <li>The arm is lowered.</li>
 	 * <li>The riser is raised, as it would need to be when attaching to the lander.</li>
 	 * <li>The hook is raised, as it would need to be when attaching to the lander.</li>
 	 * </ul>
-	 * </p>
+	 *
 	 * The difference between this and {@code readyForTransportation} is that this
 	 * mode raises the hook.
 	 */
@@ -178,13 +178,13 @@ public class AarreRobot {
 
 	/**
 	 * Prepare the robot to play the autonomous portion of the game.
-	 * <p>
+	 *
 	 * <ul>
 	 * <li>The arm is lowered, as it would be when attached to the lander.</li>
 	 * <li>The riser is lowered, as it would be when attached to the lander.</li>
 	 * <li>The hook is raised, as it would be when attached to the lander.</li>
 	 * </ul>
-	 * </p>
+	 *
 	 * The difference between this and {@code readyForTransportation} is that this
 	 * mode raises the hook.
 	 */
@@ -196,13 +196,13 @@ public class AarreRobot {
 
 	/**
 	 * Prepare the robot for transportation by putting it in its most compact state.
-	 * <p>
+	 *
 	 * <ul>
 	 * <li>The arm is lowered, which is its most compact position.</li>
 	 * <li>The riser is lowered, which is its most compact position.</li>
 	 * <li>The hook is lowered, which is its most compact position.</li>
 	 * </ul>
-	 * </p>
+	 *
 	 * The difference between this and {@code readyForAutonomousGame} is that
 	 * this mode lowers the hook.
 	 */

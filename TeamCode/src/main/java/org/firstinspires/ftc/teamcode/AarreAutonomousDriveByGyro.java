@@ -104,7 +104,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 
         // make sure the gyro is calibrated before continuing
         while (!isStopRequested() && gyro.isCalibrating()) {
-            sleep(50);
+	        sleep((long) 50);
             idle();
         }
 

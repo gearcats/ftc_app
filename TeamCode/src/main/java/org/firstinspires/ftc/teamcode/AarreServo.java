@@ -176,12 +176,12 @@ public class AarreServo {
 
 		// Wait for the hardware to catch up
 
-		millisecondsToWait = 1000;
-		millisecondsInterval = 10;
+		millisecondsToWait = (long) 1000;
+		millisecondsInterval = (long) 10;
 		runtime = new ElapsedTime();
 		millisecondsElapsed = runtime.milliseconds();
 
-		while ((millisecondsElapsed < millisecondsToWait) && opMode.opModeIsActive()) {
+		while ((millisecondsElapsed < (double) millisecondsToWait) && opMode.opModeIsActive()) {
 			opMode.sleep(millisecondsInterval);
 			millisecondsElapsed = runtime.milliseconds();
 		}

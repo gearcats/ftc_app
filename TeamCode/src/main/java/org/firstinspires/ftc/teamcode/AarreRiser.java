@@ -268,7 +268,7 @@ public class AarreRiser {
 	 * continues to run irregularly as it attempts to push the riser higher than it can go.
 	 */
 	private void raiseUntilStall() {
-		motor.setStallTimeLimitInSeconds(DEFAULT_MILLISECONDS_STALL_TIME_WINDOW);
+		motor.setStallTimeLimitInSeconds((double) DEFAULT_MILLISECONDS_STALL_TIME_WINDOW);
 		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_STALL_TOLERANCE);
 		motor.runUntilStalled(DEFAULT_PROPORTION_POWER);
 	}

@@ -35,86 +35,76 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This file contains Aarre's experimental code for the autonomous mode
- *
+ * <p>
  * To avoid issuing an error on the phones, any OpMode class must be
  * declared public.
- *
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-@Autonomous(name="Aarre Autonomous", group="Aarre")
+@Autonomous(name = "Aarre Autonomous", group = "Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
-    private static final double INCHES = 12.0;
-    private static final double TIMEOUT = 5.0;
+	private static final double         INCHES            = 12.0;
+	private static final double         TIMEOUT           = 5.0;
+	// How fast to move forward or back
+	private static final double         DRIVE_SPEED       = 0.6;
+	// How fast to move when turning
+	private static final double         TURN_SPEED        = 0.5;
+	private static final double         TEST_TIME_SECONDS = 0.5;
+	private final        ElapsedTime    runtime           = new ElapsedTime();
+	private              AarreTelemetry betterTelemetry;
+	private              AarreRobot     robot;
 
-    private AarreTelemetry betterTelemetry;
-    private AarreRobot robot;
+	public AarreAutonomous() {
+	}
 
-    private final ElapsedTime runtime = new ElapsedTime();
+	/**
+	 * Properties inherited from LinearOpMode include:
+	 * <p>
+	 * hardwareMap
+	 * telemetry
+	 */
+	@Override
+	public final void runOpMode() {
 
-    // How fast to move forward or back
-    private static final double DRIVE_SPEED                     = 0.6;
+		// 'telemetry' comes from FTC....
+		// It is only available in runOpMode
 
-    // How fast to move when turning
-    private static final double TURN_SPEED                      = 0.5;
+		if (telemetry == null) {
+			throw new AssertionError("Unexpected null object: telemetry");
+		}
+		betterTelemetry = new AarreTelemetry(telemetry);
 
-    private static final double TEST_TIME_SECONDS               = 0.5;
+		// 'hardwareMap comes from FTC....
+		// It is only available in runOpMode
 
-    public AarreAutonomous() {
-    }
+		if (hardwareMap == null) {
+			throw new AssertionError("Unexpected null object: hardwareMap");
+		}
+		robot = new AarreRobot(this);
 
+		betterTelemetry.log("Initializing robot");
 
-    // TODO: Use Math.PI above
+		// Wait for the driver to press PLAY
+		waitForStart();
 
-    /**
-     * Properties inherited from LinearOpMode include:
-     *
-     * hardwareMap
-     * telemetry
-     *
-     */
-    @Override
-    public final void runOpMode() {
+		runtime.reset();
 
-        // 'telemetry' comes from FTC....
-        // It is only available in runOpMode
+		// run until the end of the match (driver presses STOP)
+		while (opModeIsActive()) {
 
-        if (telemetry == null)
-            throw new AssertionError("Unexpected null object: telemetry");
-        betterTelemetry = new AarreTelemetry(telemetry);
+			betterTelemetry.log("Ready to run");    //
 
-        // 'hardwareMap comes from FTC....
-        // It is only available in runOpMode
+			// Step through each leg of the path,
+			// Note: Reverse movement is obtained by setting a negative distance (not speed)
 
-        if (hardwareMap == null)
-            throw new AssertionError("Unexpected null object: hardwareMap");
-        robot = new AarreRobot(this);
+			robot.drive(DRIVE_SPEED, INCHES, INCHES, TIMEOUT);
 
-        betterTelemetry.log("Initializing robot");
+			robot.drive(TURN_SPEED, INCHES, -INCHES, TIMEOUT);
 
-        // Wait for the driver to press PLAY
-        waitForStart();
+			robot.drive(DRIVE_SPEED, -INCHES, -INCHES, TIMEOUT);
 
-        runtime.reset();
-
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-
-            betterTelemetry.log("Ready to run");    //
-
-            // Step through each leg of the path,
-            // Note: Reverse movement is obtained by setting a negative distance (not speed)
-
-            final double TIMEOUT = 5.0;
-
-            robot.drive(DRIVE_SPEED, INCHES, INCHES, TIMEOUT);
-
-            robot.drive(TURN_SPEED, INCHES, -INCHES, TIMEOUT);
-
-            robot.drive(DRIVE_SPEED, -INCHES, -INCHES, TIMEOUT);
-
-            betterTelemetry.log("Path", "Complete");
-        }
-    }
+			betterTelemetry.log("Path", "Complete");
+		}
+	}
 
 }

@@ -9,7 +9,7 @@ public class AarreTestRunner {
 		Result result = JUnitCore.runClasses(JunitTestSuite.class);
 
 		for (Failure failure : result.getFailures()) {
-			System.out.println(failure.toString());
+			System.out.println(failure);
 		}
 
 		System.out.println(result.wasSuccessful());
