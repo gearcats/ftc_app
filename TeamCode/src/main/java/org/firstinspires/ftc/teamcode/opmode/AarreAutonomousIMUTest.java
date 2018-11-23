@@ -6,29 +6,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
+
 /**
- * This file contains Aarre's experimental code to test that the robot drive autonomously.
+ * This file contains Aarre's experimental code to test that we can read data from the IMU.
  * <p>
  * To avoid issuing an error on the phones, any OpMode class must be declared public.
  */
 @Autonomous(name = "Aarre Autonomous Drive Test", group = "Aarre")
-public class AarreAutonomousDriveTest extends LinearOpMode {
+public class AarreAutonomousIMUTest extends LinearOpMode {
 
-	private AarreTelemetry betterTelemetry;
-	private AarreRobot     robot;
+	AarreTelemetry betterTelemetry;
 
-	public AarreAutonomousDriveTest() {
-	}
-
-	/**
-	 * Properties and methods inherited from LinearOpMode include:
-	 * <p>
-	 * hardwareMap
-	 * opModeIsActive
-	 * telemetry
-	 */
 	@Override
-	public final void runOpMode() {
+	public void runOpMode() {
 
 		// 'telemetry' comes from FTC....
 		// It is only available in runOpMode
@@ -47,21 +37,5 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 		robot = new AarreRobot(this);
 
 		betterTelemetry.log("Initializing robot");
-
-		// Wait for the driver to press PLAY
-		waitForStart();
-
-		final double driveSpeed = 0.5;
-		final double turnSpeed  = 0.5;
-		final double inches     = 12.0;
-		final double timeout    = 5.0;
-
-		robot.drive(driveSpeed, inches, inches, timeout);
-		robot.drive(driveSpeed, -inches, -inches, timeout);
-		robot.drive(turnSpeed, inches, -inches, timeout);
-		robot.drive(turnSpeed, -inches, inches, timeout);
-
-
 	}
-
 }
