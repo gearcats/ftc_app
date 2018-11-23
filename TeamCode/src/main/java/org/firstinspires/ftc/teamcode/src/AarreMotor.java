@@ -227,12 +227,12 @@ public class AarreMotor {
 	 *
 	 * @param proportionPower
 	 * 		The power at which to rotate, in the interval [-1.0, 1.0].
-	 * @param numberOfTicks
+	 * @param numberOfTicksToRotate
 	 * 		Maximum number of ticks to rotate. Must be non-negative.
 	 * @param secondsTimeout
 	 * 		Maximum number of seconds to rotate. Must be non-negative.
 	 */
-	final void rampToEncoderTicks(final double proportionPower, final int numberOfTicks,
+	final void rampToEncoderTicks(final double proportionPower, final int numberOfTicksToRotate,
 	                              final double secondsTimeout) {
 
 		if ((proportionPower < -1.0) || (proportionPower > 1.0)) {
@@ -243,24 +243,31 @@ public class AarreMotor {
 			throw new AssertionError("secondsTimeout must non-negative");
 		}
 
-		if (numberOfTicks < 0) {
-			throw new AssertionError("numberOfTicks must be non-negative");
+		if (numberOfTicksToRotate < 0) {
+			throw new AssertionError("numberOfTicksToRotate must be non-negative");
 		}
 
-		final ElapsedTime runtime = new ElapsedTime();
-		double            secondsRunning;
-		boolean           isMotorBusy;
+		final int targetTicks = getCurrentTickNumber() +
+		                        ((int) Math.signum(proportionPower) * numberOfTicksToRotate);
 
-		final int targetTicks =
-				getCurrentTickNumber() + ((int) Math.signum(proportionPower) * numberOfTicks);
-		int rampUpTicks   = targetTicks / 2;
-		int rampDownTicks = targetTicks - rampUpTicks;
+		setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-		telemetry.log("Motor - Ramp by encoder ticks, target power: %f", proportionPower);
-		rampToPower(proportionPower, rampUpTicks, secondsTimeout);
+		/*
+		 * Ramp up for half of the ticks and down for the other half
+		 *
+		 * Ideally, the power profile should look something like this:
+		 *
+		 * ___/---\___
+		 *
+		 */
+		int ticksToRampUp   = targetTicks / 2;
+		int ticksToRampDown = targetTicks - ticksToRampUp;
 
-		telemetry.log("Motor - Ramp by encoder ticks, target power: %f", 0.0);
-		rampToPower(0.0, rampDownTicks, secondsTimeout);
+		telemetry.log("Motor - Ramp to encoder ticks(3), target power: %f", proportionPower);
+		rampToPower(proportionPower, ticksToRampUp, secondsTimeout);
+
+		telemetry.log("Motor - Ramp to encoder ticks(3), target power: %f", 0.0);
+		rampToPower(0.0, ticksToRampDown, secondsTimeout);
 
 	}
 
@@ -288,20 +295,20 @@ public class AarreMotor {
 	 *
 	 * @param proportionPowerRequested
 	 * 		The power to which the caller would like to ramp the motor at the end of the ramp
-	 * 		time. *
-	 * 		Positive values indicate forward power; Negative values indicate reverse power. The *
-	 * 		value
-	 * 		is expected to be in the interval [-1, 1].
-	 * @param ticksMaximum
-	 * 		The maximum number of encoder ticks to turn. The method will stop when this number has
-	 * 		been
-	 * 		reached, unless it times out first.
+	 * 		time. Positive values indicate forward power; Negative values indicate reverse power.
+	 * 		The value is expected to be in the interval [-1, 1].
+	 * @param ticksToMove
+	 * 		The number of encoder ticks to turn. The method will stop when this number has
+	 * 		been reached, unless it times out first.
 	 * @param secondsTimeout
 	 * 		The maximum number of seconds to run. The method will stop when this number has been
-	 * 		reached, unless it rea
+	 * 		reached, unless it moves enough ticks first.
 	 */
-	public void rampToPower(double proportionPowerRequested, int ticksMaximum, double
-			secondsTimeout) {
+	private void rampToPower(final double proportionPowerRequested, final int ticksToMove, final
+	double secondsTimeout) {
+
+		telemetry.log("Motor - Ramp to power(3), target power: %f", proportionPowerRequested);
+		telemetry.log("Motor - Ramp to power(3), target ticks: %d", ticksToMove);
 
 		ElapsedTime runtime;
 
@@ -316,15 +323,18 @@ public class AarreMotor {
 		double millisecondsSinceChange;
 
 		tickNumberStart = getCurrentTickNumber();
-		tickNumberCurrent = tickNumberStart;
+		telemetry.log("Motor - Ramp to power(3), starting tick number: %d", tickNumberStart);
 
 		powerDelta = 1.0;
+		proportionPowerCurrent = 0.0;
 		secondsRunning = 0.0;
 		ticksMoved = 0;
+		tickNumberCurrent = 0;
 
-		while (isRampToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-		                                powerDelta)) {
+		while (!isRampToEncoderTicksDone(ticksToMove, secondsTimeout, secondsRunning, ticksMoved,
+		                                 powerDelta, proportionPowerCurrent)) {
 
+			telemetry.log("Motor - Ramp to power(3), current tick number: %d", tickNumberCurrent);
 			proportionPowerCurrent = getProportionPowerCurrent();
 			powerDelta = proportionPowerRequested - proportionPowerCurrent;
 
@@ -376,11 +386,12 @@ public class AarreMotor {
 			powerIncrementAbsolute, final int millisecondsCycleLength, final double
 			                        proportionPowerTolerance, final double secondsTimeout) {
 
-		ElapsedTime runtime;
-		double      proportionPowerCurrent;
-		double      proportionPowerNew;
-		double      powerDelta;
-		double      millisecondsSinceChange;
+		telemetry.log("Motor - Ramp to power (5), total target power: %f", proportionPowerRequested);
+
+		double proportionPowerCurrent;
+		double proportionPowerNew;
+		double powerDelta;
+		double millisecondsSinceChange;
 
 		powerDelta = 1.0;
 
@@ -392,7 +403,9 @@ public class AarreMotor {
 			proportionPowerNew = getProportionPowerNew(proportionPowerCurrent,
 			                                           proportionPowerRequested,
 			                                           powerIncrementAbsolute);
-			telemetry.log("Motor - Ramp power to, power: %f", proportionPowerNew);
+
+			telemetry.log("Motor - Ramp power to, current power target: %f", proportionPowerNew);
+
 			setProportionPower(proportionPowerNew);
 
 			/*
@@ -587,14 +600,18 @@ public class AarreMotor {
 	}
 
 
+	void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
+		motor.setZeroPowerBehavior(zeroPowerBehavior);
+	}
+
 	/**
 	 * Returns true if the loop in rampToEncoderTicks should end.
-	 *
+	 * <p>
 	 * The code could be simplified and shortened but it is verbose for comprehensibility.
-	 *
-	 * The code could be part of the rampToEncoderTicks itself but isolating it here
-	 * (1) simplifies rampToEncoderTicks and (2) allows unit testing this method,
-	 * which does not depend on Op Mode.
+	 * <p>
+	 * The code could be part of the rampToEncoderTicks itself but isolating it here (1) simplifies
+	 * rampToEncoderTicks and (2) allows unit testing this method, which does not depend on Op
+	 * Mode.
 	 *
 	 * @param ticksMaximum
 	 * 		The maximum number of ticks that rampToEncoderTicks is supposed to move.
@@ -609,18 +626,17 @@ public class AarreMotor {
 	 *
 	 * @return True if the loop in rampToEncoderTicks should end.
 	 */
-	public boolean isRampToEncoderTicksDone(int ticksMaximum, double secondsTimeout, double
-			secondsRunning, int ticksMoved, double powerDelta) {
+	public boolean isRampToEncoderTicksDone(int ticksMaximum, double secondsTimeout, double secondsRunning, int ticksMoved, double powerDelta, double powerCurrent) {
 
 		boolean valueToReturn = false;
 
-		if (ticksMoved >= ticksMaximum) {
+		if (ticksMoved >= Math.abs(ticksMaximum)) {
 			telemetry.log("Loop done - moved far enough");
 			valueToReturn = true;
 		} else if (secondsRunning >= secondsTimeout) {
 			telemetry.log("Loop done - timed out");
 			valueToReturn = true;
-		} else if (powerDelta < DEFAULT_PROPORTION_POWER_TOLERANCE) {
+		} else if (Math.abs(powerDelta) < DEFAULT_PROPORTION_POWER_TOLERANCE) {
 			telemetry.log("Loop done - power reached");
 			valueToReturn = true;
 		} else if (hardwareMap != null) {

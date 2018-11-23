@@ -174,8 +174,14 @@ public class AarreRiser {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 		}
 
-		telemetry.log("Riser - Raise by revolutions, power: %f", proportionMotorPower);
+		telemetry.log("Riser - Lower by revolutions, power: %f", proportionMotorPower);
 		motor.runByRevolutions(-proportionMotorPower, numberOfRevolutions, secondsTimeout);
+
+		/*
+		 * Allow the riser motor to float at the bottom so that gravity gently pulls it down.
+		 * This helps adjust for some of the uncertainty inherent in the riser behavior.
+		 */
+		motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 	}
 
@@ -196,6 +202,11 @@ public class AarreRiser {
 		telemetry.log("Riser - raising riser");
 		raiseByRevolutions();
 		telemetry.log("Riser - riser raised");
+
+		/*
+		 * Brake the riser motor at the to so that gravity will not gently pull it down.
+		 */
+		motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		currentPosition = 1.0;
 	}
 

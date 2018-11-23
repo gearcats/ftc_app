@@ -142,7 +142,7 @@ public class AarreTelemetry {
 			}
 		}
 
-		telemetryLog.add(message);
+		telemetryLog.add("Robot: " + message);
 		syslog(message);
 	}
 

@@ -89,7 +89,7 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	}
 
 	@Test
-	public final void isRampToEncoderTicksDone01() {
+	public final void testIsRampToEncoderTicksDone01() {
 
 		/**
 		 * ticksMoved is less than ticksMaximum, so no reason to stop. (We haven't moved far enough
@@ -108,17 +108,22 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 * Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
 		 * enough yet.)
 		 */
-		double powerDelta = 0.1;     // Greater than default, so no reason to stop
+		double powerDelta = 0.1;
+
+		/**
+		 * Current power is within reason, so no reason to stop.
+		 */
+		double powerCurrent = 0.6;
 
 		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning,
-		                                                ticksMoved, powerDelta);
+		                                                secondsRunning, ticksMoved, powerDelta,
+		                                                powerCurrent);
 
 		assertFalse(result);
 	}
 
 	@Test
-	public final void isRampToEncoderTicksDone02() {
+	public final void testIsRampToEncoderTicksDone02() {
 
 		/**
 		 * We have moved farther than we intended, so it is time to stop.
@@ -136,17 +141,21 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 * Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
 		 * enough yet.)
 		 */
-		double powerDelta = 0.1;     // Greater than default, so no reason to stop
+		double powerDelta = 0.1;
+
+		/**
+		 * Current power is within reason, so no reason to stop.
+		 */
+		double powerCurrent = 0.6;
 
 		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning,
-		                                                ticksMoved, powerDelta);
+		                                                secondsRunning, ticksMoved, powerDelta, powerCurrent);
 
 		assertTrue(result);
 	}
 
 	@Test
-	public final void isRampToEncoderTicksDone03() {
+	public final void testIsRampToEncoderTicksDone03() {
 
 		/**
 		 * We have not moved enough yet, so continue.
@@ -164,17 +173,21 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 * Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
 		 * enough yet.)
 		 */
-		double powerDelta = 0.1;     // Greater than default, so no reason to stop
+		double powerDelta = 0.1;
+
+		/**
+		 * Current power is within reason, so no reason to stop.
+		 */
+		double powerCurrent = 0.6;
 
 		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning,
-		                                                ticksMoved, powerDelta);
+		                                                secondsRunning, ticksMoved, powerDelta, powerCurrent);
 
 		assertTrue(result);
 	}
 
 	@Test
-	public final void isRampToEncoderTicksDone04() {
+	public final void testIsRampToEncoderTicksDone04() {
 
 		/**
 		 * We have not moved enough yet, so continue.
@@ -191,14 +204,233 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		/**
 		 * Power delta is within tolerance, so stop.
 		 */
-		double powerDelta = 0.001;     // Greater than default, so no reason to stop
+		double powerDelta = 0.001;
+
+		/**
+		 * Current power is within reason, so no reason to stop.
+		 */
+		double powerCurrent = 0.6;
 
 		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning,
-		                                                ticksMoved, powerDelta);
+		                                                secondsRunning, ticksMoved, powerDelta,
+		                                                powerCurrent);
 
 		assertTrue(result);
 	}
+
+	/**
+	 * Test that moving exactly the right amount causes the check to stop.
+	 */
+	@Test
+	public final void testIsRampToEncoderTicksDone05() {
+
+		/**
+		 * We have moved exactly the right amount, so stop.
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = 1440;
+
+		/**
+		 * Seconds running is less than timeout, so continue.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
+
+		/**
+		 * Power delta is greater than tolerance, so continue.
+		 */
+		double powerDelta = 0.1;
+
+		/**
+		 * Current power is within reason, so no reason to stop.
+		 */
+		double powerCurrent = 0.6;
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning, ticksMoved, powerDelta,
+		                                                powerCurrent);
+
+		assertTrue(result);
+	}
+
+	/**
+	 * Test that reaching the target power by itself does not cause the check to stop.
+	 */
+	@Test
+	public final void testIsRampToEncoderTicksDone06() {
+
+		/**
+		 * We have not moved the right amount, so continue.
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = 14;
+
+		/**
+		 * Seconds running is less than timeout, so continue.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
+
+		/**
+		 * Power delta is greater than tolerance, so continue.
+		 */
+		double powerDelta = 0.1;
+
+		/**
+		 * Current power is maxed out, but still no reason to stop, so continue.
+		 */
+		double powerCurrent = 1.0;
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning, ticksMoved, powerDelta,
+		                                                powerCurrent);
+
+		assertFalse(result);
+	}
+
+
+	/**
+	 * Test that a negative power delta by itself does not cause the check to stop.
+	 */
+	@Test
+	public final void testIsRampToEncoderTicksDone07() {
+
+		/**
+		 * We have not moved enough, so continue.
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = 144;
+
+		/**
+		 * Seconds running is less than timeout, so continue.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
+
+		/**
+		 * Power delta is negative, but absolute power delta is greater than tolerance, so
+		 * continue.
+		 */
+		double powerDelta = -0.1;
+
+		/**
+		 * Current power is within reason, so no reason to stop.
+		 */
+		double powerCurrent = 0.6;
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning, ticksMoved, powerDelta,
+		                                                powerCurrent);
+
+		assertFalse(result);
+	}
+
+	/**
+	 * Test that a negative power by itself does not cause the check to stop.
+	 */
+	@Test
+	public final void testIsRampToEncoderTicksDone08() {
+
+		/**
+		 * We have not moved enough, so continue.
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = 190;
+
+		/**
+		 * Seconds running is less than timeout, so continue.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
+
+		/**
+		 * Power delta is greater than tolerance, so continue.
+		 */
+		double powerDelta = 0.1;
+
+		/**
+		 * Current power is negative but within reason, so continue.
+		 */
+		double powerCurrent = -0.6;
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning, ticksMoved, powerDelta,
+		                                                powerCurrent);
+
+		assertFalse(result);
+	}
+
+	/**
+	 * Test that a negative number of ticks does not cause the check to stop.
+	 */
+	@Test
+	public final void testIsRampToEncoderTicksDone09() {
+
+		/**
+		 * We have not moved enough, so continue.
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = -190;
+
+		/**
+		 * Seconds running is less than timeout, so continue.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
+
+		/**
+		 * Power delta is greater than tolerance, so continue.
+		 */
+		double powerDelta = 0.1;
+
+		/**
+		 * Current power is negative but within reason, so continue.
+		 */
+		double powerCurrent = -0.6;
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning, ticksMoved, powerDelta,
+		                                                powerCurrent);
+
+		assertFalse(result);
+	}
+
+	/**
+	 * Test that a negative tick maximum does not cause the loop to stop
+	 */
+	@Test
+	public final void testIsRampToEncoderTicksDone10() {
+
+		/**
+		 * We have not moved enough, so continue.
+		 */
+		int ticksMaximum = -5040;
+		int ticksMoved   = 0;
+
+		/**
+		 * Seconds running is less than timeout, so continue.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
+
+		/**
+		 * Power delta is greater than tolerance, so continue.
+		 */
+		double powerDelta = 0.1;
+
+		/**
+		 * Current power is negative but within reason, so continue.
+		 */
+		double powerCurrent = -0.6;
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning, ticksMoved, powerDelta,
+		                                                powerCurrent);
+
+		assertFalse(result);
+	}
+
+
 
 	/**
 	 * Must override runOpMode to avoid compiler error
