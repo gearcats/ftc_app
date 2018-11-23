@@ -221,5 +221,10 @@ public class AarreRobot {
 	}
 
 
+	public void updateIMUTelemetry() {
+		imu.updateTelemetry();
+	}
+
+
 }
 

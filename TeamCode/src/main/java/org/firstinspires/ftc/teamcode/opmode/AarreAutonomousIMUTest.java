@@ -38,5 +38,10 @@ public class AarreAutonomousIMUTest extends LinearOpMode {
 		robot = new AarreRobot(this);
 
 		betterTelemetry.log("Initializing robot");
+
+		while (opModeIsActive()) {
+			robot.updateIMUTelemetry();
+		}
+
 	}
 }

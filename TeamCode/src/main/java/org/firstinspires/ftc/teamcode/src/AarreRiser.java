@@ -174,6 +174,7 @@ public class AarreRiser {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 		}
 
+		telemetry.log("Riser - Raise by revolutions, power: %f", proportionMotorPower);
 		motor.runByRevolutions(-proportionMotorPower, numberOfRevolutions, secondsTimeout);
 
 	}
@@ -230,7 +231,7 @@ public class AarreRiser {
 		if (secondsTimeout < 0.0) {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 		}
-
+		telemetry.log("Riser - Raise by revolutions, power: %f", proportionMotorPower);
 		motor.runByRevolutions(proportionMotorPower, numberOfRevolutions, secondsTimeout);
 	}
 

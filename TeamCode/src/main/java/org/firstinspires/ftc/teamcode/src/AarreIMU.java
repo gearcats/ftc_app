@@ -112,10 +112,13 @@ public class AarreIMU {
 		// Set up our telemetry dashboard
 		composeTelemetry();
 
-		// Loop and update the dashboard
-		while (opMode.opModeIsActive()) {
-			telemetry.update();
-		}
+	}
+
+	/**
+	 * Public method allows other objects to update the IMU telemetry.
+	 */
+	public void updateTelemetry() {
+		telemetry.update();
 	}
 
 	void composeTelemetry() {
