@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
@@ -20,10 +21,9 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	/**
 	 * Test AarreRobot
 	 * <p>
-	 * We can't break this up into different methods because the tests depend on overriding the
-	 * FTC runOpMode() method. Properties inherited from LinearOpMode include:
-	 * - hardwareMap
-	 * - telemetry
+	 * We can't break this up into different methods because the tests depend on overriding the FTC
+	 * runOpMode() method. Properties inherited from LinearOpMode include: - hardwareMap -
+	 * telemetry
 	 */
 
 	AarreMotor motor;
@@ -86,6 +86,23 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		double proportionPowerNew = motor.getProportionPowerNew(1.0, 1.0, 0.1);
 		assertEquals(1.0, proportionPowerNew, "Wrong proportion power");
 	}
+
+	@Test
+	public final void isRampToEncoderTicksDone01() {
+
+		int    ticksMaximum   = 1440;
+		double secondsTimeout = 5.0;
+		double secondsRunning = 0.0;
+		int    ticksMoved     = 0;
+		double powerDelta     = 0.1;
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning,
+		                                                ticksMoved, powerDelta);
+
+		assertTrue(result);
+	}
+
 
 	/**
 	 * Must override runOpMode to avoid compiler error

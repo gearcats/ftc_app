@@ -128,8 +128,8 @@ public class AarreDriveMotors {
 		}
 
 		// Stop all motion;
-		leftMotor.rampPowerTo(0.0);
-		rightMotor.rampPowerTo(0.0);
+		leftMotor.rampToPower(0.0);
+		rightMotor.rampToPower(0.0);
 
 		// Turn off RUN_TO_POSITION
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -206,8 +206,8 @@ public class AarreDriveMotors {
 
 			// start motion.
 			final double adjustedSpeed = Range.clip(Math.abs(speed), 0.0, 1.0);
-			leftMotor.rampPowerTo(adjustedSpeed);
-			rightMotor.rampPowerTo(adjustedSpeed);
+			leftMotor.rampToPower(adjustedSpeed);
+			rightMotor.rampToPower(adjustedSpeed);
 
 			// keep looping while we are still active, and BOTH motors are running.
 			while (opMode.opModeIsActive() && (leftMotor.isBusy() && rightMotor.isBusy())) {
@@ -231,8 +231,8 @@ public class AarreDriveMotors {
 					rightSpeed /= max;
 				}
 
-				leftMotor.rampPowerTo(leftSpeed);
-				rightMotor.rampPowerTo(rightSpeed);
+				leftMotor.rampToPower(leftSpeed);
+				rightMotor.rampToPower(rightSpeed);
 
 				// Display drive status for the driver.
 				telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
@@ -243,8 +243,8 @@ public class AarreDriveMotors {
 			}
 
 			// Stop all motion;
-			leftMotor.rampPowerTo(0.0);
-			rightMotor.rampPowerTo(0.0);
+			leftMotor.rampToPower(0.0);
+			rightMotor.rampToPower(0.0);
 
 			// Turn off RUN_TO_POSITION
 			leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -279,8 +279,8 @@ public class AarreDriveMotors {
 		}
 
 		// Stop all motion;
-		leftMotor.rampPowerTo(0.0);
-		rightMotor.rampPowerTo(0.0);
+		leftMotor.rampToPower(0.0);
+		rightMotor.rampToPower(0.0);
 	}
 
 	/**
@@ -343,8 +343,8 @@ public class AarreDriveMotors {
 		}
 
 		// Send desired speeds to motors.
-		leftMotor.rampPowerTo(leftSpeed);
-		rightMotor.rampPowerTo(rightSpeed);
+		leftMotor.rampToPower(leftSpeed);
+		rightMotor.rampToPower(rightSpeed);
 
 		// Display it for the driver.
 		telemetry.addData("Target", "%5.2f", angle);

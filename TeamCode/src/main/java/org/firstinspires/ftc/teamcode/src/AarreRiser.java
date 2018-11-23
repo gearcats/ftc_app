@@ -76,7 +76,7 @@ public class AarreRiser {
 
 		motor = new AarreMotor(opMode, nameOfRiserMotor);
 
-		motor.rampPowerTo(0.0);
+		motor.rampToPower(0.0);
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises riser
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
