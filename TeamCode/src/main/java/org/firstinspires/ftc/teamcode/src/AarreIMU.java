@@ -68,7 +68,7 @@ public class AarreIMU {
 	Orientation  angles;
 	Acceleration gravity;
 
-	public void AarreIMU(LinearOpMode opMode) {
+	public AarreIMU(LinearOpMode opMode) {
 
 		this.opMode = opMode;
 
@@ -77,11 +77,7 @@ public class AarreIMU {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
 
-		/**
-		 * hardwareMap will be null if we are running off-robot, but for testing purposes it is
-		 * still helpful to instantiate this object (rather than throwing an exception, for example).
-		 */
-		hardwareMap = opMode.hardwareMap;
+
 
 		/**
 		 * Set up the parameters with which we will use our IMU. Note that integration
@@ -100,28 +96,27 @@ public class AarreIMU {
 		 * Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port on a
 		 * Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
 		 * and named "imu".
+		 * hardwareMap will be null if we are running off-robot, but for testing purposes it is
+		 * still helpful to instantiate this object (rather than throwing an exception, for example).
 		 */
-		imu = hardwareMap.get(BNO055IMU.class, "imu");
-		imu.initialize(parameters);
+		hardwareMap = opMode.hardwareMap;
+		if (hardwareMap == null) {
+			imu = null;
+		} else {
+			imu = hardwareMap.get(BNO055IMU.class, "imu");
+			imu.initialize(parameters);
+			// Start logging measured acceleration
+			imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+		}
 
 		// Set up our telemetry dashboard
 		composeTelemetry();
-
-		// Wait until we're told to go
-		opMode.waitForStart();
-
-		// Start the logging of measured acceleration
-		imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
 		// Loop and update the dashboard
 		while (opMode.opModeIsActive()) {
 			telemetry.update();
 		}
 	}
-
-	//----------------------------------------------------------------------------------------------
-	// Telemetry Configuration
-	//----------------------------------------------------------------------------------------------
 
 	void composeTelemetry() {
 

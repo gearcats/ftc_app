@@ -29,7 +29,7 @@ public class AarreIMUUnitTests extends LinearOpMode {
 	@Test
 	@Override
 	public final void runOpMode() {
-
+		stop();
 	}
 
 }

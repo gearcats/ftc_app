@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.src;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData
  * methods.
@@ -48,12 +49,28 @@ public class AarreTelemetry {
 	 * 		under a given time. If true, there will be a small delay between calls to log messages,
 	 * 		which will prevent "folded" log entries.
 	 */
-	@SuppressWarnings("SameParameterValue")
-	AarreTelemetry(@SuppressWarnings("ParameterHidesMemberVariable") final Telemetry underlyingTelemetry, final boolean carefulLogging) {
+	AarreTelemetry(final Telemetry underlyingTelemetry, final boolean carefulLogging) {
 
 		this(underlyingTelemetry);
 		this.carefulLogging = carefulLogging;
 
+	}
+
+	/**
+	 * In addition to items and lines, a telemetry may also contain a list of actions. When the
+	 * telemetry is to be updated, these actions are evaluated before the telemetry lines are
+	 * composed just prior to transmission. A typical use of such actions is to initialize some
+	 * state variable, parts of which are subsequently displayed in items. This can help avoid
+	 * needless re-evaluation. Actions are cleared with clearAll(), and can be removed with
+	 * removeAction().
+	 *
+	 * @param action
+	 * 		The action to execute before composing the lines telemetry.
+	 *
+	 * @return A token by which the action can be later removed.
+	 */
+	public java.lang.Object addAction(java.lang.Runnable action) {
+		return underlyingTelemetry.addAction(action);
 	}
 
 	/**
@@ -94,6 +111,14 @@ public class AarreTelemetry {
 	}
 
 	/**
+	 * Create and return a new line in the receiver {@Link Telemetry}.
+	 */
+	final Telemetry.Line addLine() {
+		return (underlyingTelemetry.addLine());
+	}
+
+
+	/**
 	 * Append a simple message to the log.
 	 * <p>
 	 * All other methods should ultimately call this one, because it also appends the message to the
@@ -102,7 +127,7 @@ public class AarreTelemetry {
 	 * @param message
 	 * 		The message to append to the log.
 	 */
-	void log(final java.lang.String message) {
+	public void log(final java.lang.String message) {
 
 		if (carefulLogging) {
 
@@ -129,7 +154,7 @@ public class AarreTelemetry {
 	 * @param message
 	 * 		The log entry message associated with the caption.
 	 */
-	void log(final java.lang.String caption, final java.lang.String message) {
+	public void log(final java.lang.String caption, final java.lang.String message) {
 
 		log(caption + ": " + message);
 	}
@@ -142,7 +167,7 @@ public class AarreTelemetry {
 	 * @param args
 	 * 		Arguments to the printf-formatted message.
 	 */
-	void log(final java.lang.String message, final java.lang.Object... args) {
+	public void log(final java.lang.String message, final java.lang.Object... args) {
 
 		final String logMessage = String.format(message, args);
 		log(logMessage);
@@ -159,7 +184,8 @@ public class AarreTelemetry {
 	 * @param args
 	 * 		Arguments to the printf-formatted message.
 	 */
-	void log(final java.lang.String caption, final java.lang.String message, final java.lang.Object... args) {
+	public void log(final java.lang.String caption, final java.lang.String message, final java.lang
+			.Object... args) {
 
 		final String logMessage = caption + ": " + message;
 		log(logMessage, args);

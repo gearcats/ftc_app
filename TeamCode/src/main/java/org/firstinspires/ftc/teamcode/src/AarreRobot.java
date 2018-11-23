@@ -100,29 +100,29 @@ public class AarreRobot {
 		return (telemetry);
 	}
 
-	void gyroDrive(double proportionPower, double directionAndDistance, double secondsTime) {
+	public void gyroDrive(double proportionPower, double directionAndDistance, double secondsTime) {
 		driveMotors.gyroDrive(proportionPower, directionAndDistance, secondsTime);
 	}
 
-	void gyroHold(double proportionPower, double degreesHeading, double secondsTime) {
+	public void gyroHold(double proportionPower, double degreesHeading, double secondsTime) {
 		driveMotors.gyroHold(proportionPower, degreesHeading, secondsTime);
 	}
 
-	void gyroTurn(final double proportionPower, final double angle) {
+	public void gyroTurn(final double proportionPower, final double angle) {
 		driveMotors.gyroTurn(proportionPower, angle);
 	}
 
 	/**
 	 * Lower the arm to its downward position
 	 */
-	void lowerArm() {
+	public void lowerArm() {
 		arm.lower();
 	}
 
 	/**
 	 * Lower the hook to its downward position
 	 */
-	void lowerHook() {
+	public void lowerHook() {
 		telemetry.log("Hook servo - lowering hook");
 		hookServo.forward();
 		telemetry.log("Hook servo - hook lowered");
@@ -132,21 +132,21 @@ public class AarreRobot {
 	 * Lower the riser to its downward (least extended) position. This is the position that it will
 	 * need to be in at the beginning of the autonomous game when it is hanging from the lander.
 	 */
-	void lowerRiser() {
+	public void lowerRiser() {
 		riser.lower();
 	}
 
 	/**
 	 * Raise the arm to its upward position
 	 */
-	void raiseArm() {
+	public void raiseArm() {
 		arm.raise();
 	}
 
 	/**
 	 * Raise the hook to its upward position
 	 */
-	void raiseHook() {
+	public void raiseHook() {
 		telemetry.log("Hook servo - raising hook");
 		hookServo.reverse();
 		telemetry.log("Hook servo - hook raised");
@@ -156,7 +156,7 @@ public class AarreRobot {
 	 * Raise the riser to its upward (most extended) position. This is the position that it will
 	 * need to be in near the end of the game just before it latches on to the lander.
 	 */
-	void raiseRiser() {
+	public void raiseRiser() {
 		riser.raise();
 	}
 
