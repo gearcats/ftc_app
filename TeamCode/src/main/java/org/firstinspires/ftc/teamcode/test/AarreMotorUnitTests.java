@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Autonomous(name = "Aarre Motor Unit Tests", group = "Aarre")
 /**
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
+@Autonomous(name = "Aarre Motor Unit Tests", group = "Aarre")
 @Disabled
 public class AarreMotorUnitTests extends LinearOpMode {
 

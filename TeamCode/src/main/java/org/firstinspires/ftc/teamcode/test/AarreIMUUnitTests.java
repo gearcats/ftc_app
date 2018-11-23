@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.AarreIMU;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 @Autonomous(name = "Aarre IMU Unit Tests", group = "Aarre")
@@ -21,4 +22,14 @@ public class AarreIMUUnitTests extends LinearOpMode {
 	public final void testConstructor() {
 		imu = new AarreIMU(this);
 	}
+
+	/**
+	 * Must override runOpMode to avoid compiler error
+	 */
+	@Test
+	@Override
+	public final void runOpMode() {
+
+	}
+
 }
