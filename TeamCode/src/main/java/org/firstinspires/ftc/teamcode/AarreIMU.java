@@ -31,6 +31,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
@@ -54,6 +56,11 @@ import java.util.Locale;
  */
 public class AarreIMU {
 
+	HardwareMap    hardwareMap;
+	LinearOpMode   opMode;
+	AarreTelemetry telemetry;
+
+
 	// The IMU sensor object
 	BNO055IMU imu;
 
@@ -61,11 +68,26 @@ public class AarreIMU {
 	Orientation  angles;
 	Acceleration gravity;
 
-	public void AarreIMU() {
+	public void AarreIMU(LinearOpMode opMode) {
 
-		// Set up the parameters with which we will use our IMU. Note that integration
-		// algorithm here just reports accelerations to the logcat log; it doesn't actually
-		// provide positional information.
+		this.opMode = opMode;
+
+		telemetry = new AarreTelemetry(opMode.telemetry);
+		if (telemetry == null) {
+			throw new AssertionError("Unexpected null object: telemetry");
+		}
+
+		/**
+		 * hardwareMap will be null if we are running off-robot, but for testing purposes it is
+		 * still helpful to instantiate this object (rather than throwing an exception, for example).
+		 */
+		hardwareMap = opMode.hardwareMap;
+
+		/**
+		 * Set up the parameters with which we will use our IMU. Note that integration
+		 * algorithm here just reports accelerations to the logcat log; it doesn't actually
+		 * provide positional information.
+		 */
 		BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 		parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
 		parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -74,9 +96,11 @@ public class AarreIMU {
 		parameters.loggingTag = "IMU";
 		parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-		// Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
-		// on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
-		// and named "imu".
+		/**
+		 * Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port on a
+		 * Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+		 * and named "imu".
+		 */
 		imu = hardwareMap.get(BNO055IMU.class, "imu");
 		imu.initialize(parameters);
 
@@ -84,13 +108,13 @@ public class AarreIMU {
 		composeTelemetry();
 
 		// Wait until we're told to go
-		waitForStart();
+		opMode.waitForStart();
 
 		// Start the logging of measured acceleration
 		imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
 		// Loop and update the dashboard
-		while (opModeIsActive()) {
+		while (opMode.opModeIsActive()) {
 			telemetry.update();
 		}
 	}
@@ -101,8 +125,10 @@ public class AarreIMU {
 
 	void composeTelemetry() {
 
-		// At the beginning of each telemetry update, grab a bunch of data
-		// from the IMU that we will then display in separate lines.
+		/**
+		 * At the beginning of each telemetry update, grab a bunch of data
+		 * from the IMU that we will then display in separate lines.
+		 */
 		telemetry.addAction(new Runnable() {
 			@Override
 			public void run() {

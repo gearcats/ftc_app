@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.AarreRobot;
@@ -11,8 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Unit tests for AarreRobot class
+ *
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ *
  */
 @Autonomous(name = "Aarre Robot Unit Tests", group = "Aarre")
+@Disabled
 public class AarreRobotUnitTests extends LinearOpMode {
 
     /**
