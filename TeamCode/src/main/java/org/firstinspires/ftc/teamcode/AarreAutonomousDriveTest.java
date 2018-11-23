@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  */
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-@Autonomous(name = "Aarre Autonomous Dance", group = "Aarre")
+@Autonomous(name = "Aarre Autonomous Drive Test", group = "Aarre")
 public class AarreAutonomousDriveTest extends LinearOpMode {
 
 	private AarreTelemetry betterTelemetry;

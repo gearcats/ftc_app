@@ -429,22 +429,13 @@ public class AarreDriveMotors {
 			proportionPowerCurrentLeft = leftMotor.getProportionPowerCurrent();
 			proportionPowerCurrentRight = rightMotor.getProportionPowerCurrent();
 
+			proportionPowerNewLeft = leftMotor.getProportionPowerNew(proportionPowerRequestedLeft, proportionPowerCurrentLeft, powerIncrementAbsolute);
+			proportionPowerNewRight = rightMotor.getProportionPowerNew(proportionPowerRequestedRight, proportionPowerCurrentRight, powerIncrementAbsolute);
+
 			powerDeltaLeft = proportionPowerRequestedLeft - proportionPowerCurrentLeft;
 			powerDeltaRight = proportionPowerRequestedRight - proportionPowerCurrentRight;
 
 			greatestPowerDelta = Math.max(powerDeltaLeft, powerDeltaRight);
-
-			directionLeft = Math.signum(powerDeltaLeft);
-			directionRight = Math.signum(powerDeltaRight);
-
-			powerIncrementLeft = powerIncrementAbsolute * directionLeft;
-			powerIncrementRight = powerIncrementAbsolute * directionRight;
-
-			proportionPowerNewLeft = proportionPowerCurrentLeft + powerIncrementLeft;
-			proportionPowerNewRight = proportionPowerCurrentRight + powerIncrementRight;
-
-			proportionPowerNewLeft = Range.clip(proportionPowerNewLeft, -1.0, 1.0);
-			proportionPowerNewRight = Range.clip(proportionPowerNewRight, -1.0, 1.0);
 
 			leftMotor.setProportionPower(proportionPowerNewLeft);
 			rightMotor.setProportionPower(proportionPowerNewRight);

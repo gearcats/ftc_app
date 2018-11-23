@@ -96,6 +96,9 @@ public class AarreRiser {
 		return currentPosition;
 	}
 
+	/**
+	 * Lower the riser using the default method.
+	 */
 	public final void lower() {
 
 		telemetry.log("Riser - lowering riser");
