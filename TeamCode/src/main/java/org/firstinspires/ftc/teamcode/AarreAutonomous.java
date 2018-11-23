@@ -107,11 +107,11 @@ public class AarreAutonomous extends LinearOpMode {
 
             final double TIMEOUT = 5.0;
 
-            robot.encoderDrive(DRIVE_SPEED, INCHES, INCHES, TIMEOUT);
+            robot.drive(DRIVE_SPEED, INCHES, INCHES, TIMEOUT);
 
-            robot.encoderDrive(TURN_SPEED, INCHES, -INCHES, TIMEOUT);
+            robot.drive(TURN_SPEED, INCHES, -INCHES, TIMEOUT);
 
-            robot.encoderDrive(DRIVE_SPEED, -INCHES, -INCHES, TIMEOUT);
+            robot.drive(DRIVE_SPEED, -INCHES, -INCHES, TIMEOUT);
 
             betterTelemetry.log("Path", "Complete");
         }

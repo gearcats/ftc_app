@@ -4,7 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({AarreArmUnitTests.class, AarreAutonomousDriveByGyroUnitTests.class, AarreMotorUnitTests.class, AarreRiserUnitTests.class,
+@Suite.SuiteClasses({AarreArmUnitTests.class, AarreAutonomousDriveTestByGyroUnitTests.class, AarreMotorUnitTests.class, AarreRiserUnitTests.class,
 		AarreRobotUnitTests.class
 
 })

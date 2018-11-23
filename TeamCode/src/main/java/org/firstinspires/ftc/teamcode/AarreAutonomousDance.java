@@ -56,10 +56,10 @@ public class AarreAutonomousDance extends LinearOpMode {
         final double inches = 12.0;
         final double timeout = 5.0;
 
-        robot.encoderDrive(driveSpeed, inches, inches, timeout);
-        robot.encoderDrive(driveSpeed, -inches, -inches, timeout);
-        robot.encoderDrive(turnSpeed, inches, -inches, timeout);
-        robot.encoderDrive(turnSpeed, -inches, inches, timeout);
+        robot.drive(driveSpeed, inches, inches, timeout);
+        robot.drive(driveSpeed, -inches, -inches, timeout);
+        robot.drive(turnSpeed, inches, -inches, timeout);
+        robot.drive(turnSpeed, -inches, inches, timeout);
 
         robot.raiseArm();
         robot.lowerArm();

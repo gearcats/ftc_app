@@ -33,9 +33,6 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 /**
  * This file illustrates the concept of driving a path based on Gyro heading and encoder counts.
@@ -83,9 +80,8 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
     // The can/should be tweaked to suite the specific robot drive train.
     static final double DRIVE_SPEED = 0.7;     // Nominal speed for better accuracy.
     static final double TURN_SPEED = 0.5;     // Nominal half speed for better accuracy.
-    static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
-    static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
-    static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
+
+
     /* Declare OpMode members. */
     ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
 
@@ -93,28 +89,12 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
     private AarreRobot robot;
 
 
-    /**
-     * Get desired steering force.
-     *
-     * @param error  Error angle in robot relative degrees
-     * @param PCoeff Proportional Gain Coefficient
-     * @return Desired steering force.  +/- 1 range.  +ve = steer left
-     */
-    public static double getSteer(final double error, final double PCoeff) {
-        return Range.clip(error * PCoeff, -1, 1);
-    }
 
     @Override
     public final void runOpMode() {
 
         aarreTelemetry = new AarreTelemetry(telemetry);
         robot = new AarreRobot(this);
-
-        gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
-
-        // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
-        robot.getLeftMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.getRightMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
@@ -131,9 +111,6 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         telemetry.addData(">", "Robot Ready.");    //
         telemetry.update();
 
-        robot.getLeftMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.getRightMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
             telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
@@ -145,218 +122,20 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         // Put a hold after each turn
-        gyroDrive(DRIVE_SPEED, 48.0, 0.0);    // Drive FWD 48 inches
-        gyroTurn(TURN_SPEED, -45.0);         // Turn  CCW to -45 Degrees
-        gyroHold(TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
-        gyroDrive(DRIVE_SPEED, 12.0, -45.0);  // Drive FWD 12 inches at 45 degrees
-        gyroTurn(TURN_SPEED, 45.0);         // Turn  CW  to  45 Degrees
-        gyroHold(TURN_SPEED, 45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-        gyroTurn(TURN_SPEED, 0.0);         // Turn  CW  to   0 Degrees
-        gyroHold(TURN_SPEED, 0.0, 1.0);    // Hold  0 Deg heading for a 1 second
-        gyroDrive(DRIVE_SPEED, -48.0, 0.0);    // Drive REV 48 inches
+        robot.gyroDrive(DRIVE_SPEED, 12.0, 0.0);    // Drive FWD 12 inches
+        robot.gyroTurn(TURN_SPEED, -45.0);         // Turn  CCW to -45 Degrees
+        robot.gyroHold(TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
+        robot.gyroDrive(DRIVE_SPEED, 12.0, -45.0);  // Drive FWD 12 inches at 45 degrees
+        robot.gyroTurn(TURN_SPEED, 45.0);         // Turn  CW  to  45 Degrees
+        robot.gyroHold(TURN_SPEED, 45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
+        robot.gyroTurn(TURN_SPEED, 0.0);         // Turn  CW  to   0 Degrees
+        robot.gyroHold(TURN_SPEED, 0.0, 1.0);    // Hold  0 Deg heading for a 1 second
+        robot.gyroDrive(DRIVE_SPEED, -48.0, 0.0);    // Drive REV 48 inches
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
 
-    /**
-     * Method to drive on a fixed compass bearing (angle), based on encoder counts.
-     * Move will stop if either of these conditions occur:
-     * 1) Move gets to the desired position
-     * 2) Driver stops the opmode running.
-     *
-     * @param speed    Target speed for forward motion.  Should allow for _/- variance for adjusting heading
-     * @param distance Distance (in inches) to move from current position.  Negative distance means move backwards.
-     * @param angle    Absolute Angle (in Degrees) relative to last gyro reset.
-     *                 0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                 If a relative angle is required, add/subtract from current heading.
-     */
-    public void gyroDrive(final double speed,
-                          final double distance,
-                          final double angle) {
 
-        final int newLeftTarget;
-        final int newRightTarget;
-        final int moveCounts;
-        double max;
-        double error;
-        double steer;
-        double leftSpeed;
-        double rightSpeed;
-
-        // Ensure that the opmode is still active
-        if (opModeIsActive()) {
-
-            // Determine new target position, and pass to motor controller
-            //noinspection NumericCastThatLosesPrecision
-            moveCounts = (int) (distance * COUNTS_PER_INCH);
-            newLeftTarget = robot.getLeftMotor().getCurrentTickNumber() + moveCounts;
-            newRightTarget = robot.getRightMotor().getCurrentTickNumber() + moveCounts;
-
-            // Set Target and Turn On RUN_TO_POSITION
-            robot.getLeftMotor().setTargetPosition(newLeftTarget);
-            robot.getRightMotor().setTargetPosition(newRightTarget);
-
-            robot.getLeftMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.getRightMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // start motion.
-            final double adjustedSpeed = Range.clip(Math.abs(speed), 0.0, 1.0);
-            robot.getLeftMotor().rampPowerTo(adjustedSpeed);
-            robot.getRightMotor().rampPowerTo(adjustedSpeed);
-
-            // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() &&
-                    (robot.getLeftMotor().isBusy() && robot.getRightMotor().isBusy())) {
-
-                // adjust relative speed based on heading error.
-                error = getError(angle);
-                steer = getSteer(error, P_DRIVE_COEFF);
-
-                // if driving in reverse, the motor correction also needs to be reversed
-                if (distance < 0)
-                    steer *= -1.0;
-
-                leftSpeed = adjustedSpeed - steer;
-                rightSpeed = adjustedSpeed + steer;
-
-                // Normalize speeds if either one exceeds +/- 1.0;
-                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-                if (max > 1.0) {
-                    leftSpeed /= max;
-                    rightSpeed /= max;
-                }
-
-                robot.getLeftMotor().rampPowerTo(leftSpeed);
-                robot.getRightMotor().rampPowerTo(rightSpeed);
-
-                // Display drive status for the driver.
-                telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
-                telemetry.addData("Target", "%7d:%7d", newLeftTarget, newRightTarget);
-                telemetry.addData("Actual", "%7d:%7d", robot.getLeftMotor().getCurrentTickNumber(),
-                        robot.getRightMotor().getCurrentTickNumber());
-                telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
-                telemetry.update();
-            }
-
-            // Stop all motion;
-            robot.getLeftMotor().rampPowerTo(0);
-            robot.getRightMotor().rampPowerTo(0);
-
-            // Turn off RUN_TO_POSITION
-            robot.getLeftMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.getRightMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
-
-    /**
-     * Method to spin on central axis to point in a new direction.
-     * Move will stop if either of these conditions occur:
-     * 1) Move gets to the heading (angle)
-     * 2) Driver stops the opmode running.
-     *
-     * @param speed Desired speed of turn.
-     * @param angle Absolute Angle (in Degrees) relative to last gyro reset.
-     *              0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *              If a relative angle is required, add/subtract from current heading.
-     */
-    public void gyroTurn(final double speed, final double angle) {
-
-        // keep looping while we are still active, and not on heading.
-        while (opModeIsActive() && !isOnHeading(speed, angle, P_TURN_COEFF)) {
-            // Update telemetry & Allow time for other processes to run.
-            telemetry.update();
-        }
-    }
-
-    /**
-     * Method to obtain & hold a heading for a finite amount of time
-     * Move will stop once the requested time has elapsed
-     *
-     * @param speed    Desired speed of turn.
-     * @param angle    Absolute Angle (in Degrees) relative to last gyro reset.
-     *                 0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                 If a relative angle is required, add/subtract from current heading.
-     * @param holdTime Length of time (in seconds) to hold the specified heading.
-     */
-    public void gyroHold(final double speed, final double angle, final double holdTime) {
-
-        final ElapsedTime holdTimer = new ElapsedTime();
-
-        // keep looping while we have time remaining.
-        holdTimer.reset();
-        while (opModeIsActive() && (holdTimer.time() < holdTime)) {
-            // Update telemetry & Allow time for other processes to run.
-            isOnHeading(speed, angle, P_TURN_COEFF);
-            telemetry.update();
-        }
-
-        // Stop all motion;
-        robot.getLeftMotor().rampPowerTo(0);
-        robot.getRightMotor().rampPowerTo(0);
-    }
-
-    /**
-     * Perform one cycle of closed loop heading control.
-     *
-     * @param speed  Desired speed of turn.
-     * @param angle  Absolute Angle (in Degrees) relative to last gyro reset.
-     *               0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *               If a relative angle is required, add/subtract from current heading.
-     * @param PCoeff Proportional Gain coefficient
-     * @return {@code true} if the angular error is less than the heading threshold
-     *         (i.e., the robot is on the right heading).
-     *         {@code false} otherwise.
-     */
-    boolean isOnHeading(final double speed, final double angle, final double PCoeff) {
-        final double error;
-        final double steer;
-        boolean onTarget = false;
-        final double leftSpeed;
-        final double rightSpeed;
-
-        // determine turn power based on +/- error
-        error = getError(angle);
-
-        if (Math.abs(error) <= HEADING_THRESHOLD) {
-            steer = 0.0;
-            leftSpeed = 0.0;
-            rightSpeed = 0.0;
-            onTarget = true;
-        } else {
-            steer = getSteer(error, PCoeff);
-            rightSpeed = speed * steer;
-            leftSpeed = -rightSpeed;
-        }
-
-        // Send desired speeds to motors.
-        robot.getLeftMotor().rampPowerTo(leftSpeed);
-        robot.getRightMotor().rampPowerTo(rightSpeed);
-
-        // Display it for the driver.
-        telemetry.addData("Target", "%5.2f", angle);
-        telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
-        telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
-
-        return onTarget;
-    }
-
-    /**
-     * getError determines the error between the target angle and the robot's current heading
-     *
-     * @param targetAngle Desired angle (relative to global reference established at last Gyro Reset).
-     * @return error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
-     * +ve error means the robot should turn LEFT (CCW) to reduce error.
-     */
-    public double getError(final double targetAngle) {
-
-        double robotError;
-
-        // calculate error in -179 to +180 range  (
-        robotError = targetAngle - gyro.getIntegratedZValue();
-        while (robotError > 180) robotError -= 360;
-        while (robotError <= -180) robotError += 360;
-        return robotError;
-    }
 
 }

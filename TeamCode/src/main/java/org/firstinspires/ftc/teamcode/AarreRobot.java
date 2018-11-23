@@ -2,11 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines all the specific
@@ -27,14 +24,13 @@ public class AarreRobot {
 	 * <p>
 	 * TODO: Implement getters and setters to keep these properties private.
 	 */
-	AarreMotor   leftMotor;
-	AarreMotor   rightMotor;
-	AarreArm     arm;
-	AarreRiser   riser;
-	AarreServo   hookServo;
-	CRServo      scoopServo;
-	LinearOpMode opMode;
-	HardwareMap  hardwareMap;
+
+	AarreDriveMotors driveMotors;
+	AarreArm         arm;
+	AarreRiser       riser;
+	AarreServo       hookServo;
+	CRServo          scoopServo;
+	HardwareMap      hardwareMap;
 
 
 	/**
@@ -59,31 +55,12 @@ public class AarreRobot {
 		// must correspond to the names assigned in the robot configuration
 		// in the FTC Robot Controller app on the phone
 
-		AarreDrive drive = new AarreDrive(opMode);
+		AarreDriveMotors driveMotors = new AarreDriveMotors(opMode);
+
 		arm = new AarreArm(hardwareMap, "arm", telemetry, opMode);
 		riser = new AarreRiser(hardwareMap, "riser", telemetry, opMode);
 
-		// Configure drive motors such that a positive power command moves them forwards
-		// and causes the encoders to count UP. Note that, as in most robots, the drive
-		// motors are mounted in opposite directions. May need to be reversed if using AndyMark motors.
 
-		leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-		rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-
-		// Set all motors to zero power
-
-		// TODO: Ramp power on the motors simultaneously to avoid swerving
-		leftMotor.rampPowerTo(0.0);
-		rightMotor.rampPowerTo(0.0);
-
-		// This code REQUIRES that you have encoders on the wheel motors
-
-		leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-		rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 		// Define the servos
 
@@ -107,71 +84,29 @@ public class AarreRobot {
 	}
 
 
-	/**
-	 *  Perform a relative move, based on encoder counts.
-	 *  Encoders are not reset because the move is based on the current position.
-	 *  Move will stop if any of three conditions occur:
-	 *  1) Move gets to the desired position
-	 *  2) Move runs out of time
-	 *  3) Driver stops the OpMode running.
-	 */
-	final void encoderDrive(final double speed, final double leftInches, final double rightInches, final double timeoutS) {
-		final int newLeftTarget;
-		final int newRightTarget;
+	public void drive(double proportionPower, double leftInches, double rightInches, double secondsTimeout) {
 
-
-		// Determine new target position, and pass to motor controller
-		newLeftTarget = leftMotor.getCurrentTickNumber() + (int) (leftInches * AarreMotor.getTicksPerInch());
-		newRightTarget = rightMotor.getCurrentTickNumber() + (int) (rightInches * AarreMotor.getTicksPerInch());
-		leftMotor.setTargetPosition(newLeftTarget);
-		rightMotor.setTargetPosition(newRightTarget);
-
-		// Turn On RUN_TO_POSITION
-		leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-		rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-		// reset the timeout time and start motion.
-		final ElapsedTime runtime = new ElapsedTime();
-		leftMotor.rampPowerTo(Math.abs(speed));
-		rightMotor.rampPowerTo(Math.abs(speed));
-
-		// keep looping while we are still active, and there is time left, and both motors are running.
-		// Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-		// its target position, the motion will stop.  This is "safer" in the event that the robot will
-		// always end the motion as soon as possible.
-		// However, if you require that BOTH motors have finished their moves before the robot continues
-		// onto the next step, use (isBusy() || isBusy()) in the loop test.
-		while ((runtime.seconds() < timeoutS) && leftMotor.isBusy() && rightMotor.isBusy() && opMode.opModeIsActive()) {
-
-			//telemetry.log("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-			//telemetry.log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor.getCurrentTickNumber());
-
-		}
-
-		// Stop all motion;
-		leftMotor.rampPowerTo(0.0);
-		rightMotor.rampPowerTo(0.0);
-
-		// Turn off RUN_TO_POSITION
-		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+		driveMotors.drive(proportionPower, leftInches, rightInches, secondsTimeout);
 	}
 
 	public HardwareMap getHardwareMap() {
 		return hardwareMap;
 	}
 
-	public AarreMotor getLeftMotor() {
-		return leftMotor;
-	}
-
-	public AarreMotor getRightMotor() {
-		return rightMotor;
-	}
-
 	public AarreTelemetry getTelemetry() {
 		return (telemetry);
+	}
+
+	void gyroDrive(double proportionPower, double directionAndDistance, double secondsTime) {
+		driveMotors.gyroDrive(proportionPower, directionAndDistance, secondsTime);
+	}
+
+	void gyroHold(double proportionPower, double degreesHeading, double secondsTime) {
+		driveMotors.gyroHold(proportionPower, degreesHeading, secondsTime);
+	}
+
+	void gyroTurn(final double proportionPower, final double angle) {
+		driveMotors.gyroTurn(proportionPower, angle);
 	}
 
 	/**

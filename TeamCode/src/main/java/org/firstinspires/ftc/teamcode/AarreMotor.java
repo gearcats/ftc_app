@@ -31,7 +31,8 @@ public class AarreMotor {
 	private static final int    TICKS_PER_MOTOR_REVOLUTION = 1440;    // eg: TETRIX Motor Encoder, TorqueNado
 	private static final double DRIVE_GEAR_REDUCTION       = 1.0;     // This is 1.0 for our direct-drive wheels
 	private static final double WHEEL_DIAMETER_INCHES      = 5.5;     // For figuring circumference; could be 5.625, also depends on treads
-	private static final double TICKS_PER_INCH             = ((double) TICKS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+
+	static final double TICKS_PER_INCH = ((double) TICKS_PER_MOTOR_REVOLUTION * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
 	/**
 	 * These fields relate to ramping motor power gradually
@@ -91,7 +92,7 @@ public class AarreMotor {
 	 * @return The proportion of power at which the motor is operating.
 	 * 		A value in the range [-1, 1].
 	 */
-	private double getProportionPowerCurrent() {
+	public double getProportionPowerCurrent() {
 		return motor.getPower();
 	}
 
@@ -401,7 +402,7 @@ public class AarreMotor {
 	}
 
 	/**
-	 * Set the power level of the motor.
+	 * Set the power level of the motor without ramping.
 	 * <p>
 	 * Power is expressed as a fraction of the maximum possible power / speed supported according to
 	 * the run mode in which the motor is operating.
@@ -411,7 +412,7 @@ public class AarreMotor {
 	 * @param power
 	 * 		The new power level of the motor, a value in the interval [-1.0, 1.0]
 	 */
-	private void setProportionPower(final double power) {
+	public void setProportionPower(final double power) {
 		motor.setPower(power);
 	}
 

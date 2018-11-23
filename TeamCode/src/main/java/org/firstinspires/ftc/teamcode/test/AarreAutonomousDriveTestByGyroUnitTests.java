@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * Test constructing an instance of AarreAutonomousDriveByGyro
  */
-public class AarreAutonomousDriveByGyroUnitTests {
+public class AarreAutonomousDriveTestByGyroUnitTests {
 
     @Test
     public void testNewGyroObjectNotNull() {
