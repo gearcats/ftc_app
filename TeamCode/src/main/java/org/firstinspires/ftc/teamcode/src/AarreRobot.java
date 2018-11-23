@@ -28,8 +28,10 @@ public class AarreRobot {
 	 * TODO: Implement getters and setters to keep these properties private.
 	 */
 
-	AarreDriveMotors driveMotors;
+
 	AarreArm         arm;
+	AarreDriveMotors driveMotors;
+	AarreIMU         imu;
 	AarreRiser       riser;
 	AarreServo       hookServo;
 	CRServo          scoopServo;
@@ -63,8 +65,6 @@ public class AarreRobot {
 		arm = new AarreArm(hardwareMap, "arm", telemetry, opMode);
 		riser = new AarreRiser(hardwareMap, "riser", telemetry, opMode);
 
-
-
 		// Define the servos
 
 		hookServo = new AarreServo(hardwareMap, "hook", telemetry, opMode);
@@ -80,6 +80,11 @@ public class AarreRobot {
 		final double hookUpDegrees      = 0.0;
 		final double hookMaximumDegrees = 180.0;
 		hookServo.scaleRange(hookUpDegrees / hookMaximumDegrees, hookDownDegrees / hookMaximumDegrees);
+
+		/**
+		 * Initialize the IMU.
+		 */
+		imu = new AarreIMU(opMode);
 
 		// TODO: Initialize scoop servo
 		scoopServo = hardwareMap.get(CRServo.class, "scoop");

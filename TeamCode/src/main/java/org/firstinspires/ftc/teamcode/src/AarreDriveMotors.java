@@ -51,7 +51,7 @@ public class AarreDriveMotors {
 		leftMotor = new AarreMotor(opMode, "left");
 		rightMotor = new AarreMotor(opMode, "right");
 
-		gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
+		//gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
 
 		// Configure drive motors such that a positive power command moves them forwards
 		// and causes the encoders to count UP. Note that, as in most robots, the drive

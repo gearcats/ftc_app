@@ -12,9 +12,10 @@ import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
  * <p>
  * To avoid issuing an error on the phones, any OpMode class must be declared public.
  */
-@Autonomous(name = "Aarre Autonomous Drive Test", group = "Aarre")
+@Autonomous(name = "Aarre Autonomous IMU Test", group = "Aarre")
 public class AarreAutonomousIMUTest extends LinearOpMode {
 
+	AarreRobot     robot;
 	AarreTelemetry betterTelemetry;
 
 	@Override

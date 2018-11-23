@@ -87,7 +87,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 	static final double TURN_SPEED            = 0.5;     // Nominal half speed for better accuracy.
 
 
-	/* Declare OpMode members. */ ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
+	ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
 
 	private AarreTelemetry aarreTelemetry;
 	private AarreRobot     robot;
