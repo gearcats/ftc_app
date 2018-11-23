@@ -1,14 +1,17 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.src.AarreRobot;
+import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
+
 /**
- * Autonomously raise the riser
+ * Autonomously lower the riser.
  */
 
-@Autonomous(name = "Aarre Autonomous Riser Raise", group = "Aarre")
-public class AarreAutonomousRiserRaise extends LinearOpMode {
+@Autonomous(name = "Aarre Autonomous Riser Lower", group = "Aarre")
+public class AarreAutonomousRiserLower extends LinearOpMode {
 
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
@@ -44,9 +47,9 @@ public class AarreAutonomousRiserRaise extends LinearOpMode {
 		// Wait for the driver to press PLAY
 		waitForStart();
 
-		robot.raiseRiser();
+		robot.lowerRiser();
 
-		betterTelemetry.log("Riser raised");
+		betterTelemetry.log("Riser lowered");
 
 		// Wait until the driver presses STOP
 		//noinspection StatementWithEmptyBody

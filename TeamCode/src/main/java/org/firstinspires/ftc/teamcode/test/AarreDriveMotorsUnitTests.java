@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.AarreDriveMotors;
+import org.firstinspires.ftc.teamcode.src.AarreDriveMotors;
 import org.junit.jupiter.api.BeforeEach;
 
 /**

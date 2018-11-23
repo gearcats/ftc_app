@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.test;
 
-import org.firstinspires.ftc.teamcode.AarreRiser;
+import org.firstinspires.ftc.teamcode.src.AarreRiser;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;

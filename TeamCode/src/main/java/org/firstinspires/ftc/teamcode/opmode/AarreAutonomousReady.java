@@ -1,7 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.src.AarreRobot;
+import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
 /**
  * This file contains Aarre's experimental code to autonomously "reset" the robot to a state
@@ -16,7 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class AarreAutonomousReady extends LinearOpMode {
 
     private AarreTelemetry betterTelemetry;
-    private AarreRobot robot;
+    private AarreRobot     robot;
 
     /**
      * Properties inherited from LinearOpMode include:

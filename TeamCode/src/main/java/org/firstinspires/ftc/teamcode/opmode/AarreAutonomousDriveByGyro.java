@@ -27,12 +27,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opmode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.src.AarreRobot;
+import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
 /**
  * This file illustrates the concept of driving a path based on Gyro heading and encoder counts.
@@ -86,7 +89,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
     ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
 
     private AarreTelemetry aarreTelemetry;
-    private AarreRobot robot;
+    private AarreRobot     robot;
 
 
 

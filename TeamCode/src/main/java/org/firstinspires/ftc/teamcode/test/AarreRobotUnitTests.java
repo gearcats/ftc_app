@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.AarreRobot;
-import org.firstinspires.ftc.teamcode.AarreTelemetry;
+import org.firstinspires.ftc.teamcode.src.AarreRobot;
+import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
