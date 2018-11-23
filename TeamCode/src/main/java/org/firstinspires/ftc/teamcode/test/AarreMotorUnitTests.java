@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -90,11 +91,52 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void isRampToEncoderTicksDone01() {
 
-		int    ticksMaximum   = 1440;
+		/**
+		 * ticksMoved is less than ticksMaximum, so no reason to stop. (We haven't moved far enough
+		 * yet).
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = 0;
+
+		/**
+		 * Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
+		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 0.0;
-		int    ticksMoved     = 0;
-		double powerDelta     = 0.1;
+
+		/**
+		 * Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
+		 * enough yet.)
+		 */
+		double powerDelta = 0.1;     // Greater than default, so no reason to stop
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning,
+		                                                ticksMoved, powerDelta);
+
+		assertFalse(result);
+	}
+
+	@Test
+	public final void isRampToEncoderTicksDone02() {
+
+		/**
+		 * We have moved farther than we intended, so it is time to stop.
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = 1441;
+
+		/**
+		 * Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 0.0;
+
+		/**
+		 * Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
+		 * enough yet.)
+		 */
+		double powerDelta = 0.1;     // Greater than default, so no reason to stop
 
 		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
 		                                                secondsRunning,
@@ -103,6 +145,60 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		assertTrue(result);
 	}
 
+	@Test
+	public final void isRampToEncoderTicksDone03() {
+
+		/**
+		 * We have not moved enough yet, so continue.
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = 1439;
+
+		/**
+		 * Seconds running is more than timeout, so stop.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 6.0;
+
+		/**
+		 * Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
+		 * enough yet.)
+		 */
+		double powerDelta = 0.1;     // Greater than default, so no reason to stop
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning,
+		                                                ticksMoved, powerDelta);
+
+		assertTrue(result);
+	}
+
+	@Test
+	public final void isRampToEncoderTicksDone04() {
+
+		/**
+		 * We have not moved enough yet, so continue.
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = 1439;
+
+		/**
+		 * Seconds running is less than timeout, so continue.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
+
+		/**
+		 * Power delta is within tolerance, so stop.
+		 */
+		double powerDelta = 0.001;     // Greater than default, so no reason to stop
+
+		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                secondsRunning,
+		                                                ticksMoved, powerDelta);
+
+		assertTrue(result);
+	}
 
 	/**
 	 * Must override runOpMode to avoid compiler error

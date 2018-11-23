@@ -615,15 +615,29 @@ public class AarreMotor {
 		boolean valueToReturn = false;
 
 		if (ticksMoved >= ticksMaximum) {
+			telemetry.log("Loop done - moved far enough");
 			valueToReturn = true;
 		} else if (secondsRunning >= secondsTimeout) {
+			telemetry.log("Loop done - timed out");
 			valueToReturn = true;
 		} else if (powerDelta < DEFAULT_PROPORTION_POWER_TOLERANCE) {
+			telemetry.log("Loop done - power reached");
 			valueToReturn = true;
-		} else if (!opMode.opModeIsActive()) {
-			valueToReturn = true;
-		}
+		} else if (hardwareMap != null) {
 
+			telemetry.log("Loop check - Running on robot");
+
+			/*
+			 * Only check whether Op Mode is active if hardware map is
+			 * not null. Otherwise, we are running off-bot, and Op Mode
+			 * will never be active. Returning false in that case allows
+			 * us to use off-bot unit tests to test the other conditions.
+			 */
+			if (!opMode.opModeIsActive()) {
+				telemetry.log("Loop done - On robot but op mode is not active");
+				valueToReturn = true;
+			}
+		}
 		return valueToReturn;
 	}
 
