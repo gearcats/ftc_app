@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -59,19 +58,21 @@ public class AarreMotor {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
 
+		/**
+		 * hardwareMap will be null if we are running off-robot, but for testing purposes it is
+		 * still helpful to instantiate this object (rather than throwing an exception, for example).
+		 */
 		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {
-			throw new AssertionError("Unexpected null object: hardwareMap");
+			motor = null;
+		} else {
+			motor = hardwareMap.get(DcMotor.class, motorName);
+			motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		}
-
-		motor = hardwareMap.get(DcMotor.class, motorName);
 
 		// These are defaults. The user should customize them
 		stallDetectionToleranceInTicks = 5;
 		setStallTimeLimitInMilliseconds(100);
-
-		// Reset the encoder and force the motor to be stopped
-		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 	}
 
@@ -87,13 +88,37 @@ public class AarreMotor {
 
 
 	/**
-	 * Get the current proportion of power at
+	 * Get the current proportion of power
 	 *
-	 * @return The proportion of power at which the motor is operating.
-	 * 		A value in the range [-1, 1].
+	 * @return The proportion of power at which the motor is operating. A value in the range [-1,
+	 * 		1].
 	 */
 	public double getProportionPowerCurrent() {
 		return motor.getPower();
+	}
+
+	/**
+	 * Get the proportion of power to which to change the motor when ramping power up or down.
+	 * <p>
+	 * Must be public to allow access from unit test suite.
+	 *
+	 * @return The new proportion of power to apply to the motor.
+	 */
+	public double getProportionPowerNew(double proportionPowerCurrent, double proportionPowerRequested, double powerIncrementAbsolute) {
+
+		double direction;
+		double powerDelta;
+		double powerIncrement;
+		double proportionPowerNew;
+
+		powerDelta = proportionPowerRequested - proportionPowerCurrent;
+		direction = Math.signum(powerDelta);
+		powerIncrement = powerIncrementAbsolute * direction;
+		proportionPowerNew = proportionPowerCurrent + powerIncrement;
+		//proportionPowerNew = Range.clip(proportionPowerNew, -1.0, 1.0);
+
+		return proportionPowerNew;
+
 	}
 
 	/**
@@ -190,11 +215,11 @@ public class AarreMotor {
 	/**
 	 * Ramp the motor power up (or down) gradually to the requested proportion.
 	 * <p>
-	 * The idea is to prevent slipping, sliding, jerking, wheelies, etc. due to
-	 * excessive acceleration/deceleration.
+	 * The idea is to prevent slipping, sliding, jerking, wheelies, etc. due to excessive
+	 * acceleration/deceleration.
 	 * <p>
-	 * This method uses default value for parameters that are likly not of
-	 * interest to most callers.
+	 * This method uses default values for parameters that are likely not of interest to most
+	 * callers.
 	 *
 	 * @param proportionPowerRequested
 	 */
@@ -205,31 +230,28 @@ public class AarreMotor {
 	/**
 	 * Ramp the motor power up (or down) gradually to the requested amount.
 	 * <p>
-	 * The idea is to prevent slipping, sliding, jerking, wheelies, etc. due to
-	 * excessive acceleration/deceleration.
+	 * The idea is to prevent slipping, sliding, jerking, wheelies, etc. due to excessive
+	 * acceleration/deceleration.
 	 *
 	 * @param proportionPowerRequested
-	 * 		The power to which the caller would like to ramp the motor
-	 * 		at the end of the ramp. Positive values indicate forward power;
-	 * 		Negative values indicate reverse power. The value is expected to
-	 * 		be in the interval [-1, 1].
+	 * 		The power to which the caller would like to ramp the motor at the end of the ramp. Positive
+	 * 		values indicate forward power; Negative values indicate reverse power. The value is
+	 * 		expected to be in the interval [-1, 1].
 	 * @param powerIncrementAbsolute
-	 * 		How much to increase or decrease the power during each cycle.
-	 * 		The value is expected to be in the interval [0, 1].
+	 * 		How much to increase or decrease the power during each cycle. The value is expected to be
+	 * 		in the interval [0, 1].
 	 * @param millisecondsCycleLength
 	 * 		The length of each cycle in milliseconds.
 	 * @param proportionPowerTolerance
-	 * 		If the actual motor power is at least this close to the requested
-	 * 		motor power, then we stop incrementing the power.
+	 * 		If the actual motor power is at least this close to the requested motor power, then we stop
+	 * 		incrementing the power.
 	 */
 	public void rampPowerTo(final double proportionPowerRequested, final double powerIncrementAbsolute, final int millisecondsCycleLength, final double proportionPowerTolerance) {
 
 		ElapsedTime runtime;
 		double      proportionPowerCurrent;
-		double      powerDelta;
-		double      direction;
-		double      powerIncrement;
 		double      proportionPowerNew;
+		double      powerDelta;
 		double      millisecondsSinceChange;
 
 		powerDelta = 1.0;
@@ -238,10 +260,9 @@ public class AarreMotor {
 
 			proportionPowerCurrent = getProportionPowerCurrent();
 			powerDelta = proportionPowerRequested - proportionPowerCurrent;
-			direction = Math.signum(powerDelta);
-			powerIncrement = powerIncrementAbsolute * direction;
-			proportionPowerNew = proportionPowerCurrent + powerIncrement;
-			proportionPowerNew = Range.clip(proportionPowerNew, -1.0, 1.0);
+
+			proportionPowerNew = getProportionPowerNew(proportionPowerCurrent, proportionPowerRequested, powerIncrementAbsolute);
+
 			setProportionPower(proportionPowerNew);
 			runtime = new ElapsedTime();
 			millisecondsSinceChange = 0.0;
@@ -251,6 +272,8 @@ public class AarreMotor {
 				opMode.sleep((long) millisecondsSinceChange);
 				millisecondsSinceChange = runtime.milliseconds();
 			}
+
+
 
 		}
 
@@ -331,8 +354,8 @@ public class AarreMotor {
 	 * an encoder.
 	 *
 	 * @param proportionPower
-	 * 		Proportion of power to apply to the motor, in the range [-1.0, 1.0].
-	 * 		Negative values run the motor backward.
+	 * 		Proportion of power to apply to the motor, in the range [-1.0, 1.0]. Negative values run
+	 * 		the motor backward.
 	 * @param secondsToRun
 	 * 		Number of seconds for which to run the motor.
 	 */
