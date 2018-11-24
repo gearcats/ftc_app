@@ -35,61 +35,286 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	}
 
 	@Test
-	public final void testGetProportionNew01() {
+	public final void testGetNumberOfCycles01() {
+
+		int    ticksToMove              = 1440;
+		double currentPower             = 1.0;
+		double proportionPowerRequested = 0.0;
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower,
+		                                        proportionPowerRequested);
+
+		assertEquals(10, numCycles);
+	}
+
+	@Test
+	public final void testGetNumberOfCycles02() {
+
+		int    ticksToMove              = 1440;
+		double currentPower             = 0.1;
+		double proportionPowerRequested = 0.0;
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower,
+		                                        proportionPowerRequested);
+
+		assertEquals(1, numCycles);
+	}
+
+	@Test
+	public final void testGetNumberOfCycles03() {
+
+		int    ticksToMove              = 1440;
+		double currentPower             = -0.1;
+		double proportionPowerRequested = 0.0;
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower,
+		                                        proportionPowerRequested);
+
+		assertEquals(1, numCycles);
+	}
+
+	@Test
+	public final void testGetNumberOfCycles04() {
+
+		int    ticksToMove              = 1440;
+		double currentPower             = -1.0;
+		double proportionPowerRequested = 0.0;
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower,
+		                                        proportionPowerRequested);
+
+		assertEquals(10, numCycles);
+	}
+
+
+	@Test
+	public final void testGetProportionPowerNew01() {
 		double proportionPowerNew = motor.getProportionPowerNew(1.0, 0.0, 0.1);
 		assertEquals(0.9, proportionPowerNew, "Wrong proportion power");
 	}
 
 	@Test
-	public final void testGetProportionNew02() {
+	public final void testGetProportionPowerNew02() {
 		double proportionPowerNew = motor.getProportionPowerNew(-1.0, 0.0, 0.1);
 		assertEquals(-0.9, proportionPowerNew, "Wrong proportion power");
 	}
 
 	@Test
-	public final void testGetProportionNew03() {
+	public final void testGetProportionPowerNew03() {
 		double proportionPowerNew = motor.getProportionPowerNew(0.0, 1.0, 0.1);
 		assertEquals(0.1, proportionPowerNew, "Wrong proportion power");
 	}
 
 	@Test
-	public final void testGetProportionNew04() {
+	public final void testGetProportionPowerNew04() {
 		double proportionPowerNew = motor.getProportionPowerNew(0.0, -1.0, 0.1);
 		assertEquals(-0.1, proportionPowerNew, "Wrong proportion power");
 	}
 
 	@Test
-	public final void testGetProportionNew05() {
+	public final void testGetProportionPowerNew05() {
 		double proportionPowerNew = motor.getProportionPowerNew(1.0, -1.0, 0.1);
 		assertEquals(0.9, proportionPowerNew, "Wrong proportion power");
 	}
 
 	@Test
-	public final void testGetProportionNew06() {
+	public final void testGetProportionPowerNew06() {
 		double proportionPowerNew = motor.getProportionPowerNew(-1.0, 1.0, 0.1);
 		assertEquals(-0.9, proportionPowerNew, "Wrong proportion power");
 	}
 
 	@Test
-	public final void testGetProportionNew07() {
+	public final void testGetProportionPowerNew07() {
 		double proportionPowerNew = motor.getProportionPowerNew(-1.0, -1.0, 0.1);
 		assertEquals(-1.0, proportionPowerNew, "Wrong proportion power");
 	}
 
 	@Test
-	public final void testGetProportionNew08() {
+	public final void testGetProportionPowerNew08() {
 		double proportionPowerNew = motor.getProportionPowerNew(0.0, 0.0, 0.1);
 		assertEquals(0.0, proportionPowerNew, "Wrong proportion power");
 	}
 
 	@Test
-	public final void testGetProportionNew09() {
+	public final void testGetProportionPowerNew09() {
 		double proportionPowerNew = motor.getProportionPowerNew(1.0, 1.0, 0.1);
 		assertEquals(1.0, proportionPowerNew, "Wrong proportion power");
 	}
 
+	/**
+	 * Test that the new proportion of power increases correctly from 0 up.
+	 */
 	@Test
-	public final void testIsRampToEncoderTicksDone01() {
+	public final void testGetProportionPowerNew10() {
+
+		/*
+		 * The current power is ...
+		 */
+		double proportionPowerCurrent = 0.0;
+
+		/*
+		 * We are ramping to power of ...
+		 */
+		double proportionPowerRequested = 1.0;
+
+		/*
+		 * The power can increment by ...
+		 */
+		double powerIncrementAbsolute = 0.1;
+
+		/*
+		 * So the correct power is...
+		 */
+		double correctValue = 0.1;
+
+		double newProportion = motor.getProportionPowerNew(proportionPowerCurrent,
+		                                                   proportionPowerRequested,
+		                                                   powerIncrementAbsolute);
+
+		assertEquals(newProportion, correctValue);
+
+	}
+
+
+	/**
+	 * Test that the new proportion of power does not increase beyond 1.0
+	 */
+	@Test
+	public final void testGetProportionPowerNew11() {
+
+		/*
+		 * The current power is ...
+		 */
+		double proportionPowerCurrent = 1.0;
+
+		/*
+		 * We are ramping to power of ...
+		 */
+		double proportionPowerRequested = 1.0;
+
+		/*
+		 * The power can increment by ...
+		 */
+		double powerIncrementAbsolute = 0.1;
+
+		/*
+		 * So the correct power is...
+		 */
+		double correctValue = 1.0;
+
+		double newProportion = motor.getProportionPowerNew(proportionPowerCurrent,
+		                                                   proportionPowerRequested,
+		                                                   powerIncrementAbsolute);
+
+		assertEquals(newProportion, correctValue);
+
+	}
+
+	@Test
+	public final void testGetTickNumberToStartRampDown01() {
+
+		/*
+		 * A power difference of 1.0 requires 10 cycles of ramp.
+		 *
+		 * There are 120 ticks in a cycle, so the ramp should be 1200 ticks
+		 */
+		double powerAtStart = 1.0;
+		double powerAtEnd   = 0.0;
+
+		/*
+		 * Subtracting 1200 ticks from the total of 2000 should give us 800 ticks
+		 */
+		int ticksTotal = 2000;
+
+		int actual = motor.getTickNumberToStartRampDown(ticksTotal, powerAtStart, powerAtEnd);
+
+		assertEquals(800, actual);
+	}
+
+	@Test
+	public final void testGetTickNumberToStartRampDown02() {
+
+		int ticksTotal = 10000;
+
+		/*
+		 * A power difference of 1.0 requires 10 cycles of ramp.
+		 */
+		double powerAtStart = 1.0;
+		double powerAtEnd   = 0.0;
+
+		/*
+		 * There are 120 ticks in a cycle, so the ramp should be 1200 ticks
+		 */
+		int actual = motor.getTickNumberToStartRampDown(ticksTotal, powerAtStart, powerAtEnd);
+
+		/*
+		 * Subtracting 1200 ticks from the total of 10000 should give us 8800 ticks
+		 */
+		assertEquals(8800, actual);
+	}
+
+	/**
+	 * Test that isRampDownToEncoderTicksRunning returns true when the motor is close enough to the
+	 * target tick number.
+	 */
+	@Test
+	public final void testIsRampDownToEncoderTicksRunning01() {
+
+		int    tickNumberCurrent       = 900;
+		int    ticksTotal              = 1000;
+		double powerAtStart            = 1.0;
+		double powerAtEnd              = 0.0;
+		int    millisecondsCycleLength = 50;
+
+		boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberCurrent, ticksTotal,
+		                                                       powerAtStart, powerAtEnd);
+
+		assertEquals(true, result);
+	}
+
+	/**
+	 * Test that isRampDownToEncoderTicksRunning returns false when the motor is not close
+	 * enough to
+	 * the target tick number.
+	 */
+	@Test
+	public final void testIsRampDownToEncoderTicksRunning02() {
+
+
+		int    tickNumberCurrent       = 900;
+		int    ticksTotal              = 10000;
+		double powerAtStart            = 1.0;
+		double powerAtEnd              = 0.0;
+		int    millisecondsCycleLength = 50;
+
+		boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberCurrent, ticksTotal,
+		                                                       powerAtStart, powerAtEnd);
+
+		assertEquals(false, result);
+	}
+
+	/**
+	 * Test that isRampDownToEncoderTicksRunning returns true when enough ticks have passed
+	 */
+	@Test
+	public final void testIsRampDownToEncoderTicksRunning03() {
+
+
+		int    tickNumberCurrent       = 11000;
+		int    ticksTotal              = 10000;
+		double powerAtStart            = 1.0;
+		double powerAtEnd              = 0.0;
+		int    millisecondsCycleLength = 50;
+
+		boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberCurrent, ticksTotal,
+		                                                       powerAtStart, powerAtEnd);
+
+		assertEquals(true, result);
+	}
+
+
+	@Test
+	public final void testIsRampUpToEncoderTicksDone01() {
 
 		/**
 		 * ticksMoved is less than ticksMaximum, so no reason to stop. (We haven't moved far enough
@@ -115,15 +340,13 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = 0.6;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta,
-		                                                powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved, powerDelta, powerCurrent);
 
 		assertFalse(result);
 	}
 
 	@Test
-	public final void testIsRampToEncoderTicksDone02() {
+	public final void testIsRampUpToEncoderTicksDone02() {
 
 		/**
 		 * We have moved farther than we intended, so it is time to stop.
@@ -148,14 +371,14 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = 0.6;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta, powerCurrent);
 
 		assertTrue(result);
 	}
 
 	@Test
-	public final void testIsRampToEncoderTicksDone03() {
+	public final void testIsRampUpToEncoderTicksDone03() {
 
 		/**
 		 * We have not moved enough yet, so continue.
@@ -180,49 +403,55 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = 0.6;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved, powerDelta, powerCurrent);
 
 		assertTrue(result);
 	}
 
+	/**
+	 * Test that having reached the maximum power (having changes to power be within tolerance)
+	 * does
+	 * not cause the loop to stop - it should continue until the number of ticks is reached.
+	 */
 	@Test
-	public final void testIsRampToEncoderTicksDone04() {
+	public final void testIsRampUpToEncoderTicksDone04() {
 
-		/**
+		/*
 		 * We have not moved enough yet, so continue.
 		 */
 		int ticksMaximum = 1440;
 		int ticksMoved   = 1439;
 
-		/**
+		/*
 		 * Seconds running is less than timeout, so continue.
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/**
-		 * Power delta is within tolerance, so stop.
+		/*
+		 * Power delta is within tolerance, so continue.
+		 * (Continue moving, although power should not continue to increase.)
 		 */
 		double powerDelta = 0.001;
 
-		/**
+		/*
 		 * Current power is within reason, so no reason to stop.
 		 */
 		double powerCurrent = 0.6;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta,
-		                                                powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
-		assertTrue(result);
+		assertFalse(result);
+
 	}
 
 	/**
 	 * Test that moving exactly the right amount causes the check to stop.
 	 */
 	@Test
-	public final void testIsRampToEncoderTicksDone05() {
+	public final void testIsRampUpToEncoderTicksDone05() {
 
 		/**
 		 * We have moved exactly the right amount, so stop.
@@ -246,9 +475,9 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = 0.6;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta,
-		                                                powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
 		assertTrue(result);
 	}
@@ -257,7 +486,7 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	 * Test that reaching the target power by itself does not cause the check to stop.
 	 */
 	@Test
-	public final void testIsRampToEncoderTicksDone06() {
+	public final void testIsRampUpToEncoderTicksDone06() {
 
 		/**
 		 * We have not moved the right amount, so continue.
@@ -281,9 +510,9 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = 1.0;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta,
-		                                                powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
 		assertFalse(result);
 	}
@@ -293,7 +522,7 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	 * Test that a negative power delta by itself does not cause the check to stop.
 	 */
 	@Test
-	public final void testIsRampToEncoderTicksDone07() {
+	public final void testIsRampUpToEncoderTicksDone07() {
 
 		/**
 		 * We have not moved enough, so continue.
@@ -318,9 +547,9 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = 0.6;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta,
-		                                                powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
 		assertFalse(result);
 	}
@@ -329,7 +558,7 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	 * Test that a negative power by itself does not cause the check to stop.
 	 */
 	@Test
-	public final void testIsRampToEncoderTicksDone08() {
+	public final void testIsRampUpToEncoderTicksDone08() {
 
 		/**
 		 * We have not moved enough, so continue.
@@ -353,9 +582,9 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = -0.6;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta,
-		                                                powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
 		assertFalse(result);
 	}
@@ -364,7 +593,7 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	 * Test that a negative number of ticks does not cause the check to stop.
 	 */
 	@Test
-	public final void testIsRampToEncoderTicksDone09() {
+	public final void testIsRampUpToEncoderTicksDone09() {
 
 		/**
 		 * We have not moved enough, so continue.
@@ -388,9 +617,9 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = -0.6;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta,
-		                                                powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
 		assertFalse(result);
 	}
@@ -399,7 +628,7 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	 * Test that a negative tick maximum does not cause the loop to stop
 	 */
 	@Test
-	public final void testIsRampToEncoderTicksDone10() {
+	public final void testIsRampUpToEncoderTicksDone10() {
 
 		/**
 		 * We have not moved enough, so continue.
@@ -423,13 +652,12 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = -0.6;
 
-		boolean result = motor.isRampToEncoderTicksDone(ticksMaximum, secondsTimeout,
-		                                                secondsRunning, ticksMoved, powerDelta,
-		                                                powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
 		assertFalse(result);
 	}
-
 
 
 	/**

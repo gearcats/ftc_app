@@ -204,9 +204,9 @@ public class AarreRiser {
 		telemetry.log("Riser - riser raised");
 
 		/*
-		 * Brake the riser motor at the to so that gravity will not gently pull it down.
+		 * Hold the riser motor at the top so that gravity will not gently pull it down.
 		 */
-		motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+		motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 		currentPosition = 1.0;
 	}
 
