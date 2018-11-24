@@ -26,8 +26,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 public class AarreMotor {
 
-	static final         double TICKS_PER_MILLISECOND      =
-			TICKS_PER_SECOND / MILLISECONDS_PER_SECOND;
 	/*
 	 * Properties of the motor
 	 *
@@ -51,6 +49,8 @@ public class AarreMotor {
 	private static final int    SECONDS_PER_MINUTE         = 60;
 	private static final int    MILLISECONDS_PER_SECOND    = 1000;
 	static final         double TICKS_PER_SECOND           = TICKS_PER_MINUTE / SECONDS_PER_MINUTE;
+	static final         double TICKS_PER_MILLISECOND      =
+			TICKS_PER_SECOND / MILLISECONDS_PER_SECOND;
 	/*
 	 * These fields relate to ramping motor power gradually
 	 */
