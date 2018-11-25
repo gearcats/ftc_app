@@ -46,9 +46,11 @@ public class AarreAutonomousArmRaise extends LinearOpMode {
 		// Wait for the driver to press PLAY
 		waitForStart();
 
+		betterTelemetry.log("-- Raising arm --");
+
 		robot.raiseArm();
 
-		betterTelemetry.log("Riser raised");
+		betterTelemetry.log("-- Arm raised --");
 
 		// Wait until the driver presses STOP
 		//noinspection StatementWithEmptyBody

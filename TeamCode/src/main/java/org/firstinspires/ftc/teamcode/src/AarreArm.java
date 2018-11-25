@@ -75,7 +75,11 @@ public class AarreArm {
 	 * Lower the arm by the default method.
 	 */
 	public final void lower() {
-		lowerByTime();
+		lowerByRamp();
+	}
+
+	private void lowerByRamp() {
+		motor.rampToEncoderTicks(-0.5, 120, 1.0);
 	}
 
 	/**
@@ -132,7 +136,11 @@ public class AarreArm {
 	 * Raise the arm using the default method.
 	 */
 	public final void raise() {
-		raiseByTime();
+		raiseByRamp();
+	}
+
+	private void raiseByRamp() {
+		motor.rampToEncoderTicks(0.5, 120, 1.0);
 	}
 
 	/**

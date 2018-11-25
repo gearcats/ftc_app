@@ -46,9 +46,11 @@ public class AarreAutonomousArmLower extends LinearOpMode {
 		// Wait for the driver to press PLAY
 		waitForStart();
 
+		betterTelemetry.log("-- Lowering arm --");
+
 		robot.lowerArm();
 
-		betterTelemetry.log("Riser lowered");
+		betterTelemetry.log("-- Arm lowered --");
 
 		// Wait until the driver presses STOP
 		//noinspection StatementWithEmptyBody
