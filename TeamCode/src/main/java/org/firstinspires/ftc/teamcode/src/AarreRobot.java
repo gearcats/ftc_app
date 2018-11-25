@@ -47,9 +47,6 @@ public class AarreRobot {
 	public AarreRobot(final LinearOpMode opMode) {
 
 		telemetry = new AarreTelemetry(opMode.telemetry);
-		if (telemetry == null) {
-			throw new AssertionError("Unexpected null object: telemetry");
-		}
 
 		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {

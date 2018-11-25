@@ -24,9 +24,10 @@ public class AarreDriveMotors {
 	private static final double DEFAULT_POWER_INCREMENT_ABSOLUTE   = 0.1;
 	private static final int    DEFAULT_MILLISECONDS_CYCLE_LENGTH  = 50;
 	private static final double DEFAULT_PROPORTION_POWER_TOLERANCE = 0.01;
+
 	AarreTelemetry        telemetry;
-	AarreMotor            leftMotor;
-	AarreMotor            rightMotor;
+	AarreDriveMotor       leftMotor;
+	AarreDriveMotor       rightMotor;
 	HardwareMap           hardwareMap;
 	LinearOpMode          opMode;
 	ModernRoboticsI2cGyro gyro;
@@ -34,22 +35,15 @@ public class AarreDriveMotors {
 	public AarreDriveMotors(LinearOpMode opMode) {
 
 		telemetry = new AarreTelemetry(opMode.telemetry);
-		if (telemetry == null) {
-			throw new AssertionError("Unexpected null object: telemetry");
-		}
+		this.opMode = opMode;
 
 		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {
 			throw new AssertionError("Unexpected null object: hardwareMap");
 		}
 
-		this.opMode = opMode;
-		if (opMode == null) {
-			throw new AssertionError("Unexpected null object: opMode");
-		}
-
-		leftMotor = new AarreMotor(opMode, "left");
-		rightMotor = new AarreMotor(opMode, "right");
+		leftMotor = new AarreDriveMotor(opMode, "left");
+		rightMotor = new AarreDriveMotor(opMode, "right");
 
 		//gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
 
@@ -101,8 +95,10 @@ public class AarreDriveMotors {
 		final int newRightTarget;
 
 		// Determine new target position, and pass to motor controller
-		newLeftTarget = leftMotor.getCurrentTickNumber() + (int) (inchesTravelLeft * AarreMotor.getTicksPerInch());
-		newRightTarget = rightMotor.getCurrentTickNumber() + (int) (inchesTravelRight * AarreMotor.getTicksPerInch());
+		newLeftTarget = leftMotor.getCurrentTickNumber() +
+		                (int) (inchesTravelLeft * leftMotor.getTicksPerInch());
+		newRightTarget = rightMotor.getCurrentTickNumber() +
+		                 (int) (inchesTravelRight * rightMotor.getTicksPerInch());
 		leftMotor.setTargetPosition(newLeftTarget);
 		rightMotor.setTargetPosition(newRightTarget);
 
@@ -192,8 +188,7 @@ public class AarreDriveMotors {
 		if (opMode.opModeIsActive()) {
 
 			// Determine new target position, and pass to motor controller
-			//noinspection NumericCastThatLosesPrecision
-			moveCounts = (int) (distance * AarreMotor.TICKS_PER_INCH);
+			moveCounts = (int) (distance * leftMotor.getTicksPerInch());
 			newLeftTarget = leftMotor.getCurrentTickNumber() + moveCounts;
 			newRightTarget = rightMotor.getCurrentTickNumber() + moveCounts;
 

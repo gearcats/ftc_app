@@ -4,14 +4,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class AarreMotorTorqueNADO extends AarreMotor {
 
-	/*
-	 * How many encoder ticks in one revolution of the motor shaft
-	 * For TETRIX motors and TorqueNADO motors, this is 1440
-	 * For the REV HD Hex motor, it is 2240
-	 */
-	private static final int TICKS_PER_REVOLUTION = 1440;
+	private static final double TORQUENADO_REVOLUTIONS_PER_MINUTE = 100;
+
+	private static final int TORQUENADO_TICKS_PER_REVOLUTION = 1440;
 
 	public AarreMotorTorqueNADO(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);
+	}
+
+	public static AarreMotorTorqueNADO createAarreMotorTorqueNADO(LinearOpMode opMode, String
+			motorName) {
+		AarreMotorTorqueNADO motor = new AarreMotorTorqueNADO(opMode, motorName);
+		motor.setRevolutionsPerMinute(TORQUENADO_REVOLUTIONS_PER_MINUTE);
+		motor.setTicksPerRevolution(TORQUENADO_TICKS_PER_REVOLUTION);
+		return motor;
 	}
 }

@@ -73,11 +73,6 @@ public class AarreIMU {
 		this.opMode = opMode;
 
 		telemetry = new AarreTelemetry(opMode.telemetry);
-		if (telemetry == null) {
-			throw new AssertionError("Unexpected null object: telemetry");
-		}
-
-
 
 		/**
 		 * Set up the parameters with which we will use our IMU. Note that integration
