@@ -33,10 +33,10 @@ public class AarreRiser {
 
 
 
-	private double         currentPosition;
-	private AarreMotor     motor;
-	private AarreTelemetry telemetry;
-	private LinearOpMode   opMode;
+	private double               currentPosition;
+	private AarreMotorTorqueNADO motor;
+	private AarreTelemetry       telemetry;
+	private LinearOpMode         opMode;
 
 	/**
 	 * This empty constructor is useful for testing.
@@ -74,7 +74,7 @@ public class AarreRiser {
 
 		this.opMode = opMode;
 
-		motor = new AarreMotor(opMode, nameOfRiserMotor);
+		motor = new AarreMotorTorqueNADO(opMode, nameOfRiserMotor);
 
 		motor.rampToPower(0.0);
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

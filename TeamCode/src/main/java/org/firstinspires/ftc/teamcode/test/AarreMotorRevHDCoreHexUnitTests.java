@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @Autonomous(name = "Aarre Motor Unit Tests", group = "Aarre")
 @Disabled
-public class AarreMotorUnitTests extends LinearOpMode {
+public class AarreMotorRevHDCoreHexUnitTests extends LinearOpMode {
 
 	/**
 	 * Test AarreRobot
@@ -358,7 +358,7 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
 		                                                             tickNumberCurrent,
 		                                                             numberOfTicksInPeriod,
-		                                                       powerAtStart, powerAtEnd);
+		                                                             powerAtStart, powerAtEnd);
 
 		assertFalse(result);
 	}
@@ -390,7 +390,8 @@ public class AarreMotorUnitTests extends LinearOpMode {
 
 	/**
 	 * Test that isRampDownToEncoderTicksRunning returns true when enough ticks have passed to
-	 * start the ramp but not enough have passed to finish the required movement.
+	 * start
+	 * the ramp but not enough have passed to finish the required movement.
 	 */
 	@Test
 	public final void testIsRampDownToEncoderTicksRunning05() {
@@ -550,7 +551,6 @@ public class AarreMotorUnitTests extends LinearOpMode {
 	}
 
 
-
 	@Test
 	public final void testIsRampUpToEncoderTicksDone01() {
 
@@ -611,7 +611,9 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = 0.6;
 
-		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved, powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
 		assertTrue(result);
 	}
@@ -642,7 +644,9 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = 0.6;
 
-		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved, powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
 		assertTrue(result);
 	}
@@ -891,7 +895,9 @@ public class AarreMotorUnitTests extends LinearOpMode {
 		 */
 		double powerCurrent = -0.6;
 
-		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved, powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout,
+		                                                  secondsRunning, ticksMoved, powerDelta,
+		                                                  powerCurrent);
 
 		assertFalse(result);
 	}
