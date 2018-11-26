@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @Autonomous(name = "Aarre Robot Unit Tests", group = "Aarre")
 @Disabled
-public class AarreRobotUnitTests extends LinearOpMode {
+class AarreRobotUnitTests extends LinearOpMode {
 
 	/**
 	 * Test AarreRobot
@@ -30,7 +30,7 @@ public class AarreRobotUnitTests extends LinearOpMode {
 	AarreRobot robot;
 
 	@Test
-	public final void testConstructor() {
+	final void testConstructor() {
 
 		try {
 			robot = new AarreRobot(this);
@@ -41,7 +41,7 @@ public class AarreRobotUnitTests extends LinearOpMode {
 	}
 
 	@Test
-	public final void testTelemetryExists() {
+	final void testTelemetryExists() {
 
 		assertNotNull(telemetry);
 		AarreTelemetry aarreTelemetry = new AarreTelemetry(telemetry);
