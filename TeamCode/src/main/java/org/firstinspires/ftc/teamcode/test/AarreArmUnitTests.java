@@ -6,21 +6,21 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AarreArmUnitTests {
+class AarreArmUnitTests {
 
-    AarreArm arm;
+    private final AarreArm arm;
 
     AarreArmUnitTests() {
         arm = new AarreArm();
     }
 
     @Test
-    public void testNewAarreArmObjectNotNull() {
+    final void testNewAarreArmObjectNotNull() {
         assertNotNull(arm);
     }
 
     @Test
-    public void testLowerMethod() {
+    final void testLowerMethod() {
         assertThrows(NullPointerException.class, () -> {
             arm.lower();
         });
@@ -29,7 +29,7 @@ public class AarreArmUnitTests {
     }
 
     @Test
-    public void testRaiseMethod() {
+    final void testRaiseMethod() {
         assertThrows(NullPointerException.class, () -> {
             arm.raise();
         });

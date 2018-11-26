@@ -207,42 +207,40 @@ public class AarreMotor {
 	 * 		down at the end but any time/ticks running at speed before the ramp).
 	 * @param numberOfTicksInPeriod
 	 * 		The total number of ticks in the period.
-	 * @param powerAtStart
+	 * @param powerAtStartOfPeriod
 	 * 		The motor power at the start of the period, in the range [-1,1].
-	 * @param powerAtEnd
+	 * @param powerAtEndOfPeriod
 	 * 		The power that should be applied to the motor at the end of the period, in the range
 	 * 		[-1,1].
 	 *
 	 * @return
 	 */
-	public double getTickNumberToStartRampDown(final int tickNumberAtStartOfPeriod, final int
-			numberOfTicksInPeriod, final double powerAtStart, final double powerAtEnd) {
+	public double getTickNumberToStartRampDown(final int tickNumberAtStartOfPeriod, final int numberOfTicksInPeriod, final double powerAtStartOfPeriod, final double powerAtEndOfPeriod) {
 
 		/*
 		 * A ramp down can occur with either positive or negative power
 		 *
 		 * Consider a ramp down from 0.5 to 0 versus a ramp down from -0.5 to 0.
 		 *
-		 * Thus we cannot assume that powerAtStart is greater than powerAtEnd
+		 * Thus we cannot assume that powerAtStartOfPeriod is greater than powerAtEndOfPeriod
 		 */
-		if (Math.abs(powerAtStart) <= Math.abs(powerAtEnd)) {
+		if (Math.abs(powerAtStartOfPeriod) <= Math.abs(powerAtEndOfPeriod)) {
 			throw new IllegalArgumentException("When ramping down, the absolute value of the " +
 			                                   "power at the start of the ramp must be greater " +
 			                                   "than the absolute value of the power at the end " +
 			                                   "of the ramp.");
 		}
 
-		double powerChangeAbsolute;
-		double powerChangeDirection;
-
 		final double numberOfCyclesInRamp;
+		final double numberOfTicksInRamp;
 		final double numberOfTicksToChange;
+		final double powerChangeAbsolute;
+		final double powerChangeDirection;
 		final double tickNumberAtEndOfPeriod;
 		final double tickNumberToStartRampDown;
-		final double numberOfTicksInRamp;
 
-		powerChangeAbsolute = Math.abs(powerAtStart - powerAtEnd);
-		powerChangeDirection = Math.signum(powerAtStart - powerAtEnd);
+		powerChangeAbsolute = Math.abs(powerAtStartOfPeriod - powerAtEndOfPeriod);
+		powerChangeDirection = Math.signum(powerAtStartOfPeriod - powerAtEndOfPeriod);
 
 		numberOfCyclesInRamp = powerChangeAbsolute / POWER_INCREMENT_PER_CYCLE;
 		numberOfTicksInRamp = numberOfCyclesInRamp * getTicksPerCycle();
@@ -336,8 +334,10 @@ public class AarreMotor {
 	}
 
 	/**
+	 * Determine whether a ramp down should be running
+	 *
 	 * @param tickNumberAtStartOfPeriod
-	 * 		The motor encoder tick number at which the period (including both the ramp at the
+	 * 		The motor encoder tick number at which the period (including both the ramp and the
 	 * 		portion at speed before the ramp) started.
 	 * @param tickNumberCurrent
 	 * 		The current motor encoder tick number.
@@ -583,18 +583,7 @@ public class AarreMotor {
 		runtimeFromStart = new ElapsedTime();
 		tickNumberStart = getCurrentTickNumber();
 
-		/*
-		 * Wait for the right time to start ramping down
-		 */
-		keepWaiting = true;
-		while (keepWaiting && opMode.opModeIsActive()) {
-			opMode.idle();
-			tickNumberCurrent = getCurrentTickNumber();
-			proportionPowerCurrent = getProportionPowerCurrent();
-			keepWaiting = !isRampDownToEncoderTicksRunning(tickNumberStart, tickNumberCurrent,
-			                                               ticksToMove, proportionPowerCurrent,
-			                                               proportionPowerAtEndAbsolute);
-		}
+		waitForRampDown(proportionPowerAtEndAbsolute, ticksToMove, tickNumberStart);
 
 		/*
 		 * Ramp down
@@ -635,6 +624,33 @@ public class AarreMotor {
 			                                            proportionPowerCurrent,
 			                                            proportionPowerAtEndAbsolute);
 
+		}
+	}
+
+	/**
+	 * Wait until it is time to begin ramping down power to the motor.
+	 *
+	 * @param proportionPowerAtEndAbsolute
+	 * @param ticksToMove
+	 * @param tickNumberStart
+	 */
+	private void waitForRampDown(double proportionPowerAtEndAbsolute, int ticksToMove, int
+			tickNumberStart) {
+		boolean keepWaiting;
+		int     tickNumberCurrent;
+		double  proportionPowerCurrent;
+
+		/*
+		 * Wait for the right time to start ramping down
+		 */
+		keepWaiting = true;
+		while (keepWaiting && opMode.opModeIsActive()) {
+			opMode.idle();
+			tickNumberCurrent = getCurrentTickNumber();
+			proportionPowerCurrent = getProportionPowerCurrent();
+			keepWaiting = !isRampDownToEncoderTicksRunning(tickNumberStart, tickNumberCurrent,
+			                                               ticksToMove, proportionPowerCurrent,
+			                                               proportionPowerAtEndAbsolute);
 		}
 	}
 
