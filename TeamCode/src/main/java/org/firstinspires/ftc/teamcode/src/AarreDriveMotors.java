@@ -13,8 +13,10 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class AarreDriveMotors {
 
-	static final double P_TURN_COEFF  = 0.1;     // Larger is more responsive, but also less stable
-	static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
+	static final double P_TURN_COEFFICIENT  = 0.1;     // Larger is more responsive, but also less
+	// stable
+	static final double P_DRIVE_COEFFICIENT = 0.15;     // Larger is more responsive, but also
+	// less stable
 
 	/**
 	 * As tight as we can make it with an integer gyro
@@ -72,13 +74,13 @@ public class AarreDriveMotors {
 	 *
 	 * @param error
 	 * 		Error angle in robot relative degrees
-	 * @param PCoeff
+	 * @param proportionalGainCoefficient
 	 * 		Proportional Gain Coefficient
 	 *
 	 * @return Desired steering force.  +/- 1 range.  +ve = steer left
 	 */
-	public static double getSteer(final double error, final double PCoeff) {
-		return Range.clip(error * PCoeff, -1.0, 1.0);
+	public static double getSteer(final double error, final double proportionalGainCoefficient) {
+		return Range.clip(error * proportionalGainCoefficient, -1.0, 1.0);
 	}
 
 	/**
@@ -209,7 +211,7 @@ public class AarreDriveMotors {
 
 				// adjust relative speed based on heading error.
 				error = getError(angle);
-				steer = getSteer(error, P_DRIVE_COEFF);
+				steer = getSteer(error, P_DRIVE_COEFFICIENT);
 
 				// if driving in reverse, the motor correction also needs to be reversed
 				if (distance < 0.0) {
@@ -269,7 +271,7 @@ public class AarreDriveMotors {
 		holdTimer.reset();
 		while (opMode.opModeIsActive() && (holdTimer.time() < holdTime)) {
 			// Update telemetry & Allow time for other processes to run.
-			isOnHeading(proportionPower, angle, P_TURN_COEFF);
+			isOnHeading(proportionPower, angle, P_TURN_COEFFICIENT);
 			telemetry.update();
 		}
 
@@ -294,7 +296,8 @@ public class AarreDriveMotors {
 	public void gyroTurn(final double proportionPowerRequested, final double angle) {
 
 		// keep looping while we are still active, and not on heading.
-		while (opMode.opModeIsActive() && !isOnHeading(proportionPowerRequested, angle, P_TURN_COEFF)) {
+		while (opMode.opModeIsActive() &&
+		       !isOnHeading(proportionPowerRequested, angle, P_TURN_COEFFICIENT)) {
 			// Update telemetry & Allow time for other processes to run.
 			telemetry.update();
 		}
@@ -309,14 +312,15 @@ public class AarreDriveMotors {
 	 * 		Absolute Angle (in Degrees) relative to last gyro reset.
 	 * 		0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
 	 * 		If a relative angle is required, add/subtract from current heading.
-	 * @param PCoeff
+	 * @param proportionalGainCoefficient
 	 * 		Proportional Gain coefficient
 	 *
 	 * @return {@code true} if the angular error is less than the heading threshold
 	 * 		(i.e., the robot is on the right heading).
 	 * 		{@code false} otherwise.
 	 */
-	boolean isOnHeading(final double speed, final double angle, final double PCoeff) {
+	boolean isOnHeading(final double speed, final double angle, final double
+			proportionalGainCoefficient) {
 		final double error;
 		final double steer;
 		boolean      onTarget = false;
@@ -332,7 +336,7 @@ public class AarreDriveMotors {
 			rightSpeed = 0.0;
 			onTarget = true;
 		} else {
-			steer = getSteer(error, PCoeff);
+			steer = getSteer(error, proportionalGainCoefficient);
 			rightSpeed = speed * steer;
 			leftSpeed = -rightSpeed;
 		}

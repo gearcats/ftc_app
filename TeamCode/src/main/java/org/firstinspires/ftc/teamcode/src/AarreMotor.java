@@ -238,7 +238,7 @@ public class AarreMotor {
 		final double numberOfCyclesInRamp;
 		final double numberOfTicksToChange;
 		final double tickNumberAtEndOfPeriod;
-		final double tickNumberToStartRampdown;
+		final double tickNumberToStartRampDown;
 		final double numberOfTicksInRamp;
 
 		powerChangeAbsolute = Math.abs(powerAtStart - powerAtEnd);
@@ -249,9 +249,9 @@ public class AarreMotor {
 		numberOfTicksToChange = powerChangeDirection * numberOfTicksInRamp;
 		tickNumberAtEndOfPeriod =
 				tickNumberAtStartOfPeriod + (numberOfTicksInPeriod * powerChangeDirection);
-		tickNumberToStartRampdown = tickNumberAtEndOfPeriod - numberOfTicksToChange;
+		tickNumberToStartRampDown = tickNumberAtEndOfPeriod - numberOfTicksToChange;
 
-		return tickNumberToStartRampdown;
+		return tickNumberToStartRampDown;
 	}
 
 	/**
@@ -367,11 +367,11 @@ public class AarreMotor {
 		boolean result = false;
 
 		int tickNumberGoal = tickNumberAtStartOfPeriod + numberOfTicksInPeriod;
-		double tickToStartRampdown = getTickNumberToStartRampDown(tickNumberAtStartOfPeriod,
+		double tickToStartRampDown = getTickNumberToStartRampDown(tickNumberAtStartOfPeriod,
 		                                                          numberOfTicksInPeriod,
 		                                                          powerAtStart, powerAtEnd);
 
-		if ((tickNumberCurrent >= tickToStartRampdown) &&
+		if ((tickNumberCurrent >= tickToStartRampDown) &&
 		    (tickNumberCurrent <= numberOfTicksInPeriod)) {
 			result = true;
 		}

@@ -138,7 +138,7 @@ public class AarreIMU {
 			public String value() {
 				return imu.getSystemStatus().toShortString();
 			}
-		}).addData("calib", new Func<String>() {
+		}).addData("Calibration", new Func<String>() {
 			@Override
 			public String value() {
 				return imu.getCalibrationStatus().toString();
@@ -162,7 +162,7 @@ public class AarreIMU {
 			}
 		});
 
-		telemetry.addLine().addData("grvty", new Func<String>() {
+		telemetry.addLine().addData("Gravity", new Func<String>() {
 			@Override
 			public String value() {
 				return gravity.toString();
