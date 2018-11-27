@@ -42,9 +42,6 @@ public class AarreDriveMotors {
 		this.opMode = opMode;
 
 		hardwareMap = opMode.hardwareMap;
-		if (hardwareMap == null) {
-			throw new AssertionError("Unexpected null object: hardwareMap");
-		}
 
 		leftMotor = new AarreDriveMotor(opMode, "left");
 		rightMotor = new AarreDriveMotor(opMode, "right");

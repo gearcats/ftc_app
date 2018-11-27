@@ -21,19 +21,12 @@ class AarreArmUnitTests {
 
     @Test
     final void testLowerMethod() {
-        assertThrows(NullPointerException.class, () -> {
-            arm.lower();
-        });
-
-        double position = arm.getCurrentPosition();
+        assertThrows(NullPointerException.class, arm::lower);
     }
 
     @Test
     final void testRaiseMethod() {
-        assertThrows(NullPointerException.class, () -> {
-            arm.raise();
-        });
-        double position = arm.getCurrentPosition();
+        assertThrows(NullPointerException.class, arm::raise);
     }
 
 }
