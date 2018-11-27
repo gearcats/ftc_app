@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
+import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
@@ -46,16 +48,16 @@ import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 @Autonomous(name = "Aarre Autonomous", group = "Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
-	private static final double         INCHES            = 12.0;
-	private static final double         TIMEOUT           = 5.0;
+	private static final double              INCHES                = 12.0;
+	private static final double              TIMEOUT               = 5.0;
 	// How fast to move forward or back
-	private static final double         DRIVE_SPEED       = 0.6;
+	private static final AarrePowerMagnitude DRIVE_POWER_MAGNITUDE = new AarrePowerMagnitude(0.6);
 	// How fast to move when turning
-	private static final double         TURN_SPEED        = 0.5;
-	private static final double         TEST_TIME_SECONDS = 0.5;
-	private final        ElapsedTime    runtime           = new ElapsedTime();
-	private              AarreTelemetry betterTelemetry;
-	private              AarreRobot     robot;
+	private static final AarrePowerMagnitude    TURN_POWER_MAGNITUDE  = new AarrePowerMagnitude(0.5);
+	private static final double              TEST_TIME_SECONDS     = 0.5;
+	private final        ElapsedTime         runtime               = new ElapsedTime();
+	private              AarreTelemetry      betterTelemetry;
+	private              AarreRobot          robot;
 
 	public AarreAutonomous() {
 	}
@@ -100,11 +102,11 @@ public class AarreAutonomous extends LinearOpMode {
 			// Step through each leg of the path,
 			// Note: Reverse movement is obtained by setting a negative distance (not speed)
 
-			robot.drive(DRIVE_SPEED, INCHES, INCHES, TIMEOUT);
+			robot.drive(DRIVE_POWER_MAGNITUDE, INCHES, INCHES, TIMEOUT);
 
-			robot.drive(TURN_SPEED, INCHES, -INCHES, TIMEOUT);
+			robot.drive(TURN_POWER_MAGNITUDE, INCHES, -INCHES, TIMEOUT);
 
-			robot.drive(DRIVE_SPEED, -INCHES, -INCHES, TIMEOUT);
+			robot.drive(DRIVE_POWER_MAGNITUDE, -INCHES, -INCHES, TIMEOUT);
 
 			betterTelemetry.log("Path", "Complete");
 		}

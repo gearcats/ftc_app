@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.src.AarreMotorRevHDCoreHex;
 
+import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,11 +43,11 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 	public final void testIsRampDownToEncoderTicksRunning01() {
 
 
-		final int    tickNumberAtStartOfPeriod = 100;
-		final int    tickNumberCurrent         = 1000;
-		final int    numberOfTicksInPeriod     = 1000;
-		final double powerAtStart              = 1.0;
-		final double powerAtEnd                = 0.0;
+		final int              tickNumberAtStartOfPeriod = 100;
+		final int              tickNumberCurrent         = 1000;
+		final int              numberOfTicksInPeriod     = 1000;
+		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
 
 		boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
 		                                                       tickNumberCurrent,
@@ -89,8 +90,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 		/*
 		 * A power difference of 1.0 requires 10 cycles of ramp.
 		 */
-		double powerAtStart = 1.0;
-		double powerAtEnd   = 0.0;
+		AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		final int tickNumberAtStartOfPeriod = 0;
 		final int numberOfTicksInPeriod     = 10000;
@@ -115,8 +116,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 	@Test
 	public final void testGetTickNumberToStartRampDown01() {
 
-		final double powerAtStart = 1.0;
-		final double powerAtEnd   = 0.0;
+		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
+		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		final int tickNumberAtStartOfPeriod = 0;
 		final int numberOfTicksInPeriod     = 2000;
@@ -153,8 +154,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 		final int tickNumberCurrent         = 61;
 		final int numberOfTicksInPeriod     = 120;
 
-		double powerAtStart = 0.5;
-		double powerAtEnd   = 0.0;
+		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		/*
 		 * Need 5 test cycles
@@ -184,8 +185,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 		final int tickNumberCurrent         = 114;
 		final int numberOfTicksInPeriod     = 120;
 
-		double powerAtStart = 0.5;
-		double powerAtEnd   = 0.0;
+		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		/*
 		 * Need 5 test cycles
@@ -212,8 +213,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 
 		final int    tickNumberAtStartOfPeriod = 60;
 		final int    numberOfTicksInPeriod     = 10000;
-		final double powerAtStart              = 1.0;
-		final double powerAtEnd                = 0.0;
+		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
 		 * 10 power cycles
@@ -239,8 +240,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 		/*
 		 * A power difference of 1.0 requires 5 cycles of ramp.
 		 */
-		double powerAtStart = 0.5;
-		double powerAtEnd   = 0.0;
+		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		final int tickNumberAtStartOfPeriod = 0;
 		final int numberOfTicksInPeriod     = 120;
@@ -267,8 +268,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 		final int    tickNumberAtStartOfPeriod = -60;
 		final int    tickNumberCurrent         = -900;
 		final int    numberOfTicksInPeriod     = 1000;
-		final double powerAtStart              = 1.0;
-		final double powerAtEnd                = 0.0;
+		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of ramp
@@ -299,8 +300,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 		final int tickNumberCurrent         = -61;
 		final int numberOfTicksInPeriod     = 120;
 
-		double powerAtStart = 0.5;
-		double powerAtEnd   = 0.0;
+		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		/*
 		 * Power change requires 5 cycles
@@ -327,8 +328,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 		final int tickNumberAtStartOfPeriod = 0;
 		final int numberOfTicksInPeriod     = 120;
 
-		double powerAtStart = 0.5;
-		double powerAtEnd   = 0.0;
+		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		/*
 		 * Power change requires 5 cycles

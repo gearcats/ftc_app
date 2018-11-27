@@ -23,9 +23,11 @@ public class AarreDriveMotors {
 	 */
 	static final double HEADING_THRESHOLD = 1.0;
 
-	private static final double DEFAULT_POWER_INCREMENT_ABSOLUTE   = 0.1;
+	private static final AarrePowerMagnitude DEFAULT_POWER_INCREMENT_ABSOLUTE   = new
+			AarrePowerMagnitude(0.1);
 	private static final int    DEFAULT_MILLISECONDS_CYCLE_LENGTH  = 50;
-	private static final double DEFAULT_PROPORTION_POWER_TOLERANCE = 0.01;
+	private static final AarrePowerMagnitude DEFAULT_PROPORTION_POWER_TOLERANCE = new
+			AarrePowerMagnitude(0.01);
 
 	AarreTelemetry        telemetry;
 	AarreDriveMotor       leftMotor;
@@ -58,7 +60,7 @@ public class AarreDriveMotors {
 
 		// Set all motors to zero power
 
-		rampPowerTo(0.0);
+		rampPowerTo(new AarrePowerVector(0.0));
 
 		// This code REQUIRES that you have encoders on the wheel motors
 
@@ -78,9 +80,11 @@ public class AarreDriveMotors {
 	 * 		Proportional Gain Coefficient
 	 *
 	 * @return Desired steering force.  +/- 1 range.  +ve = steer left
+	 *
+	 * TODO: Eliminate use of Range.clip here
 	 */
-	public static double getSteer(final double error, final double proportionalGainCoefficient) {
-		return Range.clip(error * proportionalGainCoefficient, -1.0, 1.0);
+	public static AarrePowerVector getSteer(final double error, final double proportionalGainCoefficient) {
+		return new AarrePowerVector(Range.clip(error * proportionalGainCoefficient, -1.0, 1.0));
 	}
 
 	/**
@@ -90,8 +94,19 @@ public class AarreDriveMotors {
 	 * 1) Move gets to the desired position
 	 * 2) Move runs out of time
 	 * 3) Driver stops the OpMode running.
+	 *
+	 * @param powerMagnitude The magnitude of power to apply to the wheels.
+	 * @param inchesTravelLeft How many inches to move the left wheel. Negative values move the
+	 *                            left wheel in reverse.
+	 * @param inchesTravelRight How many inches to move the right wheel. Negative values move the
+	 *                            right wheel in reverse.
+	 * @param secondsTimeout
+	 *
+	 * TODO: Catch impossible combinations of inchesTravelLeft and inchesTravelRight.
+	 *
 	 */
-	final void drive(final double proportionPower, final double inchesTravelLeft, final double inchesTravelRight, final double secondsTimeout) {
+	final void drive(final AarrePowerMagnitude powerMagnitude, final double inchesTravelLeft, final
+	double inchesTravelRight, final double secondsTimeout) {
 
 		final int newLeftTarget;
 		final int newRightTarget;
@@ -110,7 +125,12 @@ public class AarreDriveMotors {
 
 		// reset the timeout time and start motion.
 		final ElapsedTime runtime = new ElapsedTime();
-		rampPowerTo(proportionPower);
+
+		int leftPowerDirection = (int)Math.signum(inchesTravelLeft);
+		int rightPowerDirection = (int)Math.signum(inchesTravelRight);
+		AarrePowerVector leftPowerVector = new AarrePowerVector(powerMagnitude, leftPowerDirection);
+		AarrePowerVector rightPowerVector = new AarrePowerVector(powerMagnitude, rightPowerDirection);
+		rampPowerTo(leftPowerVector,rightPowerVector);
 
 		// keep looping while we are still active, and there is time left, and both motors are running.
 		// Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -126,8 +146,8 @@ public class AarreDriveMotors {
 		}
 
 		// Stop all motion;
-		leftMotor.rampToPower(0.0);
-		rightMotor.rampToPower(0.0);
+		leftMotor.rampToPower(new AarrePowerVector(0.0));
+		rightMotor.rampToPower(new AarrePowerVector(0.0));
 
 		// Turn off RUN_TO_POSITION
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -165,8 +185,8 @@ public class AarreDriveMotors {
 	 * 1) Move gets to the desired position
 	 * 2) Driver stops the opmode running.
 	 *
-	 * @param speed
-	 * 		Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+	 * @param powerVector
+	 * 		Target powerVector for forward motion.  Should allow for _/- variance for adjusting heading
 	 * @param distance
 	 * 		Distance (in inches) to move from current position.  Negative distance means move
 	 * 		backwards.
@@ -175,16 +195,16 @@ public class AarreDriveMotors {
 	 * 		0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
 	 * 		If a relative angle is required, add/subtract from current heading.
 	 */
-	public void gyroDrive(final double speed, final double distance, final double angle) {
+	public void gyroDrive(final AarrePowerVector powerVector, final double distance, final double angle) {
 
 		final int newLeftTarget;
 		final int newRightTarget;
 		final int moveCounts;
 		double    max;
 		double    error;
-		double    steer;
-		double    leftSpeed;
-		double    rightSpeed;
+		AarrePowerVector    steer;
+		AarrePowerVector    leftPowerVector;
+		AarrePowerVector    rightPowerVector;
 
 		// Ensure that the opmode is still active
 		if (opMode.opModeIsActive()) {
@@ -202,46 +222,48 @@ public class AarreDriveMotors {
 			rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 			// start motion.
-			final double adjustedSpeed = Range.clip(Math.abs(speed), 0.0, 1.0);
-			leftMotor.rampToPower(adjustedSpeed);
-			rightMotor.rampToPower(adjustedSpeed);
+			final AarrePowerVector powerVectorAdjusted = powerVector;
+			leftMotor.rampToPower(powerVector);
+			rightMotor.rampToPower(powerVector);
 
 			// keep looping while we are still active, and BOTH motors are running.
 			while (opMode.opModeIsActive() && (leftMotor.isBusy() && rightMotor.isBusy())) {
 
-				// adjust relative speed based on heading error.
+				// adjust relative powerVector based on heading error.
 				error = getError(angle);
 				steer = getSteer(error, P_DRIVE_COEFFICIENT);
 
 				// if driving in reverse, the motor correction also needs to be reversed
 				if (distance < 0.0) {
-					steer *= -1.0;
+					steer.reverseDirection();
 				}
 
-				leftSpeed = adjustedSpeed - steer;
-				rightSpeed = adjustedSpeed + steer;
+				leftPowerVector = powerVectorAdjusted.subtract(steer);
+				rightPowerVector = powerVectorAdjusted.add(steer);
 
 				// Normalize speeds if either one exceeds +/- 1.0;
-				max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+				// TODO: Avoid allowing speeds to go outside the bounds of +/- 1.0 in the first
+				// place
+				max = Math.max(leftPowerVector.asDouble(), rightPowerVector.asDouble());
 				if (max > 1.0) {
-					leftSpeed /= max;
-					rightSpeed /= max;
+					leftPowerVector = leftPowerVector.divideBy(max);
+					rightPowerVector = rightPowerVector.divideBy(max);
 				}
 
-				leftMotor.rampToPower(leftSpeed);
-				rightMotor.rampToPower(rightSpeed);
+				leftMotor.rampToPower(leftPowerVector);
+				rightMotor.rampToPower(rightPowerVector);
 
 				// Display drive status for the driver.
 				telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
 				telemetry.addData("Target", "%7d:%7d", newLeftTarget, newRightTarget);
 				telemetry.addData("Actual", "%7d:%7d", leftMotor.getCurrentTickNumber(), rightMotor.getCurrentTickNumber());
-				telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+				telemetry.addData("Speed", "%5.2f:%5.2f", leftPowerVector, rightPowerVector);
 				telemetry.update();
 			}
 
 			// Stop all motion;
-			leftMotor.rampToPower(0.0);
-			rightMotor.rampToPower(0.0);
+			leftMotor.rampToPower(new AarrePowerVector(0.0));
+			rightMotor.rampToPower(new AarrePowerVector(0.0));
 
 			// Turn off RUN_TO_POSITION
 			leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -254,7 +276,7 @@ public class AarreDriveMotors {
 	 * Method to obtain & hold a heading for a finite amount of time
 	 * Move will stop once the requested time has elapsed
 	 *
-	 * @param proportionPower
+	 * @param powerVector
 	 * 		Desired speed of turn.
 	 * @param angle
 	 * 		Absolute Angle (in Degrees) relative to last gyro reset.
@@ -263,7 +285,8 @@ public class AarreDriveMotors {
 	 * @param holdTime
 	 * 		Length of time (in seconds) to hold the specified heading.
 	 */
-	public void gyroHold(final double proportionPower, final double angle, final double holdTime) {
+	public void gyroHold(final AarrePowerVector powerVector, final double angle, final double
+			holdTime) {
 
 		final ElapsedTime holdTimer = new ElapsedTime();
 
@@ -271,13 +294,13 @@ public class AarreDriveMotors {
 		holdTimer.reset();
 		while (opMode.opModeIsActive() && (holdTimer.time() < holdTime)) {
 			// Update telemetry & Allow time for other processes to run.
-			isOnHeading(proportionPower, angle, P_TURN_COEFFICIENT);
+			isOnHeading(powerVector, angle, P_TURN_COEFFICIENT);
 			telemetry.update();
 		}
 
 		// Stop all motion;
-		leftMotor.rampToPower(0.0);
-		rightMotor.rampToPower(0.0);
+		leftMotor.rampToPower(new AarrePowerVector(0.0));
+		rightMotor.rampToPower(new AarrePowerVector(0.0));
 	}
 
 	/**
@@ -286,18 +309,18 @@ public class AarreDriveMotors {
 	 * 1) Move gets to the heading (angle)
 	 * 2) Driver stops the opmode running.
 	 *
-	 * @param proportionPowerRequested
+	 * @param powerVectorRequested
 	 * 		Desired speed of turn.
 	 * @param angle
 	 * 		Absolute Angle (in Degrees) relative to last gyro reset.
 	 * 		0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
 	 * 		If a relative angle is required, add/subtract from current heading.
 	 */
-	public void gyroTurn(final double proportionPowerRequested, final double angle) {
+	public void gyroTurn(final AarrePowerVector powerVectorRequested, final double angle) {
 
 		// keep looping while we are still active, and not on heading.
 		while (opMode.opModeIsActive() &&
-		       !isOnHeading(proportionPowerRequested, angle, P_TURN_COEFFICIENT)) {
+		       !isOnHeading(powerVectorRequested, angle, P_TURN_COEFFICIENT)) {
 			// Update telemetry & Allow time for other processes to run.
 			telemetry.update();
 		}
@@ -319,36 +342,38 @@ public class AarreDriveMotors {
 	 * 		(i.e., the robot is on the right heading).
 	 * 		{@code false} otherwise.
 	 */
-	boolean isOnHeading(final double speed, final double angle, final double
+	boolean isOnHeading(final AarrePowerVector powerVector, final double angle, final double
 			proportionalGainCoefficient) {
 		final double error;
-		final double steer;
+		final AarrePowerVector steer;
+
 		boolean      onTarget = false;
-		final double leftSpeed;
-		final double rightSpeed;
+		final AarrePowerVector leftPowerVector;
+		final AarrePowerVector rightPowerVector;
 
 		// determine turn power based on +/- error
 		error = getError(angle);
 
 		if (Math.abs(error) <= HEADING_THRESHOLD) {
-			steer = 0.0;
-			leftSpeed = 0.0;
-			rightSpeed = 0.0;
+			// Keep on truckin'...
+			leftPowerVector = new AarrePowerVector(0.0);
+			rightPowerVector = new AarrePowerVector(0.0);
 			onTarget = true;
 		} else {
 			steer = getSteer(error, proportionalGainCoefficient);
-			rightSpeed = speed * steer;
-			leftSpeed = -rightSpeed;
+			rightPowerVector = powerVector.multiplyBy(steer);
+			leftPowerVector = new AarrePowerVector(rightPowerVector);
+			leftPowerVector.reverseDirection();
 		}
 
 		// Send desired speeds to motors.
-		leftMotor.rampToPower(leftSpeed);
-		rightMotor.rampToPower(rightSpeed);
+		leftMotor.rampToPower(leftPowerVector);
+		rightMotor.rampToPower(rightPowerVector);
 
 		// Display it for the driver.
 		telemetry.addData("Target", "%5.2f", angle);
-		telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
-		telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+		telemetry.addData("Err/St", "%5.2f/%5.2f", error, powerVector);
+		telemetry.addData("Speed.", "%5.2f:%5.2f", leftPowerVector, rightPowerVector);
 
 		return onTarget;
 	}
@@ -357,7 +382,7 @@ public class AarreDriveMotors {
 	/**
 	 * Ramp the motors to the same power level using default parameters
 	 */
-	public void rampPowerTo(double power) {
+	public void rampPowerTo(AarrePowerVector power) {
 		rampPowerTo(power, power);
 
 	}
@@ -365,12 +390,13 @@ public class AarreDriveMotors {
 	/**
 	 * Ramp the motors to potentially different power levels using default parameters.
 	 *
-	 * @param proportionPowerRequestedLeft
-	 * @param proportionPowerRequestedRight
+	 * @param powerVectorRequestedLeft
+	 * @param powerVectorRequestedRight
 	 */
-	private void rampPowerTo(final double proportionPowerRequestedLeft, final double proportionPowerRequestedRight) {
+	private void rampPowerTo(final AarrePowerVector powerVectorRequestedLeft, final AarrePowerVector
+			powerVectorRequestedRight) {
 
-		rampPowerTo(proportionPowerRequestedLeft, proportionPowerRequestedRight, DEFAULT_POWER_INCREMENT_ABSOLUTE, DEFAULT_MILLISECONDS_CYCLE_LENGTH, DEFAULT_PROPORTION_POWER_TOLERANCE);
+		rampPowerTo(powerVectorRequestedLeft, powerVectorRequestedRight, DEFAULT_POWER_INCREMENT_ABSOLUTE, DEFAULT_MILLISECONDS_CYCLE_LENGTH, DEFAULT_PROPORTION_POWER_TOLERANCE);
 	}
 
 
@@ -380,12 +406,12 @@ public class AarreDriveMotors {
 	 * The idea is to prevent slipping, sliding, jerking, wheelies, etc. due to
 	 * excessive acceleration/deceleration.
 	 *
-	 * @param proportionPowerRequestedLeft
+	 * @param powerVectorRequestedLeft
 	 * 		The power to which the caller would like to ramp the left motor
 	 * 		at the end of the ramp. Positive values indicate forward power;
 	 * 		Negative values indicate reverse power. The value is expected to
 	 * 		be in the interval [-1, 1].
-	 * @param proportionPowerRequestedRight
+	 * @param powerVectorRequestedRight
 	 * 		The power to which the caller would like to ramp the right motor
 	 * 		at the end of the ramp. Positive values indicate forward power;
 	 * 		Negative values indicate reverse power. The value is expected to
@@ -395,49 +421,59 @@ public class AarreDriveMotors {
 	 * 		The value is expected to be in the interval [0, 1].
 	 * @param millisecondsCycleLength
 	 * 		The length of each cycle in milliseconds.
-	 * @param proportionPowerTolerance
+	 * @param powerVectorTolerance
 	 * 		If the actual motor power is at least this close to the requested
 	 * 		motor power, then we stop incrementing the power.
 	 */
-	public void rampPowerTo(final double proportionPowerRequestedLeft, final double proportionPowerRequestedRight, final double powerIncrementAbsolute, final int millisecondsCycleLength, final double proportionPowerTolerance) {
+	public void rampPowerTo(final AarrePowerVector powerVectorRequestedLeft, final AarrePowerVector
+			powerVectorRequestedRight, final AarrePowerMagnitude powerIncrementAbsolute, final int
+			millisecondsCycleLength, final AarrePowerMagnitude powerMagnitudeTolerance) {
 
 		ElapsedTime runtime;
 
-		double proportionPowerCurrentLeft;
-		double proportionPowerCurrentRight;
+		AarrePowerVector powerVectorCurrentLeft;
+		AarrePowerVector powerVectorCurrentRight;
 
-		double powerDeltaLeft;
-		double greatestPowerDelta;
-		double powerDeltaRight;
+		AarrePowerVector powerDeltaLeftVector;
+		AarrePowerVector powerDeltaRightVector;
 
-		double directionLeft;
-		double directionRight;
+		AarrePowerMagnitude powerDeltaLeftMagnitude;
+		AarrePowerMagnitude powerDeltaRightMagnitude;
 
-		double powerIncrementLeft;
-		double powerIncrementRight;
+		double           greatestPowerDeltaDouble;
+		AarrePowerMagnitude greatestPowerDeltaMagnitude;
 
-		double proportionPowerNewLeft;
-		double proportionPowerNewRight;
+		AarrePowerVector powerVectorNewLeft;
+		AarrePowerVector powerVectorNewRight;
 
 		double millisecondsSinceChange;
 
-		greatestPowerDelta = 1.0;
+		greatestPowerDeltaMagnitude = new AarrePowerMagnitude(1.0);
 
-		while ((greatestPowerDelta > proportionPowerTolerance) && opMode.opModeIsActive()) {
+		while ((greatestPowerDeltaMagnitude.isGreaterThan(powerMagnitudeTolerance)) && opMode
+				.opModeIsActive
+				()) {
 
-			proportionPowerCurrentLeft = leftMotor.getProportionPowerCurrent();
-			proportionPowerCurrentRight = rightMotor.getProportionPowerCurrent();
+			powerVectorCurrentLeft = leftMotor.getPowerVectorCurrent();
+			powerVectorCurrentRight = rightMotor.getPowerVectorCurrent();
 
-			proportionPowerNewLeft = leftMotor.getProportionPowerNew(proportionPowerRequestedLeft, proportionPowerCurrentLeft, powerIncrementAbsolute);
-			proportionPowerNewRight = rightMotor.getProportionPowerNew(proportionPowerRequestedRight, proportionPowerCurrentRight, powerIncrementAbsolute);
+			powerVectorNewLeft = leftMotor.getPowerVectorNew(powerVectorRequestedLeft,
+			                                                 powerVectorCurrentLeft, powerIncrementAbsolute);
+			powerVectorNewRight = rightMotor.getPowerVectorNew(powerVectorRequestedRight,
+			                                                   powerVectorCurrentRight, powerIncrementAbsolute);
 
-			powerDeltaLeft = proportionPowerRequestedLeft - proportionPowerCurrentLeft;
-			powerDeltaRight = proportionPowerRequestedRight - proportionPowerCurrentRight;
+			powerDeltaLeftVector = powerVectorRequestedLeft.subtract(powerVectorCurrentLeft);
+			powerDeltaRightVector = powerVectorRequestedRight.subtract(powerVectorCurrentRight);
 
-			greatestPowerDelta = Math.max(powerDeltaLeft, powerDeltaRight);
+			powerDeltaLeftMagnitude = powerDeltaLeftVector.getMagnitude();
+			powerDeltaRightMagnitude = powerDeltaRightVector.getMagnitude();
 
-			leftMotor.setProportionPower(proportionPowerNewLeft);
-			rightMotor.setProportionPower(proportionPowerNewRight);
+			greatestPowerDeltaDouble = Math.max(powerDeltaLeftMagnitude.asDouble(), powerDeltaRightMagnitude
+					.asDouble());
+			greatestPowerDeltaMagnitude = new AarrePowerMagnitude(greatestPowerDeltaDouble);
+
+			leftMotor.setPowerVector(powerVectorNewLeft);
+			rightMotor.setPowerVector(powerVectorNewRight);
 
 			runtime = new ElapsedTime();
 			millisecondsSinceChange = 0.0;

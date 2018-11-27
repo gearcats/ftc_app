@@ -17,10 +17,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * <p>
  * It might be preferable (e.g., more elegant, less wrapper code needed) to extend the FTC
  * DcMotorImpl class rather than wrap it. However, it seems that extending the DcMotorImpl class is
- * not recommended. See
- * <a href=https://ftcforum.usfirst.org/forum/ftc-technology/4717-how-to-extend-the-dcmotor-class
- * ></a>
- * for a discussion.
+ * not recommended. See <a href=https://ftcforum.usfirst
+ * .org/forum/ftc-technology/4717-how-to-extend-the-dcmotor-class
+ * ></a> for a discussion.
  * <p>
  * Stall detection and telemetry code adapted from
  * <a href="https://github.com/TullyNYGuy/FTC8863_ftc_app/blob/master/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Lib/FTCLib/DcMotor8863.java"></a>
@@ -28,17 +27,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class AarreMotor {
 
 
-	private static final int    SECONDS_PER_MINUTE         = 60;
+	private static final int SECONDS_PER_MINUTE = 60;
 
-	private static final int    MILLISECONDS_PER_SECOND    = 1000;
+	private static final int MILLISECONDS_PER_SECOND = 1000;
 
-	private static final int    MILLISECONDS_PER_CYCLE     = 50;
+	private static final int MILLISECONDS_PER_CYCLE = 50;
 
-	private static final double POWER_INCREMENT_PER_CYCLE  = 0.1;
-	private static final double PROPORTION_POWER_TOLERANCE = 0.01;
-	private static final double DEFAULT_SECONDS_TIMEOUT    = 5.0;
-	private static final int    RAMP_DIRECTION_DOWN        = -1;
-	private static final int    RAMP_DIRECTION_UP          = 1;
+	private static final AarrePowerMagnitude POWER_INCREMENT_PER_CYCLE  = new AarrePowerMagnitude
+			(0.1);
+	private static final AarrePowerMagnitude PROPORTION_POWER_TOLERANCE = new AarrePowerMagnitude
+			(0.01);
+	private static final double              DEFAULT_SECONDS_TIMEOUT    = 5.0;
+	private static final int                 RAMP_DIRECTION_DOWN        = -1;
+	private static final int                 RAMP_DIRECTION_UP          = 1;
 
 
 	private final DcMotor        motor;
@@ -139,15 +140,19 @@ public class AarreMotor {
 	 * <p>
 	 * The current power is a parameter here (instead of using the getter for the corresponding
 	 * class field) to allow for off-bot unit testing.
+	 * <p>
+	 * TODO: Take ticksToMove into account???
 	 */
-	public int getNumberOfCycles(int ticksToMove, double proportionPowerCurrent, double
-			proportionPowerRequested) {
+	public int getNumberOfCycles(int ticksToMove, AarrePowerVector powerVectorCurrent,
+	                             AarrePowerVector powerVectorRequested) {
 
-		double proportionPowerChange;
-		int    cyclesToChange;
+		int cyclesToChange;
 
-		proportionPowerChange = Math.abs(proportionPowerRequested - proportionPowerCurrent);
-		cyclesToChange = (int) Math.round(proportionPowerChange / POWER_INCREMENT_PER_CYCLE);
+		AarrePowerVector    powerChangeVector    = powerVectorRequested.subtract
+				(powerVectorCurrent);
+		AarrePowerMagnitude powerChangeMagnitude = powerChangeVector.getMagnitude();
+		cyclesToChange = (int) Math.round(
+				powerChangeMagnitude.asDouble() / POWER_INCREMENT_PER_CYCLE.asDouble());
 
 		return cyclesToChange;
 
@@ -159,8 +164,8 @@ public class AarreMotor {
 	 * @return The proportion of power at which the motor is operating. A value in the range [-1,
 	 * 		1].
 	 */
-	public double getProportionPowerCurrent() {
-		return motor.getPower();
+	public AarrePowerVector getPowerVectorCurrent() {
+		return new AarrePowerVector(motor.getPower());
 	}
 
 	/**
@@ -169,27 +174,39 @@ public class AarreMotor {
 	 * Must be public to allow access from unit test suite.
 	 *
 	 * @return The new proportion of power to apply to the motor.
+	 * 		<p>
+	 * 		TODO: Why is powerIncrementMagnitude never used?
 	 */
-	public double getProportionPowerNew(double proportionPowerCurrent, double
-			proportionPowerRequested, double powerIncrementAbsolute) {
+	/**
+	 *
+	 * @param powerVectorCurrent
+	 * @param powerVectorRequested
+	 * @param powerIncrementMagnitude
+	 * @return
+	 */
+	public AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent,
+	                                          AarrePowerVector powerVectorRequested,
+	                                          AarrePowerMagnitude powerIncrementMagnitude) {
 
-		double direction;
-		double powerDelta;
-		double powerIncrement;
-		double proportionPowerNew;
+		int                 direction;
+		AarrePowerVector    powerChangeVector;
+		AarrePowerMagnitude powerChangeMagnitude;
+		AarrePowerVector    powerVectorNew;
 
-		powerDelta = proportionPowerRequested - proportionPowerCurrent;
+		powerChangeVector = powerVectorRequested.subtract(powerVectorCurrent);
+		powerChangeMagnitude = new AarrePowerMagnitude(powerChangeVector);
 
-		if (Math.abs(powerDelta) < PROPORTION_POWER_TOLERANCE) {
-			proportionPowerNew = proportionPowerRequested;
+		if (powerChangeMagnitude.isLessThan(PROPORTION_POWER_TOLERANCE)) {
+			powerVectorNew = powerVectorRequested;
 		}
 		else {
-			direction = Math.signum(powerDelta);
-			powerIncrement = powerIncrementAbsolute * direction;
-			proportionPowerNew = proportionPowerCurrent + powerIncrement;
+			direction = powerChangeVector.getDirection();
+			AarrePowerVector powerIncrementVector = new AarrePowerVector(powerIncrementMagnitude,
+			                                                     direction);
+			powerVectorNew = powerVectorCurrent.add(powerIncrementVector);
 		}
 
-		return proportionPowerNew;
+		return powerVectorNew;
 
 	}
 
@@ -215,7 +232,9 @@ public class AarreMotor {
 	 *
 	 * @return
 	 */
-	public double getTickNumberToStartRampDown(final int tickNumberAtStartOfPeriod, final int numberOfTicksInPeriod, final double powerAtStartOfPeriod, final double powerAtEndOfPeriod) {
+	public double getTickNumberToStartRampDown(final int tickNumberAtStartOfPeriod, final int
+			numberOfTicksInPeriod, final AarrePowerVector powerAtStartOfPeriod, final
+	AarrePowerVector powerAtEndOfPeriod) {
 
 		/*
 		 * A ramp down can occur with either positive or negative power
@@ -224,7 +243,7 @@ public class AarreMotor {
 		 *
 		 * Thus we cannot assume that powerAtStartOfPeriod is greater than powerAtEndOfPeriod
 		 */
-		if (Math.abs(powerAtStartOfPeriod) <= Math.abs(powerAtEndOfPeriod)) {
+		if (powerAtStartOfPeriod.asDouble() <= powerAtEndOfPeriod.asDouble()) {
 			throw new IllegalArgumentException("When ramping down, the absolute value of the " +
 			                                   "power at the start of the ramp must be greater " +
 			                                   "than the absolute value of the power at the end " +
@@ -234,15 +253,16 @@ public class AarreMotor {
 		final double numberOfCyclesInRamp;
 		final double numberOfTicksInRamp;
 		final double numberOfTicksToChange;
-		final double powerChangeAbsolute;
-		final double powerChangeDirection;
 		final double tickNumberAtEndOfPeriod;
 		final double tickNumberToStartRampDown;
 
-		powerChangeAbsolute = Math.abs(powerAtStartOfPeriod - powerAtEndOfPeriod);
-		powerChangeDirection = Math.signum(powerAtStartOfPeriod - powerAtEndOfPeriod);
+		AarrePowerVector    powerChangeVector      = powerAtStartOfPeriod.subtract
+				(powerAtEndOfPeriod);
+		AarrePowerMagnitude magnitudeOfPowerChange = powerChangeVector.getMagnitude();
+		int                 powerChangeDirection   = powerChangeVector.getDirection();
 
-		numberOfCyclesInRamp = powerChangeAbsolute / POWER_INCREMENT_PER_CYCLE;
+		numberOfCyclesInRamp =
+				magnitudeOfPowerChange.asDouble() / POWER_INCREMENT_PER_CYCLE.asDouble();
 		numberOfTicksInRamp = numberOfCyclesInRamp * getTicksPerCycle();
 		numberOfTicksToChange = powerChangeDirection * numberOfTicksInRamp;
 		tickNumberAtEndOfPeriod =
@@ -300,12 +320,13 @@ public class AarreMotor {
 	 * @param powerDelta
 	 * 		The difference between the current power and the previous power on the ramp.
 	 * @param powerCurrent
-	 *      The current power applied to the motor.
+	 * 		The current power applied to the motor.
 	 *
 	 * @return True if the loop in rampUpToEncoderTicks should end.
 	 */
 	public boolean isRampUpToEncoderTicksDone(int ticksMaximum, double secondsTimeout, double
-			secondsRunning, int ticksMoved, double powerDelta, double powerCurrent) {
+			secondsRunning, int ticksMoved, AarrePowerVector powerDelta, AarrePowerVector
+			powerCurrent) {
 
 		boolean valueToReturn = false;
 
@@ -338,7 +359,8 @@ public class AarreMotor {
 	 *
 	 * @param tickNumberAtStartOfPeriod
 	 * 		The motor encoder tick number at which the period (including both the ramp and the
-	 * 		portion at speed before the ramp) started.
+	 * 		portion
+	 * 		at speed before the ramp) started.
 	 * @param tickNumberCurrent
 	 * 		The current motor encoder tick number.
 	 * @param numberOfTicksInPeriod
@@ -352,7 +374,8 @@ public class AarreMotor {
 	 * @return True if changing the power should start or continue. False otherwise.
 	 */
 	public boolean isRampDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int
-			tickNumberCurrent, int numberOfTicksInPeriod, double powerAtStart, double powerAtEnd) {
+			tickNumberCurrent, int numberOfTicksInPeriod, AarrePowerVector powerAtStart,
+	                                               AarrePowerVector powerAtEnd) {
 
 		if (numberOfTicksInPeriod < 0) {
 			throw new IllegalArgumentException("Number of ticks in period must be non-negative");
@@ -447,7 +470,7 @@ public class AarreMotor {
 	 * Rotate this motor a certain number of ticks from its current position, ramping speed up at
 	 * the beginning and down at the end.
 	 *
-	 * @param proportionPower
+	 * @param powerVector
 	 * 		The power at which to rotate, in the interval [-1.0, 1.0]. Positive values indicate
 	 * 		rotation forward (increasing tick number). Negative values indicate rotation backward
 	 * 		(decreasing tick number).
@@ -456,21 +479,15 @@ public class AarreMotor {
 	 * @param secondsTimeout
 	 * 		Maximum number of seconds to rotate. Must be non-negative.
 	 */
-	final void rampToEncoderTicks(final double proportionPower, final int numberOfTicksToRotate,
-	                              final double secondsTimeout) {
+	final void rampToEncoderTicks(final AarrePowerVector powerVector, final int
+			numberOfTicksToRotate, final double secondsTimeout) {
 
-		if ((proportionPower < -1.0) || (proportionPower > 1.0)) {
-			throw new IllegalArgumentException("Power out of range [-1.0, 1.0]");
-		}
-		else if (secondsTimeout < 0.0) {
+		if (secondsTimeout < 0.0) {
 			throw new IllegalArgumentException("secondsTimeout must non-negative");
 		}
 		else if (numberOfTicksToRotate < 0) {
 			throw new IllegalArgumentException("numberOfTicksToRotate must be non-negative");
 		}
-
-		final int targetTickNumber = getCurrentTickNumber() +
-		                             ((int) Math.signum(proportionPower) * numberOfTicksToRotate);
 
 		setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -485,11 +502,11 @@ public class AarreMotor {
 		int ticksToRampUp   = numberOfTicksToRotate / 2;
 		int ticksToRampDown = numberOfTicksToRotate - ticksToRampUp;
 
-		telemetry.log("Motor - Ramp to encoder ticks(3), target power UP: %f", proportionPower);
-		rampToPower(proportionPower, ticksToRampUp, secondsTimeout);
+		telemetry.log("Motor - Ramp to encoder ticks(3), target power UP: %f", powerVector);
+		rampToPower(powerVector, ticksToRampUp, secondsTimeout);
 
 		telemetry.log("Motor - Ramp to encoder ticks(3), target power DOWN: %f", 0.0);
-		rampToPower(0.0, ticksToRampDown, secondsTimeout);
+		rampToPower(new AarrePowerVector(0.0), ticksToRampDown, secondsTimeout);
 
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -505,10 +522,10 @@ public class AarreMotor {
 	 * This method uses default values for parameters that are likely not of interest to most
 	 * callers.
 	 *
-	 * @param proportionPowerRequested
+	 * @param powerVectorRequested
 	 */
-	public void rampToPower(final double proportionPowerRequested) {
-		rampToPower(proportionPowerRequested, POWER_INCREMENT_PER_CYCLE, MILLISECONDS_PER_CYCLE,
+	public void rampToPower(final AarrePowerVector powerVectorRequested) {
+		rampToPower(powerVectorRequested, POWER_INCREMENT_PER_CYCLE, MILLISECONDS_PER_CYCLE,
 		            PROPORTION_POWER_TOLERANCE, DEFAULT_SECONDS_TIMEOUT);
 	}
 
@@ -516,7 +533,7 @@ public class AarreMotor {
 	 * Ramp the motor power up (or down) gradually to the requested amount until ticksMaximum or
 	 * secondsTimeout has been reached.
 	 *
-	 * @param proportionPowerRequested
+	 * @param powerVectorRequested
 	 * 		The power to which the caller would like to ramp the motor at the end of the ramp time.
 	 * 		Positive values indicate forward power; Negative values indicate reverse power. The
 	 * 		value
@@ -527,21 +544,27 @@ public class AarreMotor {
 	 * @param secondsTimeout
 	 * 		The maximum number of seconds to run. The method will stop when this number has been
 	 * 		reached, unless it moves enough ticks first.
+	 *
 	 */
-	private void rampToPower(final double proportionPowerRequested, final int ticksToMove, final
-	double secondsTimeout) {
+	private void rampToPower(final AarrePowerVector powerVectorRequested, final int ticksToMove,
+	                         final double secondsTimeout) {
 
-		if ((proportionPowerRequested > 0) && (proportionPowerRequested <= 1)) {
-			rampUpToPower(proportionPowerRequested, ticksToMove, secondsTimeout);
+		AarrePowerVector powerVectorCurrent = this.getPowerVectorCurrent();
+		AarrePowerVector powerVectorChange = powerVectorCurrent.subtract(powerVectorRequested);
+
+		int powerChangeDirection = powerVectorChange.getDirection();
+
+		if (powerChangeDirection == AarrePowerVector.FORWARD) {
+			rampUpToPower(powerVectorRequested, ticksToMove, secondsTimeout);
 		}
-		else if ((proportionPowerRequested < 0) && (proportionPowerRequested >= -1)) {
-			rampDownToPower(proportionPowerRequested, ticksToMove, secondsTimeout);
-		}
-		else if (proportionPowerRequested == 0) {
-			return;
+		else if (powerChangeDirection == AarrePowerVector.REVERSE) {
+			rampDownToPower(powerVectorRequested, ticksToMove, secondsTimeout);
 		}
 		else {
-			throw new IllegalArgumentException();
+			//No change
+			if (powerChangeDirection != 0) {
+				throw new RuntimeException("Power change direction should be -1, 0, or 1");
+			}
 		}
 
 	}
@@ -557,25 +580,22 @@ public class AarreMotor {
 	 *         \
 	 *          -|
 	 * </pre>
+	 *
+	 * TODO: This is seriously buggy, does not distinguish +/- from increase/decrease
 	 */
-	private void rampDownToPower(final double proportionPowerAtEndAbsolute, final int ticksToMove, final
-	double secondsTimeout) {
+	private void rampDownToPower(final AarrePowerVector powerVectorAtEnd, final int
+			ticksToMove, final double secondsTimeout) {
 
-		telemetry.log("Motor::rampDownToPower(3) - Target power: %f",
-		              proportionPowerAtEndAbsolute);
-
-		if ((proportionPowerAtEndAbsolute <= 0) || (proportionPowerAtEndAbsolute > 1)) {
-			throw new IllegalArgumentException("Expected a value in [0,1]");
-		}
+		telemetry.log("Motor::rampDownToPower(3) - Target power: %f", powerVectorAtEnd);
 
 		boolean keepWaiting;
 		boolean keepGoing;
 		int     tickNumberStart;
 		int     tickNumberCurrent;
 
-		double proportionPowerCurrent;
-		double proportionPowerNew;
-		double millisecondsSinceChange;
+		AarrePowerVector powerVectorCurrent;
+		AarrePowerVector powerVectorNew;
+		double           millisecondsSinceChange;
 
 		ElapsedTime runtimeFromStart;
 		ElapsedTime runtimeSinceChange;
@@ -583,7 +603,7 @@ public class AarreMotor {
 		runtimeFromStart = new ElapsedTime();
 		tickNumberStart = getCurrentTickNumber();
 
-		waitForRampDown(proportionPowerAtEndAbsolute, ticksToMove, tickNumberStart);
+		waitForRampDown(powerVectorAtEnd, ticksToMove, tickNumberStart);
 
 		/*
 		 * Ramp down
@@ -594,18 +614,17 @@ public class AarreMotor {
 			opMode.idle();
 			tickNumberCurrent = getCurrentTickNumber();
 
-			proportionPowerCurrent = getProportionPowerCurrent();
-			proportionPowerNew = getProportionPowerNew(proportionPowerCurrent,
-			                                           proportionPowerAtEndAbsolute,
-			                                           POWER_INCREMENT_PER_CYCLE);
+			powerVectorCurrent = getPowerVectorCurrent();
+			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorAtEnd,
+			                                   POWER_INCREMENT_PER_CYCLE);
 
-			setProportionPower(proportionPowerNew);
+			setPowerVector(powerVectorNew);
 
 			telemetry.log("Motor::rampDownToPower(3) - Milliseconds elapsed %f", runtimeFromStart
 					.milliseconds());
 			telemetry.log("Motor::rampDownToPower(3) - Current tick number: %d",
 			              tickNumberCurrent);
-			telemetry.log("Motor::rampDownToPower(3) - New power: %f", proportionPowerNew);
+			telemetry.log("Motor::rampDownToPower(3) - New power: %f", powerVectorNew);
 
 			/*
 			 * Wait for next power change
@@ -620,9 +639,8 @@ public class AarreMotor {
 			}
 
 			keepGoing = isRampDownToEncoderTicksRunning(tickNumberStart, tickNumberCurrent,
-			                                            ticksToMove,
-			                                            proportionPowerCurrent,
-			                                            proportionPowerAtEndAbsolute);
+			                                            ticksToMove, powerVectorCurrent,
+			                                            powerVectorAtEnd);
 
 		}
 	}
@@ -630,15 +648,15 @@ public class AarreMotor {
 	/**
 	 * Wait until it is time to begin ramping down power to the motor.
 	 *
-	 * @param proportionPowerAtEndAbsolute
+	 * @param powerVectorAtEnd
 	 * @param ticksToMove
 	 * @param tickNumberStart
 	 */
-	private void waitForRampDown(double proportionPowerAtEndAbsolute, int ticksToMove, int
-			tickNumberStart) {
-		boolean keepWaiting;
-		int     tickNumberCurrent;
-		double  proportionPowerCurrent;
+	private void waitForRampDown(AarrePowerVector powerVectorAtEnd, int ticksToMove,
+	                             int tickNumberStart) {
+		boolean          keepWaiting;
+		int              tickNumberCurrent;
+		AarrePowerVector powerVectorCurrent;
 
 		/*
 		 * Wait for the right time to start ramping down
@@ -647,10 +665,10 @@ public class AarreMotor {
 		while (keepWaiting && opMode.opModeIsActive()) {
 			opMode.idle();
 			tickNumberCurrent = getCurrentTickNumber();
-			proportionPowerCurrent = getProportionPowerCurrent();
+			powerVectorCurrent = getPowerVectorCurrent();
 			keepWaiting = !isRampDownToEncoderTicksRunning(tickNumberStart, tickNumberCurrent,
-			                                               ticksToMove, proportionPowerCurrent,
-			                                               proportionPowerAtEndAbsolute);
+			                                               ticksToMove, powerVectorCurrent,
+			                                               powerVectorAtEnd);
 		}
 	}
 
@@ -665,15 +683,10 @@ public class AarreMotor {
 	 *     |_/
 	 * </pre>
 	 */
-	private void rampUpToPower(final double proportionPowerRequestedAbsolute, final int
+	private void rampUpToPower(final AarrePowerVector powerVectorRequested, final int
 			ticksToMove, final double secondsTimeout) {
 
-		if ((proportionPowerRequestedAbsolute <= 0) || (proportionPowerRequestedAbsolute > 1)) {
-			throw new IllegalArgumentException("Expected a value in [0,1]");
-		}
-
-		telemetry.log("Motor::rampUpToPower(3) - Target power: %f",
-		              proportionPowerRequestedAbsolute);
+		telemetry.log("Motor::rampUpToPower(3) - Target power: %f", powerVectorRequested);
 		telemetry.log("Motor::rampUpToPower(3) - Target ticks: %d", ticksToMove);
 
 		ElapsedTime runtimeSinceChange;
@@ -684,16 +697,16 @@ public class AarreMotor {
 		int    ticksMoved;
 		int    tickNumberStart;
 
-		double proportionPowerCurrent;
-		double proportionPowerNew;
-		double powerDelta;
-		double millisecondsSinceChange;
+		AarrePowerVector powerVectorCurrent;
+		AarrePowerVector powerVectorNew;
+		AarrePowerVector powerDelta;
+		double           millisecondsSinceChange;
 
 		tickNumberStart = getCurrentTickNumber();
 		telemetry.log("Motor::rampUpToPower(3) - Starting tick number: %d", tickNumberStart);
 
-		powerDelta = 1.0;
-		proportionPowerCurrent = 0.0;
+		powerDelta = new AarrePowerVector(1.0);
+		powerVectorCurrent = this.getPowerVectorCurrent();
 		secondsRunning = 0.0;
 		ticksMoved = 0;
 		tickNumberCurrent = 0;
@@ -701,17 +714,16 @@ public class AarreMotor {
 		runtimeTotal = new ElapsedTime();
 
 		while (!isRampUpToEncoderTicksDone(ticksToMove, secondsTimeout, secondsRunning,
-		                                   ticksMoved, powerDelta, proportionPowerCurrent)) {
+		                                   ticksMoved, powerDelta, powerVectorCurrent)) {
 
 
-			proportionPowerCurrent = getProportionPowerCurrent();
-			powerDelta = proportionPowerRequestedAbsolute - proportionPowerCurrent;
+			powerVectorCurrent = this.getPowerVectorCurrent();
+			powerDelta = powerVectorRequested.subtract(powerVectorCurrent);
 
-			proportionPowerNew = getProportionPowerNew(proportionPowerCurrent,
-			                                           proportionPowerRequestedAbsolute,
-			                                           POWER_INCREMENT_PER_CYCLE);
+			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
+			                                   POWER_INCREMENT_PER_CYCLE);
 
-			setProportionPower(proportionPowerNew);
+			setPowerVector(powerVectorNew);
 
 
 			runtimeSinceChange = new ElapsedTime();
@@ -729,7 +741,7 @@ public class AarreMotor {
 			telemetry.log("Motor::rampUpToPower(3) - Milliseconds elapsed %f", runtimeTotal
 					.milliseconds());
 			telemetry.log("Motor::rampUpToPower(3) - Current tick number: %d", tickNumberCurrent);
-			telemetry.log("Motor::rampUpToPower(3) - New power: %f", proportionPowerNew);
+			telemetry.log("Motor::rampUpToPower(3) - New power: %f", powerVectorNew);
 
 		}
 	}
@@ -740,48 +752,50 @@ public class AarreMotor {
 	 * The idea is to prevent slipping, sliding, jerking, wheelies, etc. due to excessive
 	 * acceleration/deceleration.
 	 *
-	 * @param proportionPowerRequested
+	 * @param powerVectorRequested
 	 * 		The power to which the caller would like to ramp the motor at the end of the ramp time.
 	 * 		Positive values indicate forward power; Negative values indicate reverse power. The
 	 * 		value
 	 * 		is expected to be in the interval [-1, 1].
-	 * @param powerIncrementAbsolute
+	 * @param powerIncrementMagnitude
 	 * 		How much to increase or decrease the power during each cycle. The value is expected
 	 * 		to be
 	 * 		in the interval [0, 1].
 	 * @param millisecondsCycleLength
 	 * 		The length of each cycle in milliseconds.
-	 * @param proportionPowerTolerance
+	 * @param powerToleranceMagnitude
 	 * 		If the actual motor power is at least this close to the requested motor power, then we
 	 * 		stop
 	 * 		incrementing the power.
 	 */
-	public void rampToPower(final double proportionPowerRequested, final double
-			powerIncrementAbsolute, final int millisecondsCycleLength, final double
-			proportionPowerTolerance, final double secondsTimeout) {
+	public void rampToPower(final AarrePowerVector powerVectorRequested, final AarrePowerMagnitude
+			powerIncrementMagnitude, final int millisecondsCycleLength, final AarrePowerMagnitude
+			powerToleranceMagnitude, final double secondsTimeout) {
 
-		telemetry.log("Motor - Ramp to power (5), total target power: %f",
-		              proportionPowerRequested);
+		telemetry.log("Motor - Ramp to power (5), total target power: %f", powerVectorRequested);
 
-		double proportionPowerCurrent;
-		double proportionPowerNew;
-		double powerDelta;
-		double millisecondsSinceChange;
+		AarrePowerVector    powerVectorCurrent;
+		AarrePowerVector    powerVectorNew;
+		AarrePowerVector    vectorOfLastPowerChange;
+		AarrePowerMagnitude magnitudeOfLastPowerChange;
+		double              millisecondsSinceChange;
 
-		powerDelta = 1.0;
+		magnitudeOfLastPowerChange = new AarrePowerMagnitude(1.0);
 
-		while ((powerDelta > proportionPowerTolerance) && opMode.opModeIsActive()) {
+		while ((magnitudeOfLastPowerChange.isGreaterThan(powerToleranceMagnitude)) &&
+		       opMode.opModeIsActive()) {
 
-			proportionPowerCurrent = getProportionPowerCurrent();
-			powerDelta = proportionPowerRequested - proportionPowerCurrent;
+			powerVectorCurrent = getPowerVectorCurrent();
 
-			proportionPowerNew = getProportionPowerNew(proportionPowerCurrent,
-			                                           proportionPowerRequested,
-			                                           powerIncrementAbsolute);
+			vectorOfLastPowerChange = powerVectorRequested.subtract(powerVectorCurrent);
+			magnitudeOfLastPowerChange = vectorOfLastPowerChange.getMagnitude();
 
-			telemetry.log("Motor - Ramp power to, current power target: %f", proportionPowerNew);
+			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
+			                                   powerIncrementMagnitude);
 
-			setProportionPower(proportionPowerNew);
+			telemetry.log("Motor - Ramp power to, current power target: %f", powerVectorNew);
+
+			setPowerVector(powerVectorNew);
 
 			/*
 			 * Wait for: (1) the cycle period to elapse, (2) the Op Mode to go inactive, (3) the
@@ -815,7 +829,7 @@ public class AarreMotor {
 	 * @param numberOfRevolutions
 	 * @param secondsTimeout
 	 */
-	final void runByRevolutions(final double proportionMotorPower, final double
+	final void runByRevolutions(final AarrePowerVector proportionMotorPower, final double
 			numberOfRevolutions, final double secondsTimeout) {
 
 		final int numberOfTicks = (int) Math.round(getTicksPerRevolution() * numberOfRevolutions);
@@ -827,18 +841,14 @@ public class AarreMotor {
 	 * Run the motor for a fixed amount of time. This method of moving the motor does not depend on
 	 * an encoder.
 	 *
-	 * @param proportionPower
+	 * @param powerVector
 	 * 		Proportion of power to apply to the motor, in the range [-1.0, 1.0]. Negative values
 	 * 		run
 	 * 		the motor backward.
 	 * @param secondsToRun
 	 * 		Number of seconds for which to run the motor.
 	 */
-	final void runByTime(final double proportionPower, final double secondsToRun) {
-
-		if ((proportionPower < -1.0) || (proportionPower > 1.0)) {
-			throw new IllegalArgumentException("Power expected to be in range [-1.0, 1.0]");
-		}
+	final void runByTime(final AarrePowerVector powerVector, final double secondsToRun) {
 
 		if (secondsToRun < 0.0) {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
@@ -849,7 +859,7 @@ public class AarreMotor {
 
 		setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-		rampToPower(proportionPower);
+		rampToPower(powerVector);
 		runtime = new ElapsedTime();
 		secondsRunning = runtime.seconds();
 
@@ -857,7 +867,7 @@ public class AarreMotor {
 			secondsRunning = runtime.seconds();
 		}
 
-		rampToPower(0.0);
+		rampToPower(new AarrePowerVector(0.0));
 		setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 	}
@@ -869,13 +879,13 @@ public class AarreMotor {
 	 * @param power
 	 * 		How much power to apply to the motor, in the interval [-1,1].
 	 */
-	void runUntilStalled(final double power) {
+	void runUntilStalled(final AarrePowerVector power) {
 		timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 		rampToPower(power);
 		while (!(isStalled()) && opMode.opModeIsActive()) {
 			//telemetry.log("Not stalled yet...");
 		}
-		rampToPower(0.0);
+		rampToPower(new AarrePowerVector(0.0));
 	}
 
 	/**
@@ -911,8 +921,8 @@ public class AarreMotor {
 	 * @param power
 	 * 		The new power level of the motor, a value in the interval [-1.0, 1.0]
 	 */
-	public void setProportionPower(final double power) {
-		motor.setPower(power);
+	public void setPowerVector(final AarrePowerVector aarrePowerVector) {
+		motor.setPower(aarrePowerVector.asDouble());
 	}
 
 

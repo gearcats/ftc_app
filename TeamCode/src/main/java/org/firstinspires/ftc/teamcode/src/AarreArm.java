@@ -7,9 +7,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class AarreArm {
 
-	private static final double PROPORTION_POWER_DEFAULT       = 0.5;
-	private static final double SECONDS_TO_RUN_DEFAULT         = 1.0;
-	private static final double SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
+	private static final AarrePowerMagnitude DEFAULT_POWER_MAGNITUDE        = new
+			AarrePowerMagnitude(0.5);
+	private static final double              SECONDS_TO_RUN_DEFAULT         = 1.0;
+	private static final double              SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
 
 	private AarreMotor     motor;
 	private AarreTelemetry telemetry;
@@ -51,7 +52,7 @@ public class AarreArm {
 
 		motor = AarreMotorRevHDCoreHex.createAarreMotorRevHDCoreHex(opMode, nameOfRiserMotor);
 
-		motor.rampToPower(0.0);
+		motor.rampToPower(new AarrePowerVector(0.0));
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises arm
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -79,14 +80,16 @@ public class AarreArm {
 	}
 
 	private void lowerByRamp() {
-		motor.rampToEncoderTicks(-0.5, 120, 1.0);
+		AarrePowerVector powerVector = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE, -1);
+		motor.rampToEncoderTicks(powerVector, 120, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 
 	/**
 	 * Lower the arm by the default amount of time.
 	 */
 	private void lowerByTime() {
-		lowerByTime(PROPORTION_POWER_DEFAULT, SECONDS_TO_RUN_DEFAULT);
+
+		lowerByTime(DEFAULT_POWER_MAGNITUDE, SECONDS_TO_RUN_DEFAULT);
 	}
 
 	/**
@@ -97,15 +100,13 @@ public class AarreArm {
 	 * 		raiseByTime().
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm.
+	 *
+	 * 	TODO: Why don't we use a PowerVector in the first argument?
 	 */
-	private void lowerByTime(double absolutePowerProportion, double secondsToRun) {
+	private void lowerByTime(AarrePowerMagnitude absolutePowerProportion, double secondsToRun) {
 
-		if (absolutePowerProportion < 0.0)
-			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");
-		if (secondsToRun < 0.0)
-			throw new IllegalArgumentException("secondsToRun expected to be non-negative");
-
-		motor.runByTime(-absolutePowerProportion, secondsToRun);
+		AarrePowerVector powerVector = new AarrePowerVector(absolutePowerProportion, AarrePowerVector.REVERSE);
+		motor.runByTime(powerVector, secondsToRun);
 
 		currentPosition = 0.0;
 	}
@@ -114,21 +115,17 @@ public class AarreArm {
 	 * Lower the arm to its downward position while avoiding stalling the arm motor
 	 */
 	private void lowerUntilStalled() {
-		lowerUntilStalled(PROPORTION_POWER_DEFAULT, SECONDS_TO_RUN_DEFAULT);
+		lowerUntilStalled(DEFAULT_POWER_MAGNITUDE, SECONDS_TO_RUN_DEFAULT);
 	}
 
 	/**
 	 * Lower the arm to its downward position while avoiding stalling the arm motor
 	 */
-	private void lowerUntilStalled(double absolutePowerProportion, double secondsToRun) {
-
-		if (absolutePowerProportion < 0.0)
-			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");
-		if (secondsToRun < 0.0)
-			throw new IllegalArgumentException("secondsToRun expected to be non-negative");
+	private void lowerUntilStalled(AarrePowerMagnitude powerMagnitude, double secondsToRun) {
 
 		motor.setStallTimeLimitInSeconds(secondsToRun);
-		motor.runUntilStalled(-absolutePowerProportion);
+		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector.REVERSE);
+		motor.runUntilStalled(powerVector);
 		currentPosition = 0.0;
 	}
 
@@ -140,14 +137,16 @@ public class AarreArm {
 	}
 
 	private void raiseByRamp() {
-		motor.rampToEncoderTicks(0.5, 120, 1.0);
+		AarrePowerVector powerVector = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE,
+		                                                    AarrePowerVector.FORWARD);
+		motor.rampToEncoderTicks(powerVector, 120, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 
 	/**
 	 * Raise the arm by the default amount of time.
 	 */
 	private void raiseByTime() {
-		raiseByTime(PROPORTION_POWER_DEFAULT, SECONDS_TO_RUN_DEFAULT);
+		raiseByTime(DEFAULT_POWER_MAGNITUDE, SECONDS_TO_RUN_DEFAULT);
 	}
 
 	/**
@@ -159,14 +158,11 @@ public class AarreArm {
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm. Must be non-negative.
 	 */
-	private void raiseByTime(double absolutePowerProportion, double secondsToRun) {
+	private void raiseByTime(AarrePowerMagnitude absolutePowerProportion, double secondsToRun) {
 
-		if (absolutePowerProportion < 0.0)
-			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");
-		if (secondsToRun < 0.0)
-			throw new IllegalArgumentException("secondsToRun expected to be non-negative");
-
-		motor.runByTime(absolutePowerProportion, secondsToRun);
+		AarrePowerVector powerVector = new AarrePowerVector(absolutePowerProportion,
+		                                                    AarrePowerVector.FORWARD);
+		motor.runByTime(powerVector, secondsToRun);
 
 		currentPosition = 1.0;
 	}
@@ -175,21 +171,21 @@ public class AarreArm {
 	 * Raise the arm to its upward position while avoiding stalling the arm motor
 	 */
 	private void raiseUntilStalled() {
-		raiseUntilStalled(PROPORTION_POWER_DEFAULT, SECONDS_BEFORE_TIMEOUT_DEFAULT);
+		raiseUntilStalled(DEFAULT_POWER_MAGNITUDE, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 
 	/**
 	 * Raise the arm to its upward position while avoiding stalling the arm motor
 	 */
-	private void raiseUntilStalled(double absolutePowerProportion, double secondsBeforeTimeout) {
+	private void raiseUntilStalled(AarrePowerMagnitude absolutePowerProportion, double secondsBeforeTimeout) {
 
-		if (absolutePowerProportion < 0.0)
-			throw new IllegalArgumentException("absolutePowerProportion expected to be non-negative");
 		if (secondsBeforeTimeout < 0.0)
 			throw new IllegalArgumentException("secondsBeforeTimeout expected to be non-negative");
 
 		motor.setStallTimeLimitInSeconds(secondsBeforeTimeout);
-		motor.runUntilStalled(absolutePowerProportion);
+		AarrePowerVector powerVector = new AarrePowerVector(absolutePowerProportion,
+		                                                    AarrePowerVector.FORWARD);
+		motor.runUntilStalled(powerVector);
 		currentPosition = 1.0;
 	}
 

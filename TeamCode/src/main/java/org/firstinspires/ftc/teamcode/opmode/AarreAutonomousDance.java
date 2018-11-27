@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
+import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
@@ -54,15 +56,16 @@ public class AarreAutonomousDance extends LinearOpMode {
         // Wait for the driver to press PLAY
         waitForStart();
 
-        final double driveSpeed = 0.5;
-        final double turnSpeed = 0.5;
-        final double inches = 12.0;
-        final double timeout = 5.0;
+        final AarrePowerMagnitude drivePowerMagnitude = new AarrePowerMagnitude(0.5);
+        final AarrePowerMagnitude   turnPowerMagnitude  = new AarrePowerMagnitude(0.5);
+        final double              inches     = 12.0;
+        final double              timeout    = 5.0;
 
-        robot.drive(driveSpeed, inches, inches, timeout);
-        robot.drive(driveSpeed, -inches, -inches, timeout);
-        robot.drive(turnSpeed, inches, -inches, timeout);
-        robot.drive(turnSpeed, -inches, inches, timeout);
+        robot.drive(drivePowerMagnitude, inches, inches, timeout);
+        robot.drive(drivePowerMagnitude, -inches, -inches, timeout);
+
+        robot.drive(turnPowerMagnitude, inches, -inches, timeout);
+        robot.drive(turnPowerMagnitude, -inches, inches, timeout);
 
         robot.raiseArm();
         robot.lowerArm();
