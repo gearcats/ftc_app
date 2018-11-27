@@ -37,6 +37,7 @@ public class AarrePowerVector {
 	}
 
 	private void checkProportion(double proportion) {
+
 		if (proportion < -1.0) {
 			throw new IllegalArgumentException("Proportion expected to be greater than -1.");
 		}
@@ -44,6 +45,7 @@ public class AarrePowerVector {
 		if (proportion > 1.0) {
 			throw new IllegalArgumentException("Proportion expected to be less than 1.");
 		}
+
 	}
 
 	public AarrePowerVector divideBy(AarrePowerVector divisor) {

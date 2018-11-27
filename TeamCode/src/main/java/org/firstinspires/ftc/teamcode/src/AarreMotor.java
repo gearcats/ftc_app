@@ -173,36 +173,36 @@ public class AarreMotor {
 	 * <p>
 	 * Must be public to allow access from unit test suite.
 	 *
+	 * @param powerVectorCurrent The current power vector.
+	 * @param powerVectorRequested The power vector that the caller has requested.
+	 * @param powerIncrementMagnitude The maximum magnitude by which we are allowed to change the
+	 *                                  power.
 	 * @return The new proportion of power to apply to the motor.
-	 * 		<p>
-	 * 		TODO: Why is powerIncrementMagnitude never used?
-	 */
-	/**
-	 *
-	 * @param powerVectorCurrent
-	 * @param powerVectorRequested
-	 * @param powerIncrementMagnitude
-	 * @return
 	 */
 	public AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent,
 	                                          AarrePowerVector powerVectorRequested,
 	                                          AarrePowerMagnitude powerIncrementMagnitude) {
 
-		int                 direction;
-		AarrePowerVector    powerChangeVector;
-		AarrePowerMagnitude powerChangeMagnitude;
 		AarrePowerVector    powerVectorNew;
 
-		powerChangeVector = powerVectorRequested.subtract(powerVectorCurrent);
-		powerChangeMagnitude = new AarrePowerMagnitude(powerChangeVector);
+		/*
+		 * Use a double here because the power change can be outside the range of a power vector.
+		 * For example, if the power requested is -1 and the current power is 1, then the power
+		 * change is -1 - 1 = -2.
+		 *
+		 * TODO: Create "AarrePowerChange" class???
+		 */
+		double powerChangeDouble = powerVectorRequested.asDouble() - powerVectorCurrent
+				.asDouble();
+		double powerChangeMagnitude = Math.abs(powerChangeDouble);
+		int powerChangeDirection = (int) Math.signum(powerChangeDouble);
 
-		if (powerChangeMagnitude.isLessThan(PROPORTION_POWER_TOLERANCE)) {
+		if (powerChangeMagnitude < PROPORTION_POWER_TOLERANCE.asDouble()) {
 			powerVectorNew = powerVectorRequested;
 		}
 		else {
-			direction = powerChangeVector.getDirection();
-			AarrePowerVector powerIncrementVector = new AarrePowerVector(powerIncrementMagnitude,
-			                                                     direction);
+				AarrePowerVector powerIncrementVector = new AarrePowerVector(powerIncrementMagnitude,
+			                                                     powerChangeDirection);
 			powerVectorNew = powerVectorCurrent.add(powerIncrementVector);
 		}
 

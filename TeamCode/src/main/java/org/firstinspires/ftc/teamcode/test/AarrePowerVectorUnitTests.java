@@ -111,6 +111,6 @@ class AarrePowerVectorUnitTests {
 		AarrePowerVector aarrePowerVector2 = new AarrePowerVector(0.45);
 		AarrePowerVector aarrePowerVector3 = aarrePowerVector1.subtract(aarrePowerVector2);
 		double result = aarrePowerVector3.asDouble();
-		assertEquals(0.24, result);
+		assertEquals(0.34, result);
 	}
 }
