@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreMotor;
-import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,9 +77,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     public final void testGetProportionPowerNew01() {
         AarrePowerVector powerVectorCurrent = new AarrePowerVector(1.0);
         AarrePowerVector powerVectorRequested = new AarrePowerVector(0.0);
-        AarrePowerMagnitude powerIncrementMagnitude = new AarrePowerMagnitude(0.1);
-        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
-                powerIncrementMagnitude);
+        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
         assertEquals(0.9, proportionPowerNew.asDouble(), "Wrong proportion power");
     }
 
@@ -88,9 +85,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     public final void testGetPowerVectorNew02() {
         AarrePowerVector powerVectorCurrent = new AarrePowerVector(-1.0);
         AarrePowerVector powerVectorRequested = new AarrePowerVector(0.0);
-        AarrePowerMagnitude powerIncrementMagnitude = new AarrePowerMagnitude(0.1);
-        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
-                powerIncrementMagnitude);
+        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
         assertEquals(-0.9, proportionPowerNew.asDouble(), "Wrong proportion power");
     }
 
@@ -98,9 +93,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     public final void testGetPowerVectorNew03() {
         AarrePowerVector powerVectorCurrent = new AarrePowerVector(0.0);
         AarrePowerVector powerVectorRequested = new AarrePowerVector(1.0);
-        AarrePowerMagnitude powerIncrementMagnitude = new AarrePowerMagnitude(0.1);
-        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
-                powerIncrementMagnitude);
+        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
         assertEquals(0.1, proportionPowerNew.asDouble(), "Wrong proportion power");
     }
 
@@ -108,9 +101,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     public final void testGetPowerVectorNew04() {
         AarrePowerVector powerVectorCurrent = new AarrePowerVector(0.0);
         AarrePowerVector powerVectorRequested = new AarrePowerVector(-1.0);
-        AarrePowerMagnitude powerIncrementMagnitude = new AarrePowerMagnitude(0.1);
-        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
-                powerIncrementMagnitude);
+        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
         assertEquals(-0.1, proportionPowerNew.asDouble(), "Wrong proportion power");
     }
 
@@ -118,9 +109,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     public final void testGetPowerVectorNew05() {
         AarrePowerVector powerVectorCurrent = new AarrePowerVector(1.0);
         AarrePowerVector powerVectorRequested = new AarrePowerVector(-1.0);
-        AarrePowerMagnitude powerIncrementMagnitude = new AarrePowerMagnitude(0.1);
-        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
-                powerIncrementMagnitude);
+        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
         assertEquals(0.9, proportionPowerNew.asDouble(), "Wrong proportion power");
     }
 
@@ -128,9 +117,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     public final void testGetPowerVectorNew06() {
         AarrePowerVector powerVectorCurrent = new AarrePowerVector(-1.0);
         AarrePowerVector powerVectorRequested = new AarrePowerVector(1.0);
-        AarrePowerMagnitude powerIncrementMagnitude = new AarrePowerMagnitude(0.1);
-        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
-                powerIncrementMagnitude);
+        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
         assertEquals(-0.9, proportionPowerNew.asDouble(), "Wrong proportion power");
     }
 
@@ -138,9 +125,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     public final void testGetPowerVectorNew07() {
         AarrePowerVector powerVectorCurrent = new AarrePowerVector(-1.0);
         AarrePowerVector powerVectorRequested = new AarrePowerVector(-1.0);
-        AarrePowerMagnitude powerIncrementMagnitude = new AarrePowerMagnitude(0.1);
-        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
-                powerIncrementMagnitude);
+        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
         assertEquals(-1.0, proportionPowerNew.asDouble(), "Wrong proportion power");
     }
 
@@ -148,9 +133,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     public final void testGetPowerVectorNew08() {
         AarrePowerVector powerVectorCurrent = new AarrePowerVector(0.0);
         AarrePowerVector powerVectorRequested = new AarrePowerVector(0.0);
-        AarrePowerMagnitude powerIncrementMagnitude = new AarrePowerMagnitude(0.1);
-        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
-                powerIncrementMagnitude);
+        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
         assertEquals(0.0, proportionPowerNew.asDouble(), "Wrong proportion power");
     }
 
@@ -158,9 +141,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     public final void testGetPowerVectorNew09() {
         AarrePowerVector powerVectorCurrent = new AarrePowerVector(1.0);
         AarrePowerVector powerVectorRequested = new AarrePowerVector(1.0);
-        AarrePowerMagnitude powerIncrementMagnitude = new AarrePowerMagnitude(0.1);
-        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested,
-                powerIncrementMagnitude);
+        AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
         assertEquals(1.0, proportionPowerNew.asDouble(), "Wrong proportion power");
     }
 
@@ -180,18 +161,13 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
          */
         AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
 
-        /*
-         * The power can increment by ...
-         */
-        AarrePowerMagnitude powerIncrementAbsolute = new AarrePowerMagnitude(0.1);
 
         /*
          * So the correct power is...
          */
         double correctValue = 0.1;
 
-        AarrePowerVector newPowerVector = motor.getPowerVectorNew(proportionPowerCurrent, proportionPowerRequested,
-                powerIncrementAbsolute);
+        AarrePowerVector newPowerVector = motor.getPowerVectorNew(proportionPowerCurrent, proportionPowerRequested);
 
         assertEquals(newPowerVector.asDouble(), correctValue);
 
@@ -215,17 +191,11 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
         AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
 
         /*
-         * The power can increment by ...
-         */
-        AarrePowerMagnitude powerIncrementAbsolute = new AarrePowerMagnitude(0.1);
-
-        /*
          * So the correct power is...
          */
         double correctValue = 1.0;
 
-        AarrePowerVector newProportion = motor.getPowerVectorNew(proportionPowerCurrent, proportionPowerRequested,
-                powerIncrementAbsolute);
+        AarrePowerVector newProportion = motor.getPowerVectorNew(proportionPowerCurrent, proportionPowerRequested);
 
 
         assertEquals(newProportion.asDouble(), correctValue);

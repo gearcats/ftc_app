@@ -454,10 +454,8 @@ public class AarreDriveMotors {
 			powerVectorCurrentLeft = leftMotor.getPowerVectorCurrent();
 			powerVectorCurrentRight = rightMotor.getPowerVectorCurrent();
 
-			powerVectorNewLeft = leftMotor.getPowerVectorNew(powerVectorRequestedLeft,
-			                                                 powerVectorCurrentLeft, powerIncrementAbsolute);
-			powerVectorNewRight = rightMotor.getPowerVectorNew(powerVectorRequestedRight,
-			                                                   powerVectorCurrentRight, powerIncrementAbsolute);
+			powerVectorNewLeft = leftMotor.getPowerVectorNew(powerVectorRequestedLeft, powerVectorCurrentLeft);
+			powerVectorNewRight = rightMotor.getPowerVectorNew(powerVectorRequestedRight, powerVectorCurrentRight);
 
 			powerDeltaLeftVector = powerVectorRequestedLeft.subtract(powerVectorCurrentLeft);
 			powerDeltaRightVector = powerVectorRequestedRight.subtract(powerVectorCurrentRight);

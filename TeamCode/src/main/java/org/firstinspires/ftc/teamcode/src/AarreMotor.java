@@ -31,9 +31,15 @@ public class AarreMotor implements AarreMotorInterface {
 
 	private static final int MILLISECONDS_PER_CYCLE = 50;
 
-	private static final AarrePowerMagnitude POWER_INCREMENT_PER_CYCLE = new AarrePowerMagnitude(0.1);
-	private static final AarrePowerMagnitude PROPORTION_POWER_TOLERANCE = new AarrePowerMagnitude(0.01);
+	// How much to increment the motor power in each cycle of power ramping
+	private static final AarrePowerMagnitude DEFAULT_POWER_INCREMENT_PER_CYCLE = new AarrePowerMagnitude(0.1);
+	// How much tolerance to allow when deciding whether we have reached a requested motor power
+	private static final AarrePowerMagnitude DEFAULT_PROPORTION_POWER_TOLERANCE = new AarrePowerMagnitude(0.01);
+	private AarrePowerMagnitude powerMagnitudeIncrementPerCycle = DEFAULT_POWER_INCREMENT_PER_CYCLE;
+	private AarrePowerMagnitude powerMagnitudeTolerance = DEFAULT_PROPORTION_POWER_TOLERANCE;
+
 	private static final double DEFAULT_SECONDS_TIMEOUT = 5.0;
+
 
 	private final DcMotor motor;
 	private final AarreTelemetry telemetry;
@@ -189,7 +195,8 @@ public class AarreMotor implements AarreMotorInterface {
 		AarrePowerMagnitude powerMagnitudeChangeOverRamp = powerVectorChangeOverRamp.getMagnitude();
 
 		// The number of cycles required to change power as much as requested
-		double numCyclesRequiredToChangePower = powerMagnitudeChangeOverRamp.divideBy(POWER_INCREMENT_PER_CYCLE);
+		double numCyclesRequiredToChangePower = powerMagnitudeChangeOverRamp.divideBy
+				(DEFAULT_POWER_INCREMENT_PER_CYCLE);
 
 		// The number of ticks the motor would move if we changed the power that much
 		double potentialTicksInRamp = averageTicksPerCycle * numCyclesRequiredToChangePower;
@@ -208,33 +215,18 @@ public class AarreMotor implements AarreMotorInterface {
 
 	}
 
-	/**
-	 * Get the current proportion of power
-	 *
-	 * @return The proportion of power at which the motor is operating. A value in the range [-1, 1].
-	 */
-	@Override
+
+	public final AarrePowerMagnitude getPowerMagnitudeIncrementPerCycle() {
+		return this.powerMagnitudeIncrementPerCycle;
+	}
+
 	public AarrePowerVector getPowerVectorCurrent() {
 		return new AarrePowerVector(motor.getPower());
 	}
 
-	/**
-	 * Get the proportion of power to which to change the motor when ramping power up or down.
-	 * <p>
-	 * Must be public to allow access from unit test suite.
-	 *
-	 * @param powerVectorCurrent
-	 * 		The current power vector.
-	 * @param powerVectorRequested
-	 * 		The power vector that the caller has requested.
-	 * @param powerIncrementMagnitude
-	 * 		The maximum magnitude by which we are allowed to change the power.
-	 *
-	 * @return The new proportion of power to apply to the motor.
-	 */
 	@Override
-	public AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent, AarrePowerVector
-			powerVectorRequested, AarrePowerMagnitude powerIncrementMagnitude) {
+	public final AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent, AarrePowerVector
+			powerVectorRequested) {
 
 		AarrePowerVector powerVectorNew;
 
@@ -246,13 +238,17 @@ public class AarreMotor implements AarreMotorInterface {
 		 * TODO: Create "AarrePowerChange" class???
 		 */
 		double powerChangeDouble = powerVectorRequested.asDouble() - powerVectorCurrent.asDouble();
+
+		// The magnitude by which the power must change to reach the requested power
 		double powerChangeMagnitude = Math.abs(powerChangeDouble);
 		int powerChangeDirection = (int) Math.signum(powerChangeDouble);
 
-		if (powerChangeMagnitude < PROPORTION_POWER_TOLERANCE.asDouble()) {
+		if (powerChangeMagnitude <= getPowerMagnitudeIncrementPerCycle().asDouble()) {
+			// Within one cycle, give them what they really want...
 			powerVectorNew = powerVectorRequested;
 		} else {
-			AarrePowerVector powerIncrementVector = new AarrePowerVector(powerIncrementMagnitude,
+			// Otherwise, give them what they need...
+			AarrePowerVector powerIncrementVector = new AarrePowerVector(getPowerMagnitudeIncrementPerCycle(),
 					powerChangeDirection);
 			powerVectorNew = powerVectorCurrent.add(powerIncrementVector);
 		}
@@ -310,7 +306,7 @@ public class AarreMotor implements AarreMotorInterface {
 		AarrePowerMagnitude magnitudeOfPowerChange = powerChangeVector.getMagnitude();
 		int powerChangeDirection = powerChangeVector.getDirection();
 
-		numberOfCyclesInRamp = magnitudeOfPowerChange.asDouble() / POWER_INCREMENT_PER_CYCLE.asDouble();
+		numberOfCyclesInRamp = magnitudeOfPowerChange.asDouble() / DEFAULT_POWER_INCREMENT_PER_CYCLE.asDouble();
 		numberOfTicksInRamp = numberOfCyclesInRamp * getTicksPerCycle();
 		numberOfTicksToChange = powerChangeDirection * numberOfTicksInRamp;
 		tickNumberAtEndOfPeriod = tickNumberAtStartOfPeriod + (numberOfTicksInPeriod * powerChangeDirection);
@@ -550,8 +546,8 @@ public class AarreMotor implements AarreMotorInterface {
 	 */
 	@Override
 	public void rampToPower(final AarrePowerVector powerVectorRequested) {
-		rampToPower(powerVectorRequested, POWER_INCREMENT_PER_CYCLE, MILLISECONDS_PER_CYCLE,
-				PROPORTION_POWER_TOLERANCE, DEFAULT_SECONDS_TIMEOUT);
+		rampToPower(powerVectorRequested, DEFAULT_POWER_INCREMENT_PER_CYCLE, MILLISECONDS_PER_CYCLE,
+				DEFAULT_PROPORTION_POWER_TOLERANCE, DEFAULT_SECONDS_TIMEOUT);
 	}
 
 	/**
@@ -636,7 +632,7 @@ public class AarreMotor implements AarreMotorInterface {
 			tickNumberCurrent = getCurrentTickNumber();
 
 			powerVectorCurrent = getPowerVectorCurrent();
-			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorAtEnd, POWER_INCREMENT_PER_CYCLE);
+			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorAtEnd);
 
 			setPowerVector(powerVectorNew);
 
@@ -733,7 +729,7 @@ public class AarreMotor implements AarreMotorInterface {
 			powerVectorCurrent = this.getPowerVectorCurrent();
 			powerDelta = powerVectorRequested.subtract(powerVectorCurrent);
 
-			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested, POWER_INCREMENT_PER_CYCLE);
+			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 
 			setPowerVector(powerVectorNew);
 
@@ -798,7 +794,7 @@ public class AarreMotor implements AarreMotorInterface {
 			vectorOfLastPowerChange = powerVectorRequested.subtract(powerVectorCurrent);
 			magnitudeOfLastPowerChange = vectorOfLastPowerChange.getMagnitude();
 
-			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested, powerIncrementMagnitude);
+			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 
 			telemetry.log("Motor - Ramp power to, current power target: %f", powerVectorNew);
 
@@ -914,17 +910,16 @@ public class AarreMotor implements AarreMotorInterface {
 		motor.setMode(mode);
 	}
 
-	/**
-	 * Set the power level of the motor without ramping.
-	 * <p>
-	 * Power is expressed as a fraction of the maximum possible power / speed supported according to the run mode in
-	 * which the motor is operating.
-	 * <p>
-	 * Setting a power level of zero will brake the motor.
-	 *
-	 * @param powerVector
-	 * 		The new power level of the motor, a value in the interval [-1.0, 1.0]
-	 */
+	@Override
+	public void setPowerMagnitudeTolerance(AarrePowerMagnitude powerMagnitude) {
+		powerMagnitudeTolerance = powerMagnitude;
+	}
+
+	@Override
+	public void setPowerMagnitudeIncrementPerCycle(AarrePowerMagnitude powerMagnitude) {
+		powerMagnitudeIncrementPerCycle = powerMagnitude;
+	}
+
 	@Override
 	public void setPowerVector(final AarrePowerVector powerVector) {
 		motor.setPower(powerVector.asDouble());

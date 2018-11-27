@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.src;
 
-interface AarreMotorInterface {
+abstract interface AarreMotorInterface {
 
     double getRevolutionsPerMinute();
 
@@ -55,10 +55,28 @@ interface AarreMotorInterface {
 
     int getNumberOfCycles(int ticksToMove, AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested);
 
-    AarrePowerVector getPowerVectorCurrent();
+	/**
+	 * Get the current proportion of power
+	 *
+	 * @return The proportion of power at which the motor is operating. A value in the range [-1, 1].
+	 */
+	abstract AarrePowerVector getPowerVectorCurrent();
 
-    AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested,
-                                       AarrePowerMagnitude powerIncrementMagnitude);
+	/**
+	 * Get the proportion of power to which to change the motor when ramping power up or down.
+	 * <p>
+	 * Must be public to allow access from unit test suite.
+	 *
+	 * @param powerVectorCurrent
+	 * 		The current power vector.
+	 * @param powerVectorRequested
+	 * 		The power vector that the caller has requested.
+	 * @param powerIncrementMagnitude
+	 * 		The maximum magnitude by which we are allowed to change the power.
+	 *
+	 * @return The new proportion of power to apply to the motor.
+	 */
+	AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested);
 
     double getPower();
 
@@ -76,7 +94,41 @@ interface AarreMotorInterface {
     void rampToPower(AarrePowerVector powerVectorRequested, AarrePowerMagnitude powerIncrementMagnitude, int
             millisecondsCycleLength, AarrePowerMagnitude powerToleranceMagnitude, double secondsTimeout);
 
-    void setPowerVector(AarrePowerVector powerVector);
+	/**
+	 * Set the magnitude by which the motor power will increment when ramping power up or down.
+	 *
+	 * @param powerMagnitude
+	 * 		The magnitude by which the motor should increment when ramping power up or down.
+	 */
+	void setPowerMagnitudeIncrementPerCycle(AarrePowerMagnitude powerMagnitude);
+
+	/**
+	 * Get the magnitude by which the motor power will increment when ramping up or down.
+	 *
+	 * @return The magnitude by which the motor power will increment when ramping up or down.
+	 */
+	AarrePowerMagnitude getPowerMagnitudeIncrementPerCycle();
+
+	/**
+	 * Set the magnitude within which we will consider the requested motor power to have been reached.
+	 *
+	 * @param powerMagnitude
+	 * 		The magnitude within which we will consider the requested motor power to have been reached.
+	 */
+	void setPowerMagnitudeTolerance(AarrePowerMagnitude powerMagnitude);
+
+	/**
+	 * Set the power level of the motor without ramping.
+	 * <p>
+	 * Power is expressed as a fraction of the maximum possible power / speed supported according to the run mode in
+	 * which the motor is operating.
+	 * <p>
+	 * Setting a power level of zero will brake the motor.
+	 *
+	 * @param powerVector
+	 * 		The new power level of the motor, a value in the interval [-1.0, 1.0]
+	 */
+	void setPowerVector(AarrePowerVector powerVector);
 
     void setStallDetectionToleranceInTicks(int ticks);
 
