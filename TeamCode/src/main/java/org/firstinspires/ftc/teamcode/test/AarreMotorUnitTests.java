@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.src.AarreMotor;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @Autonomous(name = "Aarre Motor Unit Tests", group = "Aarre")
 @Disabled
-public abstract class AarreMotorUnitTests extends LinearOpMode {
+public class AarreMotorUnitTests extends LinearOpMode {
 
     private AarreMotor motor;
 
     @BeforeEach
-    public void AarreMotionUnitTests() {
+    public void AarreMotorUnitTests() {
         motor = new AarreMotor(this, "left");
     }
 
@@ -205,17 +206,17 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
     /**
      * Test calculating when to start a ramp down
      */
-    public abstract void testGetTickNumberToStartRampDown01();
+    public void testGetTickNumberToStartRampDown01();
 
-    public abstract void testGetTickNumberToStartRampDown02();
+    public void testGetTickNumberToStartRampDown02();
 
-    public abstract void testGetTickNumberToStartRampDown03();
+    public void testGetTickNumberToStartRampDown03();
 
-    public abstract void testGetTickNumberToStartRampDown04();
+    public void testGetTickNumberToStartRampDown04();
 
-    public abstract void testGetTicksPerCycle01();
+    public void testGetTicksPerCycle01();
 
-    public abstract void testGetTicksPerMinute01();
+    public void testGetTicksPerMinute01();
 
     /**
      * Test that isRampDownToEncoderTicksRunning returns true when the motor is close enough to the target tick number.
@@ -757,6 +758,10 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
         assertTrue(result);
     }
 
+    @Test
+    public final void testSetDirection() {
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+    }
 
     /**
      * Must override runOpMode to avoid compiler error

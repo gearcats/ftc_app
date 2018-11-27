@@ -634,7 +634,6 @@ public class AarreMotor implements AarreMotorInterface {
 		powerVectorCurrent = this.getPowerVectorCurrent();
 		secondsRunning = 0.0;
 		ticksMoved = 0;
-		tickNumberCurrent = 0;
 
 		runtimeTotal = new ElapsedTime();
 
@@ -811,8 +810,10 @@ public class AarreMotor implements AarreMotorInterface {
 	 * @param direction
 	 * 		The logical direction in which this motor operates.
 	 */
-	void setDirection(final DcMotorSimple.Direction direction) {
-		motor.setDirection(direction);
+	public void setDirection(final DcMotorSimple.Direction direction) {
+		if (motor != null) {
+			motor.setDirection(direction);
+		}
 	}
 
 	/**

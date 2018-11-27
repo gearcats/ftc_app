@@ -2,16 +2,13 @@ package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
 import org.firstinspires.ftc.teamcode.src.AarreMotor;
 import org.firstinspires.ftc.teamcode.src.AarreMotorTorqueNADO;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
@@ -20,15 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Disabled
 public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests {
 
-	/**
-	 * Test AarreRobot
-	 * <p>
-	 * We can't break this up into different methods because the tests depend on overriding the FTC
-	 * runOpMode() method. Properties inherited from LinearOpMode include: - hardwareMap -
-	 * telemetry
-	 */
 
-	AarreMotor motor = null;
+	private AarreMotor motor;
 
 	/**
 	 * Test that isRampDownToEncoderTicksRunning returns true when the motor is close enough to the
