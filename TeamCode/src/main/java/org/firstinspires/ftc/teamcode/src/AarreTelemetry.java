@@ -20,7 +20,7 @@ public class AarreTelemetry {
 	private final Telemetry     underlyingTelemetry;
 	private final Telemetry.Log telemetryLog;
 
-	private boolean carefulLogging = false;
+	private boolean carefulLogging;
 
 
 	/**
@@ -111,7 +111,7 @@ public class AarreTelemetry {
 	}
 
 	/**
-	 * Create and return a new line in the receiver {@Link Telemetry}.
+	 * Create and return a new line in the receiver {@link Telemetry}.
 	 */
 	final Telemetry.Line addLine() {
 		return (underlyingTelemetry.addLine());

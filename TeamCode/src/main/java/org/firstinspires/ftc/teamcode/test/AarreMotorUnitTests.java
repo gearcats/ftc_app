@@ -282,7 +282,7 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 		boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
 		                                                       tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-		assertEquals(false, result);
+		assertFalse(result);
 	}
 
 	/**
@@ -440,20 +440,20 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 		int ticksMaximum = 1440;
 		int ticksMoved   = 0;
 
-		/**
-		 * Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
+		/*
+		  Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 0.0;
 
-		/**
-		 * Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
-		 * enough yet.)
+		/*
+		  Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
+		  enough yet.)
 		 */
 		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
-		/**
-		 * Current power is within reason, so no reason to stop.
+		/*
+		  Current power is within reason, so no reason to stop.
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
@@ -465,26 +465,26 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void testIsRampUpToEncoderTicksDone02() {
 
-		/**
-		 * We have moved farther than we intended, so it is time to stop.
+		/*
+		  We have moved farther than we intended, so it is time to stop.
 		 */
 		int ticksMaximum = 1440;
 		int ticksMoved   = 1441;
 
-		/**
-		 * Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
+		/*
+		  Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 0.0;
 
-		/**
-		 * Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
-		 * enough yet.)
+		/*
+		  Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
+		  enough yet.)
 		 */
 		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
-		/**
-		 * Current power is within reason, so no reason to stop.
+		/*
+		  Current power is within reason, so no reason to stop.
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
@@ -496,26 +496,26 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void testIsRampUpToEncoderTicksDone03() {
 
-		/**
-		 * We have not moved enough yet, so continue.
+		/*
+		  We have not moved enough yet, so continue.
 		 */
 		int ticksMaximum = 1440;
 		int ticksMoved   = 1439;
 
-		/**
-		 * Seconds running is more than timeout, so stop.
+		/*
+		  Seconds running is more than timeout, so stop.
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 6.0;
 
-		/**
-		 * Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
-		 * enough yet.)
+		/*
+		  Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
+		  enough yet.)
 		 */
 		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
-		/**
-		 * Current power is within reason, so no reason to stop.
+		/*
+		  Current power is within reason, so no reason to stop.
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
@@ -567,25 +567,25 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void testIsRampUpToEncoderTicksDone05() {
 
-		/**
-		 * We have moved exactly the right amount, so stop.
+		/*
+		  We have moved exactly the right amount, so stop.
 		 */
 		int ticksMaximum = 1440;
 		int ticksMoved   = 1440;
 
-		/**
-		 * Seconds running is less than timeout, so continue.
+		/*
+		  Seconds running is less than timeout, so continue.
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/**
-		 * Power delta is greater than tolerance, so continue.
+		/*
+		  Power delta is greater than tolerance, so continue.
 		 */
 		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
-		/**
-		 * Current power is within reason, so no reason to stop.
+		/*
+		  Current power is within reason, so no reason to stop.
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
@@ -600,25 +600,25 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void testIsRampUpToEncoderTicksDone06() {
 
-		/**
-		 * We have not moved the right amount, so continue.
+		/*
+		  We have not moved the right amount, so continue.
 		 */
 		int ticksMaximum = 1440;
 		int ticksMoved   = 14;
 
-		/**
-		 * Seconds running is less than timeout, so continue.
+		/*
+		  Seconds running is less than timeout, so continue.
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/**
-		 * Power delta is greater than tolerance, so continue.
+		/*
+		  Power delta is greater than tolerance, so continue.
 		 */
 		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
-		/**
-		 * Current power is maxed out, but still no reason to stop, so continue.
+		/*
+		  Current power is maxed out, but still no reason to stop, so continue.
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(1.0);
 
@@ -634,26 +634,26 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void testIsRampUpToEncoderTicksDone07() {
 
-		/**
-		 * We have not moved enough, so continue.
+		/*
+		  We have not moved enough, so continue.
 		 */
 		int ticksMaximum = 1440;
 		int ticksMoved   = 144;
 
-		/**
-		 * Seconds running is less than timeout, so continue.
+		/*
+		  Seconds running is less than timeout, so continue.
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/**
-		 * Power delta is negative, but absolute power delta is greater than tolerance, so
-		 * continue.
+		/*
+		  Power delta is negative, but absolute power delta is greater than tolerance, so
+		  continue.
 		 */
 		AarrePowerVector powerDelta = new AarrePowerVector(-0.1);
 
-		/**
-		 * Current power is within reason, so no reason to stop.
+		/*
+		  Current power is within reason, so no reason to stop.
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
@@ -668,25 +668,25 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void testIsRampUpToEncoderTicksDone08() {
 
-		/**
-		 * We have not moved enough, so continue.
+		/*
+		  We have not moved enough, so continue.
 		 */
 		int ticksMaximum = 1440;
 		int ticksMoved   = 190;
 
-		/**
-		 * Seconds running is less than timeout, so continue.
+		/*
+		  Seconds running is less than timeout, so continue.
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/**
-		 * Power delta is greater than tolerance, so continue.
+		/*
+		  Power delta is greater than tolerance, so continue.
 		 */
 		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
-		/**
-		 * Current power is negative but within reason, so continue.
+		/*
+		  Current power is negative but within reason, so continue.
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
 
@@ -703,25 +703,25 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void testIsRampUpToEncoderTicksDone09() {
 
-		/**
-		 * We have not moved enough, so continue.
+		/*
+		  We have not moved enough, so continue.
 		 */
 		int ticksMaximum = 1440;
 		int ticksMoved   = -190;
 
-		/**
-		 * Seconds running is less than timeout, so continue.
+		/*
+		  Seconds running is less than timeout, so continue.
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/**
-		 * Power delta is greater than tolerance, so continue.
+		/*
+		  Power delta is greater than tolerance, so continue.
 		 */
 		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
-		/**
-		 * Current power is negative but within reason, so continue.
+		/*
+		  Current power is negative but within reason, so continue.
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
 
@@ -737,25 +737,25 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void testIsRampUpToEncoderTicksDone10() {
 
-		/**
-		 * We have not moved enough, so continue.
+		/*
+		  We have not moved enough, so continue.
 		 */
 		int ticksMaximum = -5040;
 		int ticksMoved   = 0;
 
-		/**
-		 * Seconds running is less than timeout, so continue.
+		/*
+		  Seconds running is less than timeout, so continue.
 		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/**
-		 * Power delta is greater than tolerance, so continue.
+		/*
+		  Power delta is greater than tolerance, so continue.
 		 */
 		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
-		/**
-		 * Current power is negative but within reason, so continue.
+		/*
+		  Current power is negative but within reason, so continue.
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
 

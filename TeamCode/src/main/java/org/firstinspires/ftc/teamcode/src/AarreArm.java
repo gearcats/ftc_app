@@ -14,7 +14,9 @@ public class AarreArm {
 
 	private AarreMotor     motor;
 	private AarreTelemetry telemetry;
+	private HardwareMap    hardwareMap;
 	private LinearOpMode   opMode;
+
 
 	private double currentPosition;
 
@@ -35,41 +37,34 @@ public class AarreArm {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with the
 	 */
-	public AarreArm(final HardwareMap hardwareMap, final String nameOfRiserMotor, final AarreTelemetry telemetry, final LinearOpMode opMode) {
+	public AarreArm(final LinearOpMode opMode, final String nameOfArmMotor) {
 
-		currentPosition = 0.5; // We have no idea where the arm is
-
-		// Make sure there is a hardwareMap parameter
-		if (hardwareMap == null)
-			throw new IllegalArgumentException("Unexpected null parameter: hardwareMap");
-
-		// Make sure there is a telemetry parameter
-		if (telemetry == null)
-			throw new AssertionError("Unexpected null parameter: telemetry");
-
-		this.telemetry = telemetry;
 		this.opMode = opMode;
 
-		motor = AarreMotorRevHDCoreHex.createAarreMotorRevHDCoreHex(opMode, nameOfRiserMotor);
+		this.telemetry = new AarreTelemetry(opMode.telemetry);
+
+
+
+		/*
+		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
+		  still helpful to instantiate this object (rather than throwing an exception, for
+		  example).
+		 */
+		hardwareMap = opMode.hardwareMap;
+		if (hardwareMap == null) {
+			motor = null;
+		}
+		else {
+			motor = AarreMotorRevHDCoreHex.createAarreMotorRevHDCoreHex(opMode, nameOfArmMotor);
+		}
+
+
 
 		motor.rampToPower(new AarrePowerVector(0.0));
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises arm
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-	}
-
-	/**
-	 * Best guess at current position of the arm. (We can't know exactly where the arm is because
-	 * the arm starts in an unknown physical position upon software initialization and does not
-	 * store any state information.) A value of 0.0 indicates that we believe the arm is fully
-	 * lowered, and a value of 1.0 indicates that we believe the arm is fully raised. The arm
-	 * generally should be either fully lowered or fully raised (except when it is in motion), so
-	 * values in the middle when the arm is stationary suggest uncertainty about where the arm
-	 * really is.
-	 */
-	public double getCurrentPosition() {
-		return currentPosition;
 	}
 
 	/**

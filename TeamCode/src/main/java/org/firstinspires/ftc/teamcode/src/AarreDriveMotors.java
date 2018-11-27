@@ -139,6 +139,7 @@ public class AarreDriveMotors {
 
 			//telemetry.log("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
 			//telemetry.log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor.getCurrentTickNumber());
+			opMode.idle();
 
 		}
 

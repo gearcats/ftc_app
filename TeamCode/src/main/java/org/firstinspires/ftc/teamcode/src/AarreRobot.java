@@ -59,7 +59,7 @@ public class AarreRobot {
 
 		AarreDriveMotors driveMotors = new AarreDriveMotors(opMode);
 
-		arm = new AarreArm(hardwareMap, "arm", telemetry, opMode);
+		arm = new AarreArm(opMode, "arm");
 		riser = new AarreRiser(hardwareMap, "riser", telemetry, opMode);
 
 		// Define the servos

@@ -34,7 +34,6 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -87,7 +86,7 @@ public class AarreIMU {
 		parameters.loggingTag = "IMU";
 		parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-		/**
+		/*
 		 * Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port on a
 		 * Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
 		 * and named "imu".
@@ -118,61 +117,31 @@ public class AarreIMU {
 
 	void composeTelemetry() {
 
-		/**
+		/*
 		 * At the beginning of each telemetry update, grab a bunch of data
 		 * from the IMU that we will then display in separate lines.
 		 */
-		telemetry.addAction(new Runnable() {
-			@Override
-			public void run() {
-				// Acquiring the angles is relatively expensive; we don't want
-				// to do that in each of the three items that need that info, as that's
-				// three times the necessary expense.
-				angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-				gravity = imu.getGravity();
-			}
+		telemetry.addAction(() -> {
+			// Acquiring the angles is relatively expensive; we don't want
+			// to do that in each of the three items that need that info, as that's
+			// three times the necessary expense.
+			angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit
+					.DEGREES);
+			gravity = imu.getGravity();
 		});
 
-		telemetry.addLine().addData("status", new Func<String>() {
-			@Override
-			public String value() {
-				return imu.getSystemStatus().toShortString();
-			}
-		}).addData("Calibration", new Func<String>() {
-			@Override
-			public String value() {
-				return imu.getCalibrationStatus().toString();
-			}
-		});
+		telemetry.addLine().addData("status", () -> imu.getSystemStatus().toShortString()).addData
+				("Calibration", () -> imu.getCalibrationStatus().toString());
 
-		telemetry.addLine().addData("heading", new Func<String>() {
-			@Override
-			public String value() {
-				return formatAngle(angles.angleUnit, angles.firstAngle);
-			}
-		}).addData("roll", new Func<String>() {
-			@Override
-			public String value() {
-				return formatAngle(angles.angleUnit, angles.secondAngle);
-			}
-		}).addData("pitch", new Func<String>() {
-			@Override
-			public String value() {
-				return formatAngle(angles.angleUnit, angles.thirdAngle);
-			}
-		});
+		telemetry.addLine().addData("heading", () -> formatAngle(angles.angleUnit, angles
+				.firstAngle)).addData("roll", () -> formatAngle(angles.angleUnit, angles
+				.secondAngle)).addData("pitch", () -> formatAngle(angles.angleUnit, angles
+				.thirdAngle));
 
-		telemetry.addLine().addData("Gravity", new Func<String>() {
-			@Override
-			public String value() {
-				return gravity.toString();
-			}
-		}).addData("mag", new Func<String>() {
-			@Override
-			public String value() {
-				return String.format(Locale.getDefault(), "%.3f", Math.sqrt(gravity.xAccel * gravity.xAccel + gravity.yAccel * gravity.yAccel + gravity.zAccel * gravity.zAccel));
-			}
-		});
+		telemetry.addLine().addData("Gravity", () -> gravity.toString()).addData("mag", () ->
+				String.format(Locale.getDefault(), "%.3f", Math.sqrt(
+				gravity.xAccel * gravity.xAccel + gravity.yAccel * gravity.yAccel +
+				gravity.zAccel * gravity.zAccel)));
 	}
 
 	String formatAngle(AngleUnit angleUnit, double angle) {

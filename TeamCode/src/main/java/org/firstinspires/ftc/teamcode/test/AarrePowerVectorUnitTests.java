@@ -62,9 +62,8 @@ class AarrePowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector08() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			aarrePowerVector = new AarrePowerVector(2);
-		});
+		assertThrows(IllegalArgumentException.class, () -> aarrePowerVector = new AarrePowerVector
+				(2));
 
 	}
 
@@ -73,9 +72,7 @@ class AarrePowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector09() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			aarrePowerVector = new AarrePowerVector(-2);
-		});
+		assertThrows(IllegalArgumentException.class, () -> aarrePowerVector = new AarrePowerVector(-2));
 
 	}
 
@@ -85,9 +82,8 @@ class AarrePowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector10() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			aarrePowerVector = new AarrePowerVector(1.0001);
-		});
+		assertThrows(IllegalArgumentException.class, () -> aarrePowerVector = new AarrePowerVector
+				(1.0001));
 
 	}
 
@@ -96,9 +92,7 @@ class AarrePowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector11() {
-		assertThrows(IllegalArgumentException.class, () -> {
-			aarrePowerVector = new AarrePowerVector(-1.0001);
-		});
+		assertThrows(IllegalArgumentException.class, () -> aarrePowerVector = new AarrePowerVector(-1.0001));
 
 	}
 

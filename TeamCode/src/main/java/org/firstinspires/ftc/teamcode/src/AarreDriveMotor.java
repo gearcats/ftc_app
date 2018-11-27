@@ -12,7 +12,7 @@ public class AarreDriveMotor extends AarreMotorTorqueNADO {
 	/*
 	 * We use the diameter for calculating circumference
 	 */
-	private static final double WHEEL_DIAMETER_INCHES = 5.5;     // For figuring
+	private static final double WHEEL_DIAMETER_INCHES = 5.5;
 
 	public AarreDriveMotor(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);
