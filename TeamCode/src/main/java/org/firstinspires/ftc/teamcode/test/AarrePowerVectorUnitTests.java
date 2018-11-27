@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.test;
 
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -106,5 +108,54 @@ class AarrePowerVectorUnitTests {
 		AarrePowerVector aarrePowerVector3 = aarrePowerVector1.subtract(aarrePowerVector2);
 		double result = aarrePowerVector3.asDouble();
 		assertEquals(0.34, result);
+	}
+
+
+	@BeforeEach
+	void setUp() {
+	}
+
+	@AfterEach
+	void tearDown() {
+	}
+
+	@Test
+	void testAdd() {
+	}
+
+	@Test
+	void testDivideBy() {
+	}
+
+	@Test
+	void testDivideBy1() {
+	}
+
+	@Test
+	void testGetDirection() {
+	}
+
+	@Test
+	void testIsGreaterThan() {
+	}
+
+	@Test
+	void testAsDouble() {
+	}
+
+	@Test
+	void testGetMagnitude() {
+	}
+
+	@Test
+	void testMultiplyBy() {
+	}
+
+	@Test
+	void testReverseDirection() {
+	}
+
+	@Test
+	void testSubtract() {
 	}
 }

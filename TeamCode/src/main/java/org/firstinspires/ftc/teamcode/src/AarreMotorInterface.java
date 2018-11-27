@@ -2,60 +2,82 @@ package org.firstinspires.ftc.teamcode.src;
 
 interface AarreMotorInterface {
 
-	double getRevolutionsPerMinute();
+    double getRevolutionsPerMinute();
 
-	void setRevolutionsPerMinute(double revolutionsPerMinute);
+    double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude);
 
-	void setTicksPerRevolution(double ticksPerRevolution);
+    void setRevolutionsPerMinute(double revolutionsPerMinute);
 
-	int getMillisecondsPerCycle();
+    int getMillisecondsPerCycle();
 
-	double getTicksPerMinute();
+    double getTicksPerMinute();
 
-	double getTicksPerRevolution();
+    double getTicksPerMinute(AarrePowerMagnitude powerMagnitude);
 
-	double getTicksPerSecond();
+    double getTicksPerRevolution();
 
-	double getTicksPerMillisecond();
+    void setTicksPerRevolution(double ticksPerRevolution);
 
-	double getTicksPerCycle();
+    double getTicksPerSecond();
 
-	int getCurrentTickNumber();
+    double getTicksPerSecond(AarrePowerMagnitude powerMagnitude);
 
-	int getNumberOfCycles(int ticksToMove, AarrePowerVector powerVectorCurrent, AarrePowerVector
-			powerVectorRequested);
+    /**
+     * @return The number of ticks in a millisecond at maximum power.
+     */
+    double getTicksPerMillisecond();
 
-	AarrePowerVector getPowerVectorCurrent();
+    /**
+     * @param powerMagnitude
+     * 		The magnitude of motor power for which the caller wants to know the number of ticks in a power change
+     * 		cycle.
+     *
+     * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude
+     */
+    double getTicksPerMillisecond(AarrePowerMagnitude powerMagnitude);
 
-	AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent, AarrePowerVector
-			powerVectorRequested, AarrePowerMagnitude powerIncrementMagnitude);
+    /**
+     * @return The number of ticks in a power change cycle at maximum power
+     */
+    double getTicksPerCycle();
 
-	double getPower();
+    /**
+     * Get the number of ticks in a power change cycle at a given power magnitude.
+     *
+     * @param powerMagnitude
+     * 		The magnitude of motor power for which the caller wants the number of ticks in a power change cycle.
+     *
+     * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude.
+     */
+    double getTicksPerCycle(AarrePowerMagnitude powerMagnitude);
 
-	double getTickNumberToStartRampDown(int tickNumberAtStartOfPeriod, int numberOfTicksInPeriod,
-	                                    AarrePowerVector powerAtStartOfPeriod, AarrePowerVector
-			                                    powerAtEndOfPeriod);
+    int getCurrentTickNumber();
 
-	int getTicksInInterval(double power, int millisecondsInInterval);
+    int getNumberOfCycles(int ticksToMove, AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested);
 
-	boolean isRampUpToEncoderTicksDone(int ticksMaximum, double secondsTimeout, double
-			secondsRunning, int ticksMoved, AarrePowerVector powerDelta, AarrePowerVector
-			powerCurrent);
+    AarrePowerVector getPowerVectorCurrent();
 
-	boolean isRampDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent,
-	                                        int numberOfTicksInPeriod, AarrePowerVector
-			                                        powerAtStart, AarrePowerVector powerAtEnd);
+    AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested,
+                                       AarrePowerMagnitude powerIncrementMagnitude);
 
-	void rampToPower(AarrePowerVector powerVectorRequested);
+    double getPower();
 
-	void rampToPower(AarrePowerVector powerVectorRequested, AarrePowerMagnitude
-			powerIncrementMagnitude, int millisecondsCycleLength, AarrePowerMagnitude
-			powerToleranceMagnitude, double secondsTimeout);
+    double getTickNumberToStartRampDown(int tickNumberAtStartOfPeriod, int numberOfTicksInPeriod, AarrePowerVector
+            powerAtStartOfPeriod, AarrePowerVector powerAtEndOfPeriod);
 
-	void setPowerVector(AarrePowerVector powerVector);
+    boolean isRampUpToEncoderTicksDone(int ticksMaximum, double secondsTimeout, double secondsRunning, int
+            ticksMoved, AarrePowerVector powerDelta, AarrePowerVector powerCurrent);
 
-	@SuppressWarnings("WeakerAccess")
-	void setStallDetectionToleranceInTicks(int ticks);
+    boolean isRampDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, int
+            numberOfTicksInPeriod, AarrePowerVector powerAtStart, AarrePowerVector powerAtEnd);
 
-	void setupStallDetection(int timeLimitMs, int toleranceTicks);
+    void rampToPower(AarrePowerVector powerVectorRequested);
+
+    void rampToPower(AarrePowerVector powerVectorRequested, AarrePowerMagnitude powerIncrementMagnitude, int
+            millisecondsCycleLength, AarrePowerMagnitude powerToleranceMagnitude, double secondsTimeout);
+
+    void setPowerVector(AarrePowerVector powerVector);
+
+    void setStallDetectionToleranceInTicks(int ticks);
+
 }

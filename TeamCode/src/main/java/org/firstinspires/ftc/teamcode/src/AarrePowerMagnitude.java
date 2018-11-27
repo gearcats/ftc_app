@@ -32,9 +32,21 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 		return this.magnitude;
 	}
 
-	public AarrePowerMagnitude divideBy(AarrePowerMagnitude divisor) {
-		double ratio = this.magnitude / divisor.asDouble();
-		return new AarrePowerMagnitude(ratio);
+	/**
+	 * Divide this power magnitude by another.
+	 * <p>
+	 * The return type is double because dividing one power magnitude by another does not result in a power magnitude.
+	 * Consider dividing magnitude 1.0 by magnitude 0.5. In that case, the result of the division is a magnitude of
+	 * 2.0,
+	 * which is not a legal power magnitude.
+	 *
+	 * @param divisor
+	 * 		The power magnitude by which to divide this one.
+	 *
+	 * @return The quotient between the two magnitudes.
+	 */
+	public double divideBy(AarrePowerMagnitude divisor) {
+		return this.magnitude / divisor.asDouble();
 	}
 
 	public boolean isGreaterThan(AarrePowerMagnitude comparator) {

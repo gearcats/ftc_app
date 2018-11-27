@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class AarreDriveMotor extends AarreMotorTorqueNADO {
+public class AarreDriveMotor extends AarreMotorTorqueNADO implements AarreMotorInterface {
 
 	/*
 	 * This is 1.0 for direct-drive wheels
