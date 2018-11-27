@@ -98,13 +98,6 @@ public class AarreMotor implements AarreMotorInterface {
 		this.ticksPerRevolution = ticksPerRevolution;
 	}
 
-	/**
-	 * The number of milliseconds in a ramp up/ramp down cycle.
-	 * <p>
-	 * It is useful to have this public getter for testing purposes.
-	 *
-	 * @return The number of milliseconds in a ramp up/ramp down cycle.
-	 */
 	@Override
 	public int getMillisecondsPerCycle() {
 		return MILLISECONDS_PER_CYCLE;
@@ -257,30 +250,13 @@ public class AarreMotor implements AarreMotorInterface {
 
 	}
 
-	@Override
-	public double getPower() {
+	final public double getPower() {
 		return motor.getPower();
 	}
 
-	/**
-	 * Calculate when (what tick number) to start a ramp down.
-	 *
-	 * @param tickNumberAtStartOfPeriod
-	 * 		The motor encoder tick reading at the start of the period (which includes not only the ramp down at the
-	 * 		end but
-	 * 		any time/ticks running at speed before the ramp).
-	 * @param numberOfTicksInPeriod
-	 * 		The total number of ticks in the period.
-	 * @param powerAtStartOfPeriod
-	 * 		The motor power at the start of the period, in the range [-1,1].
-	 * @param powerAtEndOfPeriod
-	 * 		The power that should be applied to the motor at the end of the period, in the range [-1,1].
-	 *
-	 * @return
-	 */
-	@Override
-	public double getTickNumberToStartRampDown(final int tickNumberAtStartOfPeriod, final int numberOfTicksInPeriod,
-	                                           final AarrePowerVector powerAtStartOfPeriod, final AarrePowerVector
+	final public double getTickNumberToStartRampDown(final int tickNumberAtStartOfPeriod, final int
+			numberOfTicksInPeriod,
+	                                                 final AarrePowerVector powerAtStartOfPeriod, final AarrePowerVector
 			                                               powerAtEndOfPeriod) {
 
 		/*

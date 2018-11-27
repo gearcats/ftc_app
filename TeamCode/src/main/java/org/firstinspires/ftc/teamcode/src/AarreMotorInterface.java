@@ -8,7 +8,14 @@ abstract interface AarreMotorInterface {
 
     void setRevolutionsPerMinute(double revolutionsPerMinute);
 
-    int getMillisecondsPerCycle();
+	/**
+	 * The number of milliseconds in a ramp up/ramp down cycle.
+	 * <p>
+	 * It is useful to have this public getter for testing purposes.
+	 *
+	 * @return The number of milliseconds in a ramp up/ramp down cycle.
+	 */
+	int getMillisecondsPerCycle();
 
     double getTicksPerMinute();
 
@@ -80,8 +87,23 @@ abstract interface AarreMotorInterface {
 
     double getPower();
 
-    double getTickNumberToStartRampDown(int tickNumberAtStartOfPeriod, int numberOfTicksInPeriod, AarrePowerVector
-            powerAtStartOfPeriod, AarrePowerVector powerAtEndOfPeriod);
+	/**
+	 * Calculate when (what tick number) to start a ramp down.
+	 *
+	 * @param tickNumberAtStartOfPeriod
+	 * 		The motor encoder tick reading at the start of the period (which includes not only the ramp down at the
+	 * 		end but
+	 * 		any time/ticks running at speed before the ramp).
+	 * @param numberOfTicksInPeriod
+	 * 		The total number of ticks in the period.
+	 * @param powerAtStartOfPeriod
+	 * 		The motor power at the start of the period, in the range [-1,1].
+	 * @param powerAtEndOfPeriod
+	 * 		The power that should be applied to the motor at the end of the period, in the range [-1,1].
+	 *
+	 * @return
+	 */
+	double getTickNumberToStartRampDown(int tickNumberAtStartOfPeriod, int numberOfTicksInPeriod, AarrePowerVector powerAtStartOfPeriod, AarrePowerVector powerAtEndOfPeriod);
 
     boolean isRampUpToEncoderTicksDone(int ticksMaximum, double secondsTimeout, double secondsRunning, int
             ticksMoved, AarrePowerVector powerDelta, AarrePowerVector powerCurrent);
