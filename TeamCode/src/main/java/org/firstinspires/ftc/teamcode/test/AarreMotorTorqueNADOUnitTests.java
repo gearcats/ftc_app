@@ -354,4 +354,59 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests {
 		assertTrue(result);
 	}
 
+
+	@Override
+	@Test
+	public final void testGetNumberOfCycles01() {
+
+		int              ticksToMove              = 1440;
+		AarrePowerVector currentPower             = new AarrePowerVector(1.0);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+
+		assertEquals(10, numCycles);
+	}
+
+	@Override
+	@Test
+	public final void testGetNumberOfCycles02() {
+
+		int              ticksToMove              = 1440;
+		AarrePowerVector currentPower             = new AarrePowerVector(0.1);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+
+		assertEquals(1, numCycles);
+	}
+
+	@Override
+	@Test
+	public final void testGetNumberOfCycles03() {
+
+		int              ticksToMove              = 1440;
+		AarrePowerVector currentPower             = new AarrePowerVector(-0.1);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+
+		assertEquals(1, numCycles);
+	}
+
+	@Override
+	@Test
+	public final void testGetNumberOfCycles04() {
+
+		int              ticksToMove              = 1440;
+		AarrePowerVector currentPower             = new AarrePowerVector(-1.0);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+
+		assertEquals(10, numCycles);
+	}
+
+
+
 }

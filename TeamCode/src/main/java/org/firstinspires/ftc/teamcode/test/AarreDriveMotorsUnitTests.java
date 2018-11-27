@@ -3,9 +3,10 @@ package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreDriveMotors;
 import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AarreDriveMotorsUnitTests extends LinearOpMode {
 
@@ -16,8 +17,9 @@ class AarreDriveMotorsUnitTests extends LinearOpMode {
 		motors = new AarreDriveMotors(this);
 	}
 
-	@AfterEach
-	void tearDown() {
+	@Test
+	void testNewAarreArmObjectNotNull() {
+		assertNotNull(motors);
 	}
 
 	@Test

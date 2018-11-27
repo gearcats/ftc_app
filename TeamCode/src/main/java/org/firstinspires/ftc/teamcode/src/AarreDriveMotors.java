@@ -4,6 +4,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -30,6 +31,7 @@ public class AarreDriveMotors {
 	private AarreDriveMotor       leftMotor;
 	private AarreDriveMotor       rightMotor;
 	private AarreTelemetry        telemetry;
+	private HardwareMap           hardwareMap;
 	private LinearOpMode          opMode;
 	private ModernRoboticsI2cGyro gyro;
 
@@ -39,32 +41,45 @@ public class AarreDriveMotors {
 
 		telemetry = new AarreTelemetry(opMode.telemetry);
 
-		leftMotor = new AarreDriveMotor(opMode, "left");
-		rightMotor = new AarreDriveMotor(opMode, "right");
-
-		this.setPowerIncrement(DEFAULT_POWER_INCREMENT_ABSOLUTE);
 
 
-		//gyro = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyro");
+		/*
+		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
+		  still helpful to instantiate this object (rather than throwing an exception, for
+		  example).
+		 */
+		hardwareMap = opMode.hardwareMap;
+		if (hardwareMap == null) {
+			leftMotor = null;
+			rightMotor = null;
+		} else {
+			leftMotor = new AarreDriveMotor(opMode, "left");
+			rightMotor = new AarreDriveMotor(opMode, "right");
 
-		// Configure drive motors such that a positive power command moves them forwards
-		// and causes the encoders to count UP. Note that, as in most robots, the drive
-		// motors are mounted in opposite directions. May need to be reversed if using AndyMark motors.
+			this.setPowerIncrement(DEFAULT_POWER_INCREMENT_ABSOLUTE);
 
-		leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-		rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+			// Configure drive motors such that a positive power command moves them forwards
+			// and causes the encoders to count UP. Note that, as in most robots, the drive
+			// motors are mounted in opposite directions. May need to be reversed if using AndyMark motors.
 
-		// Set all motors to zero power
+			leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+			rightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-		rampPowerTo(new AarrePowerVector(0.0));
+			// Set all motors to zero power
 
-		// This code REQUIRES that you have encoders on the wheel motors
+			rampPowerTo(new AarrePowerVector(0.0));
 
-		leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-		rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+			// This code REQUIRES that you have encoders on the wheel motors
 
-		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+			leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+			rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+			leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+			rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+		}
+
+
+
 	}
 
 	public static AarrePowerMagnitude getPowerIncrementAbsolute() {

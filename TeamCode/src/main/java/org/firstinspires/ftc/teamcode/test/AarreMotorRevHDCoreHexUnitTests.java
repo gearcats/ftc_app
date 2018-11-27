@@ -2,16 +2,12 @@ package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
 import org.firstinspires.ftc.teamcode.src.AarreMotorRevHDCoreHex;
-
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
@@ -343,5 +339,60 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests {
 
 		assertEquals(52.8, result);
 	}
+
+
+	@Override
+	@Test
+	public final void testGetNumberOfCycles01() {
+
+		int              ticksToMove              = 1440;
+		AarrePowerVector currentPower             = new AarrePowerVector(1.0);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+
+		assertEquals(10, numCycles);
+	}
+
+	@Override
+	@Test
+	public final void testGetNumberOfCycles02() {
+
+		int              ticksToMove              = 1440;
+		AarrePowerVector currentPower             = new AarrePowerVector(0.1);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+
+		assertEquals(1, numCycles);
+	}
+
+	@Override
+	@Test
+	public final void testGetNumberOfCycles03() {
+
+		int              ticksToMove              = 1440;
+		AarrePowerVector currentPower             = new AarrePowerVector(-0.1);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+
+		assertEquals(1, numCycles);
+	}
+
+	@Override
+	@Test
+	public final void testGetNumberOfCycles04() {
+
+		int              ticksToMove              = 1440;
+		AarrePowerVector currentPower             = new AarrePowerVector(-1.0);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
+
+		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+
+		assertEquals(10, numCycles);
+	}
+
+
 
 }

@@ -43,8 +43,6 @@ public class AarreArm {
 
 		this.telemetry = new AarreTelemetry(opMode.telemetry);
 
-
-
 		/*
 		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
 		  still helpful to instantiate this object (rather than throwing an exception, for
@@ -57,8 +55,6 @@ public class AarreArm {
 		else {
 			motor = AarreMotorRevHDCoreHex.createAarreMotorRevHDCoreHex(opMode, nameOfArmMotor);
 		}
-
-
 
 		motor.rampToPower(new AarrePowerVector(0.0));
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
