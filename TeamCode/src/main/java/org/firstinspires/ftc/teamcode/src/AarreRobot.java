@@ -78,8 +78,9 @@ public class AarreRobot {
 		final double hookMaximumDegrees = 180.0;
 		hookServo.scaleRange(hookUpDegrees / hookMaximumDegrees, hookDownDegrees / hookMaximumDegrees);
 
-		/**
-		 * Initialize the IMU.
+
+		/*
+		  Initialize the IMU.
 		 */
 		imu = new AarreIMU(opMode);
 
@@ -112,16 +113,19 @@ public class AarreRobot {
 		return (telemetry);
 	}
 
-	public void gyroDrive(AarrePowerVector powerVector, double directionAndDistance, double secondsTime) {
-		driveMotors.gyroDrive(powerVector, directionAndDistance, secondsTime);
+	public void gyroDrive(AarrePowerMagnitude powerMagnitude, double inchesDirectionAndDistance,
+	                      double
+			secondsTime) {
+		driveMotors.gyroDrive(powerMagnitude
+				, inchesDirectionAndDistance, secondsTime);
 	}
 
-	public void gyroHold(AarrePowerVector proportionPower, double degreesHeading, double secondsTime) {
-		driveMotors.gyroHold(proportionPower, degreesHeading, secondsTime);
+	public void gyroHold(AarrePowerVector powerVector, double degreesHeading, double secondsTime) {
+		driveMotors.gyroHold(powerVector, degreesHeading, secondsTime);
 	}
 
-	public void gyroTurn(final AarrePowerVector proportionPower, final double angle) {
-		driveMotors.gyroTurn(proportionPower, angle);
+	public void gyroTurn(final AarrePowerVector powerVector, final double angle) {
+		driveMotors.gyroTurn(powerVector, angle);
 	}
 
 	/**

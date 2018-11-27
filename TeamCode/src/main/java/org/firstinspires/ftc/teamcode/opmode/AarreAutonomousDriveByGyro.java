@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
@@ -78,19 +79,14 @@ import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 @Disabled
 public class AarreAutonomousDriveByGyro extends LinearOpMode {
 
-	static final double COUNTS_PER_MOTOR_REV  = 1440;    // eg: TETRIX Motor Encoder
-	static final double DRIVE_GEAR_REDUCTION  = 2.0;     // This is < 1.0 if geared UP
-	static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
-	static final double COUNTS_PER_INCH       = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 	// These constants define the desired driving/control characteristics
 	// The can/should be tweaked to suite the specific robot drive train.
-	static final AarrePowerVector DRIVE_SPEED           = new AarrePowerVector(0.7);     // Nominal
-	// speed for better
-	// accuracy.
-	static final AarrePowerVector TURN_SPEED            = new AarrePowerVector(0.5);     // Nominal
-	// half speed for better
-	// accuracy.
 
+	// Nominal drive speed for better accuracy
+	static final AarrePowerMagnitude DRIVE_SPEED = new AarrePowerMagnitude(0.7);
+
+	// Nominal turn speed for better accuracy
+	static final AarrePowerVector    TURN_SPEED  = new AarrePowerVector(0.5);
 
 	ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
 

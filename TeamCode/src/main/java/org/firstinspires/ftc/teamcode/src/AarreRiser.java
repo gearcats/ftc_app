@@ -144,7 +144,7 @@ public class AarreRiser {
 	/**
 	 * Lower the riser by a certain number of revolutions of the motor shaft
 	 *
-	 * @param proportionMotorPower
+	 * @param powerMagnitude
 	 * 		Apply this proportion of power to the motor. In this method (where we have already
 	 * 		specified by the method name that the intent is to "lowerUntilStalled" the riser), we
 	 * 		expect this value to be non-negative. It tells us how much power to apply, not which

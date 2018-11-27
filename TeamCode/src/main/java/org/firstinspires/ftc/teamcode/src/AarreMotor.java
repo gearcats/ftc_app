@@ -60,10 +60,10 @@ public class AarreMotor {
 
 		telemetry = new AarreTelemetry(opMode.telemetry);
 
-		/**
-		 * hardwareMap will be null if we are running off-robot, but for testing purposes it is
-		 * still helpful to instantiate this object (rather than throwing an exception, for
-		 * example).
+		/*
+		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
+		  still helpful to instantiate this object (rather than throwing an exception, for
+		  example).
 		 */
 		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {
@@ -216,8 +216,7 @@ public class AarreMotor {
 
 	/**
 	 * Calculate when (what tick number) to start a ramp down.
-	 */
-	/**
+	 *
 	 * @param tickNumberAtStartOfPeriod
 	 * 		The motor encoder tick reading at the start of the period (which includes not only the
 	 * 		ramp
@@ -918,11 +917,11 @@ public class AarreMotor {
 	 * <p>
 	 * Setting a power level of zero will brake the motor.
 	 *
-	 * @param power
+	 * @param powerVector
 	 * 		The new power level of the motor, a value in the interval [-1.0, 1.0]
 	 */
-	public void setPowerVector(final AarrePowerVector aarrePowerVector) {
-		motor.setPower(aarrePowerVector.asDouble());
+	public void setPowerVector(final AarrePowerVector powerVector) {
+		motor.setPower(powerVector.asDouble());
 	}
 
 

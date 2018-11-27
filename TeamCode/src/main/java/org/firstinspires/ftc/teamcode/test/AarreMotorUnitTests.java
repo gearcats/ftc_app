@@ -433,9 +433,9 @@ public abstract class AarreMotorUnitTests extends LinearOpMode {
 	@Test
 	public final void testIsRampUpToEncoderTicksDone01() {
 
-		/**
-		 * ticksMoved is less than ticksMaximum, so no reason to stop. (We haven't moved far enough
-		 * yet).
+		/*
+		  ticksMoved is less than ticksMaximum, so no reason to stop. (We haven't moved far enough
+		  yet).
 		 */
 		int ticksMaximum = 1440;
 		int ticksMoved   = 0;
