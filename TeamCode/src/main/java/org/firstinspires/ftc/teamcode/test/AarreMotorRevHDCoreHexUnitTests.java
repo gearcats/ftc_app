@@ -171,36 +171,6 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 
 
 	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when enough ticks have passed to
-	 * start
-	 * the ramp but not enough have passed to finish the required movement.
-	 */
-	@Test
-	public final void testIsRampDownToEncoderTicksRunning12() {
-
-		final int tickNumberAtStartOfPeriod = 60;
-		final int tickNumberCurrent         = 114;
-		final int numberOfTicksInPeriod     = 120;
-
-		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
-		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
-
-		/*
-		 * Need 5 test cycles
-		 * Ticks per test cycle is 13.44
-		 * = 66.72 ticks
-		 * tick at end of period = 180
-		 * Tick to start ramp = 180 - 66.72 = 113.8
-		 */
-		final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-		                                                             tickNumberCurrent,
-		                                                             numberOfTicksInPeriod,
-		                                                             powerAtStart, powerAtEnd);
-
-		assertTrue(result);
-	}
-
-	/**
 	 * Test that isRampDownToEncoderTicksRunning returns false when the motor is not close
 	 * enough to
 	 * the target tick number.

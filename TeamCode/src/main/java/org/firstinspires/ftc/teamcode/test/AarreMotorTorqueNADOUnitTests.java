@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
@@ -20,27 +20,6 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 
 	private AarreMotor motor;
 
-	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when the motor is close enough to the
-	 * target tick number.
-	 */
-	@Test
-	public final void testIsRampDownToEncoderTicksRunning01() {
-
-
-		final int              tickNumberAtStartOfPeriod = 100;
-		final int              tickNumberCurrent         = 1000;
-		final int              numberOfTicksInPeriod     = 1000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
-
-		boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-		                                                       tickNumberCurrent,
-		                                                       numberOfTicksInPeriod,
-		                                                       powerAtStart, powerAtEnd);
-
-		assertTrue(result);
-	}
 
 	@BeforeEach
 	public final void testConstructor() {
@@ -118,36 +97,6 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		assertEquals(800, actual);
 	}
 
-	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when enough ticks have passed to
-	 * start
-	 * the ramp but not enough have passed to finish the required movement.
-	 */
-	@Test
-	public final void testIsRampDownToEncoderTicksRunning05() {
-
-		final int tickNumberAtStartOfPeriod = 60;
-		final int tickNumberCurrent         = 61;
-		final int numberOfTicksInPeriod     = 120;
-
-		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
-		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
-
-		/*
-		 * 5 cycles needed
-		 * 120 ticks per cycle
-		 * 600 ticks needed
-		 * 120-600 = -480
-		 * Ramp down should have started a long time ago!
-		 */
-
-		final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-		                                                             tickNumberCurrent,
-		                                                             numberOfTicksInPeriod,
-		                                                             powerAtStart, powerAtEnd);
-
-		assertTrue(result);
-	}
 
 
 	/**
@@ -188,36 +137,6 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	}
 
 	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when enough ticks have passed to
-	 * start
-	 * the ramp but not enough have passed to finish the required movement.
-	 */
-	@Test
-	public final void testIsRampDownToEncoderTicksRunning12() {
-
-		final int tickNumberAtStartOfPeriod = 60;
-		final int tickNumberCurrent         = 114;
-		final int numberOfTicksInPeriod     = 120;
-
-		AarrePowerVector powerAtStart = new AarrePowerVector( 0.5);
-		AarrePowerVector powerAtEnd = new AarrePowerVector( 0.0);
-
-		/*
-		 * Need 5 test cycles
-		 * Ticks per power cycle is 120
-		 * = need 600 ticks for the ramp
-		 * But tick at end of period = 180
-		 * Not enough time for ramp but it should have started at -480 ticks
-		 */
-		final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-		                                                             tickNumberCurrent,
-		                                                             numberOfTicksInPeriod,
-		                                                             powerAtStart, powerAtEnd);
-
-		assertTrue(result);
-	}
-
-	/**
 	 * Test calculating when to start a ramp down in a 10000-tick period.
 	 */
 	@Test
@@ -243,36 +162,7 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		assertEquals(-480, actual);
 	}
 
-	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when the motor is close enough to the
-	 * target tick number (negative numbers)
-	 */
-	@Test
-	public final void testIsRampDownToEncoderTicksRunning11() {
 
-
-		final int    tickNumberAtStartOfPeriod = -60;
-		final int    tickNumberCurrent         = -900;
-		final int    numberOfTicksInPeriod     = 1000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
-
-		/*
-		 * Need 10 cycles of ramp
-		 * At 120 ticks per cycle
-		 * Need 1200 ticks
-		 * Tick number at end of period = -1060
-		 * Would need to start ramp at -1060 + 1200 tics = 140 ticks
-		 * But we are at a negative tick and moving more negative, so we will never get to 140
-		 */
-
-		boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-		                                                       tickNumberCurrent,
-		                                                       numberOfTicksInPeriod,
-		                                                       powerAtStart, powerAtEnd);
-
-		assertFalse(result);
-	}
 
 	/**
 	 * Test that isRampDownToEncoderTicksRunning returns true when the motor is close enough to the
@@ -328,30 +218,6 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		                                                   powerAtEnd);
 
 		assertEquals(-2260, result);
-	}
-
-
-	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when enough ticks have passed to
-	 * start
-	 * the ramp but not enough have passed to finish the required movement (negative numbers)
-	 */
-	@Test
-	public final void testIsRampDownToEncoderTicksRunning08() {
-
-		final int tickNumberAtStartOfPeriod = 0;
-		final int tickNumberCurrent         = -61;
-		final int numberOfTicksInPeriod     = 120;
-
-		AarrePowerVector powerAtStart = new AarrePowerVector( 0.5);
-		AarrePowerVector powerAtEnd = new AarrePowerVector( 0.0);
-
-		final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-		                                                             tickNumberCurrent,
-		                                                             numberOfTicksInPeriod,
-		                                                             powerAtStart, powerAtEnd);
-
-		assertTrue(result);
 	}
 
 
