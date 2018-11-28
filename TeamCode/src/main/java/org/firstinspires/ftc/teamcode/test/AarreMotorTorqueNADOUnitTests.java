@@ -217,28 +217,55 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		assertEquals(-260, result);
 	}
 
+
 	@Test
 	@Override
-	public final void testGetTickNumberToStartSlowDown13() {
+	public final void whenThereAreEnoughTicks_thenSlowDownStartsOnTime() {
 
 		final int                  tickNumberAtStartOfPeriod = -60;
-		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(-1000);
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(10000);
 		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of ramp
 		 * At 120 ticks per cycle
-		 * Need -1200 ticks
-		 * Tick number at end of period = -1060
-		 * Would need to start ramp at -1060 - (-1200) tics = -1060 + 1200 ticks = 140 ticks
+		 * Need 1200 ticks
+		 * Tick number at start of period = -60
+		 * Tick number at end of period = 9940
+		 * Would need to start ramp at 9940 - 1200 ticks = 8740 ticks
+		 */
+
+		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerAtStart, powerAtEnd);
+
+		assertEquals(8740, result);
+	}
+
+
+	@Test
+	@Override
+	public final void whenThereAreNotEnoughTicks_thenSlowDownStartsTooEarly() {
+
+		final int                  tickNumberAtStartOfPeriod = -60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(1000);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
+
+		/*
+		 * Need 10 cycles of ramp
+		 * At 120 ticks per cycle
+		 * Need 1200 ticks
+		 * Tick number at start of period = -60
+		 * Tick number at end of period = 940
+		 * Would need to start ramp at 940 - 1200 ticks = -260 ticks
 		 */
 
 		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                   numberOfTicksInPeriod, powerAtStart,
 		                                                   powerAtEnd);
 
-		assertEquals(140, result);
+		assertEquals(-260, result);
 	}
 
 

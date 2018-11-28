@@ -66,11 +66,11 @@ interface AarreConcreteMotorUnitTestsInterface {
 	@Test
 	public void testGetTickNumberToStartSlowDown12();
 
-	/**
-	 * Test calculating when to slow down from 1.0 to 0.0 between -60 and -1000 ticks.
-	 */
 	@Test
-	public void testGetTickNumberToStartSlowDown13();
+	public void whenThereAreNotEnoughTicks_thenSlowDownStartsTooEarly();
+
+	@Test
+	public void whenThereAreEnoughTicks_thenSlowDownStartsOnTime();
 
 	@Test
 	public void testGetTicksPerCycle01();

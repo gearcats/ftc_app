@@ -177,23 +177,14 @@ interface AarreMotorUnitTestsInterface {
 	@Test
 	void testIsRampUpToEncoderTicksDone08();
 
-	/**
-	 * Test that a negative number of ticks does not cause the check to stop.
-	 */
 	@Test
-	void testIsRampUpToEncoderTicksDone09();
+	void whenWeHaveNotMovedEnough_thenSpeedUpContinues();
 
-	/**
-	 * Test that a negative tick maximum does not cause the loop to stop
-	 */
 	@Test
-	void testIsRampUpToEncoderTicksDone10();
+	void whenWeHaveNotMoved_thenSpeedUpContinues();
 
-	/**
-	 * Test that a negative tick maximum does cause the loop to stop after it is exceeded
-	 */
 	@Test
-	void testIsRampUpToEncoderTicksDone11();
+	void whenWeHaveMovedMoreThanEnough_thenSpeedUpStops();
 
 	@Test
 	void testSetDirection();

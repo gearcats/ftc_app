@@ -29,6 +29,7 @@ public class AarrePositiveIntegerUnitTests {
 		});
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Test
 	public void whenDoubleValueRequested_thenReturnsCorrectValue() {
 		int                  randomPositiveInteger      = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
@@ -38,9 +39,10 @@ public class AarrePositiveIntegerUnitTests {
 		assertEquals(expected, actual);
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Test
 	public void whenIntValueRequested_thenReturnsCorrectValue() {
-		int                  randomPositiveInteger = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, -1);
+		int                  randomPositiveInteger = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
 		AarrePositiveInteger aarrePositiveInteger  = new AarrePositiveInteger(randomPositiveInteger);
 		int                  returnValue           = aarrePositiveInteger.intValue();
 		assertEquals(randomPositiveInteger, returnValue);

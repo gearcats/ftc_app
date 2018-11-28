@@ -585,19 +585,12 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone09() {
+	public final void whenWeHaveNotMovedEnough_thenSpeedUpContinues() {
 
-		/*
-		  We have not moved enough, so continue.
-		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(-190);
-
-		/*
-		  Seconds running is less than timeout, so continue.
-		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 4.0;
+		AarrePositiveInteger    ticksMaximum   = new AarrePositiveInteger(1440);
+		AarreNonNegativeInteger ticksMoved     = new AarreNonNegativeInteger(190);
+		double                  secondsTimeout = 5.0;
+		double                  secondsRunning = 4.0;
 
 		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
@@ -606,29 +599,13 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone10() {
+	public final void whenWeHaveNotMoved_thenSpeedUpContinues() {
 
-		/*
-		  We have not moved enough, so continue.
-		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(-5040);
+		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(5040);
 		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(0);
 
-		/*
-		  Seconds running is less than timeout, so continue.
-		 */
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
-
-		/*
-		  Power delta is greater than tolerance, so continue.
-		 */
-		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
-
-		/*
-		  Current power is negative but within reason, so continue.
-		 */
-		AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
 
 		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
@@ -638,13 +615,13 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone11() {
+	public final void whenWeHaveMovedMoreThanEnough_thenSpeedUpStops() {
 
 		/*
 		 * We have moved enough (albeit in a negative direction), so stop
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(-5040);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(-5041);
+		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(5040);
+		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(5041);
 
 		/*
 		 * Seconds running is less than timeout, so continue.

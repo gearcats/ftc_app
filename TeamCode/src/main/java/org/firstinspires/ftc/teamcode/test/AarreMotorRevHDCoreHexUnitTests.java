@@ -277,10 +277,10 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 
 	@Test
 	@Override
-	public final void testGetTickNumberToStartSlowDown13() {
+	public final void whenThereAreEnoughTicks_thenSlowDownStartsOnTime() {
 
 		final int                  tickNumberAtStartOfPeriod = -60;
-		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(-1000);
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(1000);
 		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
@@ -288,14 +288,38 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 		 * Need 10 cycles of slowing down
 		 * At 13.44 ticks per cycle
 		 * Need 134.4 ticks
-		 * Tick number at end of period = -1060
-		 * Would need to start ramp at -1060 + 134.4 tics = -925.6 ticks
+		 * Tick number at end of period = 960
+		 * Would need to start ramp at 960 - 134.4 tics = 825.6 ticks
 		 */
 
 		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
-		assertEquals(-925.6, result);
+		assertEquals(825.6, result);
+	}
+
+	@Test
+	@Override
+	public final void whenThereAreNotEnoughTicks_thenSlowDownStartsTooEarly() {
+
+		final int                  tickNumberAtStartOfPeriod = -60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(100);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
+
+		/*
+		 * Need 10 cycles of slowing down
+		 * At 13.44 ticks per cycle
+		 * Need 134.4 ticks
+		 * Tick number at end of period = 40
+		 * Would need to start ramp at 40 - 134.4 tics = -94.4 ticks
+		 */
+
+		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerAtStart, powerAtEnd);
+
+		assertEquals(-94.4, result);
+
 	}
 
 

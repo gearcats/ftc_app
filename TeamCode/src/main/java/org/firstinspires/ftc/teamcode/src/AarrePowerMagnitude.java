@@ -28,7 +28,7 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 		return Double.compare(this.magnitude, comparator.asDouble());
 	}
 
-	double asDouble() {
+	public double asDouble() {
 		return this.magnitude;
 	}
 

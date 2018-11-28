@@ -243,7 +243,7 @@ public class AarreMotor implements AarreMotorInterface {
 			powerVectorAtEndOfPeriod) {
 
 		AarrePowerMagnitude powerMagnitudeAtStartOfPeriod = powerVectorAtStartOfPeriod.getMagnitude();
-		AarrePowerMagnitude powerMagnitudeAtEndOfPeriod   = powerVectorAtStartOfPeriod.getMagnitude();
+		AarrePowerMagnitude powerMagnitudeAtEndOfPeriod   = powerVectorAtEndOfPeriod.getMagnitude();
 		if (powerMagnitudeAtStartOfPeriod.asDouble() <= powerMagnitudeAtEndOfPeriod.asDouble()) {
 			throw new IllegalArgumentException("When slowing down, the absolute value of the " + "power at the start "
 					+ "of the slowdown must be greater " + "than the absolute value of the power at the end " + "of "
@@ -312,9 +312,6 @@ public class AarreMotor implements AarreMotorInterface {
 	                                               AarrePositiveInteger numberOfTicksInPeriod, AarrePowerVector
 			                                               powerAtStart, AarrePowerVector powerAtEnd) {
 
-		/*
-
-		 */
 
 		boolean result = false;
 
