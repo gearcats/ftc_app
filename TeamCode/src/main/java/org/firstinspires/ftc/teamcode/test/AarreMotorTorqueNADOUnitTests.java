@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @Autonomous(name = "Aarre Motor TorqueNADO Unit Tests", group = "Aarre")
 @Disabled
-public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests {
+public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implements AarreConcreteMotorUnitTestsInterface {
 
 
 	private AarreMotor motor;
