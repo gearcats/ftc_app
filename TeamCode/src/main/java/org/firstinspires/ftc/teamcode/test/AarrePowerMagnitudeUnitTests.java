@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.test;
 
 import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,10 +10,6 @@ class AarrePowerMagnitudeUnitTests {
 
 	@BeforeEach
 	void setUp() {
-	}
-
-	@AfterEach
-	void tearDown() {
 	}
 
 	@Test

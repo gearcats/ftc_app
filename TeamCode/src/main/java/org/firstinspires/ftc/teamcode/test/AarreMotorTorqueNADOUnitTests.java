@@ -50,39 +50,9 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		assertEquals(144000.0, ticksPerMinute);
 	}
 
-	/**
-	 * Test calculating when to start a ramp down in a 10000-tick period.
-	 */
 	@Test
-	public final void testGetTickNumberToStartRampDown02() {
-
-		/*
-		 * A power difference of 1.0 requires 10 cycles of ramp.
-		 */
-		AarrePowerVector powerAtStart = new AarrePowerVector( 1.0);
-		AarrePowerVector powerAtEnd = new AarrePowerVector( 0.0);
-
-		final int tickNumberAtStartOfPeriod = 0;
-		final int numberOfTicksInPeriod     = 10000;
-
-		/*
-		 * There are 120 ticks in a cycle, so the ramp should be 1200 ticks
-		 */
-		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
-		                                                         numberOfTicksInPeriod,
-		                                                         powerAtStart, powerAtEnd);
-
-		/*
-		 * Subtracting 1200 ticks from the total of 10000 should give us 8800 ticks
-		 */
-		assertEquals(8800, actual);
-	}
-
-	/**
-	 * Test calculating when to start a ramp down in a 2000-tick period.
-	 */
-	@Test
-	public final void testGetTickNumberToStartRampDown01() {
+	@Override
+	public final void testGetTickNumberToStartSlowDown01() {
 
 		final AarrePowerVector powerAtStart = new AarrePowerVector( 1.0);
 		final AarrePowerVector powerAtEnd = new AarrePowerVector( 0.0);
@@ -98,6 +68,34 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	}
 
 
+	/**
+	 * Test calculating when to start a ramp down in a 10000-tick period.
+	 */
+	@Test
+	@Override
+	public final void testGetTickNumberToStartSlowDown02() {
+
+		/*
+		 * A power difference of 1.0 requires 10 cycles of ramp.
+		 */
+		AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
+
+		final int tickNumberAtStartOfPeriod = 0;
+		final int numberOfTicksInPeriod     = 10000;
+
+		/*
+		 * There are 120 ticks in a cycle, so the ramp should be 1200 ticks
+		 */
+		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerAtStart, powerAtEnd);
+
+		/*
+		 * Subtracting 1200 ticks from the total of 10000 should give us 8800 ticks
+		 */
+		assertEquals(8800, actual);
+	}
+
 
 	/**
 	 * Test that isSlowDownToEncoderTicksRunning returns false when the motor is not close
@@ -105,7 +103,8 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	 * the target tick number.
 	 */
 	@Test
-	public final void testGetTickNumberToStartRampDown04() {
+	@Override
+	public final void testGetTickNumberToStartSlowDown04() {
 
 		final int    tickNumberAtStartOfPeriod = 60;
 		final int    numberOfTicksInPeriod     = 10000;
@@ -120,7 +119,8 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	}
 
 	@Test
-	public final void testGetTickNumberToStartRampDown12() {
+	@Override
+	public final void testGetTickNumberToStartSlowDown12() {
 
 		final int tickNumberAtStartOfPeriod = 60;
 		final int tickNumberCurrent         = 114;
@@ -140,7 +140,8 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	 * Test calculating when to start a ramp down in a 10000-tick period.
 	 */
 	@Test
-	public final void testGetTickNumberToStartRampDown03() {
+	@Override
+	public final void testGetTickNumberToStartSlowDown03() {
 
 		/*
 		 * A power difference of 1.0 requires 5 cycles of ramp.
@@ -163,13 +164,37 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	}
 
 
+	@Test
+	@Override
+	public final void testGetTickNumberToStartSlowDown08() {
+
+		final int tickNumberAtStartOfPeriod = 0;
+		final int numberOfTicksInPeriod     = 120;
+
+		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
+
+		/*
+		 * Power change requires 5 cycles
+		 * Each cycle is 120 ticks
+		 * 120 * 5 = 600
+		 * We need to start ramp down at tick 120 - 600 ticks = -480 ticks
+		 */
+		final double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerAtStart, powerAtEnd);
+
+		assertEquals(-480, result);
+	}
+
+
 
 	/**
 	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the
 	 * target tick number (negative numbers)
 	 */
 	@Test
-	public final void testGetTickNumberToStartRampDown11() {
+	@Override
+	public final void testGetTickNumberToStartSlowDown11() {
 
 
 		final int    tickNumberAtStartOfPeriod = -60;
@@ -192,13 +217,9 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		assertEquals(-260, result);
 	}
 
-	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the
-	 * target tick number (negative numbers)
-	 */
 	@Test
-	public final void testGetTickNumberToStartRampDown13() {
-
+	@Override
+	public final void testGetTickNumberToStartSlowDown13() {
 
 		final int    tickNumberAtStartOfPeriod = -60;
 		final int    numberOfTicksInPeriod     = -1000;
@@ -210,14 +231,14 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		 * At 120 ticks per cycle
 		 * Need -1200 ticks
 		 * Tick number at end of period = -1060
-		 * Would need to start ramp at -1060 - 1200 tics = -2260 ticks
+		 * Would need to start ramp at -1060 - (-1200) tics = -1060 + 1200 ticks = 140 ticks
 		 */
 
 		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                   numberOfTicksInPeriod, powerAtStart,
 		                                                   powerAtEnd);
 
-		assertEquals(-2260, result);
+		assertEquals(140, result);
 	}
 
 

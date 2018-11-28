@@ -238,9 +238,7 @@ public class AarreMotor implements AarreMotorInterface {
 		return motor.getPower();
 	}
 
-	final public double getTickNumberToStartSlowDown(final int tickNumberAtStartOfPeriod, final int
-			numberOfTicksInPeriod, final AarrePowerVector powerAtStartOfPeriod, final AarrePowerVector
-			powerAtEndOfPeriod) {
+	final public double getTickNumberToStartSlowDown(final int tickNumberAtStartOfPeriod, final int numberOfTicksInPeriod, final AarrePowerVector powerVectorAtStartOfPeriod, final AarrePowerVector powerVectorAtEndOfPeriod) {
 
 		/*
 		 * A slowdown can occur with either positive or negative power. Consider a slowdown from 0.5 to 0 versus a
@@ -251,29 +249,26 @@ public class AarreMotor implements AarreMotorInterface {
 		 * 0.5 to
 		 * -0.5.
 		 */
-		if (powerAtStartOfPeriod.asDouble() <= powerAtEndOfPeriod.asDouble()) {
+		AarrePowerMagnitude powerMagnitudeAtStartOfPeriod = powerVectorAtStartOfPeriod.getMagnitude();
+		AarrePowerMagnitude powerMagnitudeAtEndOfPeriod   = powerVectorAtStartOfPeriod.getMagnitude();
+		if (powerMagnitudeAtStartOfPeriod.asDouble() <= powerMagnitudeAtEndOfPeriod.asDouble()) {
 			throw new IllegalArgumentException("When slowing down, the absolute value of the " + "power at the start "
 					+ "of the slowdown must be greater " + "than the absolute value of the power at the end " + "of "
 					+ "the " + "slowdown" + ".");
 		}
 
-		final double numberOfCyclesInRamp;
-		final double numberOfTicksInRamp;
-		final double numberOfTicksToChange;
-		final double tickNumberAtEndOfPeriod;
-		final double tickNumberToStartRampDown;
-
-		AarrePowerVector    powerChangeVector      = powerAtStartOfPeriod.subtract(powerAtEndOfPeriod);
+		AarrePowerVector    powerChangeVector      = powerVectorAtStartOfPeriod.subtract(powerVectorAtEndOfPeriod);
 		AarrePowerMagnitude magnitudeOfPowerChange = powerChangeVector.getMagnitude();
 		int                 powerChangeDirection   = powerChangeVector.getDirection();
 
-		numberOfCyclesInRamp = magnitudeOfPowerChange.asDouble() / DEFAULT_POWER_INCREMENT_PER_CYCLE.asDouble();
-		numberOfTicksInRamp = numberOfCyclesInRamp * getTicksPerCycle();
-		numberOfTicksToChange = powerChangeDirection * numberOfTicksInRamp;
-		tickNumberAtEndOfPeriod = tickNumberAtStartOfPeriod + (numberOfTicksInPeriod * powerChangeDirection);
-		tickNumberToStartRampDown = tickNumberAtEndOfPeriod - numberOfTicksToChange;
+		final double numberOfCyclesInSlowDown = magnitudeOfPowerChange.divideBy(getPowerMagnitudeIncrementPerCycle());
+		final double numberOfTicksInSlowDown  = numberOfCyclesInSlowDown * getTicksPerCycle();
+		final double numberOfTicksToChange    = powerChangeDirection * numberOfTicksInSlowDown;
+		final double tickNumberAtEndOfPeriod = tickNumberAtStartOfPeriod + (numberOfTicksInPeriod *
+				powerChangeDirection);
+		final double tickNumberToStartSlowDown = tickNumberAtEndOfPeriod - numberOfTicksToChange;
 
-		return tickNumberToStartRampDown;
+		return tickNumberToStartSlowDown;
 	}
 
 
@@ -330,15 +325,17 @@ public class AarreMotor implements AarreMotorInterface {
 		/*
 		 * The slowdown should start when we are at a tick number equal to (or
 		 * greater than) the tick number to start the slowdown and continue until we are at a
-		 * tick number equal to (or greater than) the tick number to end the slowdown.
+		 * tick number equal to (or greater than) the tick number at the end of the period
 		 */
 
 		boolean result = false;
 
-		double tickToStartRampDown = getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
-				powerAtStart, powerAtEnd);
+		double tickNumberToStartSlowDown = getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-		if ((tickNumberCurrent >= tickToStartRampDown) && (tickNumberCurrent <= numberOfTicksInPeriod)) {
+		double tickNumberAtEndOfPeriod = tickNumberAtStartOfPeriod + numberOfTicksInPeriod;
+
+		if ((tickNumberCurrent >= tickNumberToStartSlowDown) && (tickNumberCurrent <= tickNumberAtEndOfPeriod)) {
 			result = true;
 		}
 

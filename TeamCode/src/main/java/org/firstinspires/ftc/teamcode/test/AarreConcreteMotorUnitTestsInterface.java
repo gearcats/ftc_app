@@ -23,17 +23,54 @@ interface AarreConcreteMotorUnitTestsInterface {
 	@Test
 	public void testGetNumberOfCycles04();
 
+	/**
+	 * Test calculating when to start a ramp down in a 2000-tick period.
+	 */
 	@Test
-	public void testGetTickNumberToStartRampDown01();
+	public void testGetTickNumberToStartSlowDown01();
 
+	/**
+	 * Test calculating when to start slowing down in a 10000-tick period.
+	 */
 	@Test
-	public void testGetTickNumberToStartRampDown02();
+	public void testGetTickNumberToStartSlowDown02();
 
+	/**
+	 * Test calculating when to start slowing down in a 120-tick period.
+	 */
 	@Test
-	public void testGetTickNumberToStartRampDown03();
+	public void testGetTickNumberToStartSlowDown03();
 
+	/**
+	 * Test calculating when to start slowing down in a 10000-tick period.
+	 */
 	@Test
-	public void testGetTickNumberToStartRampDown04();
+	public void testGetTickNumberToStartSlowDown04();
+
+	/**
+	 * Test slowing down from 0.5 to 0 between 0 and 120 ticks.
+	 */
+	@Test
+	public void testGetTickNumberToStartSlowDown08();
+
+	/**
+	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the target tick number
+	 * (negative numbers)
+	 */
+	@Test
+	public void testGetTickNumberToStartSlowDown11();
+
+	/**
+	 * Test calculating when to slow down from 0.5 to 0.0 between 60 and 120 ticks.
+	 */
+	@Test
+	public void testGetTickNumberToStartSlowDown12();
+
+	/**
+	 * Test calculating when to slow down from 1.0 to 0.0 between -60 and -1000 ticks.
+	 */
+	@Test
+	public void testGetTickNumberToStartSlowDown13();
 
 	@Test
 	public void testGetTicksPerCycle01();

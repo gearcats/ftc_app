@@ -52,7 +52,7 @@ interface AarreMotorUnitTestsInterface {
 	void testGetPowerVectorNew11();
 
 	/**
-	 * Test that ramping down should be in effect if the current tick number is close enough to the target tick number.
+	 * Test that slowing down should be in effect if the current tick number is close enough to the target tick number.
 	 * This test depends only on comparing the current and target tick numbers, so it does not depend on any particular
 	 * kind of motor.
 	 */
@@ -60,16 +60,15 @@ interface AarreMotorUnitTestsInterface {
 	void testIsSlowDownToEncoderTicksRunningGeneric01();
 
 	/**
-	 * Test that ramping down should not be in effect if the current tick number is not sufficiently close to the
-	 * target
-	 * tick number. This test depends only on comparing the current and target tick numbers, so it does not depend on
-	 * any particular kind of motor.
+	 * Test that slowing down should not be in effect if the current tick number is not close enough to the target tick
+	 * number. This test depends only on comparing the current and target tick numbers; it does not depend on any
+	 * particular kind of motor.
 	 */
 	@Test
 	void testIsSlowDownToEncoderTicksRunningGeneric02();
 
 	/**
-	 * Test that ramping down should not be in effect when the current tick number exceeds the total number of ticks we
+	 * Test that slowing down should not be in effect when the current tick number exceeds the total number of ticks we
 	 * were supposed to move. This test depends only on comparing the current and target tick numbers, so it does not
 	 * depend on any particular kind of motor.
 	 */
@@ -77,7 +76,7 @@ interface AarreMotorUnitTestsInterface {
 	void testIsSlowDownToEncoderTicksRunningGeneric03();
 
 	/**
-	 * Test that ramping down should stop when the current tick number exceeds the total number of ticks we were
+	 * Test that slowing down should stop when the current tick number exceeds the total number of ticks we were
 	 * supposed to move. This test depends only on comparing the current and target tick numbers, so it does not depend
 	 * on any particular kind of motor.
 	 */
@@ -85,14 +84,14 @@ interface AarreMotorUnitTestsInterface {
 	void testIsSlowDownToEncoderTicksRunningGeneric04();
 
 	/**
-	 * Test that slowing down should be in progress when enough ticks have passed to start slowing but not
-	 * enough have passed to reach the target.
+	 * Test that slowing down should be in progress when enough ticks have passed to start slowing but not enough have
+	 * passed to reach the target.
 	 */
 	@Test
 	void testIsSlowDownToEncoderTicksRunningGeneric05();
 
 	/**
-	 * Test that ramping down should stop when the target tick number is negative but the current tick number is
+	 * Test that slowing down should stop when the target tick number is negative but the current tick number is
 	 * positive. This test depends only on comparing the current and target tick numbers, so it does not depend on any
 	 * particular kind of motor.
 	 */
@@ -100,8 +99,8 @@ interface AarreMotorUnitTestsInterface {
 	void testIsSlowDownToEncoderTicksRunningGeneric06();
 
 	/**
-	 * Test that ramping down should not be running when the target tick number is negative and the current tick number
-	 * is negative but not sufficiently negative to have started the rampdown. This test depends only on comparing the
+	 * Test that slowing down should not be running when the target tick number is negative and the current tick number
+	 * is negative but not sufficiently negative to have started the slowdown. This test depends only on comparing the
 	 * current and target tick numbers, so it does not depend on any particular kind of motor.
 	 */
 	@Test

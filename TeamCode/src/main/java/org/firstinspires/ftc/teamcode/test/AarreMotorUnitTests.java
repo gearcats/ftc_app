@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Disabled
 public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitTestsInterface {
 
-    private AarreMotor motor;
+	private AarreMotor motor;
 
 	@Override
 	@BeforeEach
@@ -108,33 +108,49 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 	}
 
 	@Override
-    @Test
-    public final void testGetPowerVectorNew10() {
-        AarrePowerVector proportionPowerCurrent   = new AarrePowerVector(0.0);
-        AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew       = motor.getPowerVectorNew(proportionPowerCurrent,
+	@Test
+	public final void testGetPowerVectorNew10() {
+		AarrePowerVector proportionPowerCurrent   = new AarrePowerVector(0.0);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
+		AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(proportionPowerCurrent,
 				proportionPowerRequested);
 		assertEquals(0.1, proportionPowerNew.asDouble(), "Wrong proportion power");
-    }
+	}
 
 	@Override
-    @Test
-    public final void testGetPowerVectorNew11() {
-        AarrePowerVector proportionPowerCurrent   = new AarrePowerVector(1.0);
-        AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew       = motor.getPowerVectorNew(proportionPowerCurrent,
+	@Test
+	public final void testGetPowerVectorNew11() {
+		AarrePowerVector proportionPowerCurrent   = new AarrePowerVector(1.0);
+		AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
+		AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(proportionPowerCurrent,
 				proportionPowerRequested);
 		assertEquals(1.0, proportionPowerNew.asDouble(), "Wrong proportion power");
-    }
+	}
 
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric01() {
 
-		final int              tickNumberAtStartOfPeriod = 100;
-		final int              tickNumberCurrent         = 1000;
-		final int              numberOfTicksInPeriod     = 1000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
+		final int tickNumberAtStartOfPeriod = 100;
+		final int tickNumberCurrent         = 1000;
+		final int numberOfTicksInPeriod     = 1000;
+
+		/*
+
+	      The target tick (tick number at the end of the period) is 1100
+		  The current tick number is 1000
+		  The number of ticks that remain are 100
+		  There are 10 cycles
+
+		  With 120 ticks per cycle (TorqueNADO), slowing down would take 1200 ticks, meaning that it should have
+		  started at tick 1100-1200 = -100 (if possible) and still be going
+
+		  With 13.44 ticks per cycle (Rev Core Hex), slowing down would take 134.4 ticks, meaning that it should
+		  have started at tick 1100-134.4 = 965.6 and still be going
+
+		 */
+
+		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
+		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
@@ -143,53 +159,50 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 	}
 
 	@Override
-    @Test
+	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric02() {
 
-        final int tickNumberAtStartOfPeriod = 60;
-        final int tickNumberCurrent = 61;
-        final int numberOfTicksInPeriod = 10000;
-        final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
-        final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
+		final int              tickNumberAtStartOfPeriod = 60;
+		final int              tickNumberCurrent         = 61;
+		final int              numberOfTicksInPeriod     = 10000;
+		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
 
-		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-                numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 	@Override
-    @Test
+	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric03() {
 
-        final int tickNumberAtStartOfPeriod = 0;
-        final int tickNumberCurrent = 11000;
-        final int numberOfTicksInPeriod = 10000;
+		final int tickNumberAtStartOfPeriod = 0;
+		final int tickNumberCurrent         = 11000;
+		final int numberOfTicksInPeriod     = 10000;
 
-        final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
-        final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
+		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
+		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-                numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 	@Override
-    @Test
+	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric04() {
 
-        final int tickNumberAtStartOfPeriod = 0;
-        final int tickNumberCurrent = 123;
-        final int numberOfTicksInPeriod = 100;
-        final AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
-        final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
+		final int              tickNumberAtStartOfPeriod = 0;
+		final int              tickNumberCurrent         = 123;
+		final int              numberOfTicksInPeriod     = 100;
+		final AarrePowerVector powerAtStart              = new AarrePowerVector(0.5);
+		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-                numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric05() {
@@ -208,36 +221,34 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 	}
 
 	@Override
-    @Test
+	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric06() {
 
-        final int tickNumberAtStartOfPeriod = 0;
-        final int tickNumberCurrent = 59;
-        final int numberOfTicksInPeriod = 120;
-        final AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
-        final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
+		final int              tickNumberAtStartOfPeriod = 0;
+		final int              tickNumberCurrent         = 59;
+		final int              numberOfTicksInPeriod     = 120;
+		final AarrePowerVector powerAtStart              = new AarrePowerVector(0.5);
+		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-                numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 	@Override
-    @Test
+	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric07() {
 
-        final int tickNumberAtStartOfPeriod = 0;
-        final int tickNumberCurrent = -59;
-        final int numberOfTicksInPeriod = 120;
-        final AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
-        final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
+		final int              tickNumberAtStartOfPeriod = 0;
+		final int              tickNumberCurrent         = -59;
+		final int              numberOfTicksInPeriod     = 120;
+		final AarrePowerVector powerAtStart              = new AarrePowerVector(0.5);
+		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-                numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 
 	@Test
@@ -257,47 +268,44 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 	}
 
 
-
 	@Override
-    @Test
+	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric09() {
 
-        /*
-         * The current tick number exceed the total number of ticks we were supposed to
-         * move, so ramping down should stop.
-         *
-         * This is a made up example.
-         */
+		/*
+		 * The current tick number exceed the total number of ticks we were supposed to
+		 * move, so ramping down should stop.
+		 *
+		 * This is a made up example.
+		 */
 
-        final int tickNumberAtStartOfPeriod = 0;
-        final int tickNumberCurrent = -11000;
-        final int numberOfTicksInPeriod = 10000;
+		final int tickNumberAtStartOfPeriod = 0;
+		final int tickNumberCurrent         = -11000;
+		final int numberOfTicksInPeriod     = 10000;
 
-        final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
-        final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
+		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
+		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-                numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 
 	@Override
-    @Test
+	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric10() {
 
-        final int tickNumberAtStartOfPeriod = -60;
-        final int tickNumberCurrent = -61;
-        final int numberOfTicksInPeriod = 10000;
-        final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
-        final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
+		final int              tickNumberAtStartOfPeriod = -60;
+		final int              tickNumberCurrent         = -61;
+		final int              numberOfTicksInPeriod     = 10000;
+		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
 
-		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-                numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 
 	/**
@@ -316,11 +324,14 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 		/*
 		 * Need 10 cycles of ramp
-		 * At 120 ticks per cycle
+		 *
+		 * At 120 ticks per cycle (on TorqueNADO)
 		 * Need 1200 ticks
 		 * Tick number at end of period = -1060
 		 * Would need to start ramp at -1060 + 1200 tics = 140 ticks
 		 * But we are at a negative tick and moving more negative, so we will never get to 140
+		 *
+		 * At
 		 */
 
 		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
@@ -347,38 +358,38 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 
 	@Override
-    @Test
-    public final void testIsRampUpToEncoderTicksDone01() {
+	@Test
+	public final void testIsRampUpToEncoderTicksDone01() {
 
 		/*
 		  ticksMoved is less than ticksMaximum, so no reason to stop. (We haven't moved far enough
 		  yet).
 		 */
-        int ticksMaximum = 1440;
-        int ticksMoved = 0;
+		int ticksMaximum = 1440;
+		int ticksMoved   = 0;
 
 		/*
 		  Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
 		 */
-        double secondsTimeout = 5.0;
-        double secondsRunning = 0.0;
+		double secondsTimeout = 5.0;
+		double secondsRunning = 0.0;
 
 		/*
 		  Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
 		  enough yet.)
 		 */
-        AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
 		/*
 		  Current power is within reason, so no reason to stop.
 		 */
-        AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
+		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
-        boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-                powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 	@Override
 	@Test
@@ -407,7 +418,8 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
-		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved, powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
 		assertTrue(result);
 	}
@@ -439,271 +451,272 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
-		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved, powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
 		assertTrue(result);
 	}
 
 	@Override
-    @Test
-    public final void testIsRampUpToEncoderTicksDone04() {
+	@Test
+	public final void testIsRampUpToEncoderTicksDone04() {
 
-        /*
-         * We have not moved enough yet, so continue.
-         */
-        int ticksMaximum = 1440;
-        int ticksMoved = 1439;
+		/*
+		 * We have not moved enough yet, so continue.
+		 */
+		int ticksMaximum = 1440;
+		int ticksMoved   = 1439;
 
-        /*
-         * Seconds running is less than timeout, so continue.
-         */
-        double secondsTimeout = 5.0;
-        double secondsRunning = 4.0;
+		/*
+		 * Seconds running is less than timeout, so continue.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
 
-        /*
-         * Power delta is within tolerance, so continue.
-         * (Continue moving, although power should not continue to increase.)
-         */
-        AarrePowerVector powerDelta = new AarrePowerVector(0.001);
+		/*
+		 * Power delta is within tolerance, so continue.
+		 * (Continue moving, although power should not continue to increase.)
+		 */
+		AarrePowerVector powerDelta = new AarrePowerVector(0.001);
 
-        /*
-         * Current power is within reason, so no reason to stop.
-         */
-        AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
+		/*
+		 * Current power is within reason, so no reason to stop.
+		 */
+		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
-        boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-                powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
-        assertFalse(result);
+		assertFalse(result);
 
-    }
+	}
 
 	@Override
-    @Test
-    public final void testIsRampUpToEncoderTicksDone05() {
+	@Test
+	public final void testIsRampUpToEncoderTicksDone05() {
 
 		/*
 		  We have moved exactly the right amount, so stop.
 		 */
-        int ticksMaximum = 1440;
-        int ticksMoved = 1440;
+		int ticksMaximum = 1440;
+		int ticksMoved   = 1440;
 
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-        double secondsTimeout = 5.0;
-        double secondsRunning = 4.0;
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
 
 		/*
 		  Power delta is greater than tolerance, so continue.
 		 */
-        AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
 		/*
 		  Current power is within reason, so no reason to stop.
 		 */
-        AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
+		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
-        boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-                powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
-        assertTrue(result);
-    }
+		assertTrue(result);
+	}
 
 	@Override
-    @Test
-    public final void testIsRampUpToEncoderTicksDone06() {
+	@Test
+	public final void testIsRampUpToEncoderTicksDone06() {
 
 		/*
 		  We have not moved the right amount, so continue.
 		 */
-        int ticksMaximum = 1440;
-        int ticksMoved = 14;
+		int ticksMaximum = 1440;
+		int ticksMoved   = 14;
 
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-        double secondsTimeout = 5.0;
-        double secondsRunning = 4.0;
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
 
 		/*
 		  Power delta is greater than tolerance, so continue.
 		 */
-        AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
 		/*
 		  Current power is maxed out, but still no reason to stop, so continue.
 		 */
-        AarrePowerVector powerCurrent = new AarrePowerVector(1.0);
+		AarrePowerVector powerCurrent = new AarrePowerVector(1.0);
 
-        boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-                powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 
 	@Override
-    @Test
-    public final void testIsRampUpToEncoderTicksDone07() {
+	@Test
+	public final void testIsRampUpToEncoderTicksDone07() {
 
 		/*
 		  We have not moved enough, so continue.
 		 */
-        int ticksMaximum = 1440;
-        int ticksMoved = 144;
+		int ticksMaximum = 1440;
+		int ticksMoved   = 144;
 
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-        double secondsTimeout = 5.0;
-        double secondsRunning = 4.0;
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
 
 		/*
 		  Power delta is negative, but absolute power delta is greater than tolerance, so
 		  continue.
 		 */
-        AarrePowerVector powerDelta = new AarrePowerVector(-0.1);
+		AarrePowerVector powerDelta = new AarrePowerVector(-0.1);
 
 		/*
 		  Current power is within reason, so no reason to stop.
 		 */
-        AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
+		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
-        boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-                powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 	@Override
-    @Test
-    public final void testIsRampUpToEncoderTicksDone08() {
+	@Test
+	public final void testIsRampUpToEncoderTicksDone08() {
 
 		/*
 		  We have not moved enough, so continue.
 		 */
-        int ticksMaximum = 1440;
-        int ticksMoved = 190;
+		int ticksMaximum = 1440;
+		int ticksMoved   = 190;
 
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-        double secondsTimeout = 5.0;
-        double secondsRunning = 4.0;
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
 
 		/*
 		  Power delta is greater than tolerance, so continue.
 		 */
-        AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
 		/*
 		  Current power is negative but within reason, so continue.
 		 */
-        AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
+		AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
 
-        boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-                powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 	@Override
-    @Test
-    public final void testIsRampUpToEncoderTicksDone09() {
+	@Test
+	public final void testIsRampUpToEncoderTicksDone09() {
 
 		/*
 		  We have not moved enough, so continue.
 		 */
-        int ticksMaximum = 1440;
-        int ticksMoved = -190;
+		int ticksMaximum = 1440;
+		int ticksMoved   = -190;
 
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-        double secondsTimeout = 5.0;
-        double secondsRunning = 4.0;
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
 
 		/*
 		  Power delta is greater than tolerance, so continue.
 		 */
-        AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
 		/*
 		  Current power is negative but within reason, so continue.
 		 */
-        AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
+		AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
 
-        boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-                powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 	@Override
-    @Test
-    public final void testIsRampUpToEncoderTicksDone10() {
+	@Test
+	public final void testIsRampUpToEncoderTicksDone10() {
 
 		/*
 		  We have not moved enough, so continue.
 		 */
-        int ticksMaximum = -5040;
-        int ticksMoved = 0;
+		int ticksMaximum = -5040;
+		int ticksMoved   = 0;
 
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-        double secondsTimeout = 5.0;
-        double secondsRunning = 4.0;
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
 
 		/*
 		  Power delta is greater than tolerance, so continue.
 		 */
-        AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
 		/*
 		  Current power is negative but within reason, so continue.
 		 */
-        AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
+		AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
 
-        boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-                powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
-        assertFalse(result);
-    }
+		assertFalse(result);
+	}
 
 
 	@Override
-    @Test
-    public final void testIsRampUpToEncoderTicksDone11() {
+	@Test
+	public final void testIsRampUpToEncoderTicksDone11() {
 
-        /*
-         * We have moved enough (albeit in a negative direction), so stop
-         */
-        int ticksMaximum = -5040;
-        int ticksMoved = -5041;
+		/*
+		 * We have moved enough (albeit in a negative direction), so stop
+		 */
+		int ticksMaximum = -5040;
+		int ticksMoved   = -5041;
 
-        /*
-         * Seconds running is less than timeout, so continue.
-         */
-        double secondsTimeout = 5.0;
-        double secondsRunning = 4.0;
+		/*
+		 * Seconds running is less than timeout, so continue.
+		 */
+		double secondsTimeout = 5.0;
+		double secondsRunning = 4.0;
 
-        /*
-         * Power delta is greater than tolerance, so continue.
-         */
-        AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		/*
+		 * Power delta is greater than tolerance, so continue.
+		 */
+		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
 
-        /*
-         * Current power is negative but within reason, so continue.
-         */
-        AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
+		/*
+		 * Current power is negative but within reason, so continue.
+		 */
+		AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
 
-        boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
-                powerDelta, powerCurrent);
+		boolean result = motor.isRampUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved,
+				powerDelta, powerCurrent);
 
-        assertTrue(result);
-    }
+		assertTrue(result);
+	}
 
 	@Override
 	@Test
@@ -711,8 +724,8 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		motor.setDirection(DcMotorSimple.Direction.REVERSE);
 	}
 
-    @Test
-    @Override
-    public final void runOpMode() {
-    }
+	@Test
+	@Override
+	public final void runOpMode() {
+	}
 }
