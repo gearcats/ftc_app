@@ -128,7 +128,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
     }
 
 	@Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric01() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric01() {
 
 		final int              tickNumberAtStartOfPeriod = 100;
 		final int              tickNumberCurrent         = 1000;
@@ -144,7 +144,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	@Override
     @Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric02() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric02() {
 
         final int tickNumberAtStartOfPeriod = 60;
         final int tickNumberCurrent = 61;
@@ -160,7 +160,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	@Override
     @Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric03() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric03() {
 
         final int tickNumberAtStartOfPeriod = 0;
         final int tickNumberCurrent = 11000;
@@ -177,7 +177,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	@Override
     @Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric04() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric04() {
 
         final int tickNumberAtStartOfPeriod = 0;
         final int tickNumberCurrent = 123;
@@ -192,7 +192,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
     }
 
 	@Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric05() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric05() {
 
 		final int tickNumberAtStartOfPeriod = 60;
 		final int tickNumberCurrent         = 61;
@@ -207,11 +207,9 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		assertTrue(result);
 	}
 
-
-
 	@Override
     @Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric06() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric06() {
 
         final int tickNumberAtStartOfPeriod = 0;
         final int tickNumberCurrent = 59;
@@ -227,7 +225,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	@Override
     @Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric07() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric07() {
 
         final int tickNumberAtStartOfPeriod = 0;
         final int tickNumberCurrent = -59;
@@ -243,7 +241,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 
 	@Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric08() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric08() {
 
 		final int tickNumberAtStartOfPeriod = 0;
 		final int tickNumberCurrent         = -61;
@@ -262,7 +260,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	@Override
     @Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric09() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric09() {
 
         /*
          * The current tick number exceed the total number of ticks we were supposed to
@@ -287,7 +285,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	@Override
     @Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric10() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric10() {
 
         final int tickNumberAtStartOfPeriod = -60;
         final int tickNumberCurrent = -61;
@@ -307,7 +305,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 	 * (negative numbers)
 	 */
 	@Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric11() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric11() {
 
 
 		final int              tickNumberAtStartOfPeriod = -60;
@@ -332,7 +330,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 	}
 
 	@Test
-	public final void testIsRampDownToEncoderTicksRunningGeneric12() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric12() {
 
 		final int tickNumberAtStartOfPeriod = 60;
 		final int tickNumberCurrent         = 114;

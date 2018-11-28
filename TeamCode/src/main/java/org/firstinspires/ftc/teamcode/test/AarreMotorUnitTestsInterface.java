@@ -57,7 +57,7 @@ interface AarreMotorUnitTestsInterface {
 	 * kind of motor.
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric01();
+	void testIsSlowDownToEncoderTicksRunningGeneric01();
 
 	/**
 	 * Test that ramping down should not be in effect if the current tick number is not sufficiently close to the
@@ -66,7 +66,7 @@ interface AarreMotorUnitTestsInterface {
 	 * any particular kind of motor.
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric02();
+	void testIsSlowDownToEncoderTicksRunningGeneric02();
 
 	/**
 	 * Test that ramping down should not be in effect when the current tick number exceeds the total number of ticks we
@@ -74,7 +74,7 @@ interface AarreMotorUnitTestsInterface {
 	 * depend on any particular kind of motor.
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric03();
+	void testIsSlowDownToEncoderTicksRunningGeneric03();
 
 	/**
 	 * Test that ramping down should stop when the current tick number exceeds the total number of ticks we were
@@ -82,14 +82,14 @@ interface AarreMotorUnitTestsInterface {
 	 * on any particular kind of motor.
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric04();
+	void testIsSlowDownToEncoderTicksRunningGeneric04();
 
 	/**
 	 * Test that slowing down should be in progress when enough ticks have passed to start slowing but not
 	 * enough have passed to reach the target.
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric05();
+	void testIsSlowDownToEncoderTicksRunningGeneric05();
 
 	/**
 	 * Test that ramping down should stop when the target tick number is negative but the current tick number is
@@ -97,7 +97,7 @@ interface AarreMotorUnitTestsInterface {
 	 * particular kind of motor.
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric06();
+	void testIsSlowDownToEncoderTicksRunningGeneric06();
 
 	/**
 	 * Test that ramping down should not be running when the target tick number is negative and the current tick number
@@ -105,37 +105,37 @@ interface AarreMotorUnitTestsInterface {
 	 * current and target tick numbers, so it does not depend on any particular kind of motor.
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric07();
+	void testIsSlowDownToEncoderTicksRunningGeneric07();
 
 	/**
 	 * Test that isSlowDownToEncoderTicksRunning returns true when enough ticks have passed to start the ramp but not
 	 * enough have passed to finish the required movement (negative numbers)
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric08();
+	void testIsSlowDownToEncoderTicksRunningGeneric08();
 
 	/**
 	 * Test that isSlowDownToEncoderTicksRunning returns false when enough ticks have passed (negative numbers)
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric09();
+	void testIsSlowDownToEncoderTicksRunningGeneric09();
 
 	/**
 	 * Test that isSlowDownToEncoderTicksRunning returns false when the motor is not close enough to the target tick
 	 * number (negative numbers)
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric10();
+	void testIsSlowDownToEncoderTicksRunningGeneric10();
 
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric11();
+	void testIsSlowDownToEncoderTicksRunningGeneric11();
 
 	/**
 	 * Test that isSlowDownToEncoderTicksRunning returns true when enough ticks have passed to start the ramp but not
 	 * enough have passed to finish the required movement.
 	 */
 	@Test
-	void testIsRampDownToEncoderTicksRunningGeneric12();
+	void testIsSlowDownToEncoderTicksRunningGeneric12();
 
 
 	@Test
