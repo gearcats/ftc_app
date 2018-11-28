@@ -85,8 +85,8 @@ interface AarreMotorUnitTestsInterface {
 	void testIsRampDownToEncoderTicksRunningGeneric04();
 
 	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when enough ticks have passed to start the ramp but not
-	 * enough have passed to finish the required movement.
+	 * Test that slowing down should be in progress when enough ticks have passed to start slowing but not
+	 * enough have passed to reach the target.
 	 */
 	@Test
 	void testIsRampDownToEncoderTicksRunningGeneric05();
@@ -108,20 +108,20 @@ interface AarreMotorUnitTestsInterface {
 	void testIsRampDownToEncoderTicksRunningGeneric07();
 
 	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when enough ticks have passed to start the ramp but not
+	 * Test that isSlowDownToEncoderTicksRunning returns true when enough ticks have passed to start the ramp but not
 	 * enough have passed to finish the required movement (negative numbers)
 	 */
 	@Test
 	void testIsRampDownToEncoderTicksRunningGeneric08();
 
 	/**
-	 * Test that isRampDownToEncoderTicksRunning returns false when enough ticks have passed (negative numbers)
+	 * Test that isSlowDownToEncoderTicksRunning returns false when enough ticks have passed (negative numbers)
 	 */
 	@Test
 	void testIsRampDownToEncoderTicksRunningGeneric09();
 
 	/**
-	 * Test that isRampDownToEncoderTicksRunning returns false when the motor is not close enough to the target tick
+	 * Test that isSlowDownToEncoderTicksRunning returns false when the motor is not close enough to the target tick
 	 * number (negative numbers)
 	 */
 	@Test
@@ -131,7 +131,7 @@ interface AarreMotorUnitTestsInterface {
 	void testIsRampDownToEncoderTicksRunningGeneric11();
 
 	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when enough ticks have passed to start the ramp but not
+	 * Test that isSlowDownToEncoderTicksRunning returns true when enough ticks have passed to start the ramp but not
 	 * enough have passed to finish the required movement.
 	 */
 	@Test

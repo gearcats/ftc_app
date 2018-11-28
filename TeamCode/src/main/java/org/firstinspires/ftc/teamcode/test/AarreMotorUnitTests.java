@@ -130,14 +130,13 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 	@Test
 	public final void testIsRampDownToEncoderTicksRunningGeneric01() {
 
-
 		final int              tickNumberAtStartOfPeriod = 100;
 		final int              tickNumberCurrent         = 1000;
 		final int              numberOfTicksInPeriod     = 1000;
 		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
 		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
 
-		boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -153,7 +152,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
         final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
         final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
 
-        boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
                 numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
         assertFalse(result);
@@ -170,7 +169,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
         final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
         final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
 
-        final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
                 numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
         assertFalse(result);
@@ -186,7 +185,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
         final AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
         final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
 
-        final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
                 numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
         assertFalse(result);
@@ -202,15 +201,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		/*
-		 * 5 cycles needed
-		 * 120 ticks per cycle
-		 * 600 ticks needed
-		 * 120-600 = -480
-		 * Ramp down should have started a long time ago!
-		 */
-
-		final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -228,7 +219,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
         final AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
         final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
 
-        final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
                 numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
         assertFalse(result);
@@ -244,7 +235,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
         final AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
         final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
 
-        final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
                 numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
         assertFalse(result);
@@ -261,7 +252,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -287,7 +278,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
         final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
         final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
 
-        final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
                 numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
         assertFalse(result);
@@ -304,7 +295,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
         final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
         final AarrePowerVector powerAtEnd = new AarrePowerVector(0.0);
 
-        boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
                 numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
         assertFalse(result);
@@ -312,7 +303,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 
 	/**
-	 * Test that isRampDownToEncoderTicksRunning returns true when the motor is close enough to the target tick number
+	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the target tick number
 	 * (negative numbers)
 	 */
 	@Test
@@ -334,7 +325,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		 * But we are at a negative tick and moving more negative, so we will never get to 140
 		 */
 
-		boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
@@ -350,7 +341,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isRampDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);

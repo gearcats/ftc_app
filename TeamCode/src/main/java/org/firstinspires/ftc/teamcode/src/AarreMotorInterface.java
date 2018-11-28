@@ -103,7 +103,8 @@ abstract interface AarreMotorInterface {
 	 *
 	 * @return
 	 */
-	double getTickNumberToStartRampDown(int tickNumberAtStartOfPeriod, int numberOfTicksInPeriod, AarrePowerVector powerAtStartOfPeriod, AarrePowerVector powerAtEndOfPeriod);
+	double getTickNumberToStartSlowDown(int tickNumberAtStartOfPeriod, int numberOfTicksInPeriod, AarrePowerVector
+			powerAtStartOfPeriod, AarrePowerVector powerAtEndOfPeriod);
 
 	/**
 	 * Determine whether the loop in rampToEncoderTicks should end.
@@ -149,7 +150,8 @@ abstract interface AarreMotorInterface {
 	 *
 	 * @return True if changing the power should start or continue. False otherwise.
 	 */
-	boolean isRampDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, int numberOfTicksInPeriod, AarrePowerVector powerAtStart, AarrePowerVector powerAtEnd);
+	boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, int
+			numberOfTicksInPeriod, AarrePowerVector powerAtStart, AarrePowerVector powerAtEnd);
 
     void rampToPower(AarrePowerVector powerVectorRequested);
 
