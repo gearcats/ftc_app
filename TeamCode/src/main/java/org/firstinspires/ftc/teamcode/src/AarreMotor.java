@@ -240,15 +240,6 @@ public class AarreMotor implements AarreMotorInterface {
 
 	final public double getTickNumberToStartSlowDown(final int tickNumberAtStartOfPeriod, final int numberOfTicksInPeriod, final AarrePowerVector powerVectorAtStartOfPeriod, final AarrePowerVector powerVectorAtEndOfPeriod) {
 
-		/*
-		 * A slowdown can occur with either positive or negative power. Consider a slowdown from 0.5 to 0 versus a
-		 * slowdown from -0.5 to 0. Thus we cannot assume that the power at the start of the period is greater than
-		 * the power at the end of the period.
-		 *
-		 * A slowdown also can occur without a stop at 0. For example, we could slow down from -0.5 to 0.5 or from
-		 * 0.5 to
-		 * -0.5.
-		 */
 		AarrePowerMagnitude powerMagnitudeAtStartOfPeriod = powerVectorAtStartOfPeriod.getMagnitude();
 		AarrePowerMagnitude powerMagnitudeAtEndOfPeriod   = powerVectorAtStartOfPeriod.getMagnitude();
 		if (powerMagnitudeAtStartOfPeriod.asDouble() <= powerMagnitudeAtEndOfPeriod.asDouble()) {

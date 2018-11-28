@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.src;
 
 abstract interface AarreMotorInterface {
 
-    double getRevolutionsPerMinute();
+	double getRevolutionsPerMinute();
 
-    double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude);
+	double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude);
 
-    void setRevolutionsPerMinute(double revolutionsPerMinute);
+	void setRevolutionsPerMinute(double revolutionsPerMinute);
 
 	/**
 	 * The number of milliseconds in a ramp up/ramp down cycle.
@@ -17,50 +17,50 @@ abstract interface AarreMotorInterface {
 	 */
 	int getMillisecondsPerCycle();
 
-    double getTicksPerMinute();
+	double getTicksPerMinute();
 
-    double getTicksPerMinute(AarrePowerMagnitude powerMagnitude);
+	double getTicksPerMinute(AarrePowerMagnitude powerMagnitude);
 
-    double getTicksPerRevolution();
+	double getTicksPerRevolution();
 
-    void setTicksPerRevolution(double ticksPerRevolution);
+	void setTicksPerRevolution(double ticksPerRevolution);
 
-    double getTicksPerSecond();
+	double getTicksPerSecond();
 
-    double getTicksPerSecond(AarrePowerMagnitude powerMagnitude);
+	double getTicksPerSecond(AarrePowerMagnitude powerMagnitude);
 
-    /**
-     * @return The number of ticks in a millisecond at maximum power.
-     */
-    double getTicksPerMillisecond();
+	/**
+	 * @return The number of ticks in a millisecond at maximum power.
+	 */
+	double getTicksPerMillisecond();
 
-    /**
-     * @param powerMagnitude
-     * 		The magnitude of motor power for which the caller wants to know the number of ticks in a power change
-     * 		cycle.
-     *
-     * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude
-     */
-    double getTicksPerMillisecond(AarrePowerMagnitude powerMagnitude);
+	/**
+	 * @param powerMagnitude
+	 * 		The magnitude of motor power for which the caller wants to know the number of ticks in a power change
+	 * 		cycle.
+	 *
+	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude
+	 */
+	double getTicksPerMillisecond(AarrePowerMagnitude powerMagnitude);
 
-    /**
-     * @return The number of ticks in a power change cycle at maximum power
-     */
-    double getTicksPerCycle();
+	/**
+	 * @return The number of ticks in a power change cycle at maximum power
+	 */
+	double getTicksPerCycle();
 
-    /**
-     * Get the number of ticks in a power change cycle at a given power magnitude.
-     *
-     * @param powerMagnitude
-     * 		The magnitude of motor power for which the caller wants the number of ticks in a power change cycle.
-     *
-     * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude.
-     */
-    double getTicksPerCycle(AarrePowerMagnitude powerMagnitude);
+	/**
+	 * Get the number of ticks in a power change cycle at a given power magnitude.
+	 *
+	 * @param powerMagnitude
+	 * 		The magnitude of motor power for which the caller wants the number of ticks in a power change cycle.
+	 *
+	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude.
+	 */
+	double getTicksPerCycle(AarrePowerMagnitude powerMagnitude);
 
-    int getCurrentTickNumber();
+	int getCurrentTickNumber();
 
-    int getNumberOfCycles(int ticksToMove, AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested);
+	int getNumberOfCycles(int ticksToMove, AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested);
 
 	/**
 	 * Get the current proportion of power
@@ -85,10 +85,17 @@ abstract interface AarreMotorInterface {
 	 */
 	AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested);
 
-    double getPower();
+	double getPower();
 
 	/**
 	 * Calculate when (what tick number) to start a ramp down.
+	 * <p>
+	 * A slowdown can occur with either positive or negative power. Consider a slowdown from 0.5 to 0 versus a slowdown
+	 * from -0.5 to 0. Thus we cannot assume that the power at the start of the period is greater than the power at the
+	 * end of the period.
+	 * <p>
+	 * A slowdown also can occur without a stop at 0. For example, we could slow down from -0.5 to 0.5 or from 0.5 to
+	 * -0.5. *
 	 *
 	 * @param tickNumberAtStartOfPeriod
 	 * 		The motor encoder tick reading at the start of the period (which includes not only the ramp down at the
@@ -153,10 +160,10 @@ abstract interface AarreMotorInterface {
 	boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, int
 			numberOfTicksInPeriod, AarrePowerVector powerAtStart, AarrePowerVector powerAtEnd);
 
-    void rampToPower(AarrePowerVector powerVectorRequested);
+	void rampToPower(AarrePowerVector powerVectorRequested);
 
-    void rampToPower(AarrePowerVector powerVectorRequested, AarrePowerMagnitude powerIncrementMagnitude, int
-            millisecondsCycleLength, AarrePowerMagnitude powerToleranceMagnitude, double secondsTimeout);
+	void rampToPower(AarrePowerVector powerVectorRequested, AarrePowerMagnitude powerIncrementMagnitude, int
+			millisecondsCycleLength, AarrePowerMagnitude powerToleranceMagnitude, double secondsTimeout);
 
 	/**
 	 * Set the magnitude by which the motor power will increment when ramping power up or down.
@@ -194,6 +201,6 @@ abstract interface AarreMotorInterface {
 	 */
 	void setPowerVector(AarrePowerVector powerVector);
 
-    void setStallDetectionToleranceInTicks(int ticks);
+	void setStallDetectionToleranceInTicks(int ticks);
 
 }
