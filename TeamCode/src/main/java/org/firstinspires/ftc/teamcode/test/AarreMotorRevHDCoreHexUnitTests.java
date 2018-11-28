@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.src.AarreMotorRevHDCoreHex;
+import org.firstinspires.ftc.teamcode.src.AarrePositiveInteger;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,11 +41,11 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	public final void testIsRampDownToEncoderTicksRunning01() {
 
 
-		final int              tickNumberAtStartOfPeriod = 100;
-		final int              tickNumberCurrent         = 1000;
-		final int              numberOfTicksInPeriod     = 1000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
+		final int                  tickNumberAtStartOfPeriod = 100;
+		final int                  tickNumberCurrent         = 1000;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(1000);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
 		                                                       tickNumberCurrent,
@@ -86,9 +87,9 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	@Test
 	public final void testIsRampDownToEncoderTicksRunning05() {
 
-		final int tickNumberAtStartOfPeriod = 60;
-		final int tickNumberCurrent         = 61;
-		final int numberOfTicksInPeriod     = 120;
+		final int                  tickNumberAtStartOfPeriod = 60;
+		final int                  tickNumberCurrent         = 61;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
 
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
@@ -114,8 +115,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
 		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final int tickNumberAtStartOfPeriod = 0;
-		final int numberOfTicksInPeriod     = 2000;
+		final int                  tickNumberAtStartOfPeriod = 0;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(2000);
 
 		/*
 		 * The motor needs 10 cycles to ramp down 10 cycles in power
@@ -146,8 +147,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 		AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final int tickNumberAtStartOfPeriod = 0;
-		final int numberOfTicksInPeriod     = 10000;
+		final int                  tickNumberAtStartOfPeriod = 0;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(10000);
 
 		/*
 		 * There are 13.44 ticks in a cycle, so the ramp should be 134.4 ticks
@@ -168,8 +169,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final int tickNumberAtStartOfPeriod = 0;
-		final int numberOfTicksInPeriod     = 120;
+		final int                  tickNumberAtStartOfPeriod = 0;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
 
 		/*
 		 * At 13.44 ticks per cycle, total ticks in ramp = 67.2
@@ -184,10 +185,10 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	@Test
 	public final void testGetTickNumberToStartSlowDown04() {
 
-		final int    tickNumberAtStartOfPeriod = 60;
-		final int    numberOfTicksInPeriod     = 10000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
+		final int                  tickNumberAtStartOfPeriod = 60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(10000);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
 		 * 10 power cycles
@@ -209,8 +210,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	@Override
 	public final void testGetTickNumberToStartSlowDown08() {
 
-		final int tickNumberAtStartOfPeriod = 0;
-		final int numberOfTicksInPeriod     = 120;
+		final int                  tickNumberAtStartOfPeriod = 0;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
 
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
@@ -232,10 +233,10 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	public final void testGetTickNumberToStartSlowDown11() {
 
 
-		final int              tickNumberAtStartOfPeriod = -60;
-		final int              numberOfTicksInPeriod     = 1000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
+		final int                  tickNumberAtStartOfPeriod = -60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(1000);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of slowing down
@@ -255,8 +256,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	@Override
 	public final void testGetTickNumberToStartSlowDown12() {
 
-		final int tickNumberAtStartOfPeriod = 60;
-		final int numberOfTicksInPeriod     = 120;
+		final int                  tickNumberAtStartOfPeriod = 60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
 
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
@@ -278,10 +279,10 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	@Override
 	public final void testGetTickNumberToStartSlowDown13() {
 
-		final int              tickNumberAtStartOfPeriod = -60;
-		final int              numberOfTicksInPeriod     = -1000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
+		final int                  tickNumberAtStartOfPeriod = -60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(-1000);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of slowing down
@@ -306,11 +307,11 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	public final void testIsSlowDownToEncoderTicksRunning11() {
 
 
-		final int    tickNumberAtStartOfPeriod = -60;
-		final int    tickNumberCurrent         = -900;
-		final int    numberOfTicksInPeriod     = 1000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
+		final int                  tickNumberAtStartOfPeriod = -60;
+		final int                  tickNumberCurrent         = -900;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(1000);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of ramp
@@ -337,9 +338,9 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunning08() {
 
-		final int tickNumberAtStartOfPeriod = 0;
-		final int tickNumberCurrent         = -61;
-		final int numberOfTicksInPeriod     = 120;
+		final int                  tickNumberAtStartOfPeriod = 0;
+		final int                  tickNumberCurrent         = -61;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
 
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);

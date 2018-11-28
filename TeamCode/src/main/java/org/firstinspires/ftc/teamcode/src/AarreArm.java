@@ -71,8 +71,9 @@ public class AarreArm {
 	}
 
 	private void lowerByRamp() {
-		AarrePowerVector powerVector = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE, -1);
-		motor.rampToEncoderTicks(powerVector, 120, SECONDS_BEFORE_TIMEOUT_DEFAULT);
+		AarrePowerVector     powerVector           = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE, -1);
+		AarrePositiveInteger numberOfTicksToRotate = new AarrePositiveInteger(120); // TODO: Eliminate magic #
+		motor.rampToEncoderTicks(powerVector, numberOfTicksToRotate, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 
 	/**
@@ -85,7 +86,8 @@ public class AarreArm {
 	private void raiseByRamp() {
 		AarrePowerVector powerVector = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE,
 		                                                    AarrePowerVector.FORWARD);
-		motor.rampToEncoderTicks(powerVector, 120, SECONDS_BEFORE_TIMEOUT_DEFAULT);
+		AarrePositiveInteger numberOfTicksToRotate = new AarrePositiveInteger(120); // TODO: Eliminate magic #
+		motor.rampToEncoderTicks(powerVector, numberOfTicksToRotate, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 
 }

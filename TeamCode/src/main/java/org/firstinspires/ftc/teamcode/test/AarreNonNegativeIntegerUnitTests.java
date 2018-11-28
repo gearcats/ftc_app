@@ -11,7 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class AarrePositiveIntegerUnitTests {
+public class AarreNonNegativeIntegerUnitTests {
+
+	@Test
+	public void whenConstructorArgumentZero_thenNoProblem() {
+		new AarrePositiveInteger(0);
+	}
 
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Test
@@ -23,7 +28,7 @@ public class AarrePositiveIntegerUnitTests {
 	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Test
 	public void whenConstructorArgumentNegative_thenExceptionThrown() {
-		int randomNegativeInteger = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, -1);
+		int randomNegativeInteger = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, 0);
 		assertThrows(IllegalArgumentException.class, () -> {
 			new AarrePositiveInteger(randomNegativeInteger);
 		});
@@ -45,5 +50,6 @@ public class AarrePositiveIntegerUnitTests {
 		int                  returnValue           = aarrePositiveInteger.intValue();
 		assertEquals(randomPositiveInteger, returnValue);
 	}
+
 
 }

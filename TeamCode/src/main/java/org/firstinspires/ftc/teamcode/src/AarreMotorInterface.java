@@ -98,28 +98,30 @@ abstract interface AarreMotorInterface {
 	 * -0.5. *
 	 *
 	 * @param tickNumberAtStartOfPeriod
-	 * 		The motor encoder tick reading at the start of the period (which includes not only the ramp down at the
-	 * 		end but
-	 * 		any time/ticks running at speed before the ramp).
+	 * 		The motor encoder tick reading at the start of the period (which includes not only the ramp down at the end
+	 * 		but	any time/ticks running at speed before the ramp). This value can be positive or negative depending on
+	 * 		the
+	 * 		position of the motor relative to the last time the encoder was reset.
 	 * @param numberOfTicksInPeriod
-	 * 		The total number of ticks in the period.
+	 * 		The total number of ticks in the period. This value must be positive. The direction of travel is
+	 * 		determined by
+	 * 		the power at the start and end of the period, not by the number of ticks.
 	 * @param powerAtStartOfPeriod
 	 * 		The motor power at the start of the period, in the range [-1,1].
 	 * @param powerAtEndOfPeriod
-	 * 		The power that should be applied to the motor at the end of the period, in the range [-1,1].
+	 * 		The power that should be applied to the motor at the end of the period, in the range [-1,1]. Because the
+	 * 		motor
+	 * 		is slowing down, the absolute	value of the power at the end of the period must be less than the absolute
+	 * 		value
+	 * 		of the power at the beginning of the period.
 	 *
 	 * @return
 	 */
-	double getTickNumberToStartSlowDown(int tickNumberAtStartOfPeriod, int numberOfTicksInPeriod, AarrePowerVector
-			powerAtStartOfPeriod, AarrePowerVector powerAtEndOfPeriod);
+	double getTickNumberToStartSlowDown(int tickNumberAtStartOfPeriod, AarrePositiveInteger numberOfTicksInPeriod,
+	                                    AarrePowerVector powerAtStartOfPeriod, AarrePowerVector powerAtEndOfPeriod);
 
 	/**
-	 * Determine whether the loop in rampToEncoderTicks should end.
-	 * <p>
-	 * The code could be simplified and shortened but it is verbose for comprehensibility.
-	 * <p>
-	 * The code could be part of the rampToEncoderTicks itself but isolating it here (1) simplifies rampToEncoderTicks
-	 * and (2) allows unit testing this method, which does not depend on Op Mode.
+	 * Determine whether to stop speeding up.
 	 *
 	 * @param ticksMaximum
 	 * 		The maximum number of ticks that rampToEncoderTicks is supposed to move.
@@ -129,23 +131,22 @@ abstract interface AarreMotorInterface {
 	 * 		The number of seconds for which rampToEncoderTicks has been running.
 	 * @param ticksMoved
 	 * 		The number of ticks by which rampToEncoderTicks has already moved.
-	 * @param powerDelta
-	 * 		The difference between the current power and the previous power on the ramp.
-	 * @param powerCurrent
-	 * 		The current power applied to the motor.
 	 *
-	 * @return True if the loop in rampUpToEncoderTicks should end.
+	 * @return True if we should stop speeding up; false otherwise.
 	 */
-	boolean isRampUpToEncoderTicksDone(int ticksMaximum, double secondsTimeout, double secondsRunning, int ticksMoved,
-	                                   AarrePowerVector powerDelta, AarrePowerVector powerCurrent);
+	boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double
+			secondsRunning, AarreNonNegativeInteger ticksMoved);
 
 	/**
-	 * Determine whether a ramp down should be running
+	 * Determine whether a slowdown should be running.
+	 * <p>
+	 * The slowdown should start when we are at a tick number equal to (or greater than) the tick number to start the
+	 * slowdown and continue until we are at a tick number equal to (or greater than) the tick number at the end of the
+	 * period
 	 *
 	 * @param tickNumberAtStartOfPeriod
-	 * 		The motor encoder tick number at which the period (including both the ramp and the portion at speed before
-	 * 		the
-	 * 		ramp) started.
+	 * 		The motor encoder tick number at which the period (including both the ramp and the portion at speed
+	 * 		before the ramp started).
 	 * @param tickNumberCurrent
 	 * 		The current motor encoder tick number.
 	 * @param numberOfTicksInPeriod
@@ -157,7 +158,7 @@ abstract interface AarreMotorInterface {
 	 *
 	 * @return True if changing the power should start or continue. False otherwise.
 	 */
-	boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, int
+	boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, AarrePositiveInteger
 			numberOfTicksInPeriod, AarrePowerVector powerAtStart, AarrePowerVector powerAtEnd);
 
 	void rampToPower(AarrePowerVector powerVectorRequested);

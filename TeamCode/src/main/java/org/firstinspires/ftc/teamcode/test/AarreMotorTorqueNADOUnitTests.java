@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.src.AarreMotor;
 import org.firstinspires.ftc.teamcode.src.AarreMotorTorqueNADO;
+import org.firstinspires.ftc.teamcode.src.AarrePositiveInteger;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,8 +58,8 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		final AarrePowerVector powerAtStart = new AarrePowerVector( 1.0);
 		final AarrePowerVector powerAtEnd = new AarrePowerVector( 0.0);
 
-		final int tickNumberAtStartOfPeriod = 0;
-		final int numberOfTicksInPeriod     = 2000;
+		final int                  tickNumberAtStartOfPeriod = 0;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(2000);
 
 		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                         numberOfTicksInPeriod,
@@ -81,8 +82,8 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final int tickNumberAtStartOfPeriod = 0;
-		final int numberOfTicksInPeriod     = 10000;
+		int                        tickNumberAtStartOfPeriod = 0;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(10000);
 
 		/*
 		 * There are 120 ticks in a cycle, so the ramp should be 1200 ticks
@@ -106,10 +107,10 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	@Override
 	public final void testGetTickNumberToStartSlowDown04() {
 
-		final int    tickNumberAtStartOfPeriod = 60;
-		final int    numberOfTicksInPeriod     = 10000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
+		final int                  tickNumberAtStartOfPeriod = 60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(10000);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                   numberOfTicksInPeriod, powerAtStart,
@@ -122,9 +123,8 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	@Override
 	public final void testGetTickNumberToStartSlowDown12() {
 
-		final int tickNumberAtStartOfPeriod = 60;
-		final int tickNumberCurrent         = 114;
-		final int numberOfTicksInPeriod     = 120;
+		final int                  tickNumberAtStartOfPeriod = 60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
 
 		AarrePowerVector powerAtStart = new AarrePowerVector( 0.5);
 		AarrePowerVector powerAtEnd = new AarrePowerVector( 0.0);
@@ -152,8 +152,8 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final int tickNumberAtStartOfPeriod = 0;
-		final int numberOfTicksInPeriod     = 120;
+		final int                  tickNumberAtStartOfPeriod = 0;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
 
 
 		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
@@ -168,8 +168,8 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	@Override
 	public final void testGetTickNumberToStartSlowDown08() {
 
-		final int tickNumberAtStartOfPeriod = 0;
-		final int numberOfTicksInPeriod     = 120;
+		final int                  tickNumberAtStartOfPeriod = 0;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
 
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
@@ -197,10 +197,10 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	public final void testGetTickNumberToStartSlowDown11() {
 
 
-		final int    tickNumberAtStartOfPeriod = -60;
-		final int    numberOfTicksInPeriod     = 1000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
+		final int                  tickNumberAtStartOfPeriod = -60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(1000);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of ramp
@@ -221,10 +221,10 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 	@Override
 	public final void testGetTickNumberToStartSlowDown13() {
 
-		final int    tickNumberAtStartOfPeriod = -60;
-		final int    numberOfTicksInPeriod     = -1000;
-		final AarrePowerVector powerAtStart              = new AarrePowerVector(1.0);
-		final AarrePowerVector powerAtEnd                = new AarrePowerVector(0.0);
+		final int                  tickNumberAtStartOfPeriod = -60;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(-1000);
+		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
+		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of ramp

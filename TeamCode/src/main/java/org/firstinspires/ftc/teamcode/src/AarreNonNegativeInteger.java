@@ -5,13 +5,13 @@ package org.firstinspires.ftc.teamcode.src;
  * <p>
  * Not all operations are supported.
  */
-public class AarrePositiveInteger {
+public class AarreNonNegativeInteger {
 
 	private Integer value;
 
-	public AarrePositiveInteger(int value) {
-		if (value < 1) {
-			throw new IllegalArgumentException("Value must be positive");
+	public AarreNonNegativeInteger(int value) {
+		if (value < 0) {
+			throw new IllegalArgumentException("Value must be non-negative");
 		}
 		this.value = new Integer(value);
 	}
