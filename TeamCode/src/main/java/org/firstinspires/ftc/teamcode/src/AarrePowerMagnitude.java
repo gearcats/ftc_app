@@ -67,4 +67,9 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 		return new AarrePowerMagnitude(difference);
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%f", this.magnitude);
+	}
+
 }

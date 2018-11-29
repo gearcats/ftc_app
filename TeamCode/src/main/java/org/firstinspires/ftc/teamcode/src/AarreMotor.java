@@ -427,7 +427,7 @@ public class AarreMotor implements AarreMotorInterface {
 		int                  ticksToSlowDownInt = ticksToRotate.intValue() - ticksToSpeedUp.intValue();
 		AarrePositiveInteger ticksToSlowDown    = new AarrePositiveInteger(ticksToSlowDownInt);
 
-		telemetry.log("Motor - Ramp to encoder ticks(3), target power UP: %f", powerVector);
+		telemetry.log("Motor - Ramp to encoder ticks(3), target power UP: %f", powerVector.asDouble());
 		rampToPower(powerVector, ticksToSpeedUp, secondsTimeout);
 
 		telemetry.log("Motor - Ramp to encoder ticks(3), target power DOWN: %f", 0.0);
@@ -668,7 +668,7 @@ public class AarreMotor implements AarreMotorInterface {
 			powerIncrementMagnitude, final int millisecondsCycleLength, final AarrePowerMagnitude
 			powerToleranceMagnitude, final double secondsTimeout) {
 
-		telemetry.log("Motor - Ramp to power (5), total target power: %f", powerVectorRequested);
+		telemetry.log("Motor - Ramp to power (5), total target power: %f", powerVectorRequested.asDouble());
 
 		AarrePowerVector    powerVectorCurrent;
 		AarrePowerVector    powerVectorNew;
@@ -687,7 +687,7 @@ public class AarreMotor implements AarreMotorInterface {
 
 			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 
-			telemetry.log("Motor - Ramp power to, current power target: %f", powerVectorNew);
+			telemetry.log("Motor - Ramp power to, current power target: %f", powerVectorNew.asDouble());
 
 			setPowerVector(powerVectorNew);
 
@@ -730,7 +730,7 @@ public class AarreMotor implements AarreMotorInterface {
 
 		final int numberOfTicksToRunInt = (int) Math.round(getTicksPerRevolution() * targetNumberOfRevolutions);
 		final AarrePositiveInteger numberOfTicksToRun = new AarrePositiveInteger(numberOfTicksToRunInt);
-		telemetry.log("Motor - Run by revolutions, power: %f", proportionMotorPower);
+		telemetry.log("Motor - Run by revolutions, power: %f", proportionMotorPower.asDouble());
 		rampToEncoderTicks(proportionMotorPower, numberOfTicksToRun, secondsTimeout);
 	}
 

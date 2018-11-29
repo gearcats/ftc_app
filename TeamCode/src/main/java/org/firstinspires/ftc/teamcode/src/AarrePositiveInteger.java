@@ -24,4 +24,9 @@ public class AarrePositiveInteger {
 		return value.intValue();
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%f", this.value);
+	}
+
 }

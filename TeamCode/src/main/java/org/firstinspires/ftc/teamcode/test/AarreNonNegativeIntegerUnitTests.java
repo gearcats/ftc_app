@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.test;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import org.firstinspires.ftc.teamcode.src.AarreNonNegativeInteger;
 import org.junit.jupiter.api.Test;
 
@@ -18,14 +16,12 @@ public class AarreNonNegativeIntegerUnitTests {
 		new AarreNonNegativeInteger(0);
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Test
 	public void whenConstructorArgumentPositive_thenNoProblem() {
 		int randomPositiveInteger = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
 		new AarreNonNegativeInteger(randomPositiveInteger);
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Test
 	public void whenConstructorArgumentNegative_thenExceptionThrown() {
 		int randomNegativeInteger = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, 0);
@@ -34,7 +30,6 @@ public class AarreNonNegativeIntegerUnitTests {
 		});
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Test
 	public void whenDoubleValueRequested_thenReturnsCorrectValue() {
 		int                     randomPositiveInteger      = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
@@ -44,7 +39,6 @@ public class AarreNonNegativeIntegerUnitTests {
 		assertEquals(expected, actual);
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	@Test
 	public void whenIntValueRequested_thenReturnsCorrectValue() {
 		int                     randomPositiveInteger = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);

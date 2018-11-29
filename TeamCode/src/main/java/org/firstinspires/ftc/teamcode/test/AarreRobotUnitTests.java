@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @Autonomous(name = "Aarre Robot Unit Tests", group = "Aarre")
 @Disabled
-class AarreRobotUnitTests extends LinearOpMode {
+public class AarreRobotUnitTests extends LinearOpMode {
 
 	/**
 	 * Test AarreRobot

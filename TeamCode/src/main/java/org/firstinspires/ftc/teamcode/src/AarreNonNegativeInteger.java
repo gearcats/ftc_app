@@ -24,4 +24,7 @@ public class AarreNonNegativeInteger {
 		return value.intValue();
 	}
 
+	public String toString() {
+		return String.format("%f", this.value);
+	}
 }

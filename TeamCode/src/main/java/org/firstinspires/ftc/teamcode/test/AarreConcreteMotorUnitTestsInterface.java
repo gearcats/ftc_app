@@ -66,6 +66,13 @@ interface AarreConcreteMotorUnitTestsInterface {
 	@Test
 	public void testGetTickNumberToStartSlowDown12();
 
+	/**
+	 * Test that slowing down should be in progress when enough ticks have passed to start slowing but not enough have
+	 * passed to reach the target.
+	 */
+	@Test
+	void testIsSlowDownToEncoderTicksRunningGeneric05();
+
 	@Test
 	public void whenThereAreNotEnoughTicks_thenSlowDownStartsTooEarly();
 

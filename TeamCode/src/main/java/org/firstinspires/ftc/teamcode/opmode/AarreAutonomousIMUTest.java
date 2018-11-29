@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
  * To avoid issuing an error on the phones, any OpMode class must be declared public.
  */
 @Autonomous(name = "Aarre Autonomous IMU Test", group = "Aarre")
+@Disabled
 public class AarreAutonomousIMUTest extends LinearOpMode {
 
 	AarreRobot     robot;

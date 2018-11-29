@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
-
 public class AarrePowerVector {
 
 	private double proportion;
@@ -96,5 +94,10 @@ public class AarrePowerVector {
 	public AarrePowerVector subtract(AarrePowerVector other) {
 		double difference = this.proportion - other.asDouble();
 		return new AarrePowerVector(difference);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%f", this.proportion);
 	}
 }

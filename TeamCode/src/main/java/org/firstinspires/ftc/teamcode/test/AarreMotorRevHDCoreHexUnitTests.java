@@ -110,6 +110,35 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	}
 
 	@Test
+	public final void testIsSlowDownToEncoderTicksRunningGeneric05() {
+
+		final int                  tickNumberAtStartOfPeriod = 60;
+		final int                  tickNumberCurrent         = 61;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
+
+		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
+
+		/*
+		 *  The period goes from tick 60 to tick 180.
+		 *  We are at tick 61.
+		 *
+		 *  We need 5 cycles for slowing down
+		 *
+		 *  The TorqueNADO needs 120 * 5 cycles = 600 ticks, so it should start at tick 180-600=-420and still be
+		 *  slowing down. The Rev HD Core Hex needs 13.44 * 5 cycles = 67 ticks, so it should start at tick
+		 *  180-67=113 and still be slowing down
+		 *
+		 */
+
+
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+		assertFalse(result);
+	}
+
+	@Test
 	public final void testGetTickNumberToStartSlowDown01() {
 
 		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
@@ -285,17 +314,15 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		/*
-		 * Need 10 cycles of slowing down
-		 * At 13.44 ticks per cycle
-		 * Need 134.4 ticks
-		 * Tick number at end of period = 960
-		 * Would need to start ramp at 960 - 134.4 tics = 825.6 ticks
+		 * Need 10 cycles of slowing down. Thus, at 13.44 ticks per cycle, we need 134.4 ticks for slowdown. The tick
+		 * number at end of period is -60 + 1000 = 940. Thus, we would need to start ramp at 940 - 134.4 tics = 805.6
+		 * ticks
 		 */
 
 		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
-		assertEquals(825.6, result);
+		assertEquals(805.6, result);
 	}
 
 	@Test

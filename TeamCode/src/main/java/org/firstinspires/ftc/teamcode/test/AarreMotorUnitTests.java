@@ -206,32 +206,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		assertFalse(result);
 	}
 
-	@Test
-	public final void testIsSlowDownToEncoderTicksRunningGeneric05() {
 
-		/*
-		 *  The period goes from tick 60 to tick 180.
-		 *  We are at tick 61.
-		 */
-
-		final int                  tickNumberAtStartOfPeriod = 60;
-		final int                  tickNumberCurrent         = 61;
-		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
-
-		/*
-		 *  We need 5 cycles for slowing down
-		 *
-		 *  The TorqueNADO needs 120 * 5 = 600 cycles, so it should still be slowing down
-		 *  The Rev HD Core Hex needs 13.44 * 5 cycles = 67 ticks, so
-		 */
-		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
-		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
-
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
-
-		assertTrue(result);
-	}
 
 	@Override
 	@Test
@@ -265,7 +240,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 
 	@Test
-	public final void testIsSlowDownToEncoderTicksRunningGeneric08() {
+	public final void whenCurrentTickNumberOutsidePeriod_thenExceptionThrown() {
 
 		final int                  tickNumberAtStartOfPeriod = 0;
 		final int                  tickNumberCurrent         = -61;
@@ -274,10 +249,16 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
 		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		/*
+		 * The period runs from tick 0 to tick 120.
+		 * The current tickNumber is -61.
+		 * This should be impossible.
+		 */
 
-		assertTrue(result);
+		assertThrows(IllegalArgumentException.class, () -> {
+			final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		});
 	}
 
 

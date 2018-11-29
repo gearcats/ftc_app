@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
@@ -68,6 +69,34 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 		assertEquals(800, actual);
 	}
 
+	@Test
+	public final void testIsSlowDownToEncoderTicksRunningGeneric05() {
+
+		final int                  tickNumberAtStartOfPeriod = 60;
+		final int                  tickNumberCurrent         = 61;
+		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
+
+		AarrePowerVector powerAtStart = new AarrePowerVector(0.5);
+		AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
+
+		/*
+		 *  The period goes from tick 60 to tick 180.
+		 *  We are at tick 61.
+		 *
+		 *  We need 5 cycles for slowing down
+		 *
+		 *  The TorqueNADO needs 120 * 5 cycles = 600 ticks, so it should start at tick 180-600=-420and still be
+		 *  slowing down. The Rev HD Core Hex needs 13.44 * 5 cycles = 67 ticks, so it should start at tick
+		 *  180-67=113 not be going yet.
+		 *
+		 */
+
+
+		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+		assertTrue(result);
+	}
 
 	/**
 	 * Test calculating when to start a ramp down in a 10000-tick period.
