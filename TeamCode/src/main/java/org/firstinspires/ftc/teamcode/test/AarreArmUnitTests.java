@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.test;
 
 import org.firstinspires.ftc.teamcode.src.AarreArm;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -21,19 +21,12 @@ class AarreArmUnitTests {
 
     @Test
     final void testLowerMethod() {
-        assertThrows(NullPointerException.class, () -> {
-            arm.lower();
-        });
-
-        double position = arm.getCurrentPosition();
+        assertThrows(NullPointerException.class, arm::lower);
     }
 
     @Test
     final void testRaiseMethod() {
-        assertThrows(NullPointerException.class, () -> {
-            arm.raise();
-        });
-        double position = arm.getCurrentPosition();
+        assertThrows(NullPointerException.class, arm::raise);
     }
 
 }

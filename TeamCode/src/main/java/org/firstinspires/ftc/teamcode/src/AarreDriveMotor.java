@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class AarreDriveMotor extends AarreMotorTorqueNADO {
+public class AarreDriveMotor extends AarreMotorTorqueNADO implements AarreMotorInterface {
 
 	/*
 	 * This is 1.0 for direct-drive wheels
@@ -12,7 +12,7 @@ public class AarreDriveMotor extends AarreMotorTorqueNADO {
 	/*
 	 * We use the diameter for calculating circumference
 	 */
-	private static final double WHEEL_DIAMETER_INCHES = 5.5;     // For figuring
+	private static final double WHEEL_DIAMETER_INCHES = 5.5;
 
 	public AarreDriveMotor(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);

@@ -59,7 +59,7 @@ public class AarreRobot {
 
 		AarreDriveMotors driveMotors = new AarreDriveMotors(opMode);
 
-		arm = new AarreArm(hardwareMap, "arm", telemetry, opMode);
+		arm = new AarreArm(opMode, "arm");
 		riser = new AarreRiser(hardwareMap, "riser", telemetry, opMode);
 
 		// Define the servos
@@ -78,8 +78,9 @@ public class AarreRobot {
 		final double hookMaximumDegrees = 180.0;
 		hookServo.scaleRange(hookUpDegrees / hookMaximumDegrees, hookDownDegrees / hookMaximumDegrees);
 
-		/**
-		 * Initialize the IMU.
+
+		/*
+		  Initialize the IMU.
 		 */
 		imu = new AarreIMU(opMode);
 
@@ -88,10 +89,20 @@ public class AarreRobot {
 
 	}
 
+	/**
+	 * Move the robot.
+	 *
+	 * @param powerMagnitude The magnitude of power to apply to the wheels.
+	 * @param leftInches The number of inches to move the left wheel. Negative values will move
+	 *                      the left wheel in reverse.
+	 * @param rightInches The number of inches to move the right wheel. Negative values will move
+	 *                      the right wheel in reverse.
+	 * @param secondsTimeout Stop after this many seconds even if move not fully executed.
+	 */
+	public void drive(AarrePowerMagnitude powerMagnitude, double leftInches, double rightInches, double
+			secondsTimeout) {
 
-	public void drive(double proportionPower, double leftInches, double rightInches, double secondsTimeout) {
-
-		driveMotors.drive(proportionPower, leftInches, rightInches, secondsTimeout);
+		driveMotors.drive(powerMagnitude, leftInches, rightInches, secondsTimeout);
 	}
 
 	public HardwareMap getHardwareMap() {
@@ -102,16 +113,19 @@ public class AarreRobot {
 		return (telemetry);
 	}
 
-	public void gyroDrive(double proportionPower, double directionAndDistance, double secondsTime) {
-		driveMotors.gyroDrive(proportionPower, directionAndDistance, secondsTime);
+	public void gyroDrive(AarrePowerMagnitude powerMagnitude, double inchesDirectionAndDistance,
+	                      double
+			secondsTime) {
+		driveMotors.gyroDrive(powerMagnitude
+				, inchesDirectionAndDistance, secondsTime);
 	}
 
-	public void gyroHold(double proportionPower, double degreesHeading, double secondsTime) {
-		driveMotors.gyroHold(proportionPower, degreesHeading, secondsTime);
+	public void gyroHold(AarrePowerVector powerVector, double degreesHeading, double secondsTime) {
+		driveMotors.gyroHold(powerVector, degreesHeading, secondsTime);
 	}
 
-	public void gyroTurn(final double proportionPower, final double angle) {
-		driveMotors.gyroTurn(proportionPower, angle);
+	public void gyroTurn(final AarrePowerVector powerVector, final double angle) {
+		driveMotors.gyroTurn(powerVector, angle);
 	}
 
 	/**

@@ -23,18 +23,14 @@ public class AarreRiserUnitTests {
 
     @Test
     public void testLowerMethod() {
-        assertThrows(NullPointerException.class, () -> {
-            riser.lower();
-        });
+        assertThrows(NullPointerException.class, () -> riser.lower());
 
         double position = riser.getCurrentPosition();
     }
 
     @Test
     public void testRaiseMethod() {
-        assertThrows(NullPointerException.class, () -> {
-            riser.raise();
-        });
+        assertThrows(NullPointerException.class, () -> riser.raise());
         double position = riser.getCurrentPosition();
     }
 

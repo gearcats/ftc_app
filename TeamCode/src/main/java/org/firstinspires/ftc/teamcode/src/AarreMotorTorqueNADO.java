@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class AarreMotorTorqueNADO extends AarreMotor {
+public class AarreMotorTorqueNADO extends AarreMotor implements AarreMotorInterface {
 
 	private static final double TORQUENADO_REVOLUTIONS_PER_MINUTE = 100;
 

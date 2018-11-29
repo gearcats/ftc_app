@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
@@ -10,6 +9,7 @@ import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
  * Autonomously raise the arm
  */
 
+@SuppressWarnings("unused")
 @Autonomous(name = "Aarre Autonomous Arm Raise", group = "Aarre")
 public class AarreAutonomousArmRaise extends LinearOpMode {
 

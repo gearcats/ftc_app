@@ -1,28 +1,99 @@
 package org.firstinspires.ftc.teamcode.test;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.src.AarreDriveMotors;
+import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-/**
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-@Disabled
-public class AarreDriveMotorsUnitTests extends LinearOpMode {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-	AarreDriveMotors driveMotors;
+class AarreDriveMotorsUnitTests extends LinearOpMode {
 
-	/**
-	 * Override this method and place your code here.
-	 * <p>
-	 * Please do not swallow the InterruptedException, as it is used in cases
-	 * where the op mode needs to be terminated early.
-	 */
+	private AarreDriveMotors motors;
+
 	@BeforeEach
-	public void runOpMode() {
-		driveMotors = new AarreDriveMotors(this);
+	void setUp() {
+		motors = new AarreDriveMotors(this);
 	}
 
+	@Test
+	void testNewAarreArmObjectNotNull() {
+		assertNotNull(motors);
+	}
+
+	@Test
+	void getPowerIncrementAbsolute() {
+	}
+
+	@Test
+	void getCycleLengthInMilliseconds() {
+	}
+
+	@Test
+	void getPowerMagnitudeTolerance() {
+	}
+
+	@Test
+	void getSteer() {
+	}
+
+	@Test
+	void drive() {
+	}
+
+	@Test
+	void getError() {
+	}
+
+	@Test
+	void gyroDrive() {
+	}
+
+	@Test
+	void gyroHold() {
+	}
+
+	@Test
+	void gyroTurn() {
+	}
+
+	@Test
+	void isOnHeading() {
+	}
+
+	@Test
+	void rampPowerTo() {
+	}
+
+	@Test
+	void rampPowerTo1() {
+	}
+
+	@Test
+	void setPowerIncrement() {
+
+	}
+
+	@Test
+	void setPowerIncrement1() {
+	}
+
+	@Test
+	void setCycleLengthInMilliseconds() {
+	}
+
+	@Test
+	void setPowerMagnitudeTolerance() {
+		AarrePowerMagnitude powerMagnitudeTolerance = new AarrePowerMagnitude(0.0001);
+		motors.setPowerMagnitudeTolerance(powerMagnitudeTolerance);
+	}
+
+	/**
+	 * Must override runOpMode to avoid compiler error
+	 */
+	@Test
+	@Override
+	public final void runOpMode() {
+	}
 }

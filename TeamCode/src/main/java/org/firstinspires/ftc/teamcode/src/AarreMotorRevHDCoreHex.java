@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class AarreMotorRevHDCoreHex extends AarreMotor {
+public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreMotorInterface {
 
 	/*
 	 * Properties of the motor
