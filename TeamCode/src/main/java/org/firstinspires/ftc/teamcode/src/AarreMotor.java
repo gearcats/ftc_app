@@ -80,6 +80,10 @@ public class AarreMotor implements AarreMotorInterface {
 	}
 
 	public double getRevolutionsPerMinute() {
+		if (revolutionsPerMinute == 0.0) {
+			throw new IllegalStateException("Revolutions per minute must be non-zero. Maybe you are not calling from a" +
+					" concrete class?");
+		}
 		return revolutionsPerMinute;
 	}
 
@@ -88,6 +92,7 @@ public class AarreMotor implements AarreMotorInterface {
 	}
 
 	public void setRevolutionsPerMinute(double revolutionsPerMinute) {
+
 		this.revolutionsPerMinute = revolutionsPerMinute;
 	}
 
@@ -308,19 +313,23 @@ public class AarreMotor implements AarreMotorInterface {
 	}
 
 
-	public boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent,
-	                                               AarrePositiveInteger numberOfTicksInPeriod, AarrePowerVector
-			                                               powerAtStart, AarrePowerVector powerAtEnd) {
+	public boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfTravel, int tickNumberCurrent,
+	                                               AarrePositiveInteger numberOfTicksToTravel, AarrePowerVector
+			                                               powerAtStartOfTravel, AarrePowerVector powerAtEndOfTravel) {
 
+		double tickNumberAtEndOfPeriod = tickNumberAtStartOfTravel + numberOfTicksToTravel.doubleValue();
 
 		boolean result = false;
 
-		double tickNumberToStartSlowDown = getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
-				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		double tickNumberToStartSlowDown = getTickNumberToStartSlowDown(tickNumberAtStartOfTravel,
+				numberOfTicksToTravel, powerAtStartOfTravel, powerAtEndOfTravel);
 
-		double tickNumberAtEndOfPeriod = tickNumberAtStartOfPeriod + numberOfTicksInPeriod.intValue();
+		if (tickNumberCurrent < tickNumberAtStartOfTravel) {
+			throw new IllegalArgumentException("The current tick number must be within the period of travel");
+		}
 
-		if ((tickNumberCurrent >= tickNumberToStartSlowDown) && (tickNumberCurrent <= tickNumberAtEndOfPeriod)) {
+		if (((double) tickNumberCurrent >= tickNumberToStartSlowDown) && ((double) tickNumberCurrent <=
+				tickNumberAtEndOfPeriod)) {
 			result = true;
 		}
 

@@ -26,7 +26,7 @@ public class AarrePositiveInteger {
 
 	@Override
 	public String toString() {
-		return String.format("%f", this.value);
+		return String.format(this.value.toString());
 	}
 
 }
