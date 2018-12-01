@@ -4,9 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomous;
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomousReady;
+
+import java.util.logging.Logger;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines all the specific
@@ -37,6 +38,7 @@ public class AarreRobot {
 	CRServo          scoopServo;
 	HardwareMap      hardwareMap;
 
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * Construct from opMode only
@@ -57,7 +59,7 @@ public class AarreRobot {
 		// must correspond to the names assigned in the robot configuration
 		// in the FTC Robot Controller app on the phone
 
-		AarreDriveMotors driveMotors = new AarreDriveMotors(opMode);
+		driveMotors = new AarreDriveMotors(opMode);
 
 		arm = new AarreArm(opMode, "arm");
 		riser = new AarreRiser(hardwareMap, "riser", telemetry, opMode);

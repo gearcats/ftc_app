@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -26,6 +28,8 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	 */
 
 	AarreMotorRevHDCoreHex motor = null;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@BeforeEach
 	public final void testConstructor() {

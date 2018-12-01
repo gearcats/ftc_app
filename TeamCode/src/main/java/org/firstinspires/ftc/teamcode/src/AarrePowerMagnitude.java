@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.src;
 
+import java.util.logging.Logger;
+
 public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 
 	private double magnitude;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	public AarrePowerMagnitude(double magnitude) {
 		setProportion(magnitude);

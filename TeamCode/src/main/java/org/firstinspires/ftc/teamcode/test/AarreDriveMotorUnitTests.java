@@ -6,9 +6,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.logging.Logger;
+
 class AarreDriveMotorUnitTests extends LinearOpMode {
 
 	AarreDriveMotor motor;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@BeforeEach
 	void setUp() {

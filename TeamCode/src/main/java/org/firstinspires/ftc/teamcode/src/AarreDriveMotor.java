@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import java.util.logging.Logger;
+
 public class AarreDriveMotor extends AarreMotorTorqueNADO implements AarreMotorInterface {
 
 	/*
@@ -13,6 +15,8 @@ public class AarreDriveMotor extends AarreMotorTorqueNADO implements AarreMotorI
 	 * We use the diameter for calculating circumference
 	 */
 	private static final double WHEEL_DIAMETER_INCHES = 5.5;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	public AarreDriveMotor(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);

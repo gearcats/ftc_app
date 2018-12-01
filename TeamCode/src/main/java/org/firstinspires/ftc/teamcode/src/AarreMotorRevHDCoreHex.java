@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import java.util.logging.Logger;
+
 public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreMotorInterface {
 
 	/*
@@ -19,6 +21,8 @@ public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreMotorInte
 	 * For the REV HD Hex motor, it is 2240 (or 224???)
 	 */
 	static final double REV_CORE_HEX_TICKS_PER_REVOLUTION = 224;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	private AarreMotorRevHDCoreHex(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);

@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 import org.junit.jupiter.api.Test;
 
+import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -27,6 +29,8 @@ public class AarreRobotUnitTests extends LinearOpMode {
 	 */
 
 	AarreRobot robot;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Test
 	final void testConstructor() {

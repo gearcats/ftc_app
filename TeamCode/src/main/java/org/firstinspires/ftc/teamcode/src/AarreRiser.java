@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import java.util.logging.Logger;
+
 /**
  * This class represents the riser on the robot.
  */
@@ -37,6 +39,8 @@ public class AarreRiser {
 	private AarreMotorTorqueNADO motor;
 	private AarreTelemetry       telemetry;
 	private LinearOpMode         opMode;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * This empty constructor is useful for testing.

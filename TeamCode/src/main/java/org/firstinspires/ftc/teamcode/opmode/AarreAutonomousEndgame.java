@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
+import java.util.logging.Logger;
+
 /**
  * This file contains Aarre's experimental code to autonomously put the robot in
  * the state that it should be in at the end of the user period just before
@@ -25,6 +27,9 @@ public class AarreAutonomousEndgame extends LinearOpMode {
 
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
+
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * Properties inherited from LinearOpMode include:

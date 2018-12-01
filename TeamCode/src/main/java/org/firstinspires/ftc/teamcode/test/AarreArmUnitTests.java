@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.test;
 
 import org.firstinspires.ftc.teamcode.src.AarreArm;
-
 import org.junit.jupiter.api.Test;
+
+import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AarreArmUnitTests {
 
-    private final AarreArm arm;
+	private final AarreArm arm;
+	private final Logger   javaLog = Logger.getLogger(this.getClass().getName());
 
     AarreArmUnitTests() {
         arm = new AarreArm();

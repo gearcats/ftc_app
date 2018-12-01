@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import java.util.logging.Logger;
+
 public class AarreArm {
 
 	private static final AarrePowerMagnitude DEFAULT_POWER_MAGNITUDE        = new
@@ -17,6 +19,7 @@ public class AarreArm {
 	private HardwareMap    hardwareMap;
 	private LinearOpMode   opMode;
 
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	private double currentPosition;
 

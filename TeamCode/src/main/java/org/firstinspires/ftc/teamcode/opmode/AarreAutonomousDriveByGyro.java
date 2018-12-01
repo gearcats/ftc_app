@@ -33,11 +33,12 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
+
+import java.util.logging.Logger;
 
 /**
  * This file illustrates the concept of driving a path based on Gyro heading and encoder counts. It
@@ -93,6 +94,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 	private AarreTelemetry aarreTelemetry;
 	private AarreRobot     robot;
 
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Override
 	public final void runOpMode() {

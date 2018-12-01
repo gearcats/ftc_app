@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
+import java.util.logging.Logger;
+
 
 /**
  * This file contains Aarre's experimental code to test that we can read data from the IMU.
@@ -18,6 +20,8 @@ public class AarreAutonomousIMUTest extends LinearOpMode {
 
 	AarreRobot     robot;
 	AarreTelemetry betterTelemetry;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Override
 	public void runOpMode() {

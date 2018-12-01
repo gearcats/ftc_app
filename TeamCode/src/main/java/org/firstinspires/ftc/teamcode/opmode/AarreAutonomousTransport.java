@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
+import java.util.logging.Logger;
+
 /**
  * This file contains Aarre's experimental code to autonomously set the robot to a state
  * suitable for transportation (i.e., with the arm down, the riser down, and the hook down).
@@ -20,6 +22,8 @@ public class AarreAutonomousTransport extends LinearOpMode {
 
     private AarreTelemetry betterTelemetry;
     private AarreRobot     robot;
+
+    private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
     /**
      * Properties inherited from LinearOpMode include:

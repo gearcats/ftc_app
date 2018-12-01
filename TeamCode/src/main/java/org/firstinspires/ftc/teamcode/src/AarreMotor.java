@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -43,13 +46,14 @@ public class AarreMotor implements AarreMotorInterface {
 	private final DcMotor             motor;
 	private final AarreTelemetry      telemetry;
 	private final LinearOpMode        opMode;
-	private final HardwareMap         hardwareMap;
-	private       AarrePowerMagnitude powerMagnitudeIncrementPerCycle = DEFAULT_POWER_INCREMENT_PER_CYCLE;
-	private       AarrePowerMagnitude powerMagnitudeTolerance         = DEFAULT_PROPORTION_POWER_TOLERANCE;
-	private       int                 oldTickNumber                   = 0;
-	private       int                 stallTimeLimitInMilliseconds;
-	private       int                 stallDetectionToleranceInTicks;
-	private       ElapsedTime         timeStalledInMilliseconds       = null;
+	private final        HardwareMap         hardwareMap;
+	private              AarrePowerMagnitude powerMagnitudeIncrementPerCycle = DEFAULT_POWER_INCREMENT_PER_CYCLE;
+	private              AarrePowerMagnitude powerMagnitudeTolerance         = DEFAULT_PROPORTION_POWER_TOLERANCE;
+	private              int                 oldTickNumber                   = 0;
+	private              int                 stallTimeLimitInMilliseconds;
+	private              int                 stallDetectionToleranceInTicks;
+	private              ElapsedTime         timeStalledInMilliseconds       = null;
+	private final static Logger              log                             = Logger.getLogger(AarreMotor.class.getName());
 
 	private double revolutionsPerMinute;
 	private double ticksPerRevolution;
@@ -59,6 +63,10 @@ public class AarreMotor implements AarreMotorInterface {
 		this.opMode = opMode;
 
 		telemetry = new AarreTelemetry(opMode.telemetry);
+
+		log.setLevel(Level.INFO);
+		log.finest("AarreMotor");
+
 
 		/*
 		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
@@ -291,10 +299,10 @@ public class AarreMotor implements AarreMotorInterface {
 		boolean valueToReturn = false;
 
 		if (Math.abs(ticksMoved.intValue()) >= Math.abs(ticksMaximum.intValue())) {
-			telemetry.log("Loop done - moved far enough");
+			log.finest("Loop done - moved far enough");
 			valueToReturn = true;
 		} else if (secondsRunning >= secondsTimeout) {
-			telemetry.log("Loop done - timed out");
+			log.finest("Loop done - timed out");
 			valueToReturn = true;
 		} else if (hardwareMap != null) {
 
@@ -305,7 +313,7 @@ public class AarreMotor implements AarreMotorInterface {
 			 * us to use off-bot unit tests to test the other conditions.
 			 */
 			if (!opMode.opModeIsActive()) {
-				telemetry.log("Loop done - On robot but op mode is not active");
+				log.finest("Loop done - On robot but op mode is not active");
 				valueToReturn = true;
 			}
 		}
@@ -471,7 +479,7 @@ public class AarreMotor implements AarreMotorInterface {
 	 * 		indicate forward power; Negative values indicate reverse power. The value is expected to be in the interval
 	 * 		[-1, 1].
 	 * @param ticksToMove
-	 * 		The number of encoder ticks to turn. The method will stop when this number has been reached, unless it
+	 * 		The number of encoder ticks to move. The method will stop when this number has been reached, unless it
 	 * 		times
 	 * 		out first.
 	 * @param secondsTimeout

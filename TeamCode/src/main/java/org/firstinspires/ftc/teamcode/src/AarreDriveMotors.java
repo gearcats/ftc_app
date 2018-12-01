@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import java.util.logging.Logger;
+
 /**
  * A pair of motors used for driving the robot
  */
@@ -34,6 +36,8 @@ public class AarreDriveMotors {
 	private HardwareMap           hardwareMap;
 	private LinearOpMode          opMode;
 	private ModernRoboticsI2cGyro gyro;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	public AarreDriveMotors(LinearOpMode opMode) {
 

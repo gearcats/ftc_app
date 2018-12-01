@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
+import java.util.logging.Logger;
+
 /**
  * This file contains Aarre's experimental code to test that the robot drive autonomously.
  * <p>
@@ -18,6 +20,8 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	public AarreAutonomousDriveTest() {
 	}

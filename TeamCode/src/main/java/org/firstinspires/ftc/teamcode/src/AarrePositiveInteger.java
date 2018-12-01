@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
+import java.util.logging.Logger;
+
 /**
  * Wrapper class for Integer ensures the value is positive.
  * <p>
@@ -8,6 +10,8 @@ package org.firstinspires.ftc.teamcode.src;
 public class AarrePositiveInteger {
 
 	private Integer value;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	public AarrePositiveInteger(int value) {
 		if (value < 1) {

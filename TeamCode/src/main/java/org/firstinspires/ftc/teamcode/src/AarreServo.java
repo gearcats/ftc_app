@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.util.logging.Logger;
+
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
  *
@@ -19,6 +21,8 @@ public class AarreServo {
 	private final Servo          servo;
 	private       AarreTelemetry telemetry;
 	private       LinearOpMode   opMode;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * Construct an instance of AarreMotor without telemetry.

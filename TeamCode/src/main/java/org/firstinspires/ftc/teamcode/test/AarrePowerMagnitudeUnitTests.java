@@ -3,9 +3,13 @@ package org.firstinspires.ftc.teamcode.test;
 import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.junit.jupiter.api.Test;
 
+import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AarrePowerMagnitudeUnitTests {
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Test
 	void whenValueIsNegative_thenCannotConstructMagnitude() {

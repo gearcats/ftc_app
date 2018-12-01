@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.src;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.logging.Logger;
 
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData
@@ -19,6 +20,8 @@ public class AarreTelemetry {
 
 	private final Telemetry     underlyingTelemetry;
 	private final Telemetry.Log telemetryLog;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	private boolean carefulLogging;
 
@@ -129,6 +132,8 @@ public class AarreTelemetry {
 	 */
 	public void log(final java.lang.String message) {
 
+		final String TAG = "AarreTelemetry";
+
 		if (carefulLogging) {
 
 			// Wait a couple of milliseconds between log entries to ensure that every entry has its
@@ -142,8 +147,9 @@ public class AarreTelemetry {
 			}
 		}
 
-		telemetryLog.add("Robot: " + message);
-		syslog(message);
+		//syslog(TAG + message);
+		telemetryLog.add(TAG + ": " + message);
+		javaLog.info(message);
 	}
 
 	/**

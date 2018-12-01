@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.src;
 
+import java.util.logging.Logger;
+
 public class AarrePowerVector {
 
 	private double proportion;
 
 	public static final int FORWARD = 1;
 	public static final int REVERSE = -1;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	public AarrePowerVector() {
 

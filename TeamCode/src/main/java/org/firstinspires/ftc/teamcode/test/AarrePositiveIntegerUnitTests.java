@@ -4,12 +4,15 @@ import org.firstinspires.ftc.teamcode.src.AarrePositiveInteger;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class AarrePositiveIntegerUnitTests {
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Test
 	public void whenConstructorArgumentPositive_thenNoProblem() {

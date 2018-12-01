@@ -6,11 +6,16 @@ import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AarreDriveMotorsUnitTests extends LinearOpMode {
 
 	private AarreDriveMotors motors;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+
 
 	@BeforeEach
 	void setUp() {

@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.src.AarreIMU;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.logging.Logger;
 
 
 @Autonomous(name = "Aarre IMU Unit Tests", group = "Aarre")
@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Test;
 public class AarreIMUUnitTests extends LinearOpMode {
 
 	AarreIMU imu;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@BeforeEach
 	public final void testConstructor() {

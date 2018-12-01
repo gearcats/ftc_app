@@ -4,12 +4,16 @@ import org.firstinspires.ftc.teamcode.src.AarreNonNegativeInteger;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class AarreNonNegativeIntegerUnitTests {
+
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Test
 	public void whenConstructorArgumentZero_thenNoProblem() {

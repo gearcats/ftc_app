@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
+import java.util.logging.Logger;
+
 /**
  * Autonomously raise the riser
  */
@@ -16,6 +18,8 @@ public class AarreAutonomousRiserRaise extends LinearOpMode {
 
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * Properties inherited from LinearOpMode include:

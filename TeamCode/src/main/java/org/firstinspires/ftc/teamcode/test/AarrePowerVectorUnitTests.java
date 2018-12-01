@@ -4,12 +4,16 @@ import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AarrePowerVectorUnitTests {
 
 	private AarrePowerVector aarrePowerVector;
+
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Test
 	final void testAarrePowerVector01() {
