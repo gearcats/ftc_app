@@ -6,8 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.logging.Level;
+import java.util.Date;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 
 /**
@@ -26,7 +29,6 @@ import java.util.logging.Logger;
  * <a href="https://github.com/TullyNYGuy/FTC8863_ftc_app/blob/master/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Lib/FTCLib/DcMotor8863.java"></a>
  */
 public class AarreMotor implements AarreMotorInterface {
-
 
 	private static final int SECONDS_PER_MINUTE = 60;
 
@@ -53,10 +55,28 @@ public class AarreMotor implements AarreMotorInterface {
 	private              int                 stallTimeLimitInMilliseconds;
 	private              int                 stallDetectionToleranceInTicks;
 	private              ElapsedTime         timeStalledInMilliseconds       = null;
-	private final static Logger              log                             = Logger.getLogger(AarreMotor.class.getName());
 
 	private double revolutionsPerMinute;
 	private double ticksPerRevolution;
+
+	static Logger log;
+
+	static {
+		log = Logger.getLogger(AarreMotor.class.getName());
+		log.setUseParentHandlers(false);
+		ConsoleHandler handler = new ConsoleHandler();
+		handler.setFormatter(new SimpleFormatter() {
+			private static final String format = "%1$tF %1$tT [%2$s] %3$s : %4$s %n";
+
+			@Override
+			public synchronized String format(LogRecord lr) {
+				return String.format(format, new Date(lr.getMillis()), lr.getLevel().getLocalizedName(), lr
+						.getLoggerName(), lr.getMessage());
+			}
+
+		});
+		log.addHandler(handler);
+	}
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
 
@@ -64,9 +84,7 @@ public class AarreMotor implements AarreMotorInterface {
 
 		telemetry = new AarreTelemetry(opMode.telemetry);
 
-		log.setLevel(Level.INFO);
-		log.finest("AarreMotor");
-
+		log.info("AarreMotor");
 
 		/*
 		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
@@ -444,10 +462,10 @@ public class AarreMotor implements AarreMotorInterface {
 		int                  ticksToSlowDownInt = ticksToRotate.intValue() - ticksToSpeedUp.intValue();
 		AarrePositiveInteger ticksToSlowDown    = new AarrePositiveInteger(ticksToSlowDownInt);
 
-		telemetry.log("Motor - Ramp to encoder ticks(3), target power UP: %f", powerVector.asDouble());
+		log.fine(String.format("Motor - Ramp to encoder ticks(3), target power UP: %f" + powerVector.asDouble()));
 		rampToPower(powerVector, ticksToSpeedUp, secondsTimeout);
 
-		telemetry.log("Motor - Ramp to encoder ticks(3), target power DOWN: %f", 0.0);
+		log.fine(String.format("Motor - Ramp to encoder ticks(3), target power DOWN: %f", 0.0));
 		rampToPower(new AarrePowerVector(0.0), ticksToSlowDown, secondsTimeout);
 
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
