@@ -104,6 +104,10 @@ public class AarreRobot {
 	public void drive(AarrePowerMagnitude powerMagnitude, double leftInches, double rightInches, double
 			secondsTimeout) {
 
+		javaLog.fine(String.format("drive: powerMagnitude: %f", powerMagnitude.asDouble()));
+		javaLog.fine(String.format("drive: leftInches: %f", leftInches));
+		javaLog.fine(String.format("drive: rightInches: %f", rightInches));
+		javaLog.fine(String.format("drive: secondsTimeout: %f", secondsTimeout));
 		driveMotors.drive(powerMagnitude, leftInches, rightInches, secondsTimeout);
 	}
 

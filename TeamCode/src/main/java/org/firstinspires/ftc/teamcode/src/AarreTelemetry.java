@@ -147,7 +147,7 @@ public class AarreTelemetry {
 			}
 		}
 
-		//syslog(TAG + message);
+		syslog(TAG + message);
 		telemetryLog.add(TAG + ": " + message);
 		javaLog.info(message);
 	}
