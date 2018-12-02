@@ -41,19 +41,19 @@ public class AarreDriveMotors {
 	static Logger log;
 
 	static {
-		log = Logger.getLogger(AarreDriveMotors.class.getName());
+		log = Logger.getLogger(AarreMotor.class.getName());
 		log.setUseParentHandlers(false);
 		ConsoleHandler handler = new ConsoleHandler();
 		handler.setLevel(Level.ALL);
 		handler.setFormatter(new SimpleFormatter() {
 
-			private static final String format = "%1$tF %1$tT [%2$s] %3$s : %4$s %n";
+			private static final String format = "%1$tF %1$tT [%2$s] %4$s::%5$s - %6$s %n";
 
 			@Override
 			public synchronized String format(LogRecord lr) {
 				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel()
-						.getLocalizedName(), lr.getLoggerName(), lr.getMessage());
-				//telemetry.log(formattedLogRecord);
+						.getLocalizedName(), lr.getLoggerName(), lr.getSourceClassName(), lr.getSourceMethodName(), lr
+						.getMessage());
 				return formattedLogRecord;
 			}
 
@@ -158,7 +158,7 @@ public class AarreDriveMotors {
 	 */
 	final void drive(final AarrePowerMagnitude powerMagnitude, final double inchesTravelLeft, final double inchesTravelRight, final double secondsTimeout) throws NoSuchMethodException {
 
-		log.entering("AarreDriveMotors", "drive");
+		log.entering(this.getClass().getCanonicalName(), "drive");
 
 		final int newLeftTarget;
 		final int newRightTarget;
@@ -208,6 +208,8 @@ public class AarreDriveMotors {
 		// Turn off RUN_TO_POSITION
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+		log.exiting(this.getClass().getCanonicalName(), "drive");
 
 	}
 
@@ -526,11 +528,15 @@ public class AarreDriveMotors {
 	}
 
 	private void waitForNextIncrement() {
+		log.entering(getClass().getCanonicalName(), "waitForNextIncrement");
+
 		ElapsedTime elapsedTime             = new ElapsedTime();
 		double      millisecondsSinceChange = elapsedTime.milliseconds();
 		while ((millisecondsSinceChange < getCycleLengthInMilliseconds()) && opMode.opModeIsActive()) {
 			opMode.idle();
 			millisecondsSinceChange = elapsedTime.milliseconds();
 		}
+		log.exiting(getClass().getCanonicalName(), "waitForNextIncrement");
+
 	}
 }

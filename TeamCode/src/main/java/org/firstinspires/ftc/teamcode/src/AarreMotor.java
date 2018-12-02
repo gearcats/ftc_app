@@ -59,7 +59,7 @@ public class AarreMotor implements AarreMotorInterface {
 	static Logger log;
 
 	static {
-		log = Logger.getLogger(AarreMotor.class.getName());
+		log = Logger.getLogger("AarreMotor");
 		log.setUseParentHandlers(false);
 		ConsoleHandler handler = new ConsoleHandler();
 		handler.setLevel(Level.ALL);
@@ -70,7 +70,6 @@ public class AarreMotor implements AarreMotorInterface {
 			@Override
 			public synchronized String format(LogRecord lr) {
 				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel().getLocalizedName(), lr.getLoggerName(), lr.getSourceClassName(), lr.getSourceMethodName(), lr.getMessage());
-				//telemetry.log(formattedLogRecord);
 				return formattedLogRecord;
 			}
 
@@ -102,67 +101,6 @@ public class AarreMotor implements AarreMotorInterface {
 		stallDetectionToleranceInTicks = 5;
 		stallTimeLimitInMilliseconds = 100;
 
-	}
-
-	public double getRevolutionsPerMinute() {
-		if (revolutionsPerMinute == 0.0) {
-			throw new IllegalStateException("Revolutions per minute must be non-zero. Maybe you are not calling from "
-					+ "a" + " concrete class?");
-		}
-		return revolutionsPerMinute;
-	}
-
-	public double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude) {
-		return revolutionsPerMinute * powerMagnitude.asDouble();
-	}
-
-	public void setRevolutionsPerMinute(double revolutionsPerMinute) {
-
-		this.revolutionsPerMinute = revolutionsPerMinute;
-	}
-
-	public void setTicksPerRevolution(double ticksPerRevolution) {
-		this.ticksPerRevolution = ticksPerRevolution;
-	}
-
-	public int getMillisecondsPerCycle() {
-		return MILLISECONDS_PER_CYCLE;
-	}
-
-	public double getTicksPerMinute() {
-		return getTicksPerRevolution() * getRevolutionsPerMinute();
-	}
-
-	public double getTicksPerMinute(AarrePowerMagnitude powerMagnitude) {
-		return getTicksPerRevolution() * getRevolutionsPerMinute(powerMagnitude);
-	}
-
-	public double getTicksPerRevolution() {
-		return ticksPerRevolution;
-	}
-
-	public double getTicksPerSecond() {
-		return getTicksPerMinute() / SECONDS_PER_MINUTE;
-	}
-
-	public double getTicksPerSecond(AarrePowerMagnitude powerMagnitude) {
-		return getTicksPerMinute(powerMagnitude) / SECONDS_PER_MINUTE;
-	}
-
-	public double getTicksPerMillisecond() {
-		return getTicksPerSecond() / MILLISECONDS_PER_SECOND;
-	}
-
-	public double getTicksPerMillisecond(AarrePowerMagnitude powerMagnitude) {
-		return getTicksPerSecond(powerMagnitude) / MILLISECONDS_PER_SECOND;
-	}
-
-	public double getTicksPerCycle() {
-		return getTicksPerMillisecond() * getMillisecondsPerCycle();
-	}
-
-	public double getTicksPerCycle(AarrePowerMagnitude powerMagnitude) {
-		return getTicksPerMillisecond(powerMagnitude) * getMillisecondsPerCycle();
 	}
 
 	/**
@@ -783,10 +721,28 @@ public class AarreMotor implements AarreMotorInterface {
 	final void runByRevolutions(final AarrePowerVector proportionMotorPower, final double targetNumberOfRevolutions,
 	                            final double secondsTimeout) throws NoSuchMethodException {
 
+		log.entering(this.getClass().getCanonicalName(), "runByRevolutions");
+
+		log.finer(String.format("Proportion motor power: %f", proportionMotorPower.asDouble()));
+		log.finer(String.format("Target number of revolutions: %f", targetNumberOfRevolutions));
+		log.finer(String.format("Seconds timeout: %f", secondsTimeout));
+
+		final double ticksPerRevolution = getTicksPerRevolution();
+
+		log.finer(String.format("Ticks per revolution: %f", ticksPerRevolution));
+
 		final int numberOfTicksToRunInt = (int) Math.round(getTicksPerRevolution() * targetNumberOfRevolutions);
+
+		log.finer(String.format("Number of ticks to run (int): %d", numberOfTicksToRunInt));
+
 		final AarrePositiveInteger numberOfTicksToRun = new AarrePositiveInteger(numberOfTicksToRunInt);
-		log.fine(String.format("Motor - Run by revolutions, power: %f", proportionMotorPower.asDouble()));
+
+		log.finer(String.format("Number of ticks to run (AarrePositiveInteger): %f", numberOfTicksToRun.doubleValue
+				()));
+
 		rampToEncoderTicks(proportionMotorPower, numberOfTicksToRun, secondsTimeout);
+
+		log.exiting(this.getClass().getCanonicalName(), "runByRevolutions");
 	}
 
 	/**
@@ -919,5 +875,70 @@ public class AarreMotor implements AarreMotorInterface {
 	void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
 		motor.setZeroPowerBehavior(zeroPowerBehavior);
 	}
+
+
+	public double getRevolutionsPerMinute() {
+		if (revolutionsPerMinute == 0.0) {
+			throw new IllegalStateException("Revolutions per minute must be non-zero. Maybe you are not calling from "
+					+ "a" + " concrete class?");
+		}
+		return revolutionsPerMinute;
+	}
+
+	public double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude) {
+		return revolutionsPerMinute * powerMagnitude.asDouble();
+	}
+
+	public void setRevolutionsPerMinute(double revolutionsPerMinute) {
+
+		this.revolutionsPerMinute = revolutionsPerMinute;
+	}
+
+	public void setTicksPerRevolution(double ticksPerRevolution) {
+		this.ticksPerRevolution = ticksPerRevolution;
+	}
+
+	public int getMillisecondsPerCycle() {
+		return MILLISECONDS_PER_CYCLE;
+	}
+
+	public double getTicksPerMinute() {
+		return getTicksPerRevolution() * getRevolutionsPerMinute();
+	}
+
+	public double getTicksPerMinute(AarrePowerMagnitude powerMagnitude) {
+		return getTicksPerRevolution() * getRevolutionsPerMinute(powerMagnitude);
+	}
+
+	public double getTicksPerRevolution() {
+		return ticksPerRevolution;
+	}
+
+	public double getTicksPerSecond() {
+		return getTicksPerMinute() / SECONDS_PER_MINUTE;
+	}
+
+	public double getTicksPerSecond(AarrePowerMagnitude powerMagnitude) {
+		return getTicksPerMinute(powerMagnitude) / SECONDS_PER_MINUTE;
+	}
+
+	public double getTicksPerMillisecond() {
+		return getTicksPerSecond() / MILLISECONDS_PER_SECOND;
+	}
+
+	public double getTicksPerMillisecond(AarrePowerMagnitude powerMagnitude) {
+		return getTicksPerSecond(powerMagnitude) / MILLISECONDS_PER_SECOND;
+	}
+
+	public double getTicksPerCycle() {
+		return getTicksPerMillisecond() * getMillisecondsPerCycle();
+	}
+
+	public double getTicksPerCycle(AarrePowerMagnitude powerMagnitude) {
+		return getTicksPerMillisecond(powerMagnitude) * getMillisecondsPerCycle();
+	}
+
+
+
 
 }
