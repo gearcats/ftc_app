@@ -23,4 +23,5 @@ public class AarreMotorTorqueNADO extends AarreMotor implements AarreMotorInterf
 		motor.setTicksPerRevolution(TORQUENADO_TICKS_PER_REVOLUTION);
 		return motor;
 	}
+
 }

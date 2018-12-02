@@ -11,11 +11,11 @@ public class AarrePositiveInteger {
 
 	private Integer value;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final Logger log = Logger.getLogger(this.getClass().getCanonicalName());
 
 	public AarrePositiveInteger(int value) {
 		if (value < 1) {
-			throw new IllegalArgumentException("Value must be positive");
+			throw new IllegalArgumentException(String.format("Value must be positive: %d", value));
 		}
 		this.value = new Integer(value);
 	}
