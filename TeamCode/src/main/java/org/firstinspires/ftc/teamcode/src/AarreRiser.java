@@ -194,9 +194,9 @@ public class AarreRiser {
 	 * Raise the riser using the default method.
 	 */
 	public void raise() throws NoSuchMethodException {
-		log.info("Riser - raising riser");
+		log.entering(this.getClass().getCanonicalName(), "raise");
 		raiseByRevolutions();
-		log.info("Riser - riser raised");
+		log.exiting(this.getClass().getCanonicalName(), "raise");
 
 		/*
 		 * Hold the riser motor at the top so that gravity will not gently pull it down.
@@ -229,6 +229,12 @@ public class AarreRiser {
 	private void raiseByRevolutions(final AarrePowerMagnitude powerMagnitude, final double numberOfRevolutions, final
 	double secondsTimeout) throws NoSuchMethodException {
 
+		log.entering(this.getClass().getCanonicalName(), "raiseByRevolutions");
+
+		log.fine(String.format("Power magnitude: %f", powerMagnitude.asDouble()));
+		log.fine(String.format("Number of revolutions: %f", numberOfRevolutions));
+		log.fine(String.format("Seconds timeout: %f", secondsTimeout));
+
 		if (numberOfRevolutions < 0.0) {
 			throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
 		}
@@ -239,7 +245,13 @@ public class AarreRiser {
 
 		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
 				.FORWARD);
+
+		log.fine(String.format("Power vector %f", powerVector.asDouble()));
+
 		motor.runByRevolutions(powerVector, numberOfRevolutions, secondsTimeout);
+
+		log.exiting(this.getClass().getCanonicalName(), "raiseByRevolutions");
+
 	}
 
 	/**

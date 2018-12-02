@@ -37,5 +37,4 @@ public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreMotorInte
 	}
 
 
-
 }
