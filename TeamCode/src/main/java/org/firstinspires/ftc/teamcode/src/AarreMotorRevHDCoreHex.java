@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreConcreteMotorInterface {
 
@@ -21,8 +19,6 @@ public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreConcreteM
 	 * For the REV HD Hex motor, it is 2240 (or 224???)
 	 */
 	static final double REV_CORE_HEX_TICKS_PER_REVOLUTION = 224;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	private AarreMotorRevHDCoreHex(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);

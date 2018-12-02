@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.test;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AarrePowerVectorUnitTests {
 
 	private AarrePowerVector aarrePowerVector;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Test
 	final void testAarrePowerVector01() {

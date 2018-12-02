@@ -1,16 +1,11 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
-
 public class AarrePowerVector {
 
 	private double proportion;
 
 	public static final int FORWARD = 1;
 	public static final int REVERSE = -1;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	public AarrePowerVector() {
 

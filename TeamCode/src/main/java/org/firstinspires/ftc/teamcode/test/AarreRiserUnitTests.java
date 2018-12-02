@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.test;
 
 import org.firstinspires.ftc.teamcode.src.AarreRiser;
 import org.junit.jupiter.api.Test;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class AarreRiserUnitTests {
 
     AarreRiser riser;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
     AarreRiserUnitTests() {
         riser = new AarreRiser();

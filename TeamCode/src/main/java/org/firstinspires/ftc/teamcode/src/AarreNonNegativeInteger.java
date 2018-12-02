@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
-
 /**
  * Wrapper class for Integer ensures the value is positive.
  * <p>
@@ -11,8 +8,6 @@ import org.slf4j.ext.XLoggerFactory;
 public class AarreNonNegativeInteger {
 
 	private Integer value;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	public AarreNonNegativeInteger(int value) {
 		if (value < 0) {

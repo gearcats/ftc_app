@@ -7,8 +7,6 @@ import org.firstinspires.ftc.teamcode.src.AarrePositiveInteger;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,8 +26,6 @@ public class AarreMotorRevHDCoreHexUnitTests extends AarreMotorUnitTests impleme
 	 */
 
 	AarreMotorRevHDCoreHex motor = null;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@BeforeEach
 	public final void testConstructor() {

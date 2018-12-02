@@ -34,8 +34,6 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.*;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 import java.util.Locale;
 
@@ -53,8 +51,6 @@ public class AarreIMU {
 	HardwareMap    hardwareMap;
 	LinearOpMode   opMode;
 	AarreTelemetry telemetry;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	// The IMU sensor object
 	BNO055IMU imu;

@@ -5,14 +5,10 @@ import org.firstinspires.ftc.teamcode.src.AarreDriveMotor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 class AarreDriveMotorUnitTests extends LinearOpMode {
 
 	AarreDriveMotor motor;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@BeforeEach
 	void setUp() {

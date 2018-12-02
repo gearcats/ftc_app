@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 public class AarreArm {
 
@@ -18,10 +16,6 @@ public class AarreArm {
 	private AarreTelemetry telemetry;
 	private HardwareMap    hardwareMap;
 	private LinearOpMode   opMode;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
-
-	private double currentPosition;
 
 	/**
 	 * This empty constructor is useful for testing.

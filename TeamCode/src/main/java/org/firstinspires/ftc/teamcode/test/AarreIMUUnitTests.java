@@ -6,9 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreIMU;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
-
 
 @Autonomous(name = "Aarre IMU Unit Tests", group = "Aarre")
 /*
@@ -18,8 +15,6 @@ import org.slf4j.ext.XLoggerFactory;
 public class AarreIMUUnitTests extends LinearOpMode {
 
 	AarreIMU imu;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@BeforeEach
 	public final void testConstructor() {

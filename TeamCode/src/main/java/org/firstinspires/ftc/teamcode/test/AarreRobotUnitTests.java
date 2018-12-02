@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 import org.junit.jupiter.api.Test;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -29,8 +27,6 @@ public class AarreRobotUnitTests extends LinearOpMode {
 	 */
 
 	AarreRobot robot;
-
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Test
 	final void testConstructor() {
