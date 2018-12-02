@@ -65,13 +65,11 @@ public class AarreMotor implements AarreMotorInterface {
 		handler.setLevel(Level.ALL);
 		handler.setFormatter(new SimpleFormatter() {
 
-			private static final String format = "%1$tF %1$tT [%2$s] %3$s : %4$s %n";
+			private static final String format = "%1$tF %1$tT [%2$s] %4$s::%5$s - %6$s %n";
 
 			@Override
 			public synchronized String format(LogRecord lr) {
-				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel()
-						.getLocalizedName(), lr
-						.getLoggerName(), lr.getMessage());
+				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel().getLocalizedName(), lr.getLoggerName(), lr.getSourceClassName(), lr.getSourceMethodName(), lr.getMessage());
 				//telemetry.log(formattedLogRecord);
 				return formattedLogRecord;
 			}
@@ -108,8 +106,8 @@ public class AarreMotor implements AarreMotorInterface {
 
 	public double getRevolutionsPerMinute() {
 		if (revolutionsPerMinute == 0.0) {
-			throw new IllegalStateException("Revolutions per minute must be non-zero. Maybe you are not calling from a" +
-					" concrete class?");
+			throw new IllegalStateException("Revolutions per minute must be non-zero. Maybe you are not calling from "
+					+ "a" + " concrete class?");
 		}
 		return revolutionsPerMinute;
 	}
@@ -312,7 +310,8 @@ public class AarreMotor implements AarreMotorInterface {
 	}
 
 
-	public boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double secondsRunning, AarreNonNegativeInteger ticksMoved) throws NoSuchMethodException {
+	public boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double
+			secondsRunning, AarreNonNegativeInteger ticksMoved) throws NoSuchMethodException {
 
 		log.entering(this.getClass().getCanonicalName(), this.getClass().getMethod("isSpeedUpToEncoderTicksDone",
 				AarrePositiveInteger.class, double.class, double.class, AarreNonNegativeInteger.class).getName());
@@ -343,6 +342,8 @@ public class AarreMotor implements AarreMotorInterface {
 				valueToReturn = true;
 			}
 		}
+		log.exiting(this.getClass().getCanonicalName(), this.getClass().getMethod("isSpeedUpToEncoderTicksDone",
+				AarrePositiveInteger.class, double.class, double.class, AarreNonNegativeInteger.class).getName());
 		return valueToReturn;
 	}
 
@@ -454,7 +455,8 @@ public class AarreMotor implements AarreMotorInterface {
 	 * @param secondsTimeout
 	 * 		Maximum number of seconds to rotate. Must be non-negative.
 	 */
-	final void rampToEncoderTicks(final AarrePowerVector powerVector, final AarrePositiveInteger ticksToRotate, final double secondsTimeout) throws NoSuchMethodException {
+	final void rampToEncoderTicks(final AarrePowerVector powerVector, final AarrePositiveInteger ticksToRotate, final
+	double secondsTimeout) throws NoSuchMethodException {
 
 		if (secondsTimeout < 0.0) {
 			throw new IllegalArgumentException("secondsTimeout must non-negative");
@@ -512,7 +514,8 @@ public class AarreMotor implements AarreMotorInterface {
 	 * 		moves
 	 * 		enough ticks first.
 	 */
-	private void rampToPower(final AarrePowerVector powerVectorRequested, final AarrePositiveInteger ticksToMove, final double secondsTimeout) throws NoSuchMethodException {
+	private void rampToPower(final AarrePowerVector powerVectorRequested, final AarrePositiveInteger ticksToMove,
+	                         final double secondsTimeout) throws NoSuchMethodException {
 
 		AarrePowerVector powerVectorCurrent = this.getPowerVectorCurrent();
 		AarrePowerVector powerVectorChange  = powerVectorCurrent.subtract(powerVectorRequested);
@@ -609,7 +612,8 @@ public class AarreMotor implements AarreMotorInterface {
 	 * @param ticksToMove
 	 * @param tickNumberStart
 	 */
-	private void waitForSlowDown(AarrePowerVector powerVectorAtEnd, AarrePositiveInteger ticksToMove, int tickNumberStart) {
+	private void waitForSlowDown(AarrePowerVector powerVectorAtEnd, AarrePositiveInteger ticksToMove, int
+			tickNumberStart) {
 		boolean          keepWaiting;
 		int              tickNumberCurrent;
 		AarrePowerVector powerVectorCurrent;
@@ -637,7 +641,8 @@ public class AarreMotor implements AarreMotorInterface {
 	 *     |_/
 	 * </pre>
 	 */
-	private void speedUpToPower(final AarrePowerVector powerVectorRequested, final AarrePositiveInteger ticksToMove, final double secondsTimeout) throws NoSuchMethodException {
+	private void speedUpToPower(final AarrePowerVector powerVectorRequested, final AarrePositiveInteger ticksToMove,
+	                            final double secondsTimeout) throws NoSuchMethodException {
 
 		log.fine(String.format("Target power: %f", powerVectorRequested));
 		log.fine(String.format("Target ticks: %d", ticksToMove));
@@ -765,13 +770,18 @@ public class AarreMotor implements AarreMotorInterface {
 	/**
 	 * Run the motor a certain number of revolutions.
 	 *
-	 * @param proportionMotorPower The proportion of power to apply to the motor. If positive, then the motor will
-	 *                                run forward. If negative, then the motor will run in reverse.
-	 * @param targetNumberOfRevolutions The number of revolutions to turn the motor. Must be positive.
-	 * @param secondsTimeout The operation will time out after this many seconds even if the target number of
-	 *                          revolutions has not been reached.
+	 * @param proportionMotorPower
+	 * 		The proportion of power to apply to the motor. If positive, then the motor will run forward. If negative,
+	 * 		then
+	 * 		the motor will run in reverse.
+	 * @param targetNumberOfRevolutions
+	 * 		The number of revolutions to turn the motor. Must be positive.
+	 * @param secondsTimeout
+	 * 		The operation will time out after this many seconds even if the target number of revolutions has not been
+	 * 		reached.
 	 */
-	final void runByRevolutions(final AarrePowerVector proportionMotorPower, final double targetNumberOfRevolutions, final double secondsTimeout) throws NoSuchMethodException {
+	final void runByRevolutions(final AarrePowerVector proportionMotorPower, final double targetNumberOfRevolutions,
+	                            final double secondsTimeout) throws NoSuchMethodException {
 
 		final int numberOfTicksToRunInt = (int) Math.round(getTicksPerRevolution() * targetNumberOfRevolutions);
 		final AarrePositiveInteger numberOfTicksToRun = new AarrePositiveInteger(numberOfTicksToRunInt);

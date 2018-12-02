@@ -40,7 +40,7 @@ public class AarreRiser {
 	private AarreTelemetry       telemetry;
 	private LinearOpMode         opMode;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * This empty constructor is useful for testing.
@@ -105,9 +105,9 @@ public class AarreRiser {
 	 */
 	public final void lower() throws NoSuchMethodException {
 
-		telemetry.log("Riser - lowering riser");
+		log.info("Riser - lowering riser");
 		lowerByRevolutions();
-		telemetry.log("Riser - riser lowered");
+		log.info("Riser - riser lowered");
 
 		currentPosition = 0.0;
 	}
@@ -171,7 +171,7 @@ public class AarreRiser {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 		}
 
-		telemetry.log("Riser - Lower by revolutions, power: %f", powerMagnitude.asDouble());
+		log.fine(String.format("Riser - Lower by revolutions, power: %f", powerMagnitude.asDouble()));
 		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
 				.REVERSE);
 		motor.runByRevolutions(powerVector, numberOfRevolutions, secondsTimeout);
@@ -194,9 +194,9 @@ public class AarreRiser {
 	 * Raise the riser using the default method.
 	 */
 	public void raise() throws NoSuchMethodException {
-		telemetry.log("Riser - raising riser");
+		log.info("Riser - raising riser");
 		raiseByRevolutions();
-		telemetry.log("Riser - riser raised");
+		log.info("Riser - riser raised");
 
 		/*
 		 * Hold the riser motor at the top so that gravity will not gently pull it down.
@@ -235,7 +235,7 @@ public class AarreRiser {
 		if (secondsTimeout < 0.0) {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 		}
-		telemetry.log("Riser - Raise by revolutions, power: %f", powerMagnitude.asDouble());
+		log.fine(String.format("Riser - Raise by revolutions, power: %f", powerMagnitude.asDouble()));
 
 		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
 				.FORWARD);
