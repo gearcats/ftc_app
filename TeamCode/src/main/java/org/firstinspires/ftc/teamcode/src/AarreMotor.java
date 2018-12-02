@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -55,7 +54,7 @@ public class AarreMotor implements AarreMotorInterface {
 	private double revolutionsPerMinute;
 	private double ticksPerRevolution;
 
-	org.slf4j.ext.XLogger log;
+	//org.slf4j.ext.XLogger log;
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
 
@@ -373,7 +372,7 @@ public class AarreMotor implements AarreMotorInterface {
 	 * @param secondsTimeout
 	 * 		Maximum number of seconds to rotate. Must be non-negative.
 	 */
-	@SuppressLint("DefaultLocale")
+
 	final void rampToEncoderTicks(final AarrePowerVector powerVector, final AarrePositiveInteger ticksToRotate, final
 	double secondsTimeout) throws NoSuchMethodException {
 
@@ -733,7 +732,7 @@ public class AarreMotor implements AarreMotorInterface {
 
 		// log.debug(String.format("Ticks per revolution: %f", ticksPerRevolution));
 
-		final int numberOfTicksToRunInt = (int) Math.round(ticksPerRevolution * targetNumberOfRevolutions);
+		final int numberOfTicksToRunInt = (int) Math.round(getTicksPerRevolution() * targetNumberOfRevolutions);
 
 		// log.debug(String.format("Number of ticks to run (int): %d", numberOfTicksToRunInt));
 
