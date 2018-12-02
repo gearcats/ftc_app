@@ -55,7 +55,7 @@ public class AarreAutonomousArmLower extends LinearOpMode {
 		try {
 			robot.lowerArm();
 		} catch (NoSuchMethodException e) {
-			log.error(e.toString());
+			// log.error(e.toString());
 		}
 
 		betterTelemetry.log("-- Arm lowered --");

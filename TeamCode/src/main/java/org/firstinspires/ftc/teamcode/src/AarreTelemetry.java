@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * methods.
  * <p>
  * This makes it easier to log messages to both the driver station phone and the robot controller
- * log. This is convenient because it (a) allows visibility into more messages than fit on the
+ * // log. This is convenient because it (a) allows visibility into more messages than fit on the
  * driver station phone and (b) provides a longer-lasting record of messages than the driver station
  * phone, which resets after 30 seconds in the autonomous mode.
  * <p>
@@ -118,20 +118,20 @@ public class AarreTelemetry {
 
 
 	/**
-	 * Append a simple message to the log.
+	 * Append a simple message to the // log.
 	 * <p>
 	 * All other methods should ultimately call this one, because it also appends the message to the
-	 * robot controller log.
+	 * robot controller // log.
 	 *
 	 * @param message
-	 * 		The message to append to the log.
+	 * 		The message to append to the // log.
 	 */
 	public void log(final java.lang.String message) {
 
 		if (carefulLogging) {
 
 			// Wait a couple of milliseconds between log entries to ensure that every entry has its
-			// own line in the log. This can make it easier to find and read log entries. It is probably not
+			// own line in the // log. This can make it easier to find and read log entries. It is probably not
 			// a good idea to have this set during competition, though....
 
 			try {
@@ -142,12 +142,12 @@ public class AarreTelemetry {
 		}
 
 		syslog(message);
-		telemetryLog.add(message);
-		//log.info(message);
+		//telemetry// log.add(message);
+		//// log.info(message);
 	}
 
 	/**
-	 * Append a simple message (with a caption) to the log.
+	 * Append a simple message (with a caption) to the // log.
 	 *
 	 * @param caption
 	 * 		A caption for the log entry.
@@ -160,7 +160,7 @@ public class AarreTelemetry {
 	}
 
 	/**
-	 * Append a formatted message (without a caption) to the log.
+	 * Append a formatted message (without a caption) to the // log.
 	 *
 	 * @param message
 	 * 		A printf-formatted message to be logged.
@@ -175,7 +175,7 @@ public class AarreTelemetry {
 	}
 
 	/**
-	 * Append a formatted message (with a caption) to the log.
+	 * Append a formatted message (with a caption) to the // log.
 	 *
 	 * @param caption
 	 * 		A caption for the log entry.
@@ -193,10 +193,10 @@ public class AarreTelemetry {
 	}
 
 	/**
-	 * Append a message to the robot controller log.
+	 * Append a message to the robot controller // log.
 	 *
 	 * @param message
-	 * 		A message to append to the robot controller log.
+	 * 		A message to append to the robot controller // log.
 	 */
 	private void syslog(final String message) {
 

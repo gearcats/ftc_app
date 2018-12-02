@@ -10,9 +10,9 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	public AarrePowerMagnitude(double magnitude) {
-		log.entry();
+		// log.entry();
 		setProportion(magnitude);
-		log.exit();
+		// log.exit();
 	}
 
 	public AarrePowerMagnitude(AarrePowerVector powerVector) {

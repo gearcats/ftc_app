@@ -36,7 +36,7 @@ public class AarreAutonomousDance extends LinearOpMode {
 	@Override
 	public final void runOpMode() {
 
-		log.entry();
+		// log.entry();
 
 		// 'telemetry' comes from FTC....
 		// It is only available in runOpMode
@@ -52,21 +52,21 @@ public class AarreAutonomousDance extends LinearOpMode {
 			throw new AssertionError("Unexpected null object: hardwareMap");
 		robot = new AarreRobot(this);
 
-		log.info("Initializing robot");
+		// log.info("Initializing robot");
 
 		// Wait for the driver to press PLAY
 		waitForStart();
 
-		log.info("Starting play");
+		// log.info("Starting play");
 
 		final AarrePowerMagnitude drivePowerMagnitude = new AarrePowerMagnitude(0.5);
-		log.debug("Set drive power magnitude");
+		// log.debug("Set drive power magnitude");
 		final AarrePowerMagnitude turnPowerMagnitude = new AarrePowerMagnitude(0.5);
-		log.debug("Set turn power magnitude");
+		// log.debug("Set turn power magnitude");
 		final double inches  = 12.0;
 		final double timeout = 5.0;
 
-		log.debug("Starting to drive");
+		// log.debug("Starting to drive");
 
 		try {
 
@@ -85,7 +85,7 @@ public class AarreAutonomousDance extends LinearOpMode {
 			robot.raiseHook();
 
 		} catch (NoSuchMethodException e) {
-			log.error(e.toString());
+			// log.error(e.toString());
 		}
 	}
 

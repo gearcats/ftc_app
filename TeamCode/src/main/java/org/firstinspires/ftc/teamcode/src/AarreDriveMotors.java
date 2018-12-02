@@ -74,7 +74,7 @@ public class AarreDriveMotors {
 			try {
 				rampPowerTo(new AarrePowerVector(0.0));
 			} catch (NoSuchMethodException e) {
-				log.error(e.toString());
+				// log.error(e.toString());
 			}
 
 			// This code REQUIRES that you have encoders on the wheel motors
@@ -135,7 +135,7 @@ public class AarreDriveMotors {
 	 */
 	final void drive(final AarrePowerMagnitude powerMagnitude, final double inchesTravelLeft, final double inchesTravelRight, final double secondsTimeout) throws NoSuchMethodException {
 
-		log.entry();
+		// log.entry();
 
 		final int newLeftTarget;
 		final int newRightTarget;
@@ -158,9 +158,9 @@ public class AarreDriveMotors {
 		AarrePowerVector leftPowerVector     = new AarrePowerVector(powerMagnitude, leftPowerDirection);
 		AarrePowerVector rightPowerVector    = new AarrePowerVector(powerMagnitude, rightPowerDirection);
 
-		log.debug("Calling rampPowerTo");
+		// log.debug("Calling rampPowerTo");
 		rampPowerTo(leftPowerVector, rightPowerVector);
-		log.debug("Returned from rampPowerTo");
+		// log.debug("Returned from rampPowerTo");
 
 		// keep looping while we are still active, and there is time left, and both motors are running.
 		// Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -186,7 +186,7 @@ public class AarreDriveMotors {
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-		log.exit();
+		// log.exit();
 
 	}
 
@@ -433,8 +433,8 @@ public class AarreDriveMotors {
 	 */
 	public void rampPowerTo(final AarrePowerVector powerVectorRequestedLeft, final AarrePowerVector powerVectorRequestedRight) throws NoSuchMethodException {
 
-		log.entry(getClass().getCanonicalName(), getClass().getMethod("rampPowerTo", AarrePowerVector.class,
-				AarrePowerVector.class).getName());
+		// log.entry(getClass().getCanonicalName(), getClass().getMethod("rampPowerTo", AarrePowerVector.class,
+		//		AarrePowerVector.class).getName());
 
 		AarrePowerMagnitude powerMagnitudeTolerance = getPowerMagnitudeTolerance();
 
@@ -480,7 +480,7 @@ public class AarreDriveMotors {
 
 		}
 
-		log.exit();
+		// log.exit();
 
 
 	}
@@ -504,7 +504,7 @@ public class AarreDriveMotors {
 	}
 
 	private void waitForNextIncrement() {
-		log.entry(getClass().getCanonicalName(), "waitForNextIncrement");
+		// log.entry(getClass().getCanonicalName(), "waitForNextIncrement");
 
 		ElapsedTime elapsedTime             = new ElapsedTime();
 		double      millisecondsSinceChange = elapsedTime.milliseconds();
@@ -512,7 +512,7 @@ public class AarreDriveMotors {
 			opMode.idle();
 			millisecondsSinceChange = elapsedTime.milliseconds();
 		}
-		log.exit();
+		// log.exit();
 
 	}
 }

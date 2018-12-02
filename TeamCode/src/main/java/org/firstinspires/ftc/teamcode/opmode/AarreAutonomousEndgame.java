@@ -65,7 +65,7 @@ public class AarreAutonomousEndgame extends LinearOpMode {
 		try {
 			robot.readyForAutonomousEndgame();
 		} catch (NoSuchMethodException e) {
-			log.error(e.toString());
+			// log.error(e.toString());
 		}
 
 		betterTelemetry.log("Reset complete - robot is ready for autonomous mode");

@@ -68,7 +68,7 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 			robot.drive(turnSpeed, inches, -inches, timeout);
 			robot.drive(turnSpeed, -inches, inches, timeout);
 		} catch (NoSuchMethodException e) {
-			log.error(e.toString());
+			// log.error(e.toString());
 		}
 
 

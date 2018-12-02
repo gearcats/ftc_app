@@ -58,7 +58,7 @@ public class AarreAutonomousTransport extends LinearOpMode {
         try {
             robot.readyForTransportation();
         } catch (NoSuchMethodException e) {
-	        log.error(e.toString());
+	        // log.error(e.toString());
         }
 
         betterTelemetry.log("Status", "Reset complete - robot is ready for transport");

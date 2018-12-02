@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomous;
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomousReady;
-import org.slf4j.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines all the specific
@@ -21,6 +22,7 @@ public class AarreRobot {
 
 	private final AarreTelemetry telemetry;
 
+	private XLogger log = XLoggerFactory.getXLogger(getClass().getCanonicalName());
 	/**
 	 * These properties are package-private so methods of other classes in this package can use
 	 * them.
@@ -36,8 +38,6 @@ public class AarreRobot {
 	AarreServo       hookServo;
 	CRServo          scoopServo;
 	HardwareMap      hardwareMap;
-
-	static Logger log;
 
 	/**
 	 * Construct from opMode only
@@ -102,10 +102,10 @@ public class AarreRobot {
 	 */
 	public void drive(AarrePowerMagnitude powerMagnitude, double leftInches, double rightInches, double secondsTimeout) throws NoSuchMethodException {
 
-		log.debug(String.format("drive: powerMagnitude: %f", powerMagnitude.asDouble()));
-		log.debug(String.format("drive: leftInches: %f", leftInches));
-		log.debug(String.format("drive: rightInches: %f", rightInches));
-		log.debug(String.format("drive: secondsTimeout: %f", secondsTimeout));
+		// log.debug(String.format("drive: powerMagnitude: %f", powerMagnitude.asDouble()));
+		// log.debug(String.format("drive: leftInches: %f", leftInches));
+		// log.debug(String.format("drive: rightInches: %f", rightInches));
+		// log.debug(String.format("drive: secondsTimeout: %f", secondsTimeout));
 		driveMotors.drive(powerMagnitude, leftInches, rightInches, secondsTimeout);
 	}
 

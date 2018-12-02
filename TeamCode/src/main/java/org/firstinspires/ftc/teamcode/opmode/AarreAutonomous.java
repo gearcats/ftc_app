@@ -109,7 +109,7 @@ public class AarreAutonomous extends LinearOpMode {
 				robot.drive(TURN_POWER_MAGNITUDE, INCHES, -INCHES, TIMEOUT);
 				robot.drive(DRIVE_POWER_MAGNITUDE, -INCHES, -INCHES, TIMEOUT);
 			} catch (NoSuchMethodException e) {
-				log.error(e.toString());
+				// log.error(e.toString());
 			}
 
 			betterTelemetry.log("Path", "Complete");

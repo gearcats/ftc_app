@@ -139,7 +139,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 			robot.gyroHold(TURN_SPEED, 0.0, 1.0);    // Hold  0 Deg heading for a 1 second
 			robot.gyroDrive(DRIVE_SPEED, -48.0, 0.0);    // Drive REV 48 inches
 		} catch (NoSuchMethodException e) {
-			log.error(e.toString());
+			// log.error(e.toString());
 		}
 		telemetry.addData("Path", "Complete");
 		telemetry.update();

@@ -53,7 +53,7 @@ public class AarreAutonomousRiserLower extends LinearOpMode {
 		try {
 			robot.lowerRiser();
 		} catch (NoSuchMethodException e) {
-			log.error(e.toString());
+			// log.error(e.toString());
 		}
 
 		betterTelemetry.log("Riser lowered");
