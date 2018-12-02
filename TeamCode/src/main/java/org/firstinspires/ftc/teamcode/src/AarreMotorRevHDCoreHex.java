@@ -22,7 +22,7 @@ public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreConcreteM
 	 */
 	static final double REV_CORE_HEX_TICKS_PER_REVOLUTION = 224;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	private AarreMotorRevHDCoreHex(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);

@@ -21,7 +21,7 @@ public class AarreTelemetry {
 	private final Telemetry     underlyingTelemetry;
 	private final Telemetry.Log telemetryLog;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	private boolean carefulLogging;
 

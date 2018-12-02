@@ -94,7 +94,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 	private AarreTelemetry aarreTelemetry;
 	private AarreRobot     robot;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Override
 	public final void runOpMode() {

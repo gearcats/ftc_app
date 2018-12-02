@@ -24,7 +24,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	private AarreMotor motor;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Override
 	@BeforeEach

@@ -16,7 +16,7 @@ public class AarreDriveMotor extends AarreMotorTorqueNADO implements AarreMotorI
 	 */
 	private static final double WHEEL_DIAMETER_INCHES = 5.5;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	public AarreDriveMotor(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);

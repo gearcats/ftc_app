@@ -14,7 +14,7 @@ public class AarreRiserUnitTests {
 
     AarreRiser riser;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
     AarreRiserUnitTests() {
         riser = new AarreRiser();

@@ -22,7 +22,7 @@ public class AarreServo {
 	private       AarreTelemetry telemetry;
 	private       LinearOpMode   opMode;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	/**
 	 * Construct an instance of AarreMotor without telemetry.

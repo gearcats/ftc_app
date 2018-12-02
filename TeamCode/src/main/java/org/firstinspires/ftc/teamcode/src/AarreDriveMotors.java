@@ -135,7 +135,7 @@ public class AarreDriveMotors {
 	 */
 	final void drive(final AarrePowerMagnitude powerMagnitude, final double inchesTravelLeft, final double inchesTravelRight, final double secondsTimeout) throws NoSuchMethodException {
 
-		log.entry(this.getClass().getCanonicalName(), "drive");
+		log.entry();
 
 		final int newLeftTarget;
 		final int newRightTarget;

@@ -5,6 +5,6 @@ import org.slf4j.ext.XLoggerFactory;
 
 class AarreTelemetryUnitTests {
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 }

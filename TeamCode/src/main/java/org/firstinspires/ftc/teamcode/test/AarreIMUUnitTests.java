@@ -19,7 +19,7 @@ public class AarreIMUUnitTests extends LinearOpMode {
 
 	AarreIMU imu;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@BeforeEach
 	public final void testConstructor() {

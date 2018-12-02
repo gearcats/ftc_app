@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 public class AarreAutonomousDriveByGyroUnitTests {
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
     @Test
     public void testNewGyroObjectNotNull() {

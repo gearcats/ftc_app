@@ -19,7 +19,7 @@ public class AarreAutonomousArmLower extends LinearOpMode {
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 	/**
 	 * Properties inherited from LinearOpMode include:
 	 * <p>

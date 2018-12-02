@@ -123,7 +123,7 @@ public class AarreAutonomousVuforiaTest extends LinearOpMode {
     private OpenGLMatrix lastLocation = null;
     private boolean targetVisible = false;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
     @Override
     public void runOpMode() {

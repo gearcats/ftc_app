@@ -10,5 +10,5 @@ import org.slf4j.ext.XLoggerFactory;
 
 public class AarreVuforia {
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 }

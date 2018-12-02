@@ -10,7 +10,7 @@ public class AarreMotorTorqueNADO extends AarreMotor implements AarreConcreteMot
 
 	private static final int TORQUENADO_TICKS_PER_REVOLUTION = 1440;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	public AarreMotorTorqueNADO(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);

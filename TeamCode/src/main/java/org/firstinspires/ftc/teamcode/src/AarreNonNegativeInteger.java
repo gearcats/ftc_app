@@ -12,7 +12,7 @@ public class AarreNonNegativeInteger {
 
 	private Integer value;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	public AarreNonNegativeInteger(int value) {
 		if (value < 0) {

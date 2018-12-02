@@ -40,7 +40,7 @@ public class AarreRiser {
 	private AarreTelemetry       telemetry;
 	private LinearOpMode         opMode;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	/**
 	 * This empty constructor is useful for testing.

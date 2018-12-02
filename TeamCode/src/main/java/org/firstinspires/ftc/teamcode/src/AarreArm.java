@@ -19,7 +19,7 @@ public class AarreArm {
 	private HardwareMap    hardwareMap;
 	private LinearOpMode   opMode;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	private double currentPosition;
 

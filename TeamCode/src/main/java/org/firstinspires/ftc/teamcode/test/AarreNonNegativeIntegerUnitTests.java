@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class AarreNonNegativeIntegerUnitTests {
 
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Test
 	public void whenConstructorArgumentZero_thenNoProblem() {

@@ -60,7 +60,6 @@ public class AarreMotor implements AarreMotorInterface {
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
 
 		log = XLoggerFactory.getXLogger(getClass());
-		log.info("Hello World");
 
 		this.opMode = opMode;
 

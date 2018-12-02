@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AarreArmUnitTests {
 
     private final AarreArm arm;
-    private final XLogger  log = XLoggerFactory.getXLogger(this.getClass().getName());
+    private final XLogger  log = XLoggerFactory.getXLogger("TEMP");
 
     AarreArmUnitTests() {
         arm = new AarreArm();

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AarrePowerMagnitudeUnitTests {
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Test
 	void whenValueIsNegative_thenCannotConstructMagnitude() {

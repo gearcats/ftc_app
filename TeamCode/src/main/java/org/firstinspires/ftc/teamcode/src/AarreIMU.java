@@ -54,7 +54,7 @@ public class AarreIMU {
 	LinearOpMode   opMode;
 	AarreTelemetry telemetry;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	// The IMU sensor object
 	BNO055IMU imu;

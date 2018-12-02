@@ -10,7 +10,7 @@ public class AarrePowerVector {
 	public static final int FORWARD = 1;
 	public static final int REVERSE = -1;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	public AarrePowerVector() {
 

@@ -13,7 +13,7 @@ class AarrePowerVectorUnitTests {
 
 	private AarrePowerVector aarrePowerVector;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Test
 	final void testAarrePowerVector01() {

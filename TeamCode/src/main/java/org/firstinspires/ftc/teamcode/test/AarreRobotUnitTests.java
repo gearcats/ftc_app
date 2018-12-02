@@ -30,7 +30,7 @@ public class AarreRobotUnitTests extends LinearOpMode {
 
 	AarreRobot robot;
 
-	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Test
 	final void testConstructor() {
