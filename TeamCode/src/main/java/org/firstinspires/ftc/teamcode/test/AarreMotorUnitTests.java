@@ -10,10 +10,11 @@ import org.firstinspires.ftc.teamcode.src.AarrePositiveInteger;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+// import org.slf4j.ext.XLogger;
+// import org.slf4j.ext.XLoggerFactory;
 
 /**
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
@@ -24,7 +25,7 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 
 	private AarreMotor motor;
 
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
+	// private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Override
 	@BeforeEach

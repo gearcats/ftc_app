@@ -35,8 +35,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
+// import org.slf4j.ext.XLogger;
+// import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This file contains Aarre's experimental code for the autonomous mode
@@ -59,7 +59,7 @@ public class AarreAutonomous extends LinearOpMode {
 	private              AarreTelemetry      betterTelemetry;
 	private              AarreRobot          robot;
 
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
+	// private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	public AarreAutonomous() {
 	}

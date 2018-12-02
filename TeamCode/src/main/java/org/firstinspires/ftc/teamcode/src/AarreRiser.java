@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
+// import org.slf4j.ext.XLogger;
+// import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This class represents the riser on the robot.
@@ -40,7 +40,7 @@ public class AarreRiser {
 	private AarreTelemetry       telemetry;
 	private LinearOpMode         opMode;
 
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
+	// private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	/**
 	 * This empty constructor is useful for testing.

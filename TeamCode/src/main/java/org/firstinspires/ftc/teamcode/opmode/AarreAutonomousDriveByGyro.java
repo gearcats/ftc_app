@@ -37,8 +37,8 @@ import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
+// import org.slf4j.ext.XLogger;
+// import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This file illustrates the concept of driving a path based on Gyro heading and encoder counts. It
@@ -94,7 +94,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 	private AarreTelemetry aarreTelemetry;
 	private AarreRobot     robot;
 
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
+	// private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	@Override
 	public final void runOpMode() {

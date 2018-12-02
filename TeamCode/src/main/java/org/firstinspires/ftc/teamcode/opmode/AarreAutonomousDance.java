@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
+// import org.slf4j.ext.XLogger;
+// import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This file contains Aarre's experimental code to make the robot "dance" autonomously (that it, to make it exercise all
@@ -22,10 +22,10 @@ public class AarreAutonomousDance extends LinearOpMode {
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
 
-	static XLogger log;
+	//static XLogger log;
 
 	public AarreAutonomousDance() {
-		log = XLoggerFactory.getXLogger(getClass());
+		//log = XLoggerFactory.getXLogger(getClass());
 	}
 
 	/**

@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
+// import org.slf4j.ext.XLogger;
+// import org.slf4j.ext.XLoggerFactory;
 
 public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 
 	private double magnitude;
 
-	private final XLogger log = XLoggerFactory.getXLogger("TEMP");
+	// private final XLogger log = XLoggerFactory.getXLogger("TEMP");
 
 	public AarrePowerMagnitude(double magnitude) {
 		// log.entry();

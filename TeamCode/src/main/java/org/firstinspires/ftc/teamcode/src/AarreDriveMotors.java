@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
+// import org.slf4j.ext.XLogger;
+// import org.slf4j.ext.XLoggerFactory;
 
 /**
  * A pair of motors used for driving the robot
@@ -37,11 +37,11 @@ public class AarreDriveMotors {
 	private LinearOpMode          opMode;
 	private ModernRoboticsI2cGyro gyro;
 
-	private XLogger log;
+	// private XLogger log;
 
 	public AarreDriveMotors(LinearOpMode opMode) {
 
-		log = XLoggerFactory.getXLogger(getClass());
+		//log = XLoggerFactory.getXLogger(getClass());
 
 		this.opMode = opMode;
 

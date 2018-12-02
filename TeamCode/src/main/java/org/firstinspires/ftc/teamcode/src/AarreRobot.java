@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomous;
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomousReady;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
+// import org.slf4j.ext.XLogger;
+// import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines all the specific
@@ -22,7 +22,7 @@ public class AarreRobot {
 
 	private final AarreTelemetry telemetry;
 
-	private XLogger log = XLoggerFactory.getXLogger(getClass().getCanonicalName());
+	// private XLogger log = XLoggerFactory.getXLogger(getClass().getCanonicalName());
 	/**
 	 * These properties are package-private so methods of other classes in this package can use
 	 * them.
