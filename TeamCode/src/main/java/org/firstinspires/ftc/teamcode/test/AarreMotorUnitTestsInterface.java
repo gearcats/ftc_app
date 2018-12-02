@@ -105,6 +105,9 @@ interface AarreMotorUnitTestsInterface {
 	void whenGetTicksPerCycleCalledAbstract_thenThrowsException();
 
 	@Test
+	void whenGetTicksPerRevolutionCalledAbstract_thenThrowsException();
+
+	@Test
 	void testSetDirection();
 
 

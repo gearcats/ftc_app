@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -22,7 +22,7 @@ public class AarreServo {
 	private       AarreTelemetry telemetry;
 	private       LinearOpMode   opMode;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	/**
 	 * Construct an instance of AarreMotor without telemetry.

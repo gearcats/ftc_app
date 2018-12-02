@@ -2,61 +2,6 @@ package org.firstinspires.ftc.teamcode.src;
 
 abstract interface AarreMotorInterface {
 
-	double getRevolutionsPerMinute();
-
-	double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude);
-
-	void setRevolutionsPerMinute(double revolutionsPerMinute);
-
-	/**
-	 * The number of milliseconds in a ramp up/ramp down cycle.
-	 * <p>
-	 * It is useful to have this public getter for testing purposes.
-	 *
-	 * @return The number of milliseconds in a ramp up/ramp down cycle.
-	 */
-	int getMillisecondsPerCycle();
-
-	double getTicksPerMinute();
-
-	double getTicksPerMinute(AarrePowerMagnitude powerMagnitude);
-
-	double getTicksPerRevolution();
-
-	void setTicksPerRevolution(double ticksPerRevolution);
-
-	double getTicksPerSecond();
-
-	double getTicksPerSecond(AarrePowerMagnitude powerMagnitude);
-
-	/**
-	 * @return The number of ticks in a millisecond at maximum power.
-	 */
-	double getTicksPerMillisecond();
-
-	/**
-	 * @param powerMagnitude
-	 * 		The magnitude of motor power for which the caller wants to know the number of ticks in a power change
-	 * 		cycle.
-	 *
-	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude
-	 */
-	double getTicksPerMillisecond(AarrePowerMagnitude powerMagnitude);
-
-	/**
-	 * @return The number of ticks in a power change cycle at maximum power
-	 */
-	double getTicksPerCycle();
-
-	/**
-	 * Get the number of ticks in a power change cycle at a given power magnitude.
-	 *
-	 * @param powerMagnitude
-	 * 		The magnitude of motor power for which the caller wants the number of ticks in a power change cycle.
-	 *
-	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude.
-	 */
-	double getTicksPerCycle(AarrePowerMagnitude powerMagnitude);
 
 	int getCurrentTickNumber();
 

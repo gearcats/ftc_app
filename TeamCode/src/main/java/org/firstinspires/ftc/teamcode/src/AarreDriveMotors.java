@@ -7,9 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
-import java.util.Date;
-import java.util.logging.*;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * A pair of motors used for driving the robot
@@ -38,37 +37,15 @@ public class AarreDriveMotors {
 	private LinearOpMode          opMode;
 	private ModernRoboticsI2cGyro gyro;
 
-	static Logger log;
-
-	static {
-		log = Logger.getLogger(AarreMotor.class.getName());
-		log.setUseParentHandlers(false);
-		ConsoleHandler handler = new ConsoleHandler();
-		handler.setLevel(Level.ALL);
-		handler.setFormatter(new SimpleFormatter() {
-
-			private static final String format = "%1$tF %1$tT [%2$s] %4$s::%5$s - %6$s %n";
-
-			@Override
-			public synchronized String format(LogRecord lr) {
-				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel()
-						.getLocalizedName(), lr.getLoggerName(), lr.getSourceClassName(), lr.getSourceMethodName(), lr
-						.getMessage());
-				return formattedLogRecord;
-			}
-
-		});
-		log.addHandler(handler);
-		log.setLevel(Level.ALL);
-	}
+	private XLogger log;
 
 	public AarreDriveMotors(LinearOpMode opMode) {
+
+		log = XLoggerFactory.getXLogger(getClass());
 
 		this.opMode = opMode;
 
 		telemetry = new AarreTelemetry(opMode.telemetry);
-
-		log.setLevel(Level.ALL);
 
 		/*
 		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
@@ -97,7 +74,7 @@ public class AarreDriveMotors {
 			try {
 				rampPowerTo(new AarrePowerVector(0.0));
 			} catch (NoSuchMethodException e) {
-				log.severe(e.toString());
+				log.error(e.toString());
 			}
 
 			// This code REQUIRES that you have encoders on the wheel motors
@@ -158,7 +135,7 @@ public class AarreDriveMotors {
 	 */
 	final void drive(final AarrePowerMagnitude powerMagnitude, final double inchesTravelLeft, final double inchesTravelRight, final double secondsTimeout) throws NoSuchMethodException {
 
-		log.entering(this.getClass().getCanonicalName(), "drive");
+		log.entry(this.getClass().getCanonicalName(), "drive");
 
 		final int newLeftTarget;
 		final int newRightTarget;
@@ -181,9 +158,9 @@ public class AarreDriveMotors {
 		AarrePowerVector leftPowerVector     = new AarrePowerVector(powerMagnitude, leftPowerDirection);
 		AarrePowerVector rightPowerVector    = new AarrePowerVector(powerMagnitude, rightPowerDirection);
 
-		log.fine("Calling rampPowerTo");
+		log.debug("Calling rampPowerTo");
 		rampPowerTo(leftPowerVector, rightPowerVector);
-		log.fine("Returned from rampPowerTo");
+		log.debug("Returned from rampPowerTo");
 
 		// keep looping while we are still active, and there is time left, and both motors are running.
 		// Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -209,7 +186,7 @@ public class AarreDriveMotors {
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-		log.exiting(this.getClass().getCanonicalName(), "drive");
+		log.exit();
 
 	}
 
@@ -456,7 +433,7 @@ public class AarreDriveMotors {
 	 */
 	public void rampPowerTo(final AarrePowerVector powerVectorRequestedLeft, final AarrePowerVector powerVectorRequestedRight) throws NoSuchMethodException {
 
-		log.entering(getClass().getCanonicalName(), getClass().getMethod("rampPowerTo", AarrePowerVector.class,
+		log.entry(getClass().getCanonicalName(), getClass().getMethod("rampPowerTo", AarrePowerVector.class,
 				AarrePowerVector.class).getName());
 
 		AarrePowerMagnitude powerMagnitudeTolerance = getPowerMagnitudeTolerance();
@@ -503,8 +480,7 @@ public class AarreDriveMotors {
 
 		}
 
-		log.exiting(getClass().getName(), getClass().getMethod("rampPowerTo", AarrePowerVector.class, AarrePowerVector
-				.class).getName());
+		log.exit();
 
 
 	}
@@ -528,7 +504,7 @@ public class AarreDriveMotors {
 	}
 
 	private void waitForNextIncrement() {
-		log.entering(getClass().getCanonicalName(), "waitForNextIncrement");
+		log.entry(getClass().getCanonicalName(), "waitForNextIncrement");
 
 		ElapsedTime elapsedTime             = new ElapsedTime();
 		double      millisecondsSinceChange = elapsedTime.milliseconds();
@@ -536,7 +512,7 @@ public class AarreDriveMotors {
 			opMode.idle();
 			millisecondsSinceChange = elapsedTime.milliseconds();
 		}
-		log.exiting(getClass().getCanonicalName(), "waitForNextIncrement");
+		log.exit();
 
 	}
 }

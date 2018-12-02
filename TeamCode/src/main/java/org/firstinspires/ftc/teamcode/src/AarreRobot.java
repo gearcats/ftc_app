@@ -6,9 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomous;
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomousReady;
-
-import java.util.Date;
-import java.util.logging.*;
+import org.slf4j.Logger;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines all the specific
@@ -40,28 +38,6 @@ public class AarreRobot {
 	HardwareMap      hardwareMap;
 
 	static Logger log;
-
-	static {
-		log = Logger.getLogger(AarreRobot.class.getName());
-		log.setUseParentHandlers(false);
-		ConsoleHandler handler = new ConsoleHandler();
-		handler.setLevel(Level.ALL);
-		handler.setFormatter(new SimpleFormatter() {
-
-			private static final String format = "%1$tF %1$tT [%2$s] %3$s : %4$s %n";
-
-			@Override
-			public synchronized String format(LogRecord lr) {
-				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel()
-						.getLocalizedName(), lr.getLoggerName(), lr.getMessage());
-				//telemetry.log(formattedLogRecord);
-				return formattedLogRecord;
-			}
-
-		});
-		log.addHandler(handler);
-		log.setLevel(Level.ALL);
-	}
 
 	/**
 	 * Construct from opMode only
@@ -126,10 +102,10 @@ public class AarreRobot {
 	 */
 	public void drive(AarrePowerMagnitude powerMagnitude, double leftInches, double rightInches, double secondsTimeout) throws NoSuchMethodException {
 
-		log.fine(String.format("drive: powerMagnitude: %f", powerMagnitude.asDouble()));
-		log.fine(String.format("drive: leftInches: %f", leftInches));
-		log.fine(String.format("drive: rightInches: %f", rightInches));
-		log.fine(String.format("drive: secondsTimeout: %f", secondsTimeout));
+		log.debug(String.format("drive: powerMagnitude: %f", powerMagnitude.asDouble()));
+		log.debug(String.format("drive: leftInches: %f", leftInches));
+		log.debug(String.format("drive: rightInches: %f", rightInches));
+		log.debug(String.format("drive: secondsTimeout: %f", secondsTimeout));
 		driveMotors.drive(powerMagnitude, leftInches, rightInches, secondsTimeout);
 	}
 

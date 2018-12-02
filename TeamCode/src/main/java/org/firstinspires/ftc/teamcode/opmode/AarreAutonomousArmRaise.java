@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
-
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * Autonomously raise the arm
@@ -20,7 +20,7 @@ public class AarreAutonomousArmRaise extends LinearOpMode {
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
 
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	/**
 	 * Properties inherited from LinearOpMode include:
@@ -57,7 +57,7 @@ public class AarreAutonomousArmRaise extends LinearOpMode {
 		try {
 			robot.raiseArm();
 		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
+			log.error(e.toString());
 		}
 
 		betterTelemetry.log("-- Arm raised --");

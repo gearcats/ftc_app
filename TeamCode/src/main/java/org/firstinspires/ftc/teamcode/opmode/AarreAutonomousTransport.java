@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
-
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This file contains Aarre's experimental code to autonomously set the robot to a state
@@ -23,7 +23,7 @@ public class AarreAutonomousTransport extends LinearOpMode {
     private AarreTelemetry betterTelemetry;
     private AarreRobot     robot;
 
-    private final Logger log = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
     /**
      * Properties inherited from LinearOpMode include:
@@ -58,7 +58,7 @@ public class AarreAutonomousTransport extends LinearOpMode {
         try {
             robot.readyForTransportation();
         } catch (NoSuchMethodException e) {
-            log.severe(e.toString());
+	        log.error(e.toString());
         }
 
         betterTelemetry.log("Status", "Reset complete - robot is ready for transport");

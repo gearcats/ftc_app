@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
-import java.util.logging.Logger;
-
-public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreMotorInterface {
+public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreConcreteMotorInterface {
 
 	/*
 	 * Properties of the motor
@@ -22,7 +22,7 @@ public class AarreMotorRevHDCoreHex extends AarreMotor implements AarreMotorInte
 	 */
 	static final double REV_CORE_HEX_TICKS_PER_REVOLUTION = 224;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	private AarreMotorRevHDCoreHex(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);

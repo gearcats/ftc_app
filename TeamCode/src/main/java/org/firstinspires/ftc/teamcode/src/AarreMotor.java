@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.src;
 
+import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import java.util.Date;
-import java.util.logging.*;
+import org.slf4j.ext.XLoggerFactory;
 
 
 /**
@@ -56,29 +55,12 @@ public class AarreMotor implements AarreMotorInterface {
 	private double revolutionsPerMinute;
 	private double ticksPerRevolution;
 
-	static Logger log;
-
-	static {
-		log = Logger.getLogger("AarreMotor");
-		log.setUseParentHandlers(false);
-		ConsoleHandler handler = new ConsoleHandler();
-		handler.setLevel(Level.ALL);
-		handler.setFormatter(new SimpleFormatter() {
-
-			private static final String format = "%1$tF %1$tT [%2$s] %4$s::%5$s - %6$s %n";
-
-			@Override
-			public synchronized String format(LogRecord lr) {
-				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel().getLocalizedName(), lr.getLoggerName(), lr.getSourceClassName(), lr.getSourceMethodName(), lr.getMessage());
-				return formattedLogRecord;
-			}
-
-		});
-		log.addHandler(handler);
-		log.setLevel(Level.ALL);
-	}
+	org.slf4j.ext.XLogger log;
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
+
+		log = XLoggerFactory.getXLogger(getClass());
+		log.info("Hello World");
 
 		this.opMode = opMode;
 
@@ -251,21 +233,21 @@ public class AarreMotor implements AarreMotorInterface {
 	public boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double
 			secondsRunning, AarreNonNegativeInteger ticksMoved) throws NoSuchMethodException {
 
-		log.entering(this.getClass().getCanonicalName(), this.getClass().getMethod("isSpeedUpToEncoderTicksDone",
+		log.entry(this.getClass().getCanonicalName(), this.getClass().getMethod("isSpeedUpToEncoderTicksDone",
 				AarrePositiveInteger.class, double.class, double.class, AarreNonNegativeInteger.class).getName());
 
 		boolean valueToReturn = false;
 
-		log.finest(String.format("ticksMaximum: %f", ticksMaximum.doubleValue()));
-		log.finest(String.format("secondsTimeout: %f", secondsTimeout));
-		log.finest(String.format("secondsRunning: %f", secondsRunning));
-		log.finest(String.format("ticksMoved: %f", ticksMoved.doubleValue()));
+		log.debug(String.format("ticksMaximum: %f", ticksMaximum.doubleValue()));
+		log.debug(String.format("secondsTimeout: %f", secondsTimeout));
+		log.debug(String.format("secondsRunning: %f", secondsRunning));
+		log.debug(String.format("ticksMoved: %f", ticksMoved.doubleValue()));
 
 		if (Math.abs(ticksMoved.intValue()) >= Math.abs(ticksMaximum.intValue())) {
-			log.finest("Loop done - moved far enough");
+			log.debug("Loop done - moved far enough");
 			valueToReturn = true;
 		} else if (secondsRunning >= secondsTimeout) {
-			log.finest("Loop done - timed out");
+			log.debug("Loop done - timed out");
 			valueToReturn = true;
 		} else if (hardwareMap != null) {
 
@@ -276,12 +258,11 @@ public class AarreMotor implements AarreMotorInterface {
 			 * us to use off-bot unit tests to test the other conditions.
 			 */
 			if (!opMode.opModeIsActive()) {
-				log.finest("Loop done - On robot but op mode is not active");
+				log.debug("Loop done - On robot but op mode is not active");
 				valueToReturn = true;
 			}
 		}
-		log.exiting(this.getClass().getCanonicalName(), this.getClass().getMethod("isSpeedUpToEncoderTicksDone",
-				AarrePositiveInteger.class, double.class, double.class, AarreNonNegativeInteger.class).getName());
+		log.exit();
 		return valueToReturn;
 	}
 
@@ -330,13 +311,13 @@ public class AarreMotor implements AarreMotorInterface {
 	private boolean isStalled() {
 
 		// TODO: Implement logging framework to allow logging by severity level
-		telemetry.log("Time stalled = ", "%d ms", getTimeStalledInMilliseconds());
-		telemetry.log("Stall time limit = ", "%d ms", stallTimeLimitInMilliseconds);
+		log.debug(String.format("Time stalled: ", "%d ms", getTimeStalledInMilliseconds()));
+		log.debug(String.format("Stall time limit: ", "%d ms", stallTimeLimitInMilliseconds));
 
 		boolean   stalled       = false;
 		final int newTickNumber = getCurrentTickNumber();
 
-		//telemetry.log("checking for a stall", "!");
+		log.debug("Checking for a stall");
 
 		if (Math.abs(newTickNumber - oldTickNumber) < stallDetectionToleranceInTicks) {
 
@@ -346,7 +327,7 @@ public class AarreMotor implements AarreMotorInterface {
 
 				// The motor has been stalled for more than the time limit
 
-				telemetry.log("Motor stalled");
+				log.debug("Motor stalled");
 				stalled = true;
 
 			}
@@ -393,8 +374,11 @@ public class AarreMotor implements AarreMotorInterface {
 	 * @param secondsTimeout
 	 * 		Maximum number of seconds to rotate. Must be non-negative.
 	 */
+	@SuppressLint("DefaultLocale")
 	final void rampToEncoderTicks(final AarrePowerVector powerVector, final AarrePositiveInteger ticksToRotate, final
 	double secondsTimeout) throws NoSuchMethodException {
+
+		log.entry(this.getClass().getCanonicalName(), "rampToEncoderTicks");
 
 		if (secondsTimeout < 0.0) {
 			throw new IllegalArgumentException("secondsTimeout must non-negative");
@@ -409,14 +393,17 @@ public class AarreMotor implements AarreMotorInterface {
 		int                  ticksToSlowDownInt = ticksToRotate.intValue() - ticksToSpeedUp.intValue();
 		AarrePositiveInteger ticksToSlowDown    = new AarrePositiveInteger(ticksToSlowDownInt);
 
-		log.fine(String.format("Motor - Ramp to encoder ticks(3), target power UP: %f" + powerVector.asDouble()));
+		log.debug(String.format("Target power UP: %f", powerVector.asDouble()));
 		rampToPower(powerVector, ticksToSpeedUp, secondsTimeout);
 
-		log.fine(String.format("Motor - Ramp to encoder ticks(3), target power DOWN: %f", 0.0));
+		log.debug(String.format("Target power DOWN: %f", (double) 0.0));
 		rampToPower(new AarrePowerVector(0.0), ticksToSlowDown, secondsTimeout);
 
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+		log.exit();
+
 	}
 
 
@@ -455,10 +442,22 @@ public class AarreMotor implements AarreMotorInterface {
 	private void rampToPower(final AarrePowerVector powerVectorRequested, final AarrePositiveInteger ticksToMove,
 	                         final double secondsTimeout) throws NoSuchMethodException {
 
+
+		log.entry(this.getClass().getCanonicalName(), "rampToPower");
+
+		log.debug(String.format("Power vector requested: %f", powerVectorRequested.asDouble()));
+
 		AarrePowerVector powerVectorCurrent = this.getPowerVectorCurrent();
-		AarrePowerVector powerVectorChange  = powerVectorCurrent.subtract(powerVectorRequested);
+
+		log.debug(String.format("Power vector current: %f", powerVectorCurrent.asDouble()));
+
+		AarrePowerVector powerVectorChange = powerVectorRequested.subtract(powerVectorCurrent);
+
+		log.debug(String.format("Power vector change: %f", powerVectorCurrent.asDouble()));
 
 		int powerChangeDirection = powerVectorChange.getDirection();
+
+		log.debug(String.format("Power vector change direction: %d", powerChangeDirection));
 
 		if (powerChangeDirection == AarrePowerVector.FORWARD) {
 			speedUpToPower(powerVectorRequested, ticksToMove, secondsTimeout);
@@ -470,7 +469,7 @@ public class AarreMotor implements AarreMotorInterface {
 				throw new RuntimeException("Power change direction should be -1, 0, or 1");
 			}
 		}
-
+		log.exit();
 	}
 
 	/**
@@ -489,7 +488,9 @@ public class AarreMotor implements AarreMotorInterface {
 	private void slowDownToPower(final AarrePowerVector powerVectorAtEnd, final AarrePositiveInteger ticksToMove,
 	                             final double secondsTimeout) {
 
-		telemetry.log("Motor::slowDownToPower(3) - Target power: %f", powerVectorAtEnd);
+		log.entry(this.getClass().getCanonicalName(), "slowDownToPower");
+
+		log.debug(String.format("Target power: %f", powerVectorAtEnd.asDouble()));
 
 		boolean keepWaiting;
 		boolean keepGoing;
@@ -522,9 +523,9 @@ public class AarreMotor implements AarreMotorInterface {
 
 			setPowerVector(powerVectorNew);
 
-			telemetry.log("Motor::slowDownToPower(3) - Milliseconds elapsed %f", runtimeFromStart.milliseconds());
-			telemetry.log("Motor::slowDownToPower(3) - Current tick number: %d", tickNumberCurrent);
-			telemetry.log("Motor::slowDownToPower(3) - New power: %f", powerVectorNew);
+			log.debug(String.format("Milliseconds elapsed: %f", runtimeFromStart.milliseconds()));
+			log.debug(String.format("Current tick number: %d", tickNumberCurrent));
+			log.debug(String.format("New power: %f", powerVectorNew.asDouble()));
 
 			/*
 			 * Wait for next power change
@@ -541,6 +542,7 @@ public class AarreMotor implements AarreMotorInterface {
 					powerVectorCurrent, powerVectorAtEnd);
 
 		}
+		log.exit();
 	}
 
 	/**
@@ -582,8 +584,8 @@ public class AarreMotor implements AarreMotorInterface {
 	private void speedUpToPower(final AarrePowerVector powerVectorRequested, final AarrePositiveInteger ticksToMove,
 	                            final double secondsTimeout) throws NoSuchMethodException {
 
-		log.fine(String.format("Target power: %f", powerVectorRequested));
-		log.fine(String.format("Target ticks: %d", ticksToMove));
+		log.debug(String.format("Target power: %f", powerVectorRequested.asDouble()));
+		log.debug(String.format("Target ticks: %d", ticksToMove.intValue()));
 
 		ElapsedTime runtimeSinceChange;
 		ElapsedTime runtimeTotal;
@@ -596,7 +598,7 @@ public class AarreMotor implements AarreMotorInterface {
 		double           millisecondsSinceChange;
 
 		tickNumberStart = getCurrentTickNumber();
-		log.fine(String.format("Motor::speedUpToPower(3) - Starting tick number: %d", tickNumberStart));
+		log.debug(String.format("Motor::speedUpToPower(3) - Starting tick number: %d", tickNumberStart));
 
 		secondsRunning = 0.0;
 		AarreNonNegativeInteger ticksMoved = new AarreNonNegativeInteger(0);
@@ -620,9 +622,10 @@ public class AarreMotor implements AarreMotorInterface {
 
 			tickNumberCurrent = getCurrentTickNumber();
 			ticksMoved = new AarreNonNegativeInteger(tickNumberCurrent - tickNumberStart);
-			log.fine(String.format("Motor::speedUpToPower(3) - Milliseconds elapsed %f", runtimeTotal.milliseconds()));
-			log.fine(String.format("Motor::speedUpToPower(3) - Current tick number: %d", tickNumberCurrent));
-			log.fine(String.format("Motor::speedUpToPower(3) - New power: %f", powerVectorNew));
+			log.debug(String.format("Motor::speedUpToPower(3) - Milliseconds elapsed %f", runtimeTotal.milliseconds
+					()));
+			log.debug(String.format("Motor::speedUpToPower(3) - Current tick number: %d", tickNumberCurrent));
+			log.debug(String.format("Motor::speedUpToPower(3) - New power: %f", powerVectorNew.asDouble()));
 
 		}
 	}
@@ -651,11 +654,11 @@ public class AarreMotor implements AarreMotorInterface {
 			powerIncrementMagnitude, final int millisecondsCycleLength, final AarrePowerMagnitude
 			powerToleranceMagnitude, final double secondsTimeout) {
 
-		log.fine(String.format("Ramp to power (5), total target power: %f", powerVectorRequested.asDouble()));
+		log.debug(String.format("Ramp to power (5), total target power: %f", powerVectorRequested.asDouble()));
 		if (opMode.opModeIsActive()) {
-			log.fine("Op mode is active");
+			log.debug("Op mode is active");
 		} else {
-			log.fine("Op mode is NOT active");
+			log.debug("Op mode is NOT active");
 		}
 
 		AarrePowerVector    powerVectorCurrent;
@@ -668,7 +671,7 @@ public class AarreMotor implements AarreMotorInterface {
 
 		while ((magnitudeOfLastPowerChange.isGreaterThan(powerToleranceMagnitude)) && opMode.opModeIsActive()) {
 
-			log.fine("Op mode is active");
+			log.debug("Op mode is active");
 			powerVectorCurrent = getPowerVectorCurrent();
 
 			vectorOfLastPowerChange = powerVectorRequested.subtract(powerVectorCurrent);
@@ -676,7 +679,7 @@ public class AarreMotor implements AarreMotorInterface {
 
 			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 
-			log.fine(String.format("Ramp to power, current power target: %f", powerVectorNew.asDouble()));
+			log.debug(String.format("Ramp to power, current power target: %f", powerVectorNew.asDouble()));
 
 			setPowerVector(powerVectorNew);
 
@@ -708,7 +711,7 @@ public class AarreMotor implements AarreMotorInterface {
 	/**
 	 * Run the motor a certain number of revolutions.
 	 *
-	 * @param proportionMotorPower
+	 * @param targetMotorPower
 	 * 		The proportion of power to apply to the motor. If positive, then the motor will run forward. If negative,
 	 * 		then
 	 * 		the motor will run in reverse.
@@ -718,31 +721,31 @@ public class AarreMotor implements AarreMotorInterface {
 	 * 		The operation will time out after this many seconds even if the target number of revolutions has not been
 	 * 		reached.
 	 */
-	final void runByRevolutions(final AarrePowerVector proportionMotorPower, final double targetNumberOfRevolutions,
+	final void runByRevolutions(final AarrePowerVector targetMotorPower, final double targetNumberOfRevolutions,
 	                            final double secondsTimeout) throws NoSuchMethodException {
 
-		log.entering(this.getClass().getCanonicalName(), "runByRevolutions");
+		log.entry(this.getClass().getCanonicalName(), "runByRevolutions");
 
-		log.finer(String.format("Proportion motor power: %f", proportionMotorPower.asDouble()));
-		log.finer(String.format("Target number of revolutions: %f", targetNumberOfRevolutions));
-		log.finer(String.format("Seconds timeout: %f", secondsTimeout));
+		log.debug(String.format("Target motor power: %f", targetMotorPower.asDouble()));
+		log.debug(String.format("Target number of revolutions: %f", targetNumberOfRevolutions));
+		log.debug(String.format("Seconds timeout: %f", secondsTimeout));
 
 		final double ticksPerRevolution = getTicksPerRevolution();
 
-		log.finer(String.format("Ticks per revolution: %f", ticksPerRevolution));
+		log.debug(String.format("Ticks per revolution: %f", ticksPerRevolution));
 
-		final int numberOfTicksToRunInt = (int) Math.round(getTicksPerRevolution() * targetNumberOfRevolutions);
+		final int numberOfTicksToRunInt = (int) Math.round(ticksPerRevolution * targetNumberOfRevolutions);
 
-		log.finer(String.format("Number of ticks to run (int): %d", numberOfTicksToRunInt));
+		log.debug(String.format("Number of ticks to run (int): %d", numberOfTicksToRunInt));
 
 		final AarrePositiveInteger numberOfTicksToRun = new AarrePositiveInteger(numberOfTicksToRunInt);
 
-		log.finer(String.format("Number of ticks to run (AarrePositiveInteger): %f", numberOfTicksToRun.doubleValue
+		log.debug(String.format("Number of ticks to run (AarrePositiveInteger): %f", numberOfTicksToRun.doubleValue
 				()));
 
-		rampToEncoderTicks(proportionMotorPower, numberOfTicksToRun, secondsTimeout);
+		rampToEncoderTicks(targetMotorPower, numberOfTicksToRun, secondsTimeout);
 
-		log.exiting(this.getClass().getCanonicalName(), "runByRevolutions");
+		log.exit();
 	}
 
 	/**
@@ -789,7 +792,7 @@ public class AarreMotor implements AarreMotorInterface {
 		timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 		rampToPower(power);
 		while (!(isStalled()) && opMode.opModeIsActive()) {
-			log.finest("Not stalled yet...");
+			log.debug("Not stalled yet...");
 			opMode.idle();
 		}
 		rampToPower(new AarrePowerVector(0.0));
@@ -877,6 +880,7 @@ public class AarreMotor implements AarreMotorInterface {
 	}
 
 
+
 	public double getRevolutionsPerMinute() {
 		if (revolutionsPerMinute == 0.0) {
 			throw new IllegalStateException("Revolutions per minute must be non-zero. Maybe you are not calling from "
@@ -911,6 +915,10 @@ public class AarreMotor implements AarreMotorInterface {
 	}
 
 	public double getTicksPerRevolution() {
+		if (ticksPerRevolution == 0.0) {
+			throw new IllegalStateException("Revolutions per minute must be non-zero. Maybe you are not calling from "
+					+ "a" + " concrete class?");
+		}
 		return ticksPerRevolution;
 	}
 

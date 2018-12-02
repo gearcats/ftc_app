@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.src;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData
@@ -21,7 +21,7 @@ public class AarreTelemetry {
 	private final Telemetry     underlyingTelemetry;
 	private final Telemetry.Log telemetryLog;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	private boolean carefulLogging;
 
@@ -147,7 +147,7 @@ public class AarreTelemetry {
 
 		syslog(message);
 		telemetryLog.add(message);
-		//javaLog.info(message);
+		//log.info(message);
 	}
 
 	/**

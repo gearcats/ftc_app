@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
-
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This file contains Aarre's experimental code to test that the robot drive autonomously.
@@ -21,7 +21,7 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
 
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	public AarreAutonomousDriveTest() {
 	}
@@ -68,7 +68,7 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 			robot.drive(turnSpeed, inches, -inches, timeout);
 			robot.drive(turnSpeed, -inches, inches, timeout);
 		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
+			log.error(e.toString());
 		}
 
 

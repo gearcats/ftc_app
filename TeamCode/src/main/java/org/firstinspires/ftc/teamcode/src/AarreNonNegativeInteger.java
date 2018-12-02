@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * Wrapper class for Integer ensures the value is positive.
@@ -11,7 +12,7 @@ public class AarreNonNegativeInteger {
 
 	private Integer value;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	public AarreNonNegativeInteger(int value) {
 		if (value < 0) {

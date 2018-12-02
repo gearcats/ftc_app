@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This class represents the riser on the robot.
@@ -40,7 +40,7 @@ public class AarreRiser {
 	private AarreTelemetry       telemetry;
 	private LinearOpMode         opMode;
 
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	/**
 	 * This empty constructor is useful for testing.
@@ -78,7 +78,7 @@ public class AarreRiser {
 
 		this.opMode = opMode;
 
-		motor = new AarreMotorTorqueNADO(opMode, nameOfRiserMotor);
+		motor = AarreMotorTorqueNADO.createAarreMotorTorqueNADO(opMode, nameOfRiserMotor);
 
 		motor.rampToPower(new AarrePowerVector(0.0));
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -171,7 +171,7 @@ public class AarreRiser {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 		}
 
-		log.fine(String.format("Riser - Lower by revolutions, power: %f", powerMagnitude.asDouble()));
+		log.debug(String.format("Riser - Lower by revolutions, power: %f", powerMagnitude.asDouble()));
 		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
 				.REVERSE);
 		motor.runByRevolutions(powerVector, numberOfRevolutions, secondsTimeout);
@@ -194,9 +194,9 @@ public class AarreRiser {
 	 * Raise the riser using the default method.
 	 */
 	public void raise() throws NoSuchMethodException {
-		log.entering(this.getClass().getCanonicalName(), "raise");
+		log.entry();
 		raiseByRevolutions();
-		log.exiting(this.getClass().getCanonicalName(), "raise");
+		log.exit();
 
 		/*
 		 * Hold the riser motor at the top so that gravity will not gently pull it down.
@@ -229,11 +229,11 @@ public class AarreRiser {
 	private void raiseByRevolutions(final AarrePowerMagnitude powerMagnitude, final double numberOfRevolutions, final
 	double secondsTimeout) throws NoSuchMethodException {
 
-		log.entering(this.getClass().getCanonicalName(), "raiseByRevolutions");
+		log.entry(this.getClass().getCanonicalName(), "raiseByRevolutions");
 
-		log.fine(String.format("Power magnitude: %f", powerMagnitude.asDouble()));
-		log.fine(String.format("Number of revolutions: %f", numberOfRevolutions));
-		log.fine(String.format("Seconds timeout: %f", secondsTimeout));
+		log.debug(String.format("Power magnitude: %f", powerMagnitude.asDouble()));
+		log.debug(String.format("Number of revolutions: %f", numberOfRevolutions));
+		log.debug(String.format("Seconds timeout: %f", secondsTimeout));
 
 		if (numberOfRevolutions < 0.0) {
 			throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
@@ -241,16 +241,16 @@ public class AarreRiser {
 		if (secondsTimeout < 0.0) {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 		}
-		log.fine(String.format("Riser - Raise by revolutions, power: %f", powerMagnitude.asDouble()));
+		log.debug(String.format("Riser - Raise by revolutions, power: %f", powerMagnitude.asDouble()));
 
 		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
 				.FORWARD);
 
-		log.fine(String.format("Power vector %f", powerVector.asDouble()));
+		log.debug(String.format("Power vector %f", powerVector.asDouble()));
 
 		motor.runByRevolutions(powerVector, numberOfRevolutions, secondsTimeout);
 
-		log.exiting(this.getClass().getCanonicalName(), "raiseByRevolutions");
+		log.exit();
 
 	}
 

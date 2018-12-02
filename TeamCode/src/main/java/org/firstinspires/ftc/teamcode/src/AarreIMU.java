@@ -34,9 +34,10 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.*;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 import java.util.Locale;
-import java.util.logging.Logger;
 
 /**
  * {@link AarreIMU} gives a short demo on how to use the BNO055 Inertial Motion Unit (IMU) from
@@ -53,7 +54,7 @@ public class AarreIMU {
 	LinearOpMode   opMode;
 	AarreTelemetry telemetry;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	// The IMU sensor object
 	BNO055IMU imu;

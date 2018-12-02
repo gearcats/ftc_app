@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * Separate out the portions of the Vuforia code that do not depend on running on the robot so that we can unit test
@@ -9,5 +10,5 @@ import java.util.logging.Logger;
 
 public class AarreVuforia {
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 }

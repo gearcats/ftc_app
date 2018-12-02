@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 public class AarrePowerVector {
 
@@ -9,7 +10,7 @@ public class AarrePowerVector {
 	public static final int FORWARD = 1;
 	public static final int REVERSE = -1;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	public AarrePowerVector() {
 

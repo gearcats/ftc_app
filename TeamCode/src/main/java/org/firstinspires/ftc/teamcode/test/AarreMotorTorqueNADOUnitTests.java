@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.src.AarrePositiveInteger;
 import org.firstinspires.ftc.teamcode.src.AarrePowerVector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,7 +23,7 @@ public class AarreMotorTorqueNADOUnitTests extends AarreMotorUnitTests implement
 
 	private AarreMotor motor;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 
 	@BeforeEach

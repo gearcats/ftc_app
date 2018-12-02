@@ -1,17 +1,18 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 
 	private double magnitude;
 
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	public AarrePowerMagnitude(double magnitude) {
-		log.entering("AarrePowerMagnitude", "AarrePowerMagnitude");
+		log.entry();
 		setProportion(magnitude);
-		log.exiting("AarrePowerMagnitude", "AarrePowerMagnitude");
+		log.exit();
 	}
 
 	public AarrePowerMagnitude(AarrePowerVector powerVector) {

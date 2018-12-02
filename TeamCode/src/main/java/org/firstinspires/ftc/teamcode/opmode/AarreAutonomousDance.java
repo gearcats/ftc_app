@@ -5,9 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
-
-import java.util.Date;
-import java.util.logging.*;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 /**
  * This file contains Aarre's experimental code to make the robot "dance" autonomously (that it, to make it exercise all
@@ -23,31 +22,10 @@ public class AarreAutonomousDance extends LinearOpMode {
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
 
-	static Logger log;
-
-	static {
-		log = Logger.getLogger(AarreAutonomousDance.class.getName());
-		log.setUseParentHandlers(false);
-		ConsoleHandler handler = new ConsoleHandler();
-		handler.setLevel(Level.ALL);
-		handler.setFormatter(new SimpleFormatter() {
-
-			private static final String format = "%1$tF %1$tT [%2$s] %3$s : %4$s %n";
-
-			@Override
-			public synchronized String format(LogRecord lr) {
-				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel()
-						.getLocalizedName(), lr.getLoggerName(), lr.getMessage());
-				//telemetry.log(formattedLogRecord);
-				return formattedLogRecord;
-			}
-
-		});
-		log.addHandler(handler);
-		log.setLevel(Level.ALL);
-	}
+	static XLogger log;
 
 	public AarreAutonomousDance() {
+		log = XLoggerFactory.getXLogger(getClass());
 	}
 
 	/**
@@ -58,7 +36,7 @@ public class AarreAutonomousDance extends LinearOpMode {
 	@Override
 	public final void runOpMode() {
 
-		log.entering("AarreAutonomousDance", "runOpMode");
+		log.entry();
 
 		// 'telemetry' comes from FTC....
 		// It is only available in runOpMode
@@ -82,13 +60,13 @@ public class AarreAutonomousDance extends LinearOpMode {
 		log.info("Starting play");
 
 		final AarrePowerMagnitude drivePowerMagnitude = new AarrePowerMagnitude(0.5);
-		log.fine("Set drive power magnitude");
+		log.debug("Set drive power magnitude");
 		final AarrePowerMagnitude turnPowerMagnitude = new AarrePowerMagnitude(0.5);
-		log.fine("Set turn power magnitude");
+		log.debug("Set turn power magnitude");
 		final double inches  = 12.0;
 		final double timeout = 5.0;
 
-		log.fine("Starting to drive");
+		log.debug("Starting to drive");
 
 		try {
 
@@ -107,7 +85,7 @@ public class AarreAutonomousDance extends LinearOpMode {
 			robot.raiseHook();
 
 		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
+			log.error(e.toString());
 		}
 	}
 

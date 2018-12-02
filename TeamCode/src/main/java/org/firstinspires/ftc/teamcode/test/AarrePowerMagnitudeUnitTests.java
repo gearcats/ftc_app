@@ -2,14 +2,14 @@ package org.firstinspires.ftc.teamcode.test;
 
 import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.junit.jupiter.api.Test;
-
-import java.util.logging.Logger;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AarrePowerMagnitudeUnitTests {
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final XLogger log = XLoggerFactory.getXLogger(this.getClass().getName());
 
 	@Test
 	void whenValueIsNegative_thenCannotConstructMagnitude() {
