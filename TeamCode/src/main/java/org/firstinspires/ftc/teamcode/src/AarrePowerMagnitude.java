@@ -6,10 +6,12 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 
 	private double magnitude;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	public AarrePowerMagnitude(double magnitude) {
+		log.entering("AarrePowerMagnitude", "AarrePowerMagnitude");
 		setProportion(magnitude);
+		log.exiting("AarrePowerMagnitude", "AarrePowerMagnitude");
 	}
 
 	public AarrePowerMagnitude(AarrePowerVector powerVector) {

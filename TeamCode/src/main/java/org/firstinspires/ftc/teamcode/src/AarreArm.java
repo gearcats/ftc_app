@@ -69,11 +69,11 @@ public class AarreArm {
 	/**
 	 * Lower the arm by the default method.
 	 */
-	public final void lower() {
+	public final void lower() throws NoSuchMethodException {
 		lowerByRamp();
 	}
 
-	private void lowerByRamp() {
+	private void lowerByRamp() throws NoSuchMethodException {
 		AarrePowerVector     powerVector           = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE, -1);
 		AarrePositiveInteger numberOfTicksToRotate = new AarrePositiveInteger(120); // TODO: Eliminate magic #
 		motor.rampToEncoderTicks(powerVector, numberOfTicksToRotate, SECONDS_BEFORE_TIMEOUT_DEFAULT);
@@ -82,11 +82,11 @@ public class AarreArm {
 	/**
 	 * Raise the arm using the default method.
 	 */
-	public final void raise() {
+	public final void raise() throws NoSuchMethodException {
 		raiseByRamp();
 	}
 
-	private void raiseByRamp() {
+	private void raiseByRamp() throws NoSuchMethodException {
 		AarrePowerVector powerVector = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE,
 		                                                    AarrePowerVector.FORWARD);
 		AarrePositiveInteger numberOfTicksToRotate = new AarrePositiveInteger(120); // TODO: Eliminate magic #

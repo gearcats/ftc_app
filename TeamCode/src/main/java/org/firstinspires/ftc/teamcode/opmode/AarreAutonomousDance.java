@@ -6,80 +6,109 @@ import org.firstinspires.ftc.teamcode.src.AarrePowerMagnitude;
 import org.firstinspires.ftc.teamcode.src.AarreRobot;
 import org.firstinspires.ftc.teamcode.src.AarreTelemetry;
 
-import java.util.logging.Logger;
+import java.util.Date;
+import java.util.logging.*;
 
 /**
- * This file contains Aarre's experimental code to make the robot "dance" autonomously (that it,
- * to make it exercise all of its functions).
- *
- * To avoid issuing an error on the phones, any OpMode class must be
- * declared public.
- *
+ * This file contains Aarre's experimental code to make the robot "dance" autonomously (that it, to make it exercise all
+ * of its functions).
+ * <p>
+ * To avoid issuing an error on the phones, any OpMode class must be declared public.
  */
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 @Autonomous(name = "Aarre Autonomous Dance", group = "Aarre")
 public class AarreAutonomousDance extends LinearOpMode {
 
-    private AarreTelemetry betterTelemetry;
-    private AarreRobot     robot;
+	private AarreTelemetry betterTelemetry;
+	private AarreRobot     robot;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	static Logger log;
 
-    public AarreAutonomousDance() {
-    }
+	static {
+		log = Logger.getLogger(AarreAutonomousDance.class.getName());
+		log.setUseParentHandlers(false);
+		ConsoleHandler handler = new ConsoleHandler();
+		handler.setLevel(Level.ALL);
+		handler.setFormatter(new SimpleFormatter() {
 
-    /**
-     * Properties and methods inherited from LinearOpMode include:
-     *
-     * hardwareMap
-     * opModeIsActive
-     * telemetry
-     */
-    @Override
-    public final void runOpMode() {
+			private static final String format = "%1$tF %1$tT [%2$s] %3$s : %4$s %n";
 
-        // 'telemetry' comes from FTC....
-        // It is only available in runOpMode
+			@Override
+			public synchronized String format(LogRecord lr) {
+				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel()
+						.getLocalizedName(), lr.getLoggerName(), lr.getMessage());
+				//telemetry.log(formattedLogRecord);
+				return formattedLogRecord;
+			}
 
-        if (telemetry == null)
-            throw new AssertionError("Unexpected null object: telemetry");
-        betterTelemetry = new AarreTelemetry(telemetry);
+		});
+		log.addHandler(handler);
+		log.setLevel(Level.ALL);
+	}
 
-        // 'hardwareMap comes from FTC....
-        // It is only available in runOpMode
+	public AarreAutonomousDance() {
+	}
 
-        if (hardwareMap == null)
-            throw new AssertionError("Unexpected null object: hardwareMap");
-        robot = new AarreRobot(this);
+	/**
+	 * Properties and methods inherited from LinearOpMode include:
+	 * <p>
+	 * hardwareMap opModeIsActive telemetry
+	 */
+	@Override
+	public final void runOpMode() {
 
-        betterTelemetry.log("Initializing robot");
+		log.entering("AarreAutonomousDance", "runOpMode");
 
-        // Wait for the driver to press PLAY
-        waitForStart();
+		// 'telemetry' comes from FTC....
+		// It is only available in runOpMode
 
-        final AarrePowerMagnitude drivePowerMagnitude = new AarrePowerMagnitude(0.5);
-        final AarrePowerMagnitude   turnPowerMagnitude  = new AarrePowerMagnitude(0.5);
-        final double              inches     = 12.0;
-        final double              timeout    = 5.0;
+		if (telemetry == null)
+			throw new AssertionError("Unexpected null object: telemetry");
+		betterTelemetry = new AarreTelemetry(telemetry);
 
-        robot.drive(drivePowerMagnitude, inches, inches, timeout);
-        robot.drive(drivePowerMagnitude, -inches, -inches, timeout);
+		// 'hardwareMap comes from FTC....
+		// It is only available in runOpMode
 
-        robot.drive(turnPowerMagnitude, inches, -inches, timeout);
-        robot.drive(turnPowerMagnitude, -inches, inches, timeout);
+		if (hardwareMap == null)
+			throw new AssertionError("Unexpected null object: hardwareMap");
+		robot = new AarreRobot(this);
 
-        robot.raiseArm();
-        robot.lowerArm();
+		log.info("Initializing robot");
 
-        robot.raiseRiser();
-        robot.lowerRiser();
+		// Wait for the driver to press PLAY
+		waitForStart();
 
-        robot.lowerHook();
-        robot.raiseHook();
+		log.info("Starting play");
 
-        betterTelemetry.log("Ready to run");    //
+		final AarrePowerMagnitude drivePowerMagnitude = new AarrePowerMagnitude(0.5);
+		log.fine("Set drive power magnitude");
+		final AarrePowerMagnitude turnPowerMagnitude = new AarrePowerMagnitude(0.5);
+		log.fine("Set turn power magnitude");
+		final double inches  = 12.0;
+		final double timeout = 5.0;
 
-    }
+		log.fine("Starting to drive");
+
+		try {
+
+			robot.drive(drivePowerMagnitude, inches, inches, timeout);
+			robot.drive(drivePowerMagnitude, -inches, -inches, timeout);
+			robot.drive(turnPowerMagnitude, inches, -inches, timeout);
+			robot.drive(turnPowerMagnitude, -inches, inches, timeout);
+
+			robot.raiseArm();
+			robot.lowerArm();
+
+			robot.raiseRiser();
+			robot.lowerRiser();
+
+			robot.lowerHook();
+			robot.raiseHook();
+
+		} catch (NoSuchMethodException e) {
+			log.severe(e.toString());
+		}
+	}
 
 }

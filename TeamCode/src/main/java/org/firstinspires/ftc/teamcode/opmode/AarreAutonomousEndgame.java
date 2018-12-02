@@ -29,7 +29,7 @@ public class AarreAutonomousEndgame extends LinearOpMode {
 	private AarreRobot     robot;
 
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * Properties inherited from LinearOpMode include:
@@ -62,7 +62,11 @@ public class AarreAutonomousEndgame extends LinearOpMode {
 		// Wait for the driver to press PLAY
 		waitForStart();
 
-		robot.readyForAutonomousEndgame();
+		try {
+			robot.readyForAutonomousEndgame();
+		} catch (NoSuchMethodException e) {
+			log.severe(e.toString());
+		}
 
 		betterTelemetry.log("Reset complete - robot is ready for autonomous mode");
 

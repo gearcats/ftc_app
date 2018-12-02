@@ -23,7 +23,7 @@ public class AarreAutonomousTransport extends LinearOpMode {
     private AarreTelemetry betterTelemetry;
     private AarreRobot     robot;
 
-    private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+    private final Logger log = Logger.getLogger(this.getClass().getName());
 
     /**
      * Properties inherited from LinearOpMode include:
@@ -55,7 +55,11 @@ public class AarreAutonomousTransport extends LinearOpMode {
         // Wait for the driver to press PLAY
         waitForStart();
 
-        robot.readyForTransportation();
+        try {
+            robot.readyForTransportation();
+        } catch (NoSuchMethodException e) {
+            log.severe(e.toString());
+        }
 
         betterTelemetry.log("Status", "Reset complete - robot is ready for transport");
 

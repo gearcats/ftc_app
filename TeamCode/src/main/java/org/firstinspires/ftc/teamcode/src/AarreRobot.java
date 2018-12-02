@@ -7,7 +7,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomous;
 import org.firstinspires.ftc.teamcode.opmode.AarreAutonomousReady;
 
-import java.util.logging.Logger;
+import java.util.Date;
+import java.util.logging.*;
 
 /**
  * This file contains Aarre's experimental code to initialize the robot. It defines all the specific
@@ -38,7 +39,29 @@ public class AarreRobot {
 	CRServo          scoopServo;
 	HardwareMap      hardwareMap;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	static Logger log;
+
+	static {
+		log = Logger.getLogger(AarreRobot.class.getName());
+		log.setUseParentHandlers(false);
+		ConsoleHandler handler = new ConsoleHandler();
+		handler.setLevel(Level.ALL);
+		handler.setFormatter(new SimpleFormatter() {
+
+			private static final String format = "%1$tF %1$tT [%2$s] %3$s : %4$s %n";
+
+			@Override
+			public synchronized String format(LogRecord lr) {
+				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel()
+						.getLocalizedName(), lr.getLoggerName(), lr.getMessage());
+				//telemetry.log(formattedLogRecord);
+				return formattedLogRecord;
+			}
+
+		});
+		log.addHandler(handler);
+		log.setLevel(Level.ALL);
+	}
 
 	/**
 	 * Construct from opMode only
@@ -101,13 +124,12 @@ public class AarreRobot {
 	 *                      the right wheel in reverse.
 	 * @param secondsTimeout Stop after this many seconds even if move not fully executed.
 	 */
-	public void drive(AarrePowerMagnitude powerMagnitude, double leftInches, double rightInches, double
-			secondsTimeout) {
+	public void drive(AarrePowerMagnitude powerMagnitude, double leftInches, double rightInches, double secondsTimeout) throws NoSuchMethodException {
 
-		javaLog.fine(String.format("drive: powerMagnitude: %f", powerMagnitude.asDouble()));
-		javaLog.fine(String.format("drive: leftInches: %f", leftInches));
-		javaLog.fine(String.format("drive: rightInches: %f", rightInches));
-		javaLog.fine(String.format("drive: secondsTimeout: %f", secondsTimeout));
+		log.fine(String.format("drive: powerMagnitude: %f", powerMagnitude.asDouble()));
+		log.fine(String.format("drive: leftInches: %f", leftInches));
+		log.fine(String.format("drive: rightInches: %f", rightInches));
+		log.fine(String.format("drive: secondsTimeout: %f", secondsTimeout));
 		driveMotors.drive(powerMagnitude, leftInches, rightInches, secondsTimeout);
 	}
 
@@ -120,24 +142,24 @@ public class AarreRobot {
 	}
 
 	public void gyroDrive(AarrePowerMagnitude powerMagnitude, double inchesDirectionAndDistance,
-	                      double
-			secondsTime) {
+	                      double secondsTime) throws NoSuchMethodException {
 		driveMotors.gyroDrive(powerMagnitude
 				, inchesDirectionAndDistance, secondsTime);
 	}
 
-	public void gyroHold(AarrePowerVector powerVector, double degreesHeading, double secondsTime) {
+	public void gyroHold(AarrePowerVector powerVector, double degreesHeading, double secondsTime) throws
+			NoSuchMethodException {
 		driveMotors.gyroHold(powerVector, degreesHeading, secondsTime);
 	}
 
-	public void gyroTurn(final AarrePowerVector powerVector, final double angle) {
+	public void gyroTurn(final AarrePowerVector powerVector, final double angle) throws NoSuchMethodException {
 		driveMotors.gyroTurn(powerVector, angle);
 	}
 
 	/**
 	 * Lower the arm to its downward position
 	 */
-	public void lowerArm() {
+	public void lowerArm() throws NoSuchMethodException {
 		arm.lower();
 	}
 
@@ -154,14 +176,14 @@ public class AarreRobot {
 	 * Lower the riser to its downward (least extended) position. This is the position that it will
 	 * need to be in at the beginning of the autonomous game when it is hanging from the lander.
 	 */
-	public void lowerRiser() {
+	public void lowerRiser() throws NoSuchMethodException {
 		riser.lower();
 	}
 
 	/**
 	 * Raise the arm to its upward position
 	 */
-	public void raiseArm() {
+	public void raiseArm() throws NoSuchMethodException {
 		arm.raise();
 	}
 
@@ -178,7 +200,7 @@ public class AarreRobot {
 	 * Raise the riser to its upward (most extended) position. This is the position that it will
 	 * need to be in near the end of the game just before it latches on to the lander.
 	 */
-	public void raiseRiser() {
+	public void raiseRiser() throws NoSuchMethodException {
 		riser.raise();
 	}
 
@@ -195,7 +217,7 @@ public class AarreRobot {
 	 * The difference between this and {@code readyForTransportation} is that this
 	 * mode raises the hook.
 	 */
-	public void readyForAutonomousEndgame() {
+	public void readyForAutonomousEndgame() throws NoSuchMethodException {
 		lowerArm();
 		raiseRiser();
 		raiseHook();
@@ -213,7 +235,7 @@ public class AarreRobot {
 	 * The difference between this and {@code readyForTransportation} is that this
 	 * mode raises the hook.
 	 */
-	public void readyForAutonomousGame() {
+	public void readyForAutonomousGame() throws NoSuchMethodException {
 		lowerArm();
 		lowerRiser();
 		raiseHook();
@@ -231,7 +253,7 @@ public class AarreRobot {
 	 * The difference between this and {@code readyForAutonomousGame} is that
 	 * this mode lowers the hook.
 	 */
-	public void readyForTransportation() {
+	public void readyForTransportation() throws NoSuchMethodException {
 		lowerArm();
 		lowerRiser();
 		lowerHook();

@@ -134,8 +134,7 @@ abstract interface AarreMotorInterface {
 	 *
 	 * @return True if we should stop speeding up; false otherwise.
 	 */
-	boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double
-			secondsRunning, AarreNonNegativeInteger ticksMoved);
+	boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double secondsRunning, AarreNonNegativeInteger ticksMoved) throws NoSuchMethodException;
 
 	/**
 	 * Determine whether a slowdown should be running.

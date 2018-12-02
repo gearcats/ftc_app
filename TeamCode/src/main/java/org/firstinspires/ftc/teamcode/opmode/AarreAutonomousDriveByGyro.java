@@ -94,7 +94,7 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 	private AarreTelemetry aarreTelemetry;
 	private AarreRobot     robot;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	@Override
 	public final void runOpMode() {
@@ -128,16 +128,19 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 		// Step through each leg of the path,
 		// Note: Reverse movement is obtained by setting a negative distance (not speed)
 		// Put a hold after each turn
-		robot.gyroDrive(DRIVE_SPEED, 12.0, 0.0);    // Drive FWD 12 inches
-		robot.gyroTurn(TURN_SPEED, -45.0);         // Turn  CCW to -45 Degrees
-		robot.gyroHold(TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
-		robot.gyroDrive(DRIVE_SPEED, 12.0, -45.0);  // Drive FWD 12 inches at 45 degrees
-		robot.gyroTurn(TURN_SPEED, 45.0);         // Turn  CW  to  45 Degrees
-		robot.gyroHold(TURN_SPEED, 45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-		robot.gyroTurn(TURN_SPEED, 0.0);         // Turn  CW  to   0 Degrees
-		robot.gyroHold(TURN_SPEED, 0.0, 1.0);    // Hold  0 Deg heading for a 1 second
-		robot.gyroDrive(DRIVE_SPEED, -48.0, 0.0);    // Drive REV 48 inches
-
+		try {
+			robot.gyroDrive(DRIVE_SPEED, 12.0, 0.0);    // Drive FWD 12 inches
+			robot.gyroTurn(TURN_SPEED, -45.0);         // Turn  CCW to -45 Degrees
+			robot.gyroHold(TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
+			robot.gyroDrive(DRIVE_SPEED, 12.0, -45.0);  // Drive FWD 12 inches at 45 degrees
+			robot.gyroTurn(TURN_SPEED, 45.0);         // Turn  CW  to  45 Degrees
+			robot.gyroHold(TURN_SPEED, 45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
+			robot.gyroTurn(TURN_SPEED, 0.0);         // Turn  CW  to   0 Degrees
+			robot.gyroHold(TURN_SPEED, 0.0, 1.0);    // Hold  0 Deg heading for a 1 second
+			robot.gyroDrive(DRIVE_SPEED, -48.0, 0.0);    // Drive REV 48 inches
+		} catch (NoSuchMethodException e) {
+			log.severe(e.toString());
+		}
 		telemetry.addData("Path", "Complete");
 		telemetry.update();
 	}

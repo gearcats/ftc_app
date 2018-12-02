@@ -20,7 +20,7 @@ public class AarreAutonomousArmRaise extends LinearOpMode {
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * Properties inherited from LinearOpMode include:
@@ -54,7 +54,11 @@ public class AarreAutonomousArmRaise extends LinearOpMode {
 
 		betterTelemetry.log("-- Raising arm --");
 
-		robot.raiseArm();
+		try {
+			robot.raiseArm();
+		} catch (NoSuchMethodException e) {
+			log.severe(e.toString());
+		}
 
 		betterTelemetry.log("-- Arm raised --");
 

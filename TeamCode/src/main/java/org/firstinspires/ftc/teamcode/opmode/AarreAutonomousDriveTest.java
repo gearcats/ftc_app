@@ -21,7 +21,7 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 	private AarreTelemetry betterTelemetry;
 	private AarreRobot     robot;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	public AarreAutonomousDriveTest() {
 	}
@@ -62,10 +62,14 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 		final double           inches     = 12.0;
 		final double           timeout    = 5.0;
 
-		robot.drive(driveSpeed, inches, inches, timeout);
-		robot.drive(driveSpeed, -inches, -inches, timeout);
-		robot.drive(turnSpeed, inches, -inches, timeout);
-		robot.drive(turnSpeed, -inches, inches, timeout);
+		try {
+			robot.drive(driveSpeed, inches, inches, timeout);
+			robot.drive(driveSpeed, -inches, -inches, timeout);
+			robot.drive(turnSpeed, inches, -inches, timeout);
+			robot.drive(turnSpeed, -inches, inches, timeout);
+		} catch (NoSuchMethodException e) {
+			log.severe(e.toString());
+		}
 
 
 	}

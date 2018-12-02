@@ -132,8 +132,6 @@ public class AarreTelemetry {
 	 */
 	public void log(final java.lang.String message) {
 
-		final String TAG = "AarreTelemetry";
-
 		if (carefulLogging) {
 
 			// Wait a couple of milliseconds between log entries to ensure that every entry has its
@@ -147,9 +145,9 @@ public class AarreTelemetry {
 			}
 		}
 
-		syslog(TAG + message);
-		telemetryLog.add(TAG + ": " + message);
-		javaLog.info(message);
+		syslog(message);
+		telemetryLog.add(message);
+		//javaLog.info(message);
 	}
 
 	/**

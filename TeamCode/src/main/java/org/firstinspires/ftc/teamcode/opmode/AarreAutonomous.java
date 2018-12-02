@@ -59,7 +59,7 @@ public class AarreAutonomous extends LinearOpMode {
 	private              AarreTelemetry      betterTelemetry;
 	private              AarreRobot          robot;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	public AarreAutonomous() {
 	}
@@ -104,11 +104,13 @@ public class AarreAutonomous extends LinearOpMode {
 			// Step through each leg of the path,
 			// Note: Reverse movement is obtained by setting a negative distance (not speed)
 
-			robot.drive(DRIVE_POWER_MAGNITUDE, INCHES, INCHES, TIMEOUT);
-
-			robot.drive(TURN_POWER_MAGNITUDE, INCHES, -INCHES, TIMEOUT);
-
-			robot.drive(DRIVE_POWER_MAGNITUDE, -INCHES, -INCHES, TIMEOUT);
+			try {
+				robot.drive(DRIVE_POWER_MAGNITUDE, INCHES, INCHES, TIMEOUT);
+				robot.drive(TURN_POWER_MAGNITUDE, INCHES, -INCHES, TIMEOUT);
+				robot.drive(DRIVE_POWER_MAGNITUDE, -INCHES, -INCHES, TIMEOUT);
+			} catch (NoSuchMethodException e) {
+				log.severe(e.toString());
+			}
 
 			betterTelemetry.log("Path", "Complete");
 		}

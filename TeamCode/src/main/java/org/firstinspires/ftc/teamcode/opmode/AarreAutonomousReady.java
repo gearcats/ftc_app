@@ -24,7 +24,7 @@ public class AarreAutonomousReady extends LinearOpMode {
     private AarreTelemetry betterTelemetry;
     private AarreRobot     robot;
 
-    private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+    private final Logger log = Logger.getLogger(this.getClass().getName());
 
     /**
      * Properties inherited from LinearOpMode include:
@@ -55,7 +55,11 @@ public class AarreAutonomousReady extends LinearOpMode {
         // Wait for the driver to press PLAY
         waitForStart();
 
-        robot.readyForAutonomousGame();
+        try {
+            robot.readyForAutonomousGame();
+        } catch (NoSuchMethodException e) {
+            log.severe(e.toString());
+        }
 
         betterTelemetry.log("Reset complete - robot is ready for autonomous mode");
 

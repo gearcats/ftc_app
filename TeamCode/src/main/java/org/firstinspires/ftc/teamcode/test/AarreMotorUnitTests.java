@@ -151,18 +151,13 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double secondsTimeout = 5.0;
 		double secondsRunning = 0.0;
 
-		/*
-		  Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
-		  enough yet.)
-		 */
-		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		boolean result = true;
 
-		/*
-		  Current power is within reason, so no reason to stop.
-		 */
-		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
-
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertFalse(result);
 	}
@@ -194,7 +189,12 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		 */
 		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
 
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		boolean result = false;
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertTrue(result);
 	}
@@ -215,7 +215,12 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double secondsTimeout = 5.0;
 		double secondsRunning = 6.0;
 
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		boolean result = false;
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertTrue(result);
 	}
@@ -236,18 +241,13 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/*
-		 * Power delta is within tolerance, so continue.
-		 * (Continue moving, although power should not continue to increase.)
-		 */
-		AarrePowerVector powerDelta = new AarrePowerVector(0.001);
+		boolean result = true;
 
-		/*
-		 * Current power is within reason, so no reason to stop.
-		 */
-		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
-
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertFalse(result);
 
@@ -269,7 +269,13 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		boolean result = false;
+
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertTrue(result);
 	}
@@ -290,17 +296,13 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/*
-		  Power delta is greater than tolerance, so continue.
-		 */
-		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		boolean result = true;
 
-		/*
-		  Current power is maxed out, but still no reason to stop, so continue.
-		 */
-		AarrePowerVector powerCurrent = new AarrePowerVector(1.0);
-
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertFalse(result);
 	}
@@ -322,8 +324,12 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-
+		boolean result = true;
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 		assertFalse(result);
 	}
 
@@ -343,17 +349,14 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		/*
-		  Power delta is greater than tolerance, so continue.
-		 */
-		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
+		boolean result = true;
 
-		/*
-		  Current power is negative but within reason, so continue.
-		 */
-		AarrePowerVector powerCurrent = new AarrePowerVector(-0.6);
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertFalse(result);
 	}
@@ -367,7 +370,12 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double                  secondsTimeout = 5.0;
 		double                  secondsRunning = 4.0;
 
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		boolean result = true;
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertFalse(result);
 	}
@@ -382,7 +390,12 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		boolean result = false;
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertFalse(result);
 	}
@@ -404,7 +417,12 @@ public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitT
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		boolean result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		boolean result = false;
+		try {
+			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		} catch (NoSuchMethodException e) {
+			javaLog.severe(e.toString());
+		}
 
 		assertTrue(result);
 	}

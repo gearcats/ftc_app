@@ -103,7 +103,7 @@ public class AarreRiser {
 	/**
 	 * Lower the riser using the default method.
 	 */
-	public final void lower() {
+	public final void lower() throws NoSuchMethodException {
 
 		telemetry.log("Riser - lowering riser");
 		lowerByRevolutions();
@@ -141,7 +141,7 @@ public class AarreRiser {
 	/**
 	 * Lower the riser by revolutions using default parameters
 	 */
-	private void lowerByRevolutions() {
+	private void lowerByRevolutions() throws NoSuchMethodException {
 		lowerByRevolutions(DEFAULT_POWER_MAGNITUDE, DEFAULT_REVOLUTIONS_LOWER, DEFAULT_SECONDS_TO_RUN_MAXIMUM);
 	}
 
@@ -161,8 +161,8 @@ public class AarreRiser {
 	 * 		for long periods of time or breaking other components by applying too much force to them
 	 * 		for too long.
 	 */
-	private void lowerByRevolutions(final AarrePowerMagnitude powerMagnitude, final double
-			numberOfRevolutions, final double secondsTimeout) {
+	private void lowerByRevolutions(final AarrePowerMagnitude powerMagnitude, final double numberOfRevolutions, final
+	double secondsTimeout) throws NoSuchMethodException {
 
 		if (numberOfRevolutions < 0.0) {
 			throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
@@ -193,7 +193,7 @@ public class AarreRiser {
 	/**
 	 * Raise the riser using the default method.
 	 */
-	public void raise() {
+	public void raise() throws NoSuchMethodException {
 		telemetry.log("Riser - raising riser");
 		raiseByRevolutions();
 		telemetry.log("Riser - riser raised");
@@ -208,7 +208,7 @@ public class AarreRiser {
 	/**
 	 * Raise the riser by revolutions using default parameters.
 	 */
-	private void raiseByRevolutions() {
+	private void raiseByRevolutions() throws NoSuchMethodException {
 		raiseByRevolutions(DEFAULT_POWER_MAGNITUDE, DEFAULT_REVOLUTIONS_RAISE, DEFAULT_SECONDS_TO_RUN_MAXIMUM);
 	}
 
@@ -226,8 +226,8 @@ public class AarreRiser {
 	 * 		them for long periods of time or breaking other components by applying too much force to
 	 * 		them for too long.
 	 */
-	private void raiseByRevolutions(final AarrePowerMagnitude powerMagnitude, final double
-			numberOfRevolutions, final double secondsTimeout) {
+	private void raiseByRevolutions(final AarrePowerMagnitude powerMagnitude, final double numberOfRevolutions, final
+	double secondsTimeout) throws NoSuchMethodException {
 
 		if (numberOfRevolutions < 0.0) {
 			throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
