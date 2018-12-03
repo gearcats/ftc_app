@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.slf4j.ext.XLogger;
-import org.slf4j.ext.XLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.logging.ConsoleHandler;
@@ -65,6 +65,7 @@ public class AarreMotor implements AarreMotorInterface {
 	static java.util.logging.Logger java_log;
 
 	static {
+
 		java_log = java.util.logging.Logger.getLogger("AarreMotor");
 		java_log.setUseParentHandlers(false);
 		ConsoleHandler handler = new ConsoleHandler();
@@ -86,7 +87,7 @@ public class AarreMotor implements AarreMotorInterface {
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
 
-		XLogger slf4j_logger = XLoggerFactory.getXLogger(getClass());
+		Logger slf4j_logger = LoggerFactory.getLogger(getClass());
 
 		this.opMode = opMode;
 
