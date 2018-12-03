@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-// import org.slf4j.ext.XLoggerFactory;
+import org.slf4j.ext.XLoggerFactory;
 
 
 /**
@@ -54,11 +54,11 @@ public class AarreMotor implements AarreMotorInterface {
 	private double revolutionsPerMinute;
 	private double ticksPerRevolution;
 
-	//org.slf4j.ext.XLogger log;
+	org.slf4j.ext.XLogger log;
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
 
-		//log = XLoggerFactory.getXLogger(getClass());
+		log = XLoggerFactory.getXLogger(getClass());
 
 		this.opMode = opMode;
 
@@ -231,15 +231,14 @@ public class AarreMotor implements AarreMotorInterface {
 	public boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double
 			secondsRunning, AarreNonNegativeInteger ticksMoved) throws NoSuchMethodException {
 
-		// log.entry(this.getClass().getCanonicalName(), this.getClass().getMethod("isSpeedUpToEncoderTicksDone",
-		//		AarrePositiveInteger.class, double.class, double.class, AarreNonNegativeInteger.class).getName());
+		log.entry();
 
 		boolean valueToReturn = false;
 
-		// log.debug(String.format("ticksMaximum: %f", ticksMaximum.doubleValue()));
-		// log.debug(String.format("secondsTimeout: %f", secondsTimeout));
-		// log.debug(String.format("secondsRunning: %f", secondsRunning));
-		// log.debug(String.format("ticksMoved: %f", ticksMoved.doubleValue()));
+		log.debug(String.format("ticksMaximum: %f", ticksMaximum.doubleValue()));
+		log.debug(String.format("secondsTimeout: %f", secondsTimeout));
+		log.debug(String.format("secondsRunning: %f", secondsRunning));
+		log.debug(String.format("ticksMoved: %f", ticksMoved.doubleValue()));
 
 		if (Math.abs(ticksMoved.intValue()) >= Math.abs(ticksMaximum.intValue())) {
 			// log.debug("Loop done - moved far enough");
