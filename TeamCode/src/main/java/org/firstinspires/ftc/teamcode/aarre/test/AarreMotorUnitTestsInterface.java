@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 interface AarreMotorUnitTestsInterface {
 
 	@Test
-	void AarreMotorUnitTests();
+	void testConstructor();
 
 	@Test
 	void testGetProportionPowerNew01();

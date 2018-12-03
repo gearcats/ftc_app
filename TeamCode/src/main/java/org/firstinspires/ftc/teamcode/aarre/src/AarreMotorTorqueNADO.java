@@ -19,9 +19,19 @@ public class AarreMotorTorqueNADO extends AarreMotor implements AarreMotorInterf
 	public static AarreMotorTorqueNADO createAarreMotorTorqueNADO(LinearOpMode opMode, String
 			motorName) {
 		AarreMotorTorqueNADO motor = new AarreMotorTorqueNADO(opMode, motorName);
-		motor.setRevolutionsPerMinute(TORQUENADO_REVOLUTIONS_PER_MINUTE);
-		motor.setTicksPerRevolution(TORQUENADO_TICKS_PER_REVOLUTION);
 		return motor;
+	}
+
+	public double getRevolutionsPerMinute() {
+		return TORQUENADO_REVOLUTIONS_PER_MINUTE;
+	}
+
+	public double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude) {
+		return getRevolutionsPerMinute() * powerMagnitude.asDouble();
+	}
+
+	public double getTicksPerRevolution() {
+		return TORQUENADO_TICKS_PER_REVOLUTION;
 	}
 
 }

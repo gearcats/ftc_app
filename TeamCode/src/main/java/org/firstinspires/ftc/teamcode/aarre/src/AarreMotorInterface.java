@@ -1,12 +1,6 @@
 package org.firstinspires.ftc.teamcode.aarre.src;
 
-abstract interface AarreMotorInterface {
-
-	double getRevolutionsPerMinute();
-
-	double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude);
-
-	void setRevolutionsPerMinute(double revolutionsPerMinute);
+interface AarreMotorInterface {
 
 	/**
 	 * The number of milliseconds in a ramp up/ramp down cycle.
@@ -20,10 +14,6 @@ abstract interface AarreMotorInterface {
 	double getTicksPerMinute();
 
 	double getTicksPerMinute(AarrePowerMagnitude powerMagnitude);
-
-	double getTicksPerRevolution();
-
-	void setTicksPerRevolution(double ticksPerRevolution);
 
 	double getTicksPerSecond();
 

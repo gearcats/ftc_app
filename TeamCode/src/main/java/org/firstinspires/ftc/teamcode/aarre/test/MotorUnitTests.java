@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.aarre.src.AarreMotor;
 import org.firstinspires.ftc.teamcode.aarre.src.AarreNonNegativeInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.AarrePositiveInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerVector;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -20,17 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @Autonomous(name = "Aarre Motor Unit Tests", group = "Aarre")
 @Disabled
-public class AarreMotorUnitTests extends LinearOpMode implements AarreMotorUnitTestsInterface {
+public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorUnitTestsInterface {
 
 	private AarreMotor motor;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
-	@Override
-	@BeforeEach
-	public void AarreMotorUnitTests() {
-		motor = new AarreMotor(this, "left");
-	}
 
 	@Override
 	@Test

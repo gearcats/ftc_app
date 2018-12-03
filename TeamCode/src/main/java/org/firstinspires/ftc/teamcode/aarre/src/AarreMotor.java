@@ -26,7 +26,7 @@ import java.util.logging.*;
  * Stall detection and telemetry code adapted from
  * <a href="https://github.com/TullyNYGuy/FTC8863_ftc_app/blob/master/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Lib/FTCLib/DcMotor8863.java"></a>
  */
-public class AarreMotor implements AarreMotorInterface {
+public abstract class AarreMotor implements AarreMotorInterface, ConcreteMotorInterface {
 
 	private static final int SECONDS_PER_MINUTE = 60;
 
@@ -53,9 +53,6 @@ public class AarreMotor implements AarreMotorInterface {
 	private        int                 stallTimeLimitInMilliseconds;
 	private        int                 stallDetectionToleranceInTicks;
 	private        ElapsedTime         timeStalledInMilliseconds       = null;
-
-	private double revolutionsPerMinute;
-	private double ticksPerRevolution;
 
 	static Logger log;
 
@@ -879,28 +876,6 @@ public class AarreMotor implements AarreMotorInterface {
 		motor.setZeroPowerBehavior(zeroPowerBehavior);
 	}
 
-
-	public double getRevolutionsPerMinute() {
-		if (revolutionsPerMinute == 0.0) {
-			throw new IllegalStateException("Revolutions per minute must be non-zero. Maybe you are not calling from "
-					+ "a" + " concrete class?");
-		}
-		return revolutionsPerMinute;
-	}
-
-	public double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude) {
-		return revolutionsPerMinute * powerMagnitude.asDouble();
-	}
-
-	public void setRevolutionsPerMinute(double revolutionsPerMinute) {
-
-		this.revolutionsPerMinute = revolutionsPerMinute;
-	}
-
-	public void setTicksPerRevolution(double ticksPerRevolution) {
-		this.ticksPerRevolution = ticksPerRevolution;
-	}
-
 	public int getMillisecondsPerCycle() {
 		return MILLISECONDS_PER_CYCLE;
 	}
@@ -913,9 +888,6 @@ public class AarreMotor implements AarreMotorInterface {
 		return getTicksPerRevolution() * getRevolutionsPerMinute(powerMagnitude);
 	}
 
-	public double getTicksPerRevolution() {
-		return ticksPerRevolution;
-	}
 
 	public double getTicksPerSecond() {
 		return getTicksPerMinute() / SECONDS_PER_MINUTE;
