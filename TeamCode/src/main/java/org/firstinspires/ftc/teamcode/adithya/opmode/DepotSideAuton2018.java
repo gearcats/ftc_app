@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-@Autonomous
-
+@Autonomous(name = "Depot Side Auton 2018", group = "Adithya")
 public class DepotSideAuton2018 extends LinearOpMode {
 	//variables assosiated with vuforia/TFod
 	private static final String               TFOD_MODEL_ASSET     = "RoverRuckus.tflite";

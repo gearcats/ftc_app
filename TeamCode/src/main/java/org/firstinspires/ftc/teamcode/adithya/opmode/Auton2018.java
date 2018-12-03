@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.adithya.opmode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,8 +16,8 @@ import java.util.List;
 import java.util.Locale;
 
 
-@Autonomous
-
+@Autonomous(name = "Auton 2018", group = "Adithya")
+@Disabled
 public class Auton2018 extends LinearOpMode {
 	//variables assosiated with vuforia/TFod
 	private static final String               TFOD_MODEL_ASSET     = "RoverRuckus.tflite";
