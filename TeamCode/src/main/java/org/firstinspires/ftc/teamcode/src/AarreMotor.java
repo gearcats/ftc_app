@@ -56,11 +56,9 @@ public class AarreMotor implements AarreMotorInterface {
 	private double revolutionsPerMinute;
 	private double ticksPerRevolution;
 
-	Logger log;
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
-
-		log = LoggerFactory.getLogger(getClass());
 
 		log.error("<init>");
 
@@ -238,8 +236,6 @@ public class AarreMotor implements AarreMotorInterface {
 
 	public boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double
 			secondsRunning, AarreNonNegativeInteger ticksMoved) throws NoSuchMethodException {
-
-		log.entry();
 
 		boolean valueToReturn = false;
 
