@@ -5,16 +5,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.logging.Logger;
 
 /**
- * Wrap Telemetry class to provide Telemetry.java_log methods with same interface as Telemetry.addData
+ * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData
  * methods.
  * <p>
- * This makes it easier to java_log messages to both the driver station phone and the robot controller
- * java_log. This is convenient because it (a) allows visibility into more messages than fit on the
+ * This makes it easier to log messages to both the driver station phone and the robot controller
+ * log. This is convenient because it (a) allows visibility into more messages than fit on the
  * driver station phone and (b) provides a longer-lasting record of messages than the driver station
  * phone, which resets after 30 seconds in the autonomous mode.
  * <p>
  * This also makes it easier to switch back and forth between calling the Telemetry.addData and
- * Telemetry.java_log methods in other classes.
+ * Telemetry.log methods in other classes.
  */
 public class AarreTelemetry {
 
@@ -47,10 +47,10 @@ public class AarreTelemetry {
 	 * @param underlyingTelemetry
 	 * 		The underlying @link{Telemetry} instance.
 	 * @param carefulLogging
-	 * 		Whether to do logging "carefully." If false, there will be no delays between calls to java_log
-	 * 		messages, which can result in "folded" java_log entries where more than one java_log entry is listed
-	 * 		under a given time. If true, there will be a small delay between calls to java_log messages,
-	 * 		which will prevent "folded" java_log entries.
+	 * 		Whether to do logging "carefully." If false, there will be no delays between calls to log
+	 * 		messages, which can result in "folded" log entries where more than one log entry is listed
+	 * 		under a given time. If true, there will be a small delay between calls to log messages,
+	 * 		which will prevent "folded" log entries.
 	 */
 	AarreTelemetry(final Telemetry underlyingTelemetry, final boolean carefulLogging) {
 
@@ -80,7 +80,7 @@ public class AarreTelemetry {
 	 * Add a simple string to telemetry.
 	 * <p>
 	 * In this class, all items added to telemetry are also logged, both to the driver station
-	 * screen and to the robot controller java_log file.
+	 * screen and to the robot controller log file.
 	 *
 	 * @param caption
 	 * 		A caption for the telemetry entry.
@@ -98,7 +98,7 @@ public class AarreTelemetry {
 	 * Add a formatted string to telemetry.
 	 * <p>
 	 * In this class, all items added to telemetry are also logged, both to the driver station
-	 * screen and to the robot controller java_log file.
+	 * screen and to the robot controller log file.
 	 *
 	 * @param caption
 	 * 		A caption for the telemetry entry.
@@ -122,20 +122,20 @@ public class AarreTelemetry {
 
 
 	/**
-	 * Append a simple message to the java_log.
+	 * Append a simple message to the log.
 	 * <p>
 	 * All other methods should ultimately call this one, because it also appends the message to the
-	 * robot controller java_log.
+	 * robot controller log.
 	 *
 	 * @param message
-	 * 		The message to append to the java_log.
+	 * 		The message to append to the log.
 	 */
 	public void log(final java.lang.String message) {
 
 		if (carefulLogging) {
 
-			// Wait a couple of milliseconds between java_log entries to ensure that every entry has its
-			// own line in the java_log. This can make it easier to find and read java_log entries. It is probably not
+			// Wait a couple of milliseconds between log entries to ensure that every entry has its
+			// own line in the log. This can make it easier to find and read log entries. It is probably not
 			// a good idea to have this set during competition, though....
 
 			try {
@@ -151,12 +151,12 @@ public class AarreTelemetry {
 	}
 
 	/**
-	 * Append a simple message (with a caption) to the java_log.
+	 * Append a simple message (with a caption) to the log.
 	 *
 	 * @param caption
-	 * 		A caption for the java_log entry.
+	 * 		A caption for the log entry.
 	 * @param message
-	 * 		The java_log entry message associated with the caption.
+	 * 		The log entry message associated with the caption.
 	 */
 	public void log(final java.lang.String caption, final java.lang.String message) {
 
@@ -164,7 +164,7 @@ public class AarreTelemetry {
 	}
 
 	/**
-	 * Append a formatted message (without a caption) to the java_log.
+	 * Append a formatted message (without a caption) to the log.
 	 *
 	 * @param message
 	 * 		A printf-formatted message to be logged.
@@ -179,10 +179,10 @@ public class AarreTelemetry {
 	}
 
 	/**
-	 * Append a formatted message (with a caption) to the java_log.
+	 * Append a formatted message (with a caption) to the log.
 	 *
 	 * @param caption
-	 * 		A caption for the java_log entry.
+	 * 		A caption for the log entry.
 	 * @param message
 	 * 		A printf-formatted message associated with the caption.
 	 * @param args
@@ -197,10 +197,10 @@ public class AarreTelemetry {
 	}
 
 	/**
-	 * Append a message to the robot controller java_log.
+	 * Append a message to the robot controller log.
 	 *
 	 * @param message
-	 * 		A message to append to the robot controller java_log.
+	 * 		A message to append to the robot controller log.
 	 */
 	private void syslog(final String message) {
 
