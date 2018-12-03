@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.src;
 
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.util.StatusPrinter;
+//import ch.qos.logback.classic.Level;
+
+import ch.qos.logback.classic.Level;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -9,6 +10,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.ext.XLogger;
+import org.slf4j.ext.XLoggerFactory;
+
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -56,15 +60,17 @@ public class AarreMotor implements AarreMotorInterface {
 	private double revolutionsPerMinute;
 	private double ticksPerRevolution;
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger  log_sfl4j = LoggerFactory.getLogger(this.getClass());
+	private final XLogger log       = XLoggerFactory.getXLogger(this.getClass());
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
 
+		ch.qos.logback.classic.Logger log_logback = (ch.qos.logback.classic.Logger) log_sfl4j;
+		log_logback.setLevel(Level.DEBUG);
+
 		log.error("<init>");
 
-		// print internal state
-		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-		StatusPrinter.print(lc);
+		log.debug("Testing Log Level");
 
 		this.opMode = opMode;
 
