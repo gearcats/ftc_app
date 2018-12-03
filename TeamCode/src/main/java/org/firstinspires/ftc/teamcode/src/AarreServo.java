@@ -170,7 +170,7 @@ public class AarreServo {
 	 */
 	private void setPosition(final double position) {
 
-		//telemetry.log("Setting servo to position %f", position);
+		//telemetry.java_log("Setting servo to position %f", position);
 		servo.setPosition(position);
 
 		long        millisecondsToWait;
@@ -190,7 +190,7 @@ public class AarreServo {
 			millisecondsElapsed = runtime.milliseconds();
 		}
 
-		//telemetry.log("Done setting servo to position %f", position);
+		//telemetry.java_log("Done setting servo to position %f", position);
 
 	}
 

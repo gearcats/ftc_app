@@ -194,8 +194,8 @@ public class AarreDriveMotors {
 		while ((runtime.seconds() < secondsTimeout) && leftMotor.isBusy() && rightMotor.isBusy() && opMode
 				.opModeIsActive()) {
 
-			//telemetry.log("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-			//telemetry.log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor
+			//telemetry.java_log("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
+			//telemetry.java_log("Path2",  "Running at %7d :%7d", leftMotor.getCurrentTickNumber(), rightMotor
 			// .getCurrentTickNumber());
 			opMode.idle();
 

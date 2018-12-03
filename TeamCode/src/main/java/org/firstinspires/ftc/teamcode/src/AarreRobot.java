@@ -54,7 +54,7 @@ public class AarreRobot {
 			public synchronized String format(LogRecord lr) {
 				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel()
 						.getLocalizedName(), lr.getLoggerName(), lr.getMessage());
-				//telemetry.log(formattedLogRecord);
+				//telemetry.java_log(formattedLogRecord);
 				return formattedLogRecord;
 			}
 
