@@ -45,7 +45,7 @@ public class AarreAutonomousRiserLower extends LinearOpMode {
 
 		robot = new AarreRobot(this);
 
-		log("Initializing robot");
+		log.info("Initializing robot");
 
 		// Wait for the driver to press PLAY
 		waitForStart();
@@ -56,7 +56,7 @@ public class AarreAutonomousRiserLower extends LinearOpMode {
 			log.severe(e.toString());
 		}
 
-		log("Riser lowered");
+		log.info("Riser lowered");
 
 		// Wait until the driver presses STOP
 		//noinspection StatementWithEmptyBody
