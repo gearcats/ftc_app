@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.src;
 
-//import ch.qos.logback.classic.Level;
-
 import ch.qos.logback.classic.Level;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
