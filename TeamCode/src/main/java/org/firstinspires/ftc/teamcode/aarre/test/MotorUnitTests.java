@@ -10,7 +10,8 @@ import org.firstinspires.ftc.teamcode.aarre.src.AarrePositiveInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerVector;
 import org.junit.jupiter.api.Test;
 
-import java.util.logging.Logger;
+import java.util.Date;
+import java.util.logging.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,108 +22,130 @@ import static org.junit.jupiter.api.Assertions.*;
 @Disabled
 public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorUnitTestsInterface {
 
-	private AarreMotor motor;
+	private static Logger log;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	static {
 
+		log = Logger.getLogger("MotorUnitTests");
+		log.setUseParentHandlers(false);
+		ConsoleHandler handler = new ConsoleHandler();
+		handler.setLevel(Level.ALL);
+		handler.setFormatter(new SimpleFormatter() {
+
+			private static final String format = "%1$tF %1$tT [%2$s] %4$s::%5$s - %6$s %n";
+
+			@Override
+			public synchronized String format(LogRecord lr) {
+				String formattedLogRecord = String.format(format, new Date(lr.getMillis()), lr.getLevel()
+						.getLocalizedName(), lr.getLoggerName(), lr.getSourceClassName(), lr.getSourceMethodName(), lr
+						.getMessage());
+				return formattedLogRecord;
+			}
+
+		});
+		log.addHandler(handler);
+		log.setLevel(Level.ALL);
+	}
+
+	private AarreMotor motor = null;
 
 	@Override
 	@Test
-	public final void testGetProportionPowerNew01() {
+	public void testGetProportionPowerNew01() {
 		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(1.0);
 		AarrePowerVector powerVectorRequested = new AarrePowerVector(0.0);
-		AarrePowerVector proportionPowerNew   = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(0.9, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew02() {
+	public void testGetPowerVectorNew02() {
 		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(-1.0);
 		AarrePowerVector powerVectorRequested = new AarrePowerVector(0.0);
-		AarrePowerVector proportionPowerNew   = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(-0.9, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew03() {
+	public void testGetPowerVectorNew03() {
 		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(0.0);
 		AarrePowerVector powerVectorRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew   = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(0.1, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew04() {
+	public void testGetPowerVectorNew04() {
 		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(0.0);
 		AarrePowerVector powerVectorRequested = new AarrePowerVector(-1.0);
-		AarrePowerVector proportionPowerNew   = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(-0.1, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew05() {
+	public void testGetPowerVectorNew05() {
 		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(1.0);
 		AarrePowerVector powerVectorRequested = new AarrePowerVector(-1.0);
-		AarrePowerVector proportionPowerNew   = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(0.9, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew06() {
+	public void testGetPowerVectorNew06() {
 		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(-1.0);
 		AarrePowerVector powerVectorRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew   = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(-0.9, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew07() {
+	public void testGetPowerVectorNew07() {
 		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(-1.0);
 		AarrePowerVector powerVectorRequested = new AarrePowerVector(-1.0);
-		AarrePowerVector proportionPowerNew   = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(-1.0, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew08() {
+	public void testGetPowerVectorNew08() {
 		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(0.0);
 		AarrePowerVector powerVectorRequested = new AarrePowerVector(0.0);
-		AarrePowerVector proportionPowerNew   = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(0.0, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew09() {
+	public void testGetPowerVectorNew09() {
 		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(1.0);
 		AarrePowerVector powerVectorRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew   = motor.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(1.0, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew10() {
+	public void testGetPowerVectorNew10() {
 		AarrePowerVector proportionPowerCurrent   = new AarrePowerVector(0.0);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(proportionPowerCurrent,
+		AarrePowerVector proportionPowerNew = getMotor().getPowerVectorNew(proportionPowerCurrent,
 				proportionPowerRequested);
 		assertEquals(0.1, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
-	public final void testGetPowerVectorNew11() {
+	public void testGetPowerVectorNew11() {
 		AarrePowerVector proportionPowerCurrent   = new AarrePowerVector(1.0);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew = motor.getPowerVectorNew(proportionPowerCurrent,
+		AarrePowerVector proportionPowerNew = getMotor().getPowerVectorNew(proportionPowerCurrent,
 				proportionPowerRequested);
 		assertEquals(1.0, proportionPowerNew.asDouble(), "Wrong proportion power");
 	}
@@ -130,7 +153,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone01() {
+	public void testIsRampUpToEncoderTicksDone01() {
 
 		/*
 		  ticksMoved is less than ticksMaximum, so no reason to stop. (We haven't moved far enough
@@ -148,9 +171,9 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		boolean result = true;
 
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertFalse(result);
@@ -158,7 +181,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone02() {
+	public void testIsRampUpToEncoderTicksDone02() {
 
 		/*
 		  We have moved farther than we intended, so it is time to stop.
@@ -172,22 +195,11 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		double secondsTimeout = 5.0;
 		double secondsRunning = 0.0;
 
-		/*
-		  Power delta is not within the tolerance, so no reason to stop. (We haven't ramped
-		  enough yet.)
-		 */
-		AarrePowerVector powerDelta = new AarrePowerVector(0.1);
-
-		/*
-		  Current power is within reason, so no reason to stop.
-		 */
-		AarrePowerVector powerCurrent = new AarrePowerVector(0.6);
-
 		boolean result = false;
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertTrue(result);
@@ -195,7 +207,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone03() {
+	public void testIsRampUpToEncoderTicksDone03() {
 
 		/*
 		  We have not moved enough yet, so continue.
@@ -211,9 +223,9 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 		boolean result = false;
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertTrue(result);
@@ -221,7 +233,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone04() {
+	public void testIsRampUpToEncoderTicksDone04() {
 
 		/*
 		 * We have not moved enough yet, so continue.
@@ -238,9 +250,9 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		boolean result = true;
 
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertFalse(result);
@@ -249,7 +261,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone05() {
+	public void testIsRampUpToEncoderTicksDone05() {
 
 		/*
 		  We have moved exactly the right amount, so stop.
@@ -266,9 +278,9 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		boolean result = false;
 
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertTrue(result);
@@ -276,7 +288,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone06() {
+	public void testIsRampUpToEncoderTicksDone06() {
 
 		/*
 		  We have not moved the right amount, so continue.
@@ -293,9 +305,11 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		boolean result = true;
 
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			log.finest("Calling method on 'revHDCoreHexMotor'");
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			log.finest("Return from method on 'revHDCoreHexMotor'");
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertFalse(result);
@@ -304,7 +318,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone07() {
+	public void testIsRampUpToEncoderTicksDone07() {
 
 		/*
 		  We have not moved enough, so continue.
@@ -320,16 +334,16 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 		boolean result = true;
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 		assertFalse(result);
 	}
 
 	@Override
 	@Test
-	public final void testIsRampUpToEncoderTicksDone08() {
+	public void testIsRampUpToEncoderTicksDone08() {
 
 		/*
 		  We have not moved enough, so continue.
@@ -346,10 +360,10 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		boolean result = true;
 
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertFalse(result);
@@ -357,7 +371,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void whenWeHaveNotMovedEnough_thenSpeedUpContinues() {
+	public void whenWeHaveNotMovedEnough_thenSpeedUpContinues() {
 
 		AarrePositiveInteger    ticksMaximum   = new AarrePositiveInteger(1440);
 		AarreNonNegativeInteger ticksMoved     = new AarreNonNegativeInteger(190);
@@ -366,9 +380,9 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 		boolean result = true;
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertFalse(result);
@@ -376,7 +390,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void whenWeHaveNotMoved_thenSpeedUpContinues() {
+	public void whenWeHaveNotMoved_thenSpeedUpContinues() {
 
 		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(5040);
 		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(0);
@@ -386,9 +400,9 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 		boolean result = false;
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertFalse(result);
@@ -397,7 +411,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void whenWeHaveMovedMoreThanEnough_thenSpeedUpStops() {
+	public void whenWeHaveMovedMoreThanEnough_thenSpeedUpStops() throws NoSuchMethodException {
 
 		/*
 		 * We have moved enough (albeit in a negative direction), so stop
@@ -412,10 +426,11 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		double secondsRunning = 4.0;
 
 		boolean result = false;
+
 		try {
-			result = motor.isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		} catch (NoSuchMethodException e) {
-			javaLog.severe(e.toString());
+			log.severe(e.toString());
 		}
 
 		assertTrue(result);
@@ -424,20 +439,20 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 
 	@Override
 	@Test
-	public final void whenGetTicksPerCycleCalledAbstract_thenThrowsException() {
-		assertThrows(IllegalStateException.class, () -> {
-			motor.getTicksPerCycle();
-		});
-	}
-
-	@Override
-	@Test
-	public final void testSetDirection() {
-		motor.setDirection(DcMotorSimple.Direction.REVERSE);
+	public void testSetDirection() {
+		getMotor().setDirection(DcMotorSimple.Direction.REVERSE);
 	}
 
 	@Test
 	@Override
-	public final void runOpMode() {
+	public void runOpMode() {
+	}
+
+	// Subclasses should override this method to return their own special type of revHDCoreHexMotor
+	AarreMotor getMotor() {
+		return motor;
+	}
+
+	protected MotorUnitTests() {
 	}
 }

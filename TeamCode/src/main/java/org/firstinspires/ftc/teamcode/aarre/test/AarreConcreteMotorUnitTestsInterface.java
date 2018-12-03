@@ -3,13 +3,16 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 import org.junit.jupiter.api.Test;
 
 /**
- * This interface declares motor-related unit tests that depend on which kind of motor is being tested. For example,
- * because the TorqueNADO motor and the REV HD Core Hex motor have different characteristics (e.g., number of ticks per
+ * This interface declares revHDCoreHexMotor-related unit tests that depend on which kind of revHDCoreHexMotor is
+ * being tested. For example,
+ * because the TorqueNADO revHDCoreHexMotor and the REV HD Core Hex revHDCoreHexMotor have different characteristics
+ * (e.g., number of ticks per
  * revolution), they need separate unit tests. Their tests should both implement this interface, though. Motor-related
- * tests whose results do not depend on the specific kind of motor are declared in {@link
+ * tests whose results do not depend on the specific kind of revHDCoreHexMotor are declared in {@link
  * AarreMotorUnitTestsInterface}.
  */
-interface AarreConcreteMotorUnitTestsInterface {
+interface AarreConcreteMotorUnitTestsInterface extends AarreMotorUnitTestsInterface {
+
 
 	@Test
 	public void testGetNumberOfCycles01();
@@ -54,7 +57,8 @@ interface AarreConcreteMotorUnitTestsInterface {
 	public void testGetTickNumberToStartSlowDown08();
 
 	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the target tick number
+	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the target
+	 * tick number
 	 * (negative numbers)
 	 */
 	@Test
@@ -76,7 +80,7 @@ interface AarreConcreteMotorUnitTestsInterface {
 	/**
 	 * Test that slowing down should be in effect if the current tick number is close enough to the target tick number.
 	 * This test depends only on comparing the current and target tick numbers, so it does not depend on any particular
-	 * kind of motor.
+	 * kind of revHDCoreHexMotor.
 	 */
 	@Test
 	void testIsSlowDownToEncoderTicksRunningGeneric01();
@@ -84,7 +88,7 @@ interface AarreConcreteMotorUnitTestsInterface {
 	/**
 	 * Test that slowing down should not be in effect if the current tick number is not close enough to the target tick
 	 * number. This test depends only on comparing the current and target tick numbers; it does not depend on any
-	 * particular kind of motor.
+	 * particular kind of revHDCoreHexMotor.
 	 */
 	@Test
 	void testIsSlowDownToEncoderTicksRunningGeneric02();
@@ -92,7 +96,7 @@ interface AarreConcreteMotorUnitTestsInterface {
 	/**
 	 * Test that slowing down should not be in effect when the current tick number exceeds the total number of ticks we
 	 * were supposed to move. This test depends only on comparing the current and target tick numbers, so it does not
-	 * depend on any particular kind of motor.
+	 * depend on any particular kind of revHDCoreHexMotor.
 	 */
 	@Test
 	void testIsSlowDownToEncoderTicksRunningGeneric03();
@@ -100,7 +104,7 @@ interface AarreConcreteMotorUnitTestsInterface {
 	/**
 	 * Test that slowing down should stop when the current tick number exceeds the total number of ticks we were
 	 * supposed to move. This test depends only on comparing the current and target tick numbers, so it does not depend
-	 * on any particular kind of motor.
+	 * on any particular kind of revHDCoreHexMotor.
 	 */
 	@Test
 	void testIsSlowDownToEncoderTicksRunningGeneric04();
@@ -109,7 +113,7 @@ interface AarreConcreteMotorUnitTestsInterface {
 	/**
 	 * Test that slowing down should not be running when the target tick number is negative and the current tick number
 	 * is negative but not sufficiently negative to have started the slowdown. This test depends only on comparing the
-	 * current and target tick numbers, so it does not depend on any particular kind of motor.
+	 * current and target tick numbers, so it does not depend on any particular kind of revHDCoreHexMotor.
 	 */
 	@Test
 	void testIsSlowDownToEncoderTicksRunningGeneric07();
@@ -121,7 +125,7 @@ interface AarreConcreteMotorUnitTestsInterface {
 	void testIsSlowDownToEncoderTicksRunningGeneric09();
 
 	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns false when the motor is not close enough to the target tick
+	 * Test that isSlowDownToEncoderTicksRunning returns false when the revHDCoreHexMotor is not close enough to the target tick
 	 * number (negative numbers)
 	 */
 	@Test

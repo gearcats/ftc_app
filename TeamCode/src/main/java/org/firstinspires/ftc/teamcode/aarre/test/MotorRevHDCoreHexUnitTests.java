@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import org.firstinspires.ftc.teamcode.aarre.src.AarreMotor;
 import org.firstinspires.ftc.teamcode.aarre.src.AarreMotorRevHDCoreHex;
 import org.firstinspires.ftc.teamcode.aarre.src.AarrePositiveInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerVector;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,15 +27,17 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 	 * Properties inherited from LinearOpMode include: - hardwareMap - telemetry
 	 */
 
-	AarreMotorRevHDCoreHex motor = null;
+	AarreMotorRevHDCoreHex revHDCoreHexMotor = AarreMotorRevHDCoreHex.createAarreMotorRevHDCoreHex(this, "arm");
+	Logger                 javaLog           = Logger.getLogger(this.getClass().getName());
 
-	@BeforeEach
-	public final void testConstructor() {
-		motor = AarreMotorRevHDCoreHex.createAarreMotorRevHDCoreHex(this, "arm");
+	@Override
+	AarreMotor getMotor() {
+		return revHDCoreHexMotor;
 	}
 
 	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the target tick number.
+	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the target
+	 * tick number.
 	 */
 	@Test
 	public final void testIsRampDownToEncoderTicksRunning01() {
@@ -45,7 +49,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
-		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -53,25 +57,25 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 
 	@Test
 	public final void testGetTicksPerCycle01() {
-		double ticksPerCycle = motor.getTicksPerCycle();
+		double ticksPerCycle = getMotor().getTicksPerCycle();
 		assertEquals(13.44, ticksPerCycle, 0.001);
 	}
 
 	@Test
 	public final void testGetTicksPerMillisecond01() {
-		double ticksPerMillisecond = motor.getTicksPerMillisecond();
+		double ticksPerMillisecond = getMotor().getTicksPerMillisecond();
 		assertEquals(0.2688, ticksPerMillisecond, 0.00001);
 	}
 
 	@Test
 	public final void testGetTicksPerSecond01() {
-		double ticksPerSecond = motor.getTicksPerSecond();
+		double ticksPerSecond = getMotor().getTicksPerSecond();
 		assertEquals(268.8, ticksPerSecond);
 	}
 
 	@Test
 	public final void testGetTicksPerMinute01() {
-		double ticksPerMinute = motor.getTicksPerMinute();
+		double ticksPerMinute = getMotor().getTicksPerMinute();
 		assertEquals(16128.0, ticksPerMinute);
 	}
 
@@ -96,7 +100,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 * tick at end of period = 180
 		 * Tick to start ramp = 180 - 66.72 = 113.8
 		 */
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
@@ -125,7 +129,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 */
 
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
@@ -141,7 +145,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(2000);
 
 		/*
-		 * The motor needs 10 cycles to ramp down 10 cycles in power
+		 * The revHDCoreHexMotor needs 10 cycles to ramp down 10 cycles in power
 		 *
 		 * Each cycle in power is 50 milliseconds long
 		 *
@@ -154,7 +158,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 * 2000 - 134.4 = 1865.6
 		 */
 
-		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(1865.6, actual, 0.01);
@@ -175,7 +179,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		/*
 		 * There are 13.44 ticks in a cycle, so the ramp should be 134.4 ticks
 		 */
-		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		/*
@@ -198,7 +202,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 * At 13.44 ticks per cycle, total ticks in ramp = 67.2
 		 * 120 - 67.2 = 52.8
 		 */
-		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(52.8, actual, 0.01);
@@ -219,7 +223,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 *
 		 * 10060 - 134.4 = 9925.6
 		 */
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(9925.6, result, 0.01);
@@ -242,7 +246,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 * 13.44 * 5 = 67.2
 		 * We need to start ramp down at tick 120 - 67.2 ticks = 52.8 ticks
 		 */
-		final double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		final double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(52.8, result);
@@ -266,7 +270,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 * Would need to start ramp at 940 - 134.4 tics = 805.6 ticks
 		 */
 
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(805.6, result);
@@ -284,12 +288,12 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 
 		/*
 		 * Need 5 cycles to slow down from 0.5 to 0.0.
-		 * With Rev HD Core Hex motor, there are 13.44 ticks per cycle.
+		 * With Rev HD Core Hex revHDCoreHexMotor, there are 13.44 ticks per cycle.
 		 * Need 5 * 13.44 = 67.2 ticks to slow down.
 		 * Tick number at end of period is 60 + 120 = 180.
 		 * Tick to start is 180 - 67.2 = 112.8
 		 */
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(112.8, result);
@@ -310,7 +314,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 * ticks
 		 */
 
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(805.6, result);
@@ -333,7 +337,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 * Would need to start ramp at 40 - 134.4 tics = -94.4 ticks
 		 */
 
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(-94.4, result);
@@ -342,7 +346,8 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 
 
 	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the target tick number
+	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the target
+	 * tick number
 	 * (negative numbers)
 	 */
 	@Test
@@ -364,7 +369,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 */
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 	}
@@ -395,7 +400,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 * ticks needed for the ramp
 		 */
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 	}
@@ -409,7 +414,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		AarrePowerVector currentPower             = new AarrePowerVector(1.0);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
 
-		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(10, numCycles);
 	}
@@ -422,7 +427,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		AarrePowerVector currentPower             = new AarrePowerVector(0.1);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
 
-		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(1, numCycles);
 	}
@@ -435,7 +440,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		AarrePowerVector currentPower             = new AarrePowerVector(-0.1);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
 
-		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(1, numCycles);
 	}
@@ -448,7 +453,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		AarrePowerVector currentPower             = new AarrePowerVector(-1.0);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
 
-		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(10, numCycles);
 	}
@@ -473,7 +478,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 *  number 180 - 67.2 = 112.8. If the slow down started at tick 112.8, then it would still be going currently
 		 *  at tick 114.
 		 */
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -495,7 +500,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 */
 
 		double expected = 112.8;
-		double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(expected, actual);
@@ -528,7 +533,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
 		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -544,7 +549,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
-		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
@@ -561,7 +566,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
 		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
@@ -577,7 +582,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		final AarrePowerVector     powerAtStart              = new AarrePowerVector(0.5);
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
@@ -600,7 +605,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 *  So the slowdown should start at tick number 120 - 67.2 = 52.8
 		 *  In that case, the slowdown should be running currently at tick number 59
 		 */
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -617,7 +622,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 
@@ -643,7 +648,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 	}
@@ -660,14 +665,15 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 	}
 
 
 	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the target tick number
+	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the target
+	 * tick number
 	 * (negative numbers)
 	 */
 	@Test
@@ -693,7 +699,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 */
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 	}
@@ -716,7 +722,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements
 		 */
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 					numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 		});
 	}

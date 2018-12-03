@@ -3,13 +3,11 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 import org.junit.jupiter.api.Test;
 
 /**
- * This interface declares motor-related unit tests that apply to all motors. Motor-related unit tests whose results
+ * This interface declares revHDCoreHexMotor-related unit tests that apply to all motors. Motor-related unit tests
+ * whose results
  * depend on specific kinds of motors are declared in {@link AarreConcreteMotorUnitTestsInterface}.
  */
 interface AarreMotorUnitTestsInterface {
-
-	@Test
-	void testConstructor();
 
 	@Test
 	void testGetProportionPowerNew01();
@@ -99,10 +97,7 @@ interface AarreMotorUnitTestsInterface {
 	void whenWeHaveNotMoved_thenSpeedUpContinues();
 
 	@Test
-	void whenWeHaveMovedMoreThanEnough_thenSpeedUpStops();
-
-	@Test
-	void whenGetTicksPerCycleCalledAbstract_thenThrowsException();
+	void whenWeHaveMovedMoreThanEnough_thenSpeedUpStops() throws NoSuchMethodException;
 
 	@Test
 	void testSetDirection();

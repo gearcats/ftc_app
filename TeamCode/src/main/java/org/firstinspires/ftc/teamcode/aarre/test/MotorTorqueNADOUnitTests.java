@@ -6,7 +6,6 @@ import org.firstinspires.ftc.teamcode.aarre.src.AarreMotor;
 import org.firstinspires.ftc.teamcode.aarre.src.AarreMotorTorqueNADO;
 import org.firstinspires.ftc.teamcode.aarre.src.AarrePositiveInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerVector;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -20,38 +19,36 @@ import static org.junit.jupiter.api.Assertions.*;
 @Disabled
 public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreConcreteMotorUnitTestsInterface {
 
+	AarreMotorTorqueNADO torqueNADOMotor = AarreMotorTorqueNADO.createAarreMotorTorqueNADO(this, "left");
 
-	private AarreMotor motor;
+	Logger javaLog = Logger.getLogger(this.getClass().getName());
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
-
-
-	@BeforeEach
-	public final void testConstructor() {
-		motor = AarreMotorTorqueNADO.createAarreMotorTorqueNADO(this, "left");
+	@Override
+	AarreMotor getMotor() {
+		return torqueNADOMotor;
 	}
 
 	@Test
 	public final void testGetTicksPerCycle01() {
-		double ticksPerCycle = motor.getTicksPerCycle();
+		double ticksPerCycle = getMotor().getTicksPerCycle();
 		assertEquals(120.0, ticksPerCycle);
 	}
 
 	@Test
 	public final void testGetTicksPerMillisecond01() {
-		double ticksPerMillisecond = motor.getTicksPerMillisecond();
+		double ticksPerMillisecond = getMotor().getTicksPerMillisecond();
 		assertEquals(2.4, ticksPerMillisecond);
 	}
 
 	@Test
 	public final void testGetTicksPerSecond01() {
-		double ticksPerSecond = motor.getTicksPerSecond();
+		double ticksPerSecond = getMotor().getTicksPerSecond();
 		assertEquals(2400.0, ticksPerSecond);
 	}
 
 	@Test
 	public final void testGetTicksPerMinute01() {
-		double ticksPerMinute = motor.getTicksPerMinute();
+		double ticksPerMinute = getMotor().getTicksPerMinute();
 		assertEquals(144000.0, ticksPerMinute);
 	}
 
@@ -65,7 +62,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		final int                  tickNumberAtStartOfPeriod = 0;
 		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(2000);
 
-		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                         numberOfTicksInPeriod,
 		                                                         powerAtStart, powerAtEnd);
 
@@ -95,7 +92,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 */
 
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -120,7 +117,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		/*
 		 * There are 120 ticks in a cycle, so the ramp should be 1200 ticks
 		 */
-		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		/*
@@ -131,7 +128,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 
 
 	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns false when the motor is not close
+	 * Test that isSlowDownToEncoderTicksRunning returns false when the revHDCoreHexMotor is not close
 	 * enough to
 	 * the target tick number.
 	 */
@@ -144,7 +141,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                   numberOfTicksInPeriod, powerAtStart,
 		                                                   powerAtEnd);
 
@@ -161,7 +158,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		AarrePowerVector powerAtStart = new AarrePowerVector( 0.5);
 		AarrePowerVector powerAtEnd = new AarrePowerVector( 0.0);
 
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                   numberOfTicksInPeriod, powerAtStart,
 		                                                   powerAtEnd);
 
@@ -188,7 +185,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		final AarrePositiveInteger numberOfTicksInPeriod     = new AarrePositiveInteger(120);
 
 
-		final double actual = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                         numberOfTicksInPeriod,
 		                                                         powerAtStart, powerAtEnd);
 
@@ -212,7 +209,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 * 120 * 5 = 600
 		 * We need to start ramp down at tick 120 - 600 ticks = -480 ticks
 		 */
-		final double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		final double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(-480, result);
@@ -221,7 +218,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 
 
 	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the
+	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the
 	 * target tick number (negative numbers)
 	 */
 	@Test
@@ -242,7 +239,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 * Would need to start ramp at -1060 + 1200 tics = -260 ticks
 		 */
 
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                   numberOfTicksInPeriod, powerAtStart,
 		                                                   powerAtEnd);
 
@@ -268,7 +265,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 * Would need to start ramp at 9940 - 1200 ticks = 8740 ticks
 		 */
 
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
 				powerAtStart, powerAtEnd);
 
 		assertEquals(8740, result);
@@ -293,7 +290,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 * Would need to start ramp at 940 - 1200 ticks = -260 ticks
 		 */
 
-		double result = motor.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 		                                                   numberOfTicksInPeriod, powerAtStart,
 		                                                   powerAtEnd);
 
@@ -309,7 +306,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		AarrePowerVector currentPower             = new AarrePowerVector(1.0);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
 
-		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(10, numCycles);
 	}
@@ -322,7 +319,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		AarrePowerVector currentPower             = new AarrePowerVector(0.1);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
 
-		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(1, numCycles);
 	}
@@ -335,7 +332,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		AarrePowerVector currentPower             = new AarrePowerVector(-0.1);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
 
-		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(1, numCycles);
 	}
@@ -348,7 +345,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		AarrePowerVector currentPower             = new AarrePowerVector(-1.0);
 		AarrePowerVector proportionPowerRequested = new AarrePowerVector(0.0);
 
-		int numCycles = motor.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(10, numCycles);
 	}
@@ -374,7 +371,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 *  For REV HD Core Hex, this would be 13.44 * 5 = 67.2 ticks, and the slow down would start at tick
 		 *  number 174 - 67.2 = 106.8 and would not have started yet --> false
 		 */
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -407,7 +404,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
 		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -423,7 +420,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		final AarrePowerVector     powerAtStart              = new AarrePowerVector(1.0);
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
-		boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
@@ -440,7 +437,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		final AarrePowerVector powerAtStart = new AarrePowerVector(1.0);
 		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
@@ -456,7 +453,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		final AarrePowerVector     powerAtStart              = new AarrePowerVector(0.5);
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
@@ -480,7 +477,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 *  Last tick is number 120
 		 *  Ramp down would start at tick number 120-600 = -480 and still be going
 		 */
-		final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
@@ -504,7 +501,8 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 */
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			final boolean result = motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+			final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+					tickNumberCurrent,
 					numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 		});
 	}
@@ -529,7 +527,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		final AarrePowerVector powerAtEnd   = new AarrePowerVector(0.0);
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 
@@ -547,7 +545,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		final AarrePowerVector     powerAtEnd                = new AarrePowerVector(0.0);
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 
@@ -555,7 +553,8 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 
 
 	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns true when the motor is close enough to the target tick number
+	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the target
+	 * tick number
 	 * (negative numbers)
 	 */
 	@Test
@@ -581,7 +580,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 */
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 
@@ -607,7 +606,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements AarreCon
 		 */
 
 		assertThrows(IllegalArgumentException.class, () -> {
-			motor.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
 		});
 
