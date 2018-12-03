@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.logging.ConsoleHandler;
@@ -63,6 +61,7 @@ public class AarreMotor implements AarreMotorInterface {
 	private double ticksPerRevolution;
 
 	static java.util.logging.Logger java_log;
+	static org.slf4j.Logger         slf4j_logger = org.slf4j.LoggerFactory.getLogger("AarreMotor");
 
 	static {
 
@@ -86,8 +85,6 @@ public class AarreMotor implements AarreMotorInterface {
 	}
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
-
-		Logger slf4j_logger = LoggerFactory.getLogger(getClass());
 
 		this.opMode = opMode;
 
