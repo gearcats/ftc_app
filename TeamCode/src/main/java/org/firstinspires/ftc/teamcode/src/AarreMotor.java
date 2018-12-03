@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.src;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.util.StatusPrinter;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.slf4j.ext.XLoggerFactory;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class wraps the FTC DcMotor interface / DcMotorImpl class to:
@@ -54,11 +56,17 @@ public class AarreMotor implements AarreMotorInterface {
 	private double revolutionsPerMinute;
 	private double ticksPerRevolution;
 
-	org.slf4j.ext.XLogger log;
+	Logger log;
 
 	public AarreMotor(LinearOpMode opMode, final String motorName) {
 
-		log = XLoggerFactory.getXLogger(getClass());
+		log = LoggerFactory.getLogger(getClass());
+
+		log.error("<init>");
+
+		// print internal state
+		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+		StatusPrinter.print(lc);
 
 		this.opMode = opMode;
 
