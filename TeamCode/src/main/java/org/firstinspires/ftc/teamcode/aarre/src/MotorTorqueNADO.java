@@ -40,12 +40,6 @@ public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 
 	}
 
-	//public static MotorTorqueNADO createAarreMotorTorqueNADO(LinearOpMode opMode, String
-	//		motorName) {
-	//	motorTorqueNADO = new MotorTorqueNADO(opMode, motorName);
-	//	return motorTorqueNADO;
-	//}
-
 	@Override
 	public final int getCurrentTickNumber() {
 		return motor.getCurrentPosition();

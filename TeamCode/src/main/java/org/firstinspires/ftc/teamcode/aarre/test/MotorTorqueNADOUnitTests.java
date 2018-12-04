@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import org.firstinspires.ftc.teamcode.aarre.src.Motor;
 import org.firstinspires.ftc.teamcode.aarre.src.MotorTorqueNADO;
 import org.firstinspires.ftc.teamcode.aarre.src.PositiveInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
@@ -24,7 +23,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 	Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Override
-	Motor getMotor() {
+	public MotorTorqueNADO getMotor() {
 		return torqueNADOMotor;
 	}
 

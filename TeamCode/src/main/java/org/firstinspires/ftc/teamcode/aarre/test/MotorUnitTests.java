@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import org.firstinspires.ftc.teamcode.aarre.src.Motor;
 import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.PositiveInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
@@ -46,8 +45,6 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		log.addHandler(handler);
 		log.setLevel(Level.ALL);
 	}
-
-	private Motor motor = null;
 
 	@Override
 	@Test
@@ -170,11 +167,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 
 		boolean result = true;
 
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
 		assertFalse(result);
 	}
@@ -196,11 +189,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		double secondsRunning = 0.0;
 
 		boolean result = false;
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+
+		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
 		assertTrue(result);
 	}
@@ -222,11 +212,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		double secondsRunning = 6.0;
 
 		boolean result = false;
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
 		assertTrue(result);
 	}
@@ -249,11 +235,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 
 		boolean result = true;
 
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
 		assertFalse(result);
 
@@ -277,12 +259,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 
 		boolean result = false;
 
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
-
+		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		assertTrue(result);
 	}
 
@@ -304,13 +281,9 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 
 		boolean result = true;
 
-		try {
-			log.finest("Calling method on 'revHDCoreHexMotor'");
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-			log.finest("Return from method on 'revHDCoreHexMotor'");
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+		log.finest("Calling method on 'revHDCoreHexMotor'");
+		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+		log.finest("Return from method on 'revHDCoreHexMotor'");
 
 		assertFalse(result);
 	}
@@ -333,11 +306,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		double secondsRunning = 4.0;
 
 		boolean result = true;
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 		assertFalse(result);
 	}
 
@@ -357,14 +326,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		boolean result = true;
-
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
 		assertFalse(result);
 	}
@@ -379,11 +341,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		double             secondsRunning = 4.0;
 
 		boolean result = true;
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
 		assertFalse(result);
 	}
@@ -398,16 +356,10 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		boolean result = false;
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
 		assertFalse(result);
 	}
-
 
 	@Override
 	@Test
@@ -425,13 +377,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
 
-		boolean result = false;
-
-		try {
-			result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-		} catch (NoSuchMethodException e) {
-			log.severe(e.toString());
-		}
+		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning,
+				ticksMoved);
 
 		assertTrue(result);
 	}
@@ -446,11 +393,6 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 	@Test
 	@Override
 	public void runOpMode() {
-	}
-
-	// Subclasses should override this method to return their own special type of revHDCoreHexMotor
-	Motor getMotor() {
-		return motor;
 	}
 
 	protected MotorUnitTests() {

@@ -77,7 +77,7 @@ public abstract class Motor implements MotorInterface {
 
 
 	/**
-	 * Get the current reading of the encoder for this getMotor().
+	 * Get the current reading of the encoder for this getMotorRevHDCoreHex().
 	 * <p>
 	 * Despite its name, the {@link DcMotor} method {@code getCurrentPosition} provides almost no information about
 	 * position. Therefore, we use a different name here.
@@ -85,6 +85,10 @@ public abstract class Motor implements MotorInterface {
 	 * @return The current reading of the encoder for this motor, in ticks.
 	 */
 	public int getCurrentTickNumber() {
+		DcMotor.RunMode mode = getMotor().getMode();
+		if (mode != DcMotor.RunMode.RUN_USING_ENCODER) {
+			log.warning("Motor is not using encoder!");
+		}
 		return getMotor().getCurrentPosition();
 	}
 
@@ -230,8 +234,7 @@ public abstract class Motor implements MotorInterface {
 	}
 
 
-	public boolean isSpeedUpToEncoderTicksDone(PositiveInteger ticksMaximum, double secondsTimeout, double
-			secondsRunning, NonNegativeInteger ticksMoved) throws NoSuchMethodException {
+	public boolean isSpeedUpToEncoderTicksDone(PositiveInteger ticksMaximum, double secondsTimeout, double secondsRunning, NonNegativeInteger ticksMoved) {
 
 		log.entering(this.getClass().getCanonicalName(), "isSpeedUpToEncoderTicksDone");
 
@@ -261,8 +264,7 @@ public abstract class Motor implements MotorInterface {
 				valueToReturn = true;
 			}
 		}
-		log.exiting(this.getClass().getCanonicalName(), this.getClass().getMethod("isSpeedUpToEncoderTicksDone",
-				PositiveInteger.class, double.class, double.class, NonNegativeInteger.class).getName());
+		log.exiting(this.getClass().getCanonicalName(), "isSpeedUpToEncoderTicksDone");
 		return valueToReturn;
 	}
 

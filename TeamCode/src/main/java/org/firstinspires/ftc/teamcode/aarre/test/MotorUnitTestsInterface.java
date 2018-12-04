@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.aarre.test;
 
+import org.firstinspires.ftc.teamcode.aarre.src.Motor;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -8,6 +9,10 @@ import org.junit.jupiter.api.Test;
  * depend on specific kinds of motors are declared in {@link ConcreteMotorUnitTestsInterface}.
  */
 interface MotorUnitTestsInterface {
+
+
+	// Subclasses should override this method to return their own special type of motorRevHDCoreHex
+	Motor getMotor();
 
 	@Test
 	void testGetProportionPowerNew01();
