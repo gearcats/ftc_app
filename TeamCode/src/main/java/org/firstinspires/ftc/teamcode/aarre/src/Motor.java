@@ -288,9 +288,7 @@ public abstract class Motor implements MotorInterface {
 		double tickNumberToStartSlowDown = getTickNumberToStartSlowDown(tickNumberAtStartOfTravel,
 				numberOfTicksToTravel, powerAtStartOfTravel, powerAtEndOfTravel);
 
-		if (tickNumberCurrent < tickNumberAtStartOfTravel) {
-			throw new IllegalArgumentException("The current tick number must be within the period of travel");
-		}
+		log.finer(String.format("Tick number to start slowdown: %f", tickNumberToStartSlowDown));
 
 		if (((double) tickNumberCurrent >= tickNumberToStartSlowDown) && ((double) tickNumberCurrent <= tickNumberAtEndOfTravel)) {
 			result = true;
@@ -625,7 +623,7 @@ public abstract class Motor implements MotorInterface {
 			}
 
 			tickNumberCurrent = getCurrentTickNumber();
-			ticksMoved = new NonNegativeInteger(tickNumberCurrent - tickNumberStart);
+			ticksMoved = new NonNegativeInteger(Math.abs(tickNumberCurrent - tickNumberStart));
 			secondsRunning = runtimeTotal.seconds();
 
 			log.fine(String.format("Seconds elapsed %f", secondsRunning));

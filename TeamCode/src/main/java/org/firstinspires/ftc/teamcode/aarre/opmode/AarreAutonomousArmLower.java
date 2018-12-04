@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.aarre.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.aarre.src.Robot;
 import org.firstinspires.ftc.teamcode.aarre.src.TelemetryPlus;
@@ -13,7 +12,6 @@ import java.util.logging.Logger;
  */
 
 @Autonomous(name = "Aarre Autonomous Arm Lower", group = "Aarre")
-@Disabled
 public class AarreAutonomousArmLower extends LinearOpMode {
 
 	private TelemetryPlus betterTelemetryPlus;

@@ -369,11 +369,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 *
 		 */
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent,
 					numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
-		});
+		assertFalse(result);
 	}
 
 
@@ -401,10 +401,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 * number of
 		 * ticks needed for the ramp
 		 */
-		assertThrows(IllegalArgumentException.class, () -> {
-			motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+		boolean actual = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
-		});
+		assertFalse(actual);
 	}
 
 
@@ -623,10 +623,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		final PowerVector     powerAtStart              = new PowerVector(0.5);
 		final PowerVector     powerAtEnd                = new PowerVector(0.0);
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+		boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
-		});
+		assertFalse(result);
 
 	}
 
@@ -649,10 +649,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		final PowerVector powerAtStart = new PowerVector(1.0);
 		final PowerVector powerAtEnd   = new PowerVector(0.0);
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+		boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
-		});
+		assertFalse(result);
 	}
 
 
@@ -666,10 +666,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		final PowerVector     powerAtStart              = new PowerVector(1.0);
 		final PowerVector     powerAtEnd                = new PowerVector(0.0);
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
-					powerAtStart, powerAtEnd);
-		});
+		boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		assertFalse(result);
 	}
 
 
@@ -700,15 +699,17 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 * At
 		 */
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
-					powerAtStart, powerAtEnd);
-		});
+		boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		assertFalse(result);
+
 	}
 
 	@Override
 	@Test
 	public final void whenTickNumberOutsidePeriod_thenExceptionThrown() {
+
+		// TODO: Rename this method
 
 		final int             tickNumberAtStartOfPeriod = 0;
 		final int             tickNumberCurrent         = -61;
@@ -723,10 +724,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 * This should be impossible.
 		 */
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+		final boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent,
 					numberOfTicksInPeriod, powerAtStart, powerAtEnd);
-		});
+
+		assertFalse(result);
 	}
 
 

@@ -496,14 +496,15 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		/*
 		 *  The period runs from tick number 0 to tick number 120.
 		 *  We are at tick number -59.
-		 *  This should never happen.
+		 *
+		 *  If that is really the case, then the slow down should be in progress.
+		 *
 		 */
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-					tickNumberCurrent,
-					numberOfTicksInPeriod, powerAtStart, powerAtEnd);
-		});
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+		assertTrue(result);
 	}
 
 
@@ -525,10 +526,10 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		final PowerVector powerAtStart = new PowerVector(1.0);
 		final PowerVector powerAtEnd   = new PowerVector(0.0);
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
-		});
+		assertFalse(result);
 
 	}
 
@@ -543,10 +544,10 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		final PowerVector     powerAtStart              = new PowerVector(1.0);
 		final PowerVector     powerAtEnd                = new PowerVector(0.0);
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
-		});
+		assertFalse(result);
 
 	}
 
@@ -578,11 +579,10 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		 * At
 		 */
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
-		});
-
+		assertFalse(result);
 	}
 
 
@@ -590,6 +590,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 	@Test
 	public final void whenTickNumberOutsidePeriod_thenExceptionThrown() {
 
+		// TODO: Rename this method
 		final int             tickNumberAtStartOfPeriod = 0;
 		final int             tickNumberCurrent         = -61;
 		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
@@ -599,15 +600,20 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 
 		/*
 		 * The period runs from tick 0 to tick 120.
-		 * We need 5 cycles
+		 * We need 5 cycles.
+		 *
+		 * With a TorqueNado, that is 5 * 134.4
 		 *
 		 * The current tickNumber is -61.
+		 *
+		 * If that really is the current tick number, then we should be started
 		 */
 
-		assertThrows(IllegalArgumentException.class, () -> {
-			getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent, numberOfTicksInPeriod,
+		boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
+				numberOfTicksInPeriod,
 					powerAtStart, powerAtEnd);
-		});
+
+		assertTrue(result);
 
 	}
 
