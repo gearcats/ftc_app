@@ -408,7 +408,7 @@ public abstract class AarreMotor implements AarreMotorInterface, ConcreteMotorIn
 		int                  ticksToSlowDownInt = ticksToRotate.intValue() - ticksToSpeedUp.intValue();
 		AarrePositiveInteger ticksToSlowDown    = new AarrePositiveInteger(ticksToSlowDownInt);
 
-		log.fine(String.format("Motor - Ramp to encoder ticks(3), target power UP: %f" + powerVector.asDouble()));
+		log.fine(String.format("Motor - Ramp to encoder ticks(3), target power UP: %f", powerVector.asDouble()));
 		rampToPower(powerVector, ticksToSpeedUp, secondsTimeout);
 
 		log.fine(String.format("Motor - Ramp to encoder ticks(3), target power DOWN: %f", 0.0));
@@ -483,14 +483,14 @@ public abstract class AarreMotor implements AarreMotorInterface, ConcreteMotorIn
 	 *          -|
 	 * </pre>
 	 * <p>
-	 * TODO: This is seriously buggy, does not distinguish +/- from increase/decrease
+	 *
+	 * TODO: Why is secondsTimeout not used? What is it for?
 	 */
 	private void slowDownToPower(final AarrePowerVector powerVectorAtEnd, final AarrePositiveInteger ticksToMove,
 	                             final double secondsTimeout) {
 
-		telemetry.log("Motor::slowDownToPower(3) - Target power: %f", powerVectorAtEnd);
+		telemetry.log("Motor::slowDownToPower(3) - Target power: %f", powerVectorAtEnd.asDouble());
 
-		boolean keepWaiting;
 		boolean keepGoing;
 		int     tickNumberStart;
 		int     tickNumberCurrent;
@@ -523,7 +523,7 @@ public abstract class AarreMotor implements AarreMotorInterface, ConcreteMotorIn
 
 			telemetry.log("Motor::slowDownToPower(3) - Milliseconds elapsed %f", runtimeFromStart.milliseconds());
 			telemetry.log("Motor::slowDownToPower(3) - Current tick number: %d", tickNumberCurrent);
-			telemetry.log("Motor::slowDownToPower(3) - New power: %f", powerVectorNew);
+			telemetry.log("Motor::slowDownToPower(3) - New power: %f", powerVectorNew.asDouble());
 
 			/*
 			 * Wait for next power change
@@ -581,8 +581,8 @@ public abstract class AarreMotor implements AarreMotorInterface, ConcreteMotorIn
 	private void speedUpToPower(final AarrePowerVector powerVectorRequested, final AarrePositiveInteger ticksToMove,
 	                            final double secondsTimeout) throws NoSuchMethodException {
 
-		log.fine(String.format("Target power: %f", powerVectorRequested));
-		log.fine(String.format("Target ticks: %d", ticksToMove));
+		log.fine(String.format("Target power: %f", powerVectorRequested.asDouble()));
+		log.fine(String.format("Target ticks: %d", ticksToMove.intValue()));
 
 		ElapsedTime runtimeSinceChange;
 		ElapsedTime runtimeTotal;
@@ -622,7 +622,7 @@ public abstract class AarreMotor implements AarreMotorInterface, ConcreteMotorIn
 			log.fine(String.format("Motor::speedUpToPower(3) - Milliseconds elapsed %f", runtimeTotal
 					.milliseconds()));
 			log.fine(String.format("Motor::speedUpToPower(3) - Current tick number: %d", tickNumberCurrent));
-			log.fine(String.format("Motor::speedUpToPower(3) - New power: %f", powerVectorNew));
+			log.fine(String.format("Motor::speedUpToPower(3) - New power: %f", powerVectorNew.asDouble()));
 
 		}
 	}
