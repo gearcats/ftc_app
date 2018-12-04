@@ -25,7 +25,7 @@ public class DriveMotor extends MotorTorqueNADO implements ConcreteMotorInterfac
 
 	@Override
 	public void setPowerVector(PowerVector targetVector) {
-		motorTorqueNADO.setPowerVector(targetVector);
+		getMotor().setPower(targetVector.doubleValue());
 	}
 
 

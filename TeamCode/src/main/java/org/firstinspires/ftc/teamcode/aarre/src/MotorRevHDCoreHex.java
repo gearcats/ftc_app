@@ -13,7 +13,6 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 	static private TelemetryPlus     telemetry;
 	private final  LinearOpMode      opMode;
 	private final  HardwareMap       hardwareMap;
-	static         MotorRevHDCoreHex motorRevHDCoreHex;
 
 	public MotorRevHDCoreHex(LinearOpMode opMode, final String motorName) {
 
@@ -51,22 +50,27 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 		return opMode;
 	}
 
+	@Override
 	public final HardwareMap getHardwareMap() {
 		return hardwareMap;
 	}
 
+	@Override
 	public double getRevolutionsPerMinute() {
 		return REV_CORE_HEX_REVOLUTIONS_PER_MINUTE;
 	}
 
+	@Override
 	public double getRevolutionsPerMinute(PowerMagnitude powerMagnitude) {
 		return getRevolutionsPerMinute() * powerMagnitude.doubleValue();
 	}
 
+	@Override
 	public double getTicksPerRevolution() {
 		return REV_CORE_HEX_TICKS_PER_REVOLUTION;
 	}
 
+	@Override
 	public final void setPowerVector(final PowerVector powerVector) {
 		motor.setPower(powerVector.doubleValue());
 	}

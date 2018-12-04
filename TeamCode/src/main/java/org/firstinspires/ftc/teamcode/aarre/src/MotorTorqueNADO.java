@@ -11,8 +11,6 @@ public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 
 	private static final int TORQUENADO_TICKS_PER_REVOLUTION = 1440;
 
-	static MotorTorqueNADO motorTorqueNADO;
-
 	private final  DcMotor       motor;
 	static private TelemetryPlus telemetry;
 	private final  LinearOpMode  opMode;
@@ -60,18 +58,22 @@ public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 		return opMode;
 	}
 
+	@Override
 	public double getRevolutionsPerMinute() {
 		return TORQUENADO_REVOLUTIONS_PER_MINUTE;
 	}
 
+	@Override
 	public double getRevolutionsPerMinute(PowerMagnitude powerMagnitude) {
 		return getRevolutionsPerMinute() * powerMagnitude.doubleValue();
 	}
 
+	@Override
 	public double getTicksPerRevolution() {
 		return TORQUENADO_TICKS_PER_REVOLUTION;
 	}
 
+	@Override
 	public void setPowerVector(PowerVector targetVector) {
 		motor.setPower(targetVector.doubleValue());
 	}
