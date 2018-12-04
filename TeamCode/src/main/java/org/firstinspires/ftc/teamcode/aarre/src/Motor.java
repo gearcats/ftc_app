@@ -491,7 +491,7 @@ public abstract class Motor implements MotorInterface {
 
 		boolean keepGoing;
 		int     tickNumberStart;
-		int     tickNumberCurrent;
+		int     currentTickNumber;
 
 		PowerVector powerVectorCurrent;
 		PowerVector powerVectorNew;
@@ -513,7 +513,7 @@ public abstract class Motor implements MotorInterface {
 		while (secondsFromStart < secondsTimeout && keepGoing && getOpMode().opModeIsActive()) {
 
 			getOpMode().idle();
-			tickNumberCurrent = getCurrentTickNumber();
+			currentTickNumber = getCurrentTickNumber();
 
 			powerVectorCurrent = getPowerVectorCurrent();
 			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorAtEnd);
@@ -521,7 +521,7 @@ public abstract class Motor implements MotorInterface {
 			setPowerVector(powerVectorNew);
 
 			log.finer(String.format("Milliseconds elapsed %f", runtimeFromStart.milliseconds()));
-			log.finer(String.format("Current tick number: %d", tickNumberCurrent));
+			log.finer(String.format("Current tick number: %d", currentTickNumber));
 			log.finer(String.format("New power: %f", powerVectorNew.doubleValue()));
 
 			/*
@@ -537,7 +537,7 @@ public abstract class Motor implements MotorInterface {
 
 			secondsFromStart = runtimeFromStart.seconds();
 
-			keepGoing = isSlowDownToEncoderTicksRunning(tickNumberStart, tickNumberCurrent, ticksToMove,
+			keepGoing = isSlowDownToEncoderTicksRunning(tickNumberStart, currentTickNumber, ticksToMove,
 					powerVectorCurrent, powerVectorAtEnd);
 
 		}

@@ -26,7 +26,7 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	 * Properties inherited from LinearOpMode include: - hardwareMap - telemetry
 	 */
 
-	MotorRevHDCoreHex revHDCoreHexMotor = MotorRevHDCoreHex.createAarreMotorRevHDCoreHex(this, "arm");
+	MotorRevHDCoreHex revHDCoreHexMotor = new MotorRevHDCoreHex(this, "arm");
 	Logger            javaLog           = Logger.getLogger(this.getClass().getName());
 
 	@Override

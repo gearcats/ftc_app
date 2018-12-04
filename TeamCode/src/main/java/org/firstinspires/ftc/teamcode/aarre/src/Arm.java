@@ -5,22 +5,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import java.util.logging.Logger;
-
 public class Arm {
 
 	private static final PowerMagnitude DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(0.5);
-	private static final double         SECONDS_TO_RUN_DEFAULT         = 1.0;
 	private static final double         SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
 
-	private Motor         motor;
-	private TelemetryPlus telemetry;
-	private HardwareMap   hardwareMap;
-	private LinearOpMode  opMode;
-
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
-
-	private double currentPosition;
+	private MotorRevHDCoreHex motor;
+	private TelemetryPlus     telemetry;
+	private HardwareMap       hardwareMap;
+	private LinearOpMode      opMode;
 
 	/**
 	 * This empty constructor is useful for testing.
@@ -55,7 +48,7 @@ public class Arm {
 			motor = null;
 		}
 		else {
-			motor = MotorRevHDCoreHex.createAarreMotorRevHDCoreHex(opMode, nameOfArmMotor);
+			motor = new MotorRevHDCoreHex(opMode, nameOfArmMotor);
 		}
 
 		motor.rampToPower(new PowerVector(0.0));

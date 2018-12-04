@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Disabled
 public class MotorTorqueNADOUnitTests extends MotorUnitTests implements ConcreteMotorUnitTestsInterface {
 
-	MotorTorqueNADO torqueNADOMotor = MotorTorqueNADO.createAarreMotorTorqueNADO(this, "left");
+	MotorTorqueNADO torqueNADOMotor = new MotorTorqueNADO(this, "left");
 
 	Logger javaLog = Logger.getLogger(this.getClass().getName());
 

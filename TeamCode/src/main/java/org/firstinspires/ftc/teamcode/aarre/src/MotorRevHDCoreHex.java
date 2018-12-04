@@ -36,12 +36,13 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 
 	}
 
-	public static MotorRevHDCoreHex createAarreMotorRevHDCoreHex(LinearOpMode opMode, String
-			motorName) {
-		motorRevHDCoreHex = new MotorRevHDCoreHex(opMode, motorName);
-		return motorRevHDCoreHex;
-	}
+	//public static MotorRevHDCoreHex createAarreMotorRevHDCoreHex(LinearOpMode opMode, String
+	//		motorName) {
+	//	motorRevHDCoreHex = new MotorRevHDCoreHex(opMode, motorName);
+	//	return motorRevHDCoreHex;
+	//}
 
+	@Override
 	public final int getCurrentTickNumber() {
 		return motor.getCurrentPosition();
 	}
