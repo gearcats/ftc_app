@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Arm {
 
-	private static final PowerMagnitude DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(0.5);
-	private static final double         SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
+	private static final PowerMagnitude DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(1.0);
+	private static final double         SECONDS_BEFORE_TIMEOUT_DEFAULT = 1.0;
 
 	private MotorRevHDCoreHex motor;
 	private TelemetryPlus     telemetry;

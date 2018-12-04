@@ -195,23 +195,43 @@ public abstract class Motor implements MotorInterface {
 		log.finer(String.format("Power vector at end of period: %f", powerVectorAtEndOfPeriod.doubleValue()));
 
 		PowerMagnitude powerMagnitudeAtStartOfPeriod = powerVectorAtStartOfPeriod.getMagnitude();
+		log.finer(String.format("Power magnitude at start of period: %f", powerMagnitudeAtStartOfPeriod.doubleValue
+				()));
+
 		PowerMagnitude powerMagnitudeAtEndOfPeriod   = powerVectorAtEndOfPeriod.getMagnitude();
+		log.finer(String.format("Power magnitude at end of period: %f", powerMagnitudeAtEndOfPeriod.doubleValue()));
+
 		if (powerMagnitudeAtStartOfPeriod.doubleValue() <= powerMagnitudeAtEndOfPeriod.doubleValue()) {
-			throw new IllegalArgumentException("When slowing down, the absolute value of the " + "power at the start "
-					+ "of the slowdown must be greater " + "than the absolute value of the power at the end " + "of "
+			throw new IllegalArgumentException("When slowing down, the magnitude of the " + "power at the start " +
+					"of the slowdown must be greater " + "than the magnitude of the power at the end " + "of "
 					+ "the " + "slowdown" + ".");
 		}
 
 		PowerVector    powerChangeVector      = powerVectorAtStartOfPeriod.subtract(powerVectorAtEndOfPeriod);
+		log.finer(String.format("Power change vector: %f", powerChangeVector.doubleValue()));
+
 		PowerMagnitude magnitudeOfPowerChange = powerChangeVector.getMagnitude();
+		log.finer(String.format("Magnitude of power change: %f", magnitudeOfPowerChange.doubleValue()));
+
 		int            powerChangeDirection   = powerChangeVector.getDirection();
+		log.finer(String.format("Power change direction: %d", powerChangeDirection));
+
 
 		final double numberOfCyclesInSlowDown = magnitudeOfPowerChange.divideBy(getPowerMagnitudeIncrementPerCycle());
+		log.finer(String.format("Number of cycles in slowdown %f", numberOfCyclesInSlowDown));
+
 		final double numberOfTicksInSlowDown  = numberOfCyclesInSlowDown * getTicksPerCycle();
+		log.finer(String.format("Number of ticks in slowdown: %f", numberOfTicksInSlowDown));
+
 		final double numberOfTicksToChange    = powerChangeDirection * numberOfTicksInSlowDown;
+		log.finer(String.format("Number of ticks to change: %f", numberOfTicksToChange));
+
 		final double tickNumberAtEndOfPeriod = tickNumberAtStartOfPeriod + (numberOfTicksInPeriod.intValue() *
 				powerChangeDirection);
+		log.finer(String.format("Tick number at end of period: %f", tickNumberAtEndOfPeriod));
+
 		final double tickNumberToStartSlowDown = tickNumberAtEndOfPeriod - numberOfTicksToChange;
+		log.finer(String.format("Tick number to start slowdown: %f", tickNumberToStartSlowDown));
 
 		log.exiting(getClass().getCanonicalName(), "getTickNumberToStartSlowDown");
 
