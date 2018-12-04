@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.aarre.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerMagnitude;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreRobot;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreTelemetry;
+import org.firstinspires.ftc.teamcode.aarre.src.PowerMagnitude;
+import org.firstinspires.ftc.teamcode.aarre.src.Robot;
+import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
 
 import java.util.Date;
 import java.util.logging.*;
@@ -20,8 +20,8 @@ import java.util.logging.*;
 @Autonomous(name = "Aarre Autonomous Dance", group = "Aarre")
 public class AarreAutonomousDance extends LinearOpMode {
 
-	private AarreTelemetry betterTelemetry;
-	private AarreRobot     robot;
+	private Telemetry betterTelemetry;
+	private Robot     robot;
 
 	static Logger log;
 
@@ -65,14 +65,14 @@ public class AarreAutonomousDance extends LinearOpMode {
 
 		if (telemetry == null)
 			throw new AssertionError("Unexpected null object: telemetry");
-		betterTelemetry = new AarreTelemetry(telemetry);
+		betterTelemetry = new Telemetry(telemetry);
 
 		// 'hardwareMap comes from FTC....
 		// It is only available in runOpMode
 
 		if (hardwareMap == null)
 			throw new AssertionError("Unexpected null object: hardwareMap");
-		robot = new AarreRobot(this);
+		robot = new Robot(this);
 
 		log.info("Initializing robot");
 
@@ -81,9 +81,9 @@ public class AarreAutonomousDance extends LinearOpMode {
 
 		log.info("Starting play");
 
-		final AarrePowerMagnitude drivePowerMagnitude = new AarrePowerMagnitude(0.5);
+		final PowerMagnitude drivePowerMagnitude = new PowerMagnitude(0.5);
 		log.fine("Set drive power magnitude");
-		final AarrePowerMagnitude turnPowerMagnitude = new AarrePowerMagnitude(0.5);
+		final PowerMagnitude turnPowerMagnitude = new PowerMagnitude(0.5);
 		log.fine("Set turn power magnitude");
 		final double inches  = 12.0;
 		final double timeout = 5.0;

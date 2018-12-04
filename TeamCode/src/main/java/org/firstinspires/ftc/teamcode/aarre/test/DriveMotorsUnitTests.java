@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.aarre.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreDriveMotors;
-import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerMagnitude;
+import org.firstinspires.ftc.teamcode.aarre.src.DriveMotors;
+import org.firstinspires.ftc.teamcode.aarre.src.PowerMagnitude;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,16 +10,16 @@ import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class AarreDriveMotorsUnitTests extends LinearOpMode {
+class DriveMotorsUnitTests extends LinearOpMode {
 
-	private AarreDriveMotors motors;
+	private DriveMotors motors;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 
 	@BeforeEach
 	void setUp() {
-		motors = new AarreDriveMotors(this);
+		motors = new DriveMotors(this);
 	}
 
 	@Test
@@ -90,7 +90,7 @@ class AarreDriveMotorsUnitTests extends LinearOpMode {
 
 	@Test
 	void setPowerMagnitudeTolerance() {
-		AarrePowerMagnitude powerMagnitudeTolerance = new AarrePowerMagnitude(0.0001);
+		PowerMagnitude powerMagnitudeTolerance = new PowerMagnitude(0.0001);
 		motors.setPowerMagnitudeTolerance(powerMagnitudeTolerance);
 	}
 

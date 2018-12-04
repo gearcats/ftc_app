@@ -14,7 +14,7 @@ import java.util.logging.*;
 /**
  * A pair of motors used for driving the robot
  */
-public class AarreDriveMotors {
+public class DriveMotors {
 
 	// Defaults
 	private static final double DEFAULT_HEADING_THRESHOLD          = 1.0;
@@ -25,15 +25,15 @@ public class AarreDriveMotors {
 	private static final int    DEFAULT_MILLISECONDS_CYCLE_LENGTH  = 50;
 
 	// Private fields
-	private static AarrePowerMagnitude powerIncrementAbsolute    = new AarrePowerMagnitude
+	private static PowerMagnitude powerIncrementAbsolute    = new PowerMagnitude
 			(DEFAULT_POWER_INCREMENT_ABSOLUTE);
-	private static int                 cycleLengthInMilliseconds = DEFAULT_MILLISECONDS_CYCLE_LENGTH;
-	private static AarrePowerMagnitude powerMagnitudeTolerance   = new AarrePowerMagnitude
+	private static int            cycleLengthInMilliseconds = DEFAULT_MILLISECONDS_CYCLE_LENGTH;
+	private static PowerMagnitude powerMagnitudeTolerance   = new PowerMagnitude
 			(DEFAULT_PROPORTION_POWER_TOLERANCE);
 
-	private AarreDriveMotor       leftMotor;
-	private AarreDriveMotor       rightMotor;
-	private AarreTelemetry        telemetry;
+	private DriveMotor            leftMotor;
+	private DriveMotor            rightMotor;
+	private Telemetry             telemetry;
 	private HardwareMap           hardwareMap;
 	private LinearOpMode          opMode;
 	private ModernRoboticsI2cGyro gyro;
@@ -41,7 +41,7 @@ public class AarreDriveMotors {
 	static Logger log;
 
 	static {
-		log = Logger.getLogger(AarreMotor.class.getName());
+		log = Logger.getLogger(Motor.class.getName());
 		log.setUseParentHandlers(false);
 		ConsoleHandler handler = new ConsoleHandler();
 		handler.setLevel(Level.ALL);
@@ -62,11 +62,11 @@ public class AarreDriveMotors {
 		log.setLevel(Level.ALL);
 	}
 
-	public AarreDriveMotors(LinearOpMode opMode) {
+	public DriveMotors(LinearOpMode opMode) {
 
 		this.opMode = opMode;
 
-		telemetry = new AarreTelemetry(opMode.telemetry);
+		telemetry = new Telemetry(opMode.telemetry);
 
 		log.setLevel(Level.ALL);
 
@@ -80,8 +80,8 @@ public class AarreDriveMotors {
 			leftMotor = null;
 			rightMotor = null;
 		} else {
-			leftMotor = new AarreDriveMotor(opMode, "left");
-			rightMotor = new AarreDriveMotor(opMode, "right");
+			leftMotor = new DriveMotor(opMode, "left");
+			rightMotor = new DriveMotor(opMode, "right");
 
 			this.setPowerIncrement(DEFAULT_POWER_INCREMENT_ABSOLUTE);
 
@@ -95,7 +95,7 @@ public class AarreDriveMotors {
 			// Set all motors to zero power
 
 			try {
-				rampPowerTo(new AarrePowerVector(0.0));
+				rampPowerTo(new PowerVector(0.0));
 			} catch (NoSuchMethodException e) {
 				log.severe(e.toString());
 			}
@@ -113,7 +113,7 @@ public class AarreDriveMotors {
 
 	}
 
-	public static AarrePowerMagnitude getPowerIncrementAbsolute() {
+	public static PowerMagnitude getPowerIncrementAbsolute() {
 		return powerIncrementAbsolute;
 	}
 
@@ -121,7 +121,7 @@ public class AarreDriveMotors {
 		return cycleLengthInMilliseconds;
 	}
 
-	public static AarrePowerMagnitude getPowerMagnitudeTolerance() {
+	public static PowerMagnitude getPowerMagnitudeTolerance() {
 		return powerMagnitudeTolerance;
 	}
 
@@ -137,8 +137,8 @@ public class AarreDriveMotors {
 	 * 		<p>
 	 * 		TODO: Eliminate use of Range.clip here
 	 */
-	public static AarrePowerVector getSteer(final double error, final double proportionalGainCoefficient) {
-		return new AarrePowerVector(Range.clip(error * proportionalGainCoefficient, -1.0, 1.0));
+	public static PowerVector getSteer(final double error, final double proportionalGainCoefficient) {
+		return new PowerVector(Range.clip(error * proportionalGainCoefficient, -1.0, 1.0));
 	}
 
 	/**
@@ -156,7 +156,8 @@ public class AarreDriveMotors {
 	 * @param secondsTimeout
 	 * 		TODO: Catch impossible combinations of inchesTravelLeft and inchesTravelRight.
 	 */
-	final void drive(final AarrePowerMagnitude powerMagnitude, final double inchesTravelLeft, final double inchesTravelRight, final double secondsTimeout) throws NoSuchMethodException {
+	final void drive(final PowerMagnitude powerMagnitude, final double inchesTravelLeft, final double
+			inchesTravelRight, final double secondsTimeout) throws NoSuchMethodException {
 
 		log.entering(this.getClass().getCanonicalName(), "drive");
 
@@ -176,10 +177,10 @@ public class AarreDriveMotors {
 		// reset the timeout time and start motion.
 		final ElapsedTime runtime = new ElapsedTime();
 
-		int              leftPowerDirection  = (int) Math.signum(inchesTravelLeft);
-		int              rightPowerDirection = (int) Math.signum(inchesTravelRight);
-		AarrePowerVector leftPowerVector     = new AarrePowerVector(powerMagnitude, leftPowerDirection);
-		AarrePowerVector rightPowerVector    = new AarrePowerVector(powerMagnitude, rightPowerDirection);
+		int         leftPowerDirection  = (int) Math.signum(inchesTravelLeft);
+		int         rightPowerDirection = (int) Math.signum(inchesTravelRight);
+		PowerVector leftPowerVector     = new PowerVector(powerMagnitude, leftPowerDirection);
+		PowerVector rightPowerVector    = new PowerVector(powerMagnitude, rightPowerDirection);
 
 		log.fine("Calling rampPowerTo");
 		rampPowerTo(leftPowerVector, rightPowerVector);
@@ -202,8 +203,8 @@ public class AarreDriveMotors {
 		}
 
 		// Stop all motion;
-		leftMotor.rampToPower(new AarrePowerVector(0.0));
-		rightMotor.rampToPower(new AarrePowerVector(0.0));
+		leftMotor.rampToPower(new PowerVector(0.0));
+		rightMotor.rampToPower(new PowerVector(0.0));
 
 		// Turn off RUN_TO_POSITION
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -253,16 +254,17 @@ public class AarreDriveMotors {
 	 * 		<p>
 	 * 		TODO: This is buggy, half is RUN_BY_ENCODER, half not
 	 */
-	public void gyroDrive(final AarrePowerMagnitude powerMagnitude, final double inchesTravelDistanceAndDirection, final double angle) throws NoSuchMethodException {
+	public void gyroDrive(final PowerMagnitude powerMagnitude, final double inchesTravelDistanceAndDirection, final
+	double angle) throws NoSuchMethodException {
 
-		final int        tickNumberTargetLeft;
-		final int        tickNumberTargetRight;
-		final int        numberOfTicksToMove;
-		double           max;
-		double           error;
-		AarrePowerVector steer;
-		AarrePowerVector leftPowerVector;
-		AarrePowerVector rightPowerVector;
+		final int   tickNumberTargetLeft;
+		final int   tickNumberTargetRight;
+		final int   numberOfTicksToMove;
+		double      max;
+		double      error;
+		PowerVector steer;
+		PowerVector leftPowerVector;
+		PowerVector rightPowerVector;
 
 		// Ensure that the opmode is still active
 		if (opMode.opModeIsActive()) {
@@ -272,8 +274,8 @@ public class AarreDriveMotors {
 			tickNumberTargetLeft = leftMotor.getCurrentTickNumber() + numberOfTicksToMove;
 			tickNumberTargetRight = rightMotor.getCurrentTickNumber() + numberOfTicksToMove;
 
-			int                    powerDirection      = (int) Math.signum(inchesTravelDistanceAndDirection);
-			final AarrePowerVector powerVectorAdjusted = new AarrePowerVector(powerMagnitude, powerDirection);
+			int               powerDirection      = (int) Math.signum(inchesTravelDistanceAndDirection);
+			final PowerVector powerVectorAdjusted = new PowerVector(powerMagnitude, powerDirection);
 
 			// TODO: Need to write a function to determine when to stop this loop
 			boolean continueLoop = false;
@@ -314,7 +316,7 @@ public class AarreDriveMotors {
 			}
 
 			// Stop all motion;
-			this.rampPowerTo(new AarrePowerVector(0.0));
+			this.rampPowerTo(new PowerVector(0.0));
 
 			// Turn off RUN_TO_POSITION
 			leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -335,7 +337,7 @@ public class AarreDriveMotors {
 	 * @param holdTime
 	 * 		Length of time (in seconds) to hold the specified heading.
 	 */
-	public void gyroHold(final AarrePowerVector powerVector, final double angle, final double holdTime) throws
+	public void gyroHold(final PowerVector powerVector, final double angle, final double holdTime) throws
 			NoSuchMethodException {
 
 		final ElapsedTime holdTimer = new ElapsedTime();
@@ -349,8 +351,8 @@ public class AarreDriveMotors {
 		}
 
 		// Stop all motion;
-		leftMotor.rampToPower(new AarrePowerVector(0.0));
-		rightMotor.rampToPower(new AarrePowerVector(0.0));
+		leftMotor.rampToPower(new PowerVector(0.0));
+		rightMotor.rampToPower(new PowerVector(0.0));
 	}
 
 	/**
@@ -364,7 +366,7 @@ public class AarreDriveMotors {
 	 * 		forward.
 	 * 		If a relative angle is required, add/subtract from current heading.
 	 */
-	public void gyroTurn(final AarrePowerVector powerVectorRequested, final double angle) throws
+	public void gyroTurn(final PowerVector powerVectorRequested, final double angle) throws
 			NoSuchMethodException {
 
 		// keep looping while we are still active, and not on heading.
@@ -389,13 +391,14 @@ public class AarreDriveMotors {
 	 * @return {@code true} if the angular error is less than the heading threshold (i.e., the robot is on the right
 	 * 		heading). {@code false} otherwise.
 	 */
-	boolean isOnHeading(final AarrePowerVector powerVector, final double angle, final double proportionalGainCoefficient) throws NoSuchMethodException {
-		final double           error;
-		final AarrePowerVector steer;
+	boolean isOnHeading(final PowerVector powerVector, final double angle, final double proportionalGainCoefficient)
+			throws NoSuchMethodException {
+		final double      error;
+		final PowerVector steer;
 
-		boolean                onTarget = false;
-		final AarrePowerVector leftPowerVector;
-		final AarrePowerVector rightPowerVector;
+		boolean           onTarget = false;
+		final PowerVector leftPowerVector;
+		final PowerVector rightPowerVector;
 
 		// determine turn power based on +/- error
 		error = getError(angle);
@@ -408,7 +411,7 @@ public class AarreDriveMotors {
 		} else {
 			steer = getSteer(error, proportionalGainCoefficient);
 			rightPowerVector = powerVector.multiplyBy(steer);
-			leftPowerVector = new AarrePowerVector(rightPowerVector);
+			leftPowerVector = new PowerVector(rightPowerVector);
 			leftPowerVector.reverseDirection();
 		}
 
@@ -427,7 +430,7 @@ public class AarreDriveMotors {
 	/**
 	 * Ramp the motors to the same power level using default parameters
 	 */
-	public void rampPowerTo(AarrePowerVector power) throws NoSuchMethodException {
+	public void rampPowerTo(PowerVector power) throws NoSuchMethodException {
 		rampPowerTo(power, power);
 
 	}
@@ -454,29 +457,30 @@ public class AarreDriveMotors {
 	 * 		If the actual motor power is at least this close to the requested motor power, then we stop incrementing
 	 * 		the	power.
 	 */
-	public void rampPowerTo(final AarrePowerVector powerVectorRequestedLeft, final AarrePowerVector powerVectorRequestedRight) throws NoSuchMethodException {
+	public void rampPowerTo(final PowerVector powerVectorRequestedLeft, final PowerVector powerVectorRequestedRight)
+			throws NoSuchMethodException {
 
-		log.entering(getClass().getCanonicalName(), getClass().getMethod("rampPowerTo", AarrePowerVector.class,
-				AarrePowerVector.class).getName());
+		log.entering(getClass().getCanonicalName(), getClass().getMethod("rampPowerTo", PowerVector.class, PowerVector
+				.class).getName());
 
-		AarrePowerMagnitude powerMagnitudeTolerance = getPowerMagnitudeTolerance();
+		PowerMagnitude powerMagnitudeTolerance = getPowerMagnitudeTolerance();
 
-		AarrePowerVector powerVectorCurrentLeft;
-		AarrePowerVector powerVectorCurrentRight;
+		PowerVector powerVectorCurrentLeft;
+		PowerVector powerVectorCurrentRight;
 
-		AarrePowerVector powerDeltaLeftVector;
-		AarrePowerVector powerDeltaRightVector;
+		PowerVector powerDeltaLeftVector;
+		PowerVector powerDeltaRightVector;
 
-		AarrePowerMagnitude powerDeltaLeftMagnitude;
-		AarrePowerMagnitude powerDeltaRightMagnitude;
+		PowerMagnitude powerDeltaLeftMagnitude;
+		PowerMagnitude powerDeltaRightMagnitude;
 
-		double              greatestPowerDeltaDouble;
-		AarrePowerMagnitude greatestPowerDeltaMagnitude;
+		double         greatestPowerDeltaDouble;
+		PowerMagnitude greatestPowerDeltaMagnitude;
 
-		AarrePowerVector powerVectorNewLeft;
-		AarrePowerVector powerVectorNewRight;
+		PowerVector powerVectorNewLeft;
+		PowerVector powerVectorNewRight;
 
-		greatestPowerDeltaMagnitude = new AarrePowerMagnitude(1.0);
+		greatestPowerDeltaMagnitude = new PowerMagnitude(1.0);
 
 		while ((greatestPowerDeltaMagnitude.isGreaterThan(powerMagnitudeTolerance)) && opMode.opModeIsActive()) {
 
@@ -495,7 +499,7 @@ public class AarreDriveMotors {
 			greatestPowerDeltaDouble = Math.max(powerDeltaLeftMagnitude.doubleValue(), powerDeltaRightMagnitude
 					.doubleValue
 					());
-			greatestPowerDeltaMagnitude = new AarrePowerMagnitude(greatestPowerDeltaDouble);
+			greatestPowerDeltaMagnitude = new PowerMagnitude(greatestPowerDeltaDouble);
 
 			leftMotor.setPowerVector(powerVectorNewLeft);
 			rightMotor.setPowerVector(powerVectorNewRight);
@@ -504,7 +508,7 @@ public class AarreDriveMotors {
 
 		}
 
-		log.exiting(getClass().getName(), getClass().getMethod("rampPowerTo", AarrePowerVector.class, AarrePowerVector
+		log.exiting(getClass().getName(), getClass().getMethod("rampPowerTo", PowerVector.class, PowerVector
 				.class).getName());
 
 
@@ -512,11 +516,11 @@ public class AarreDriveMotors {
 
 
 	public void setPowerIncrement(double increment) {
-		AarrePowerMagnitude powerMagnitudeIncrement = new AarrePowerMagnitude(increment);
+		PowerMagnitude powerMagnitudeIncrement = new PowerMagnitude(increment);
 		setPowerIncrement(powerMagnitudeIncrement);
 	}
 
-	public void setPowerIncrement(AarrePowerMagnitude powerIncrementAbsolute) {
+	public void setPowerIncrement(PowerMagnitude powerIncrementAbsolute) {
 		this.powerIncrementAbsolute = powerIncrementAbsolute;
 	}
 
@@ -524,7 +528,7 @@ public class AarreDriveMotors {
 		this.cycleLengthInMilliseconds = cycleLengthInMilliseconds;
 	}
 
-	public void setPowerMagnitudeTolerance(AarrePowerMagnitude powerMagnitudeTolerance) {
+	public void setPowerMagnitudeTolerance(PowerMagnitude powerMagnitudeTolerance) {
 		this.powerMagnitudeTolerance = powerMagnitudeTolerance;
 	}
 

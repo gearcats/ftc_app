@@ -1,22 +1,22 @@
 package org.firstinspires.ftc.teamcode.aarre.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreDriveMotor;
+import org.firstinspires.ftc.teamcode.aarre.src.DriveMotor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
 
-class AarreDriveMotorUnitTests extends LinearOpMode {
+class DriveMotorUnitTests extends LinearOpMode {
 
-	AarreDriveMotor motor;
+	DriveMotor motor;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@BeforeEach
 	void setUp() {
-		motor = new AarreDriveMotor(this, "left");
+		motor = new DriveMotor(this, "left");
 	}
 
 	@AfterEach

@@ -7,7 +7,7 @@ import java.util.logging.Logger;
  * them off-bot.
  */
 
-public class AarreVuforia {
+public class Vuforia {
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 }

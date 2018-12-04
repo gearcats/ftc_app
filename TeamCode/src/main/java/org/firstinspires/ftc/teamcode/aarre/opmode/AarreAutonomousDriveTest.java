@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.aarre.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerMagnitude;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreRobot;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreTelemetry;
+import org.firstinspires.ftc.teamcode.aarre.src.PowerMagnitude;
+import org.firstinspires.ftc.teamcode.aarre.src.Robot;
+import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
 
 import java.util.logging.Logger;
 
@@ -18,8 +18,8 @@ import java.util.logging.Logger;
 @Disabled
 public class AarreAutonomousDriveTest extends LinearOpMode {
 
-	private AarreTelemetry betterTelemetry;
-	private AarreRobot     robot;
+	private Telemetry betterTelemetry;
+	private Robot     robot;
 
 	private final Logger log = Logger.getLogger(this.getClass().getName());
 
@@ -42,7 +42,7 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 		if (telemetry == null) {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
-		betterTelemetry = new AarreTelemetry(telemetry);
+		betterTelemetry = new Telemetry(telemetry);
 
 		// 'hardwareMap comes from FTC....
 		// It is only available in runOpMode
@@ -50,17 +50,17 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 		if (hardwareMap == null) {
 			throw new AssertionError("Unexpected null object: hardwareMap");
 		}
-		robot = new AarreRobot(this);
+		robot = new Robot(this);
 
 		betterTelemetry.log("Initializing robot");
 
 		// Wait for the driver to press PLAY
 		waitForStart();
 
-		final AarrePowerMagnitude driveSpeed = new AarrePowerMagnitude(0.5);
-		final AarrePowerMagnitude           turnSpeed  = new AarrePowerMagnitude(0.5);
-		final double           inches     = 12.0;
-		final double           timeout    = 5.0;
+		final PowerMagnitude driveSpeed = new PowerMagnitude(0.5);
+		final PowerMagnitude turnSpeed  = new PowerMagnitude(0.5);
+		final double         inches     = 12.0;
+		final double         timeout    = 5.0;
 
 		try {
 			robot.drive(driveSpeed, inches, inches, timeout);

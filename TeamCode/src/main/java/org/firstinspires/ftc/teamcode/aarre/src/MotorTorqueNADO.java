@@ -5,25 +5,25 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-public class AarreMotorTorqueNADO extends AarreMotor implements ConcreteMotorInterface {
+public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 
 	private static final double TORQUENADO_REVOLUTIONS_PER_MINUTE = 100;
 
 	private static final int TORQUENADO_TICKS_PER_REVOLUTION = 1440;
 
-	static AarreMotorTorqueNADO motorTorqueNADO;
+	static MotorTorqueNADO motorTorqueNADO;
 
-	private final  DcMotor        motor;
-	static private AarreTelemetry telemetry;
-	private final  LinearOpMode   opMode;
-	private final  HardwareMap    hardwareMap;
+	private final  DcMotor      motor;
+	static private Telemetry    telemetry;
+	private final  LinearOpMode opMode;
+	private final  HardwareMap  hardwareMap;
 
 
-	public AarreMotorTorqueNADO(LinearOpMode opMode, String motorName) {
+	public MotorTorqueNADO(LinearOpMode opMode, String motorName) {
 
 		this.opMode = opMode;
 
-		telemetry = new AarreTelemetry(opMode.telemetry);
+		telemetry = new Telemetry(opMode.telemetry);
 
 		/*
 		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
@@ -40,9 +40,9 @@ public class AarreMotorTorqueNADO extends AarreMotor implements ConcreteMotorInt
 
 	}
 
-	public static AarreMotorTorqueNADO createAarreMotorTorqueNADO(LinearOpMode opMode, String
+	public static MotorTorqueNADO createAarreMotorTorqueNADO(LinearOpMode opMode, String
 			motorName) {
-		motorTorqueNADO = new AarreMotorTorqueNADO(opMode, motorName);
+		motorTorqueNADO = new MotorTorqueNADO(opMode, motorName);
 		return motorTorqueNADO;
 	}
 
@@ -68,7 +68,7 @@ public class AarreMotorTorqueNADO extends AarreMotor implements ConcreteMotorInt
 		return TORQUENADO_REVOLUTIONS_PER_MINUTE;
 	}
 
-	public double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude) {
+	public double getRevolutionsPerMinute(PowerMagnitude powerMagnitude) {
 		return getRevolutionsPerMinute() * powerMagnitude.doubleValue();
 	}
 
@@ -76,7 +76,7 @@ public class AarreMotorTorqueNADO extends AarreMotor implements ConcreteMotorInt
 		return TORQUENADO_TICKS_PER_REVOLUTION;
 	}
 
-	public void setPowerVector(AarrePowerVector targetVector) {
+	public void setPowerVector(PowerVector targetVector) {
 		motor.setPower(targetVector.doubleValue());
 	}
 

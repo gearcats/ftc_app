@@ -7,13 +7,13 @@ import java.util.logging.Logger;
  * <p>
  * Not all operations are supported.
  */
-public class AarreNonNegativeInteger {
+public class NonNegativeInteger {
 
 	private Integer value;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
-	public AarreNonNegativeInteger(int value) {
+	public NonNegativeInteger(int value) {
 		if (value < 0) {
 			throw new IllegalArgumentException("Value must be non-negative");
 		}

@@ -39,7 +39,7 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 /**
- * {@link AarreIMU} gives a short demo on how to use the BNO055 Inertial Motion Unit (IMU) from
+ * {@link IMU} gives a short demo on how to use the BNO055 Inertial Motion Unit (IMU) from
  * AdaFruit.
  * <p>
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
@@ -47,11 +47,11 @@ import java.util.logging.Logger;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-public class AarreIMU {
+public class IMU {
 
-	HardwareMap    hardwareMap;
-	LinearOpMode   opMode;
-	AarreTelemetry telemetry;
+	HardwareMap  hardwareMap;
+	LinearOpMode opMode;
+	Telemetry    telemetry;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
@@ -62,11 +62,11 @@ public class AarreIMU {
 	Orientation  angles;
 	Acceleration gravity;
 
-	public AarreIMU(LinearOpMode opMode) {
+	public IMU(LinearOpMode opMode) {
 
 		this.opMode = opMode;
 
-		telemetry = new AarreTelemetry(opMode.telemetry);
+		telemetry = new Telemetry(opMode.telemetry);
 
 		/*
 		  Set up the parameters with which we will use our IMU. Note that integration

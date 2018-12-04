@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreRobot;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreTelemetry;
+import org.firstinspires.ftc.teamcode.aarre.src.Robot;
+import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @Autonomous(name = "Aarre Robot Unit Tests", group = "Aarre")
 @Disabled
-public class AarreRobotUnitTests extends LinearOpMode {
+public class RobotUnitTests extends LinearOpMode {
 
 	/**
 	 * Test AarreRobot
@@ -28,7 +28,7 @@ public class AarreRobotUnitTests extends LinearOpMode {
 	 * telemetry
 	 */
 
-	AarreRobot robot;
+	Robot robot;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
@@ -36,7 +36,7 @@ public class AarreRobotUnitTests extends LinearOpMode {
 	final void testConstructor() {
 
 		try {
-			robot = new AarreRobot(this);
+			robot = new Robot(this);
 		} catch (AssertionError e) {
 			//
 		}
@@ -46,9 +46,9 @@ public class AarreRobotUnitTests extends LinearOpMode {
 	@Test
 	final void testTelemetryExists() {
 
+		assertNotNull(this.telemetry);
+		Telemetry telemetry = new Telemetry(this.telemetry);
 		assertNotNull(telemetry);
-		AarreTelemetry aarreTelemetry = new AarreTelemetry(telemetry);
-		assertNotNull(aarreTelemetry);
 
 	}
 

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.aarre.test;
 
-import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerVector;
+import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,56 +9,56 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class AarrePowerVectorUnitTests {
+class PowerVectorUnitTests {
 
-	private AarrePowerVector aarrePowerVector;
+	private PowerVector powerVector;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Test
 	final void testAarrePowerVector01() {
-		aarrePowerVector = new AarrePowerVector();
+		powerVector = new PowerVector();
 	}
 
 	@Test
 	final void testAarrePowerVector02() {
-		aarrePowerVector = new AarrePowerVector(0);
-		double result = aarrePowerVector.doubleValue();
+		powerVector = new PowerVector(0);
+		double result = powerVector.doubleValue();
 		assertEquals(0.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector03() {
-		aarrePowerVector = new AarrePowerVector(1);
-		double result = aarrePowerVector.doubleValue();
+		powerVector = new PowerVector(1);
+		double result = powerVector.doubleValue();
 		assertEquals(1.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector04() {
-		aarrePowerVector = new AarrePowerVector(-1);
-		double result = aarrePowerVector.doubleValue();
+		powerVector = new PowerVector(-1);
+		double result = powerVector.doubleValue();
 		assertEquals(-1.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector05() {
-		aarrePowerVector = new AarrePowerVector(0.0);
-		double result = aarrePowerVector.doubleValue();
+		powerVector = new PowerVector(0.0);
+		double result = powerVector.doubleValue();
 		assertEquals(0.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector06() {
-		aarrePowerVector = new AarrePowerVector(1.0);
-		double result = aarrePowerVector.doubleValue();
+		powerVector = new PowerVector(1.0);
+		double result = powerVector.doubleValue();
 		assertEquals(1.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector07() {
-		aarrePowerVector = new AarrePowerVector(-1.0);
-		double result = aarrePowerVector.doubleValue();
+		powerVector = new PowerVector(-1.0);
+		double result = powerVector.doubleValue();
 		assertEquals(-1.0, result);
 	}
 
@@ -67,7 +67,7 @@ class AarrePowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector08() {
-		assertThrows(IllegalArgumentException.class, () -> aarrePowerVector = new AarrePowerVector
+		assertThrows(IllegalArgumentException.class, () -> powerVector = new PowerVector
 				(2));
 
 	}
@@ -77,7 +77,7 @@ class AarrePowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector09() {
-		assertThrows(IllegalArgumentException.class, () -> aarrePowerVector = new AarrePowerVector(-2));
+		assertThrows(IllegalArgumentException.class, () -> powerVector = new PowerVector(-2));
 
 	}
 
@@ -87,7 +87,7 @@ class AarrePowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector10() {
-		assertThrows(IllegalArgumentException.class, () -> aarrePowerVector = new AarrePowerVector
+		assertThrows(IllegalArgumentException.class, () -> powerVector = new PowerVector
 				(1.0001));
 
 	}
@@ -97,7 +97,7 @@ class AarrePowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector11() {
-		assertThrows(IllegalArgumentException.class, () -> aarrePowerVector = new AarrePowerVector(-1.0001));
+		assertThrows(IllegalArgumentException.class, () -> powerVector = new PowerVector(-1.0001));
 
 	}
 
@@ -106,10 +106,10 @@ class AarrePowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector12() {
-		AarrePowerVector aarrePowerVector1 = new AarrePowerVector(0.79);
-		AarrePowerVector aarrePowerVector2 = new AarrePowerVector(0.45);
-		AarrePowerVector aarrePowerVector3 = aarrePowerVector1.subtract(aarrePowerVector2);
-		double           result            = aarrePowerVector3.doubleValue();
+		PowerVector powerVector1 = new PowerVector(0.79);
+		PowerVector powerVector2 = new PowerVector(0.45);
+		PowerVector powerVector3 = powerVector1.subtract(powerVector2);
+		double      result       = powerVector3.doubleValue();
 		assertEquals(0.34, result);
 	}
 

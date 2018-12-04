@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
  * (e.g., number of ticks per
  * revolution), they need separate unit tests. Their tests should both implement this interface, though. Motor-related
  * tests whose results do not depend on the specific kind of revHDCoreHexMotor are declared in {@link
- * AarreMotorUnitTestsInterface}.
+ * MotorUnitTestsInterface}.
  */
-interface AarreConcreteMotorUnitTestsInterface extends AarreMotorUnitTestsInterface {
+interface ConcreteMotorUnitTestsInterface extends MotorUnitTestsInterface {
 
 
 	@Test

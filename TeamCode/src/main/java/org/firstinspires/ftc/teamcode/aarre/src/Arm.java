@@ -7,17 +7,16 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.logging.Logger;
 
-public class AarreArm {
+public class Arm {
 
-	private static final AarrePowerMagnitude DEFAULT_POWER_MAGNITUDE        = new
-			AarrePowerMagnitude(0.5);
-	private static final double              SECONDS_TO_RUN_DEFAULT         = 1.0;
-	private static final double              SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
+	private static final PowerMagnitude DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(0.5);
+	private static final double         SECONDS_TO_RUN_DEFAULT         = 1.0;
+	private static final double         SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
 
-	private AarreMotor     motor;
-	private AarreTelemetry telemetry;
-	private HardwareMap    hardwareMap;
-	private LinearOpMode   opMode;
+	private Motor        motor;
+	private Telemetry    telemetry;
+	private HardwareMap  hardwareMap;
+	private LinearOpMode opMode;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
@@ -26,7 +25,7 @@ public class AarreArm {
 	/**
 	 * This empty constructor is useful for testing.
 	 */
-	public AarreArm() {
+	public Arm() {
 
 	}
 
@@ -40,11 +39,11 @@ public class AarreArm {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with the
 	 */
-	public AarreArm(final LinearOpMode opMode, final String nameOfArmMotor) {
+	public Arm(final LinearOpMode opMode, final String nameOfArmMotor) {
 
 		this.opMode = opMode;
 
-		this.telemetry = new AarreTelemetry(opMode.telemetry);
+		this.telemetry = new Telemetry(opMode.telemetry);
 
 		/*
 		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
@@ -56,10 +55,10 @@ public class AarreArm {
 			motor = null;
 		}
 		else {
-			motor = AarreMotorRevHDCoreHex.createAarreMotorRevHDCoreHex(opMode, nameOfArmMotor);
+			motor = MotorRevHDCoreHex.createAarreMotorRevHDCoreHex(opMode, nameOfArmMotor);
 		}
 
-		motor.rampToPower(new AarrePowerVector(0.0));
+		motor.rampToPower(new PowerVector(0.0));
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises arm
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -74,8 +73,8 @@ public class AarreArm {
 	}
 
 	private void lowerByRamp() throws NoSuchMethodException {
-		AarrePowerVector     powerVector           = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE, -1);
-		AarrePositiveInteger numberOfTicksToRotate = new AarrePositiveInteger(120); // TODO: Eliminate magic #
+		PowerVector     powerVector           = new PowerVector(DEFAULT_POWER_MAGNITUDE, -1);
+		PositiveInteger numberOfTicksToRotate = new PositiveInteger(120); // TODO: Eliminate magic #
 		motor.rampToEncoderTicks(powerVector, numberOfTicksToRotate, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 
@@ -87,9 +86,8 @@ public class AarreArm {
 	}
 
 	private void raiseByRamp() throws NoSuchMethodException {
-		AarrePowerVector powerVector = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE,
-		                                                    AarrePowerVector.FORWARD);
-		AarrePositiveInteger numberOfTicksToRotate = new AarrePositiveInteger(120); // TODO: Eliminate magic #
+		PowerVector powerVector = new PowerVector(DEFAULT_POWER_MAGNITUDE, PowerVector.FORWARD);
+		PositiveInteger numberOfTicksToRotate = new PositiveInteger(120); // TODO: Eliminate magic #
 		motor.rampToEncoderTicks(powerVector, numberOfTicksToRotate, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 

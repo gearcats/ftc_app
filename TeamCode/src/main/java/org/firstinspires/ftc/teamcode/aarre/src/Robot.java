@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.aarre.src;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.aarre.opmode.AarreAutonomous;
 import org.firstinspires.ftc.teamcode.aarre.opmode.AarreAutonomousReady;
 
@@ -19,9 +18,9 @@ import java.util.logging.*;
  * <p>
  * This is NOT an OpMode itself.
  */
-public class AarreRobot {
+public class Robot {
 
-	private final AarreTelemetry telemetry;
+	private final Telemetry telemetry;
 
 	/**
 	 * These properties are package-private so methods of other classes in this package can use
@@ -31,18 +30,18 @@ public class AarreRobot {
 	 */
 
 
-	AarreArm         arm;
-	AarreDriveMotors driveMotors;
-	AarreIMU         imu;
-	AarreRiser       riser;
-	AarreServo       hookServo;
-	CRServo          scoopServo;
-	HardwareMap      hardwareMap;
+	Arm         arm;
+	DriveMotors driveMotors;
+	IMU         imu;
+	Riser       riser;
+	Servo       hookServo;
+	CRServo     scoopServo;
+	HardwareMap hardwareMap;
 
 	static Logger log;
 
 	static {
-		log = Logger.getLogger(AarreRobot.class.getName());
+		log = Logger.getLogger(Robot.class.getName());
 		log.setUseParentHandlers(false);
 		ConsoleHandler handler = new ConsoleHandler();
 		handler.setLevel(Level.ALL);
@@ -69,9 +68,9 @@ public class AarreRobot {
 	 * @param opMode
 	 * 		The FTC opMode inside which this robot is running.
 	 */
-	public AarreRobot(final LinearOpMode opMode) {
+	public Robot(final LinearOpMode opMode) {
 
-		telemetry = new AarreTelemetry(opMode.telemetry);
+		telemetry = new Telemetry(opMode.telemetry);
 
 		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {
@@ -82,18 +81,18 @@ public class AarreRobot {
 		// must correspond to the names assigned in the robot configuration
 		// in the FTC Robot Controller app on the phone
 
-		driveMotors = new AarreDriveMotors(opMode);
+		driveMotors = new DriveMotors(opMode);
 
-		arm = new AarreArm(opMode, "arm");
-		riser = new AarreRiser(hardwareMap, "riser", telemetry, opMode);
+		arm = new Arm(opMode, "arm");
+		riser = new Riser(hardwareMap, "riser", telemetry, opMode);
 
 		// Define the servos
 
-		hookServo = new AarreServo(hardwareMap, "hook", telemetry, opMode);
+		hookServo = new Servo(hardwareMap, "hook", telemetry, opMode);
 
 		telemetry.log("Initializing hook");
 
-		hookServo.setDirection(Servo.Direction.FORWARD);
+		hookServo.setDirection(com.qualcomm.robotcore.hardware.Servo.Direction.FORWARD);
 
 		// With the hook up, the servo is at 0 degrees.
 		// With the hook down, the servo is at about 100 degrees.
@@ -107,7 +106,7 @@ public class AarreRobot {
 		/*
 		  Initialize the IMU.
 		 */
-		imu = new AarreIMU(opMode);
+		imu = new IMU(opMode);
 
 		// TODO: Initialize scoop servo
 		scoopServo = hardwareMap.get(CRServo.class, "scoop");
@@ -124,7 +123,8 @@ public class AarreRobot {
 	 *                      the right wheel in reverse.
 	 * @param secondsTimeout Stop after this many seconds even if move not fully executed.
 	 */
-	public void drive(AarrePowerMagnitude powerMagnitude, double leftInches, double rightInches, double secondsTimeout) throws NoSuchMethodException {
+	public void drive(PowerMagnitude powerMagnitude, double leftInches, double rightInches, double secondsTimeout)
+			throws NoSuchMethodException {
 
 		log.fine(String.format("drive: powerMagnitude: %f", powerMagnitude.doubleValue()));
 		log.fine(String.format("drive: leftInches: %f", leftInches));
@@ -137,22 +137,22 @@ public class AarreRobot {
 		return hardwareMap;
 	}
 
-	public AarreTelemetry getTelemetry() {
+	public Telemetry getTelemetry() {
 		return (telemetry);
 	}
 
-	public void gyroDrive(AarrePowerMagnitude powerMagnitude, double inchesDirectionAndDistance,
+	public void gyroDrive(PowerMagnitude powerMagnitude, double inchesDirectionAndDistance,
 	                      double secondsTime) throws NoSuchMethodException {
 		driveMotors.gyroDrive(powerMagnitude
 				, inchesDirectionAndDistance, secondsTime);
 	}
 
-	public void gyroHold(AarrePowerVector powerVector, double degreesHeading, double secondsTime) throws
+	public void gyroHold(PowerVector powerVector, double degreesHeading, double secondsTime) throws
 			NoSuchMethodException {
 		driveMotors.gyroHold(powerVector, degreesHeading, secondsTime);
 	}
 
-	public void gyroTurn(final AarrePowerVector powerVector, final double angle) throws NoSuchMethodException {
+	public void gyroTurn(final PowerVector powerVector, final double angle) throws NoSuchMethodException {
 		driveMotors.gyroTurn(powerVector, angle);
 	}
 

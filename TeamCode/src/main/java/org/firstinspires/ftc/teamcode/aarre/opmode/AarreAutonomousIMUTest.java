@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.aarre.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreRobot;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreTelemetry;
+import org.firstinspires.ftc.teamcode.aarre.src.Robot;
+import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
 
 import java.util.logging.Logger;
 
@@ -18,8 +18,8 @@ import java.util.logging.Logger;
 @Disabled
 public class AarreAutonomousIMUTest extends LinearOpMode {
 
-	AarreRobot     robot;
-	AarreTelemetry betterTelemetry;
+	Robot     robot;
+	Telemetry betterTelemetry;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
@@ -32,7 +32,7 @@ public class AarreAutonomousIMUTest extends LinearOpMode {
 		if (telemetry == null) {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
-		betterTelemetry = new AarreTelemetry(telemetry);
+		betterTelemetry = new Telemetry(telemetry);
 
 		// 'hardwareMap comes from FTC....
 		// It is only available in runOpMode
@@ -40,7 +40,7 @@ public class AarreAutonomousIMUTest extends LinearOpMode {
 		if (hardwareMap == null) {
 			throw new AssertionError("Unexpected null object: hardwareMap");
 		}
-		robot = new AarreRobot(this);
+		robot = new Robot(this);
 
 		betterTelemetry.log("Initializing robot");
 

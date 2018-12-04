@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-interface AarreMotorInterface {
+interface MotorInterface {
 
 	HardwareMap getHardwareMap();
 
@@ -30,17 +30,17 @@ interface AarreMotorInterface {
 
 	double getRevolutionsPerMinute();
 
-	double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude);
+	double getRevolutionsPerMinute(PowerMagnitude powerMagnitude);
 
 	double getTicksPerMinute();
 
-	double getTicksPerMinute(AarrePowerMagnitude powerMagnitude);
+	double getTicksPerMinute(PowerMagnitude powerMagnitude);
 
 	double getTicksPerRevolution();
 
 	double getTicksPerSecond();
 
-	double getTicksPerSecond(AarrePowerMagnitude powerMagnitude);
+	double getTicksPerSecond(PowerMagnitude powerMagnitude);
 
 	/**
 	 * @return The number of ticks in a millisecond at maximum power.
@@ -54,7 +54,7 @@ interface AarreMotorInterface {
 	 *
 	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude
 	 */
-	double getTicksPerMillisecond(AarrePowerMagnitude powerMagnitude);
+	double getTicksPerMillisecond(PowerMagnitude powerMagnitude);
 
 	/**
 	 * @return The number of ticks in a power change cycle at maximum power
@@ -69,18 +69,18 @@ interface AarreMotorInterface {
 	 *
 	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude.
 	 */
-	double getTicksPerCycle(AarrePowerMagnitude powerMagnitude);
+	double getTicksPerCycle(PowerMagnitude powerMagnitude);
 
 	int getCurrentTickNumber();
 
-	int getNumberOfCycles(int ticksToMove, AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested);
+	int getNumberOfCycles(int ticksToMove, PowerVector powerVectorCurrent, PowerVector powerVectorRequested);
 
 	/**
 	 * Get the current proportion of power
 	 *
 	 * @return The proportion of power at which the motor is operating. A value in the range [-1, 1].
 	 */
-	abstract AarrePowerVector getPowerVectorCurrent();
+	abstract PowerVector getPowerVectorCurrent();
 
 	/**
 	 * Get the proportion of power to which to change the motor when ramping power up or down.
@@ -96,7 +96,7 @@ interface AarreMotorInterface {
 	 *
 	 * @return The new proportion of power to apply to the motor.
 	 */
-	AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent, AarrePowerVector powerVectorRequested);
+	PowerVector getPowerVectorNew(PowerVector powerVectorCurrent, PowerVector powerVectorRequested);
 
 	double getPower();
 
@@ -130,8 +130,8 @@ interface AarreMotorInterface {
 	 *
 	 * @return
 	 */
-	double getTickNumberToStartSlowDown(int tickNumberAtStartOfPeriod, AarrePositiveInteger numberOfTicksInPeriod,
-	                                    AarrePowerVector powerAtStartOfPeriod, AarrePowerVector powerAtEndOfPeriod);
+	double getTickNumberToStartSlowDown(int tickNumberAtStartOfPeriod, PositiveInteger numberOfTicksInPeriod,
+	                                    PowerVector powerAtStartOfPeriod, PowerVector powerAtEndOfPeriod);
 
 	/**
 	 * Determine whether to stop speeding up.
@@ -147,7 +147,8 @@ interface AarreMotorInterface {
 	 *
 	 * @return True if we should stop speeding up; false otherwise.
 	 */
-	boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double secondsRunning, AarreNonNegativeInteger ticksMoved) throws NoSuchMethodException;
+	boolean isSpeedUpToEncoderTicksDone(PositiveInteger ticksMaximum, double secondsTimeout, double secondsRunning,
+	                                    NonNegativeInteger ticksMoved) throws NoSuchMethodException;
 
 	/**
 	 * Determine whether a slowdown should be running.
@@ -170,13 +171,13 @@ interface AarreMotorInterface {
 	 *
 	 * @return True if changing the power should start or continue. False otherwise.
 	 */
-	boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, AarrePositiveInteger
-			numberOfTicksInPeriod, AarrePowerVector powerAtStart, AarrePowerVector powerAtEnd);
+	boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, PositiveInteger
+			numberOfTicksInPeriod, PowerVector powerAtStart, PowerVector powerAtEnd);
 
-	void rampToPower(AarrePowerVector powerVectorRequested);
+	void rampToPower(PowerVector powerVectorRequested);
 
-	void rampToPower(AarrePowerVector powerVectorRequested, AarrePowerMagnitude powerIncrementMagnitude, int
-			millisecondsCycleLength, AarrePowerMagnitude powerToleranceMagnitude, double secondsTimeout);
+	void rampToPower(PowerVector powerVectorRequested, PowerMagnitude powerIncrementMagnitude, int
+			millisecondsCycleLength, PowerMagnitude powerToleranceMagnitude, double secondsTimeout);
 
 	/**
 	 * Set the magnitude by which the motor power will increment when ramping power up or down.
@@ -184,14 +185,14 @@ interface AarreMotorInterface {
 	 * @param powerMagnitude
 	 * 		The magnitude by which the motor should increment when ramping power up or down.
 	 */
-	void setPowerMagnitudeIncrementPerCycle(AarrePowerMagnitude powerMagnitude);
+	void setPowerMagnitudeIncrementPerCycle(PowerMagnitude powerMagnitude);
 
 	/**
 	 * Get the magnitude by which the motor power will increment when ramping up or down.
 	 *
 	 * @return The magnitude by which the motor power will increment when ramping up or down.
 	 */
-	AarrePowerMagnitude getPowerMagnitudeIncrementPerCycle();
+	PowerMagnitude getPowerMagnitudeIncrementPerCycle();
 
 	/**
 	 * Set the magnitude within which we will consider the requested motor power to have been reached.
@@ -199,7 +200,7 @@ interface AarreMotorInterface {
 	 * @param powerMagnitude
 	 * 		The magnitude within which we will consider the requested motor power to have been reached.
 	 */
-	void setPowerMagnitudeTolerance(AarrePowerMagnitude powerMagnitude);
+	void setPowerMagnitudeTolerance(PowerMagnitude powerMagnitude);
 
 	/**
 	 * Set the power level of the motor without ramping.
@@ -212,7 +213,7 @@ interface AarreMotorInterface {
 	 * @param powerVector
 	 * 		The new power level of the motor, a value in the interval [-1.0, 1.0]
 	 */
-	void setPowerVector(AarrePowerVector powerVector);
+	void setPowerVector(PowerVector powerVector);
 
 	void setStallDetectionToleranceInTicks(int ticks);
 

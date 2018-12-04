@@ -24,7 +24,7 @@ import java.util.logging.*;
  * Stall detection and telemetry code adapted from
  * <a href="https://github.com/TullyNYGuy/FTC8863_ftc_app/blob/master/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Lib/FTCLib/DcMotor8863.java"></a>
  */
-public abstract class AarreMotor implements AarreMotorInterface {
+public abstract class Motor implements MotorInterface {
 
 	private static final int SECONDS_PER_MINUTE = 60;
 
@@ -33,17 +33,17 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	private static final int MILLISECONDS_PER_CYCLE = 50;
 
 	// How much to increment the motor power in each cycle of power ramping (slowing down / speeding up)
-	private static final AarrePowerMagnitude DEFAULT_POWER_INCREMENT_PER_CYCLE = new AarrePowerMagnitude(0.1);
+	private static final PowerMagnitude DEFAULT_POWER_INCREMENT_PER_CYCLE = new PowerMagnitude(0.1);
 
 	// How much tolerance to allow when deciding whether we have reached a requested motor power
-	private static final AarrePowerMagnitude DEFAULT_PROPORTION_POWER_TOLERANCE = new AarrePowerMagnitude(0.01);
+	private static final PowerMagnitude DEFAULT_PROPORTION_POWER_TOLERANCE = new PowerMagnitude(0.01);
 
 	// How long to allow a motor operation to continue before timing out
 	private static final double DEFAULT_SECONDS_TIMEOUT = 5.0;
 
-	private        AarrePowerMagnitude powerMagnitudeIncrementPerCycle = DEFAULT_POWER_INCREMENT_PER_CYCLE;
-	private        AarrePowerMagnitude powerMagnitudeTolerance         = DEFAULT_PROPORTION_POWER_TOLERANCE;
-	private        int                 oldTickNumber                   = 0;
+	private PowerMagnitude powerMagnitudeIncrementPerCycle = DEFAULT_POWER_INCREMENT_PER_CYCLE;
+	private PowerMagnitude powerMagnitudeTolerance         = DEFAULT_PROPORTION_POWER_TOLERANCE;
+	private int            oldTickNumber                   = 0;
 
 	// These are defaults. The user should customize them
 	private int stallTimeLimitInMilliseconds   = 100;
@@ -95,23 +95,23 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 * for off-bot unit testing.
 	 * <p>
 	 */
-	public int getNumberOfCycles(int ticksToMove, AarrePowerVector powerVectorCurrent, AarrePowerVector
+	public int getNumberOfCycles(int ticksToMove, PowerVector powerVectorCurrent, PowerVector
 			powerVectorRequested) {
 
 		// The magnitude of the current and requested power
-		AarrePowerMagnitude powerMagnitudeCurrent   = powerVectorCurrent.getMagnitude();
-		AarrePowerMagnitude powerMagnitudeRequested = powerVectorRequested.getMagnitude();
+		PowerMagnitude powerMagnitudeCurrent   = powerVectorCurrent.getMagnitude();
+		PowerMagnitude powerMagnitudeRequested = powerVectorRequested.getMagnitude();
 
 		// The average number of ticks per cycle during the ramp
-		double              currentMagnitude      = powerMagnitudeCurrent.doubleValue();
-		double              requestedMagnitude    = powerMagnitudeRequested.doubleValue();
-		double              averageMagnitude      = (currentMagnitude + requestedMagnitude) / 2;
-		AarrePowerMagnitude averagePowerMagnitude = new AarrePowerMagnitude(averageMagnitude);
-		double              averageTicksPerCycle  = averageMagnitude * getTicksPerCycle(averagePowerMagnitude);
+		double         currentMagnitude      = powerMagnitudeCurrent.doubleValue();
+		double         requestedMagnitude    = powerMagnitudeRequested.doubleValue();
+		double         averageMagnitude      = (currentMagnitude + requestedMagnitude) / 2;
+		PowerMagnitude averagePowerMagnitude = new PowerMagnitude(averageMagnitude);
+		double         averageTicksPerCycle  = averageMagnitude * getTicksPerCycle(averagePowerMagnitude);
 
 		// The magnitude of the power change over the ramp
-		AarrePowerVector    powerVectorChangeOverRamp    = powerVectorRequested.subtract(powerVectorCurrent);
-		AarrePowerMagnitude powerMagnitudeChangeOverRamp = powerVectorChangeOverRamp.getMagnitude();
+		PowerVector    powerVectorChangeOverRamp    = powerVectorRequested.subtract(powerVectorCurrent);
+		PowerMagnitude powerMagnitudeChangeOverRamp = powerVectorChangeOverRamp.getMagnitude();
 
 		// The number of cycles required to change power as much as requested
 		double numCyclesRequiredToChangePower = powerMagnitudeChangeOverRamp.divideBy
@@ -135,18 +135,18 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	}
 
 
-	public final AarrePowerMagnitude getPowerMagnitudeIncrementPerCycle() {
+	public final PowerMagnitude getPowerMagnitudeIncrementPerCycle() {
 		return this.powerMagnitudeIncrementPerCycle;
 	}
 
-	public AarrePowerVector getPowerVectorCurrent() {
-		return new AarrePowerVector(getMotor().getPower());
+	public PowerVector getPowerVectorCurrent() {
+		return new PowerVector(getMotor().getPower());
 	}
 
-	public final AarrePowerVector getPowerVectorNew(AarrePowerVector powerVectorCurrent, AarrePowerVector
+	public final PowerVector getPowerVectorNew(PowerVector powerVectorCurrent, PowerVector
 			powerVectorRequested) {
 
-		AarrePowerVector powerVectorNew;
+		PowerVector powerVectorNew;
 
 		/*
 		 * Use a double here because the power change can be outside the range of a power vector.
@@ -166,7 +166,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 			powerVectorNew = powerVectorRequested;
 		} else {
 			// Otherwise, give them what they need...
-			AarrePowerVector powerIncrementVector = new AarrePowerVector(getPowerMagnitudeIncrementPerCycle(),
+			PowerVector powerIncrementVector = new PowerVector(getPowerMagnitudeIncrementPerCycle(),
 					powerChangeDirection);
 			powerVectorNew = powerVectorCurrent.add(powerIncrementVector);
 		}
@@ -179,8 +179,8 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		return getMotor().getPower();
 	}
 
-	final public double getTickNumberToStartSlowDown(final int tickNumberAtStartOfPeriod, final AarrePositiveInteger
-			numberOfTicksInPeriod, final AarrePowerVector powerVectorAtStartOfPeriod, final AarrePowerVector
+	final public double getTickNumberToStartSlowDown(final int tickNumberAtStartOfPeriod, final PositiveInteger
+			numberOfTicksInPeriod, final PowerVector powerVectorAtStartOfPeriod, final PowerVector
 			powerVectorAtEndOfPeriod) {
 
 		log.entering(getClass().getCanonicalName(), "getTickNumberToStartSlowDown");
@@ -190,17 +190,17 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		log.finer(String.format("Power vector at start of period: %f", powerVectorAtStartOfPeriod.doubleValue()));
 		log.finer(String.format("Power vector at end of period: %f", powerVectorAtEndOfPeriod.doubleValue()));
 
-		AarrePowerMagnitude powerMagnitudeAtStartOfPeriod = powerVectorAtStartOfPeriod.getMagnitude();
-		AarrePowerMagnitude powerMagnitudeAtEndOfPeriod   = powerVectorAtEndOfPeriod.getMagnitude();
+		PowerMagnitude powerMagnitudeAtStartOfPeriod = powerVectorAtStartOfPeriod.getMagnitude();
+		PowerMagnitude powerMagnitudeAtEndOfPeriod   = powerVectorAtEndOfPeriod.getMagnitude();
 		if (powerMagnitudeAtStartOfPeriod.doubleValue() <= powerMagnitudeAtEndOfPeriod.doubleValue()) {
 			throw new IllegalArgumentException("When slowing down, the absolute value of the " + "power at the start "
 					+ "of the slowdown must be greater " + "than the absolute value of the power at the end " + "of "
 					+ "the " + "slowdown" + ".");
 		}
 
-		AarrePowerVector    powerChangeVector      = powerVectorAtStartOfPeriod.subtract(powerVectorAtEndOfPeriod);
-		AarrePowerMagnitude magnitudeOfPowerChange = powerChangeVector.getMagnitude();
-		int                 powerChangeDirection   = powerChangeVector.getDirection();
+		PowerVector    powerChangeVector      = powerVectorAtStartOfPeriod.subtract(powerVectorAtEndOfPeriod);
+		PowerMagnitude magnitudeOfPowerChange = powerChangeVector.getMagnitude();
+		int            powerChangeDirection   = powerChangeVector.getDirection();
 
 		final double numberOfCyclesInSlowDown = magnitudeOfPowerChange.divideBy(getPowerMagnitudeIncrementPerCycle());
 		final double numberOfTicksInSlowDown  = numberOfCyclesInSlowDown * getTicksPerCycle();
@@ -230,8 +230,8 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	}
 
 
-	public boolean isSpeedUpToEncoderTicksDone(AarrePositiveInteger ticksMaximum, double secondsTimeout, double
-			secondsRunning, AarreNonNegativeInteger ticksMoved) throws NoSuchMethodException {
+	public boolean isSpeedUpToEncoderTicksDone(PositiveInteger ticksMaximum, double secondsTimeout, double
+			secondsRunning, NonNegativeInteger ticksMoved) throws NoSuchMethodException {
 
 		log.entering(this.getClass().getCanonicalName(), "isSpeedUpToEncoderTicksDone");
 
@@ -262,14 +262,13 @@ public abstract class AarreMotor implements AarreMotorInterface {
 			}
 		}
 		log.exiting(this.getClass().getCanonicalName(), this.getClass().getMethod("isSpeedUpToEncoderTicksDone",
-				AarrePositiveInteger.class, double.class, double.class, AarreNonNegativeInteger.class).getName());
+				PositiveInteger.class, double.class, double.class, NonNegativeInteger.class).getName());
 		return valueToReturn;
 	}
 
 
 	public boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfTravel, int tickNumberCurrent,
-	                                               AarrePositiveInteger numberOfTicksToTravel, AarrePowerVector
-			                                               powerAtStartOfTravel, AarrePowerVector powerAtEndOfTravel) {
+	                                               PositiveInteger numberOfTicksToTravel, PowerVector powerAtStartOfTravel, PowerVector powerAtEndOfTravel) {
 
 
 		log.entering(getClass().getCanonicalName(), "isSlowDownToEncoderTicksRunning");
@@ -382,7 +381,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 * @param secondsTimeout
 	 * 		Maximum number of seconds to rotate. Must be non-negative.
 	 */
-	final void rampToEncoderTicks(final AarrePowerVector powerVector, final AarrePositiveInteger ticksToRotate, final
+	final void rampToEncoderTicks(final PowerVector powerVector, final PositiveInteger ticksToRotate, final
 	double secondsTimeout) throws NoSuchMethodException {
 
 		if (secondsTimeout < 0.0) {
@@ -391,18 +390,18 @@ public abstract class AarreMotor implements AarreMotorInterface {
 
 		setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-		double               ticksToSpeedUpDouble = ticksToRotate.doubleValue() / 2.0;
-		int                  ticksToSpeedUpInt    = (int) Math.round(ticksToSpeedUpDouble);
-		AarrePositiveInteger ticksToSpeedUp       = new AarrePositiveInteger(ticksToSpeedUpInt);
+		double          ticksToSpeedUpDouble = ticksToRotate.doubleValue() / 2.0;
+		int             ticksToSpeedUpInt    = (int) Math.round(ticksToSpeedUpDouble);
+		PositiveInteger ticksToSpeedUp       = new PositiveInteger(ticksToSpeedUpInt);
 
-		int                  ticksToSlowDownInt = ticksToRotate.intValue() - ticksToSpeedUp.intValue();
-		AarrePositiveInteger ticksToSlowDown    = new AarrePositiveInteger(ticksToSlowDownInt);
+		int             ticksToSlowDownInt = ticksToRotate.intValue() - ticksToSpeedUp.intValue();
+		PositiveInteger ticksToSlowDown    = new PositiveInteger(ticksToSlowDownInt);
 
 		log.fine(String.format("Target power UP: %f", powerVector.doubleValue()));
 		rampToPower(powerVector, ticksToSpeedUp, secondsTimeout);
 
 		log.fine(String.format("Target power DOWN: %f", 0.0));
-		rampToPower(new AarrePowerVector(0.0), ticksToSlowDown, secondsTimeout);
+		rampToPower(new PowerVector(0.0), ticksToSlowDown, secondsTimeout);
 
 		getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		getMotor().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -418,7 +417,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 *
 	 * @param powerVectorRequested
 	 */
-	public void rampToPower(final AarrePowerVector powerVectorRequested) {
+	public void rampToPower(final PowerVector powerVectorRequested) {
 		rampToPower(powerVectorRequested, DEFAULT_POWER_INCREMENT_PER_CYCLE, MILLISECONDS_PER_CYCLE,
 				DEFAULT_PROPORTION_POWER_TOLERANCE, DEFAULT_SECONDS_TIMEOUT);
 	}
@@ -441,7 +440,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 * 		moves
 	 * 		enough ticks first.
 	 */
-	private void rampToPower(final AarrePowerVector powerVectorRequested, final AarrePositiveInteger ticksToMove,
+	private void rampToPower(final PowerVector powerVectorRequested, final PositiveInteger ticksToMove,
 	                         final double secondsTimeout) throws NoSuchMethodException {
 
 		log.entering(getClass().getCanonicalName(), "rampToPower");
@@ -449,15 +448,15 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		log.finer(String.format("Ticks to move: %d", ticksToMove.intValue()));
 
 		log.finer(String.format("Power vector requested: %f", powerVectorRequested.doubleValue()));
-		AarrePowerMagnitude powerMagnitudeRequested = powerVectorRequested.getMagnitude();
+		PowerMagnitude powerMagnitudeRequested = powerVectorRequested.getMagnitude();
 		log.finer(String.format("Power magnitude requested: %f", powerMagnitudeRequested.doubleValue()));
 
-		AarrePowerVector powerVectorCurrent = this.getPowerVectorCurrent();
+		PowerVector powerVectorCurrent = this.getPowerVectorCurrent();
 		log.finer(String.format("Power vector current: %f", powerVectorCurrent.doubleValue()));
-		AarrePowerMagnitude powerMagnitudeCurrent = powerVectorCurrent.getMagnitude();
+		PowerMagnitude powerMagnitudeCurrent = powerVectorCurrent.getMagnitude();
 		log.finer(String.format("Power magnitude current: %f", powerMagnitudeCurrent.doubleValue()));
 
-		AarrePowerVector powerVectorChange = powerVectorRequested.subtract(powerVectorCurrent);
+		PowerVector powerVectorChange = powerVectorRequested.subtract(powerVectorCurrent);
 		log.finer(String.format("Power vector change: %f", powerVectorChange.doubleValue()));
 
 		if (powerMagnitudeRequested.isGreaterThan(powerMagnitudeCurrent)) {
@@ -483,7 +482,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 * <p>
 	 *
 	 */
-	private void slowDownToPower(final AarrePowerVector powerVectorAtEnd, final AarrePositiveInteger ticksToMove,
+	private void slowDownToPower(final PowerVector powerVectorAtEnd, final PositiveInteger ticksToMove,
 	                             final double secondsTimeout) {
 
 		log.entering(getClass().getCanonicalName(), "slowDownToPower");
@@ -494,8 +493,8 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		int     tickNumberStart;
 		int     tickNumberCurrent;
 
-		AarrePowerVector powerVectorCurrent;
-		AarrePowerVector powerVectorNew;
+		PowerVector powerVectorCurrent;
+		PowerVector powerVectorNew;
 
 		ElapsedTime      runtimeSinceChange;
 		double           millisecondsSinceChange;
@@ -552,11 +551,11 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 * @param ticksToMove
 	 * @param tickNumberStart
 	 */
-	private void waitForSlowDown(AarrePowerVector powerVectorAtEnd, AarrePositiveInteger ticksToMove, int
+	private void waitForSlowDown(PowerVector powerVectorAtEnd, PositiveInteger ticksToMove, int
 			tickNumberStart) {
-		boolean          keepWaiting;
-		int              tickNumberCurrent;
-		AarrePowerVector powerVectorCurrent;
+		boolean     keepWaiting;
+		int         tickNumberCurrent;
+		PowerVector powerVectorCurrent;
 
 		/*
 		 * Wait for the right time to start slowing down
@@ -581,7 +580,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 *     |_/
 	 * </pre>
 	 */
-	private void speedUpToPower(final AarrePowerVector powerVectorRequested, final AarrePositiveInteger ticksToMove,
+	private void speedUpToPower(final PowerVector powerVectorRequested, final PositiveInteger ticksToMove,
 	                            final double secondsTimeout) throws NoSuchMethodException {
 
 		log.entering(getClass().getName(), "speedUpToPower");
@@ -597,20 +596,20 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		int    tickNumberCurrent;
 		int    tickNumberStart;
 
-		AarrePowerVector powerVectorNew;
-		double           millisecondsSinceChange;
+		PowerVector powerVectorNew;
+		double      millisecondsSinceChange;
 
 		tickNumberStart = getCurrentTickNumber();
 		log.fine(String.format("Starting tick number: %d", tickNumberStart));
 
-		AarreNonNegativeInteger ticksMoved = new AarreNonNegativeInteger(0);
+		NonNegativeInteger ticksMoved = new NonNegativeInteger(0);
 
 		runtimeTotal = new ElapsedTime();
 		secondsRunning = runtimeTotal.seconds();
 
 		while (!isSpeedUpToEncoderTicksDone(ticksToMove, secondsTimeout, secondsRunning, ticksMoved)) {
 
-			AarrePowerVector powerVectorCurrent = this.getPowerVectorCurrent();
+			PowerVector powerVectorCurrent = this.getPowerVectorCurrent();
 			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 			setPowerVector(powerVectorNew);
 
@@ -624,7 +623,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 			}
 
 			tickNumberCurrent = getCurrentTickNumber();
-			ticksMoved = new AarreNonNegativeInteger(tickNumberCurrent - tickNumberStart);
+			ticksMoved = new NonNegativeInteger(tickNumberCurrent - tickNumberStart);
 			secondsRunning = runtimeTotal.seconds();
 
 			log.fine(String.format("Seconds elapsed %f", secondsRunning));
@@ -656,8 +655,8 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 * 		the
 	 * 		power.
 	 */
-	public void rampToPower(final AarrePowerVector powerVectorRequested, final AarrePowerMagnitude
-			powerIncrementMagnitude, final int millisecondsCycleLength, final AarrePowerMagnitude
+	public void rampToPower(final PowerVector powerVectorRequested, final PowerMagnitude powerIncrementMagnitude,
+	                        final int millisecondsCycleLength, final PowerMagnitude
 			powerToleranceMagnitude, final double secondsTimeout) {
 
 		log.fine(String.format("Total target power: %f", powerVectorRequested.doubleValue()));
@@ -667,13 +666,13 @@ public abstract class AarreMotor implements AarreMotorInterface {
 			log.fine("Op mode is NOT active");
 		}
 
-		AarrePowerVector    powerVectorCurrent;
-		AarrePowerVector    powerVectorNew;
-		AarrePowerVector    vectorOfLastPowerChange;
-		AarrePowerMagnitude magnitudeOfLastPowerChange;
-		double              millisecondsSinceChange;
+		PowerVector    powerVectorCurrent;
+		PowerVector    powerVectorNew;
+		PowerVector    vectorOfLastPowerChange;
+		PowerMagnitude magnitudeOfLastPowerChange;
+		double         millisecondsSinceChange;
 
-		magnitudeOfLastPowerChange = new AarrePowerMagnitude(1.0);
+		magnitudeOfLastPowerChange = new PowerMagnitude(1.0);
 
 		while ((magnitudeOfLastPowerChange.isGreaterThan(powerToleranceMagnitude)) && getOpMode().opModeIsActive()) {
 
@@ -727,7 +726,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 * 		The operation will time out after this many seconds even if the target number of revolutions has not been
 	 * 		reached.
 	 */
-	final void runByRevolutions(final AarrePowerVector proportionMotorPower, final double targetNumberOfRevolutions,
+	final void runByRevolutions(final PowerVector proportionMotorPower, final double targetNumberOfRevolutions,
 	                            final double secondsTimeout) throws NoSuchMethodException {
 
 		log.entering(this.getClass().getCanonicalName(), "runByRevolutions");
@@ -744,7 +743,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 
 		log.finer(String.format("Number of ticks to run (int): %d", numberOfTicksToRunInt));
 
-		final AarrePositiveInteger numberOfTicksToRun = new AarrePositiveInteger(numberOfTicksToRunInt);
+		final PositiveInteger numberOfTicksToRun = new PositiveInteger(numberOfTicksToRunInt);
 
 		log.finer(String.format("Number of ticks to run (AarrePositiveInteger): %f", numberOfTicksToRun.doubleValue
 				()));
@@ -763,7 +762,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 * @param secondsToRun
 	 * 		Number of seconds for which to run the motor.
 	 */
-	final void runByTime(final AarrePowerVector powerVector, final double secondsToRun) {
+	final void runByTime(final PowerVector powerVector, final double secondsToRun) {
 
 		if (secondsToRun < 0.0) {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
@@ -782,7 +781,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 			secondsRunning = runtime.seconds();
 		}
 
-		rampToPower(new AarrePowerVector(0.0));
+		rampToPower(new PowerVector(0.0));
 		setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 	}
@@ -794,14 +793,14 @@ public abstract class AarreMotor implements AarreMotorInterface {
 	 * @param power
 	 * 		How much power to apply to the motor, in the interval [-1,1].
 	 */
-	void runUntilStalled(final AarrePowerVector power) {
+	void runUntilStalled(final PowerVector power) {
 		timeStalledInMilliseconds = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 		rampToPower(power);
 		while (!(isStalled()) && getOpMode().opModeIsActive()) {
 			log.finest("Not stalled yet...");
 			getOpMode().idle();
 		}
-		rampToPower(new AarrePowerVector(0.0));
+		rampToPower(new PowerVector(0.0));
 	}
 
 	/**
@@ -826,11 +825,11 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		getMotor().setMode(mode);
 	}
 
-	public void setPowerMagnitudeTolerance(AarrePowerMagnitude powerMagnitude) {
+	public void setPowerMagnitudeTolerance(PowerMagnitude powerMagnitude) {
 		powerMagnitudeTolerance = powerMagnitude;
 	}
 
-	public void setPowerMagnitudeIncrementPerCycle(AarrePowerMagnitude powerMagnitude) {
+	public void setPowerMagnitudeIncrementPerCycle(PowerMagnitude powerMagnitude) {
 		powerMagnitudeIncrementPerCycle = powerMagnitude;
 	}
 
@@ -888,7 +887,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		return getTicksPerRevolution() * getRevolutionsPerMinute();
 	}
 
-	public double getTicksPerMinute(AarrePowerMagnitude powerMagnitude) {
+	public double getTicksPerMinute(PowerMagnitude powerMagnitude) {
 		return getTicksPerRevolution() * getRevolutionsPerMinute(powerMagnitude);
 	}
 
@@ -897,7 +896,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		return getTicksPerMinute() / SECONDS_PER_MINUTE;
 	}
 
-	public double getTicksPerSecond(AarrePowerMagnitude powerMagnitude) {
+	public double getTicksPerSecond(PowerMagnitude powerMagnitude) {
 		return getTicksPerMinute(powerMagnitude) / SECONDS_PER_MINUTE;
 	}
 
@@ -905,7 +904,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		return getTicksPerSecond() / MILLISECONDS_PER_SECOND;
 	}
 
-	public double getTicksPerMillisecond(AarrePowerMagnitude powerMagnitude) {
+	public double getTicksPerMillisecond(PowerMagnitude powerMagnitude) {
 		return getTicksPerSecond(powerMagnitude) / MILLISECONDS_PER_SECOND;
 	}
 
@@ -913,7 +912,7 @@ public abstract class AarreMotor implements AarreMotorInterface {
 		return getTicksPerMillisecond() * getMillisecondsPerCycle();
 	}
 
-	public double getTicksPerCycle(AarrePowerMagnitude powerMagnitude) {
+	public double getTicksPerCycle(PowerMagnitude powerMagnitude) {
 		return getTicksPerMillisecond(powerMagnitude) * getMillisecondsPerCycle();
 	}
 

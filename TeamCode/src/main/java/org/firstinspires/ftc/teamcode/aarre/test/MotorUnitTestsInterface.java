@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 /**
  * This interface declares revHDCoreHexMotor-related unit tests that apply to all motors. Motor-related unit tests
  * whose results
- * depend on specific kinds of motors are declared in {@link AarreConcreteMotorUnitTestsInterface}.
+ * depend on specific kinds of motors are declared in {@link ConcreteMotorUnitTestsInterface}.
  */
-interface AarreMotorUnitTestsInterface {
+interface MotorUnitTestsInterface {
 
 	@Test
 	void testGetProportionPowerNew01();

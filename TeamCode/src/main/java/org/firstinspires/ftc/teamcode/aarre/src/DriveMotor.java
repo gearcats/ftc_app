@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.aarre.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class AarreDriveMotor extends AarreMotorTorqueNADO implements ConcreteMotorInterface {
+public class DriveMotor extends MotorTorqueNADO implements ConcreteMotorInterface {
 
 	/*
 	 * This is 1.0 for direct-drive wheels
@@ -14,7 +14,7 @@ public class AarreDriveMotor extends AarreMotorTorqueNADO implements ConcreteMot
 	 */
 	private static final double WHEEL_DIAMETER_INCHES = 5.5;
 
-	public AarreDriveMotor(LinearOpMode opMode, String motorName) {
+	public DriveMotor(LinearOpMode opMode, String motorName) {
 		super(opMode, motorName);
 	}
 
@@ -24,7 +24,7 @@ public class AarreDriveMotor extends AarreMotorTorqueNADO implements ConcreteMot
 	}
 
 	@Override
-	public void setPowerVector(AarrePowerVector targetVector) {
+	public void setPowerVector(PowerVector targetVector) {
 		motorTorqueNADO.setPowerVector(targetVector);
 	}
 

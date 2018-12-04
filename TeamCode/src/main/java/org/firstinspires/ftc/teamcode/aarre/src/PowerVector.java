@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.aarre.src;
 
 import java.util.logging.Logger;
 
-public class AarrePowerVector {
+public class PowerVector {
 
 	private double proportion;
 
@@ -11,31 +11,31 @@ public class AarrePowerVector {
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
-	public AarrePowerVector() {
+	public PowerVector() {
 
 	}
 
-	public AarrePowerVector(int proportion) {
+	public PowerVector(int proportion) {
 		setProportion((double) proportion);
 	}
 
-	public AarrePowerVector(double proportion) {
+	public PowerVector(double proportion) {
 		setProportion(proportion);
 	}
 
-	public AarrePowerVector(AarrePowerMagnitude powerMagnitude, int direction) {
+	public PowerVector(PowerMagnitude powerMagnitude, int direction) {
 		double proportion = powerMagnitude.doubleValue() * direction;
 		setProportion(proportion);
 	}
 
-	public AarrePowerVector(AarrePowerVector powerVector) {
+	public PowerVector(PowerVector powerVector) {
 		double proportion = powerVector.doubleValue();
 		setProportion(proportion);
 	}
 
-	public AarrePowerVector add(AarrePowerVector other) {
+	public PowerVector add(PowerVector other) {
 		double sum = this.proportion + other.doubleValue();
-		return new AarrePowerVector(sum);
+		return new PowerVector(sum);
 	}
 
 	private void checkProportion(double proportion) {
@@ -50,21 +50,21 @@ public class AarrePowerVector {
 
 	}
 
-	public AarrePowerVector divideBy(AarrePowerVector divisor) {
+	public PowerVector divideBy(PowerVector divisor) {
 		double quotient = this.proportion / divisor.doubleValue();
-		return new AarrePowerVector(quotient);
+		return new PowerVector(quotient);
 	}
 
-	public AarrePowerVector divideBy(double divisor) {
+	public PowerVector divideBy(double divisor) {
 		double quotient = this.proportion / divisor;
-		return new AarrePowerVector(quotient);
+		return new PowerVector(quotient);
 	}
 
 	int getDirection() {
 		return (int)Math.signum(this.proportion);
 	}
 
-	public boolean isGreaterThan(AarrePowerVector comparator) {
+	public boolean isGreaterThan(PowerVector comparator) {
 		return this.doubleValue() > comparator.doubleValue();
 	}
 
@@ -72,15 +72,15 @@ public class AarrePowerVector {
 		return proportion;
 	}
 
-	AarrePowerMagnitude getMagnitude() {
+	PowerMagnitude getMagnitude() {
 
-		return new AarrePowerMagnitude(Math.abs(this.proportion));
+		return new PowerMagnitude(Math.abs(this.proportion));
 
 	}
 
-	AarrePowerVector multiplyBy(AarrePowerVector multiplicand) {
+	PowerVector multiplyBy(PowerVector multiplicand) {
 		double product = this.proportion * multiplicand.doubleValue();
-		return new AarrePowerVector(product);
+		return new PowerVector(product);
 	}
 
 	/**
@@ -95,9 +95,9 @@ public class AarrePowerVector {
 		this.proportion = proportion;
 	}
 
-	public AarrePowerVector subtract(AarrePowerVector other) {
+	public PowerVector subtract(PowerVector other) {
 		double difference = this.proportion - other.doubleValue();
-		return new AarrePowerVector(difference);
+		return new PowerVector(difference);
 	}
 
 	@Override

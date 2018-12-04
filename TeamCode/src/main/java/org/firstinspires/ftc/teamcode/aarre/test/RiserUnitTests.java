@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.aarre.test;
 
-import org.firstinspires.ftc.teamcode.aarre.src.AarreRiser;
+import org.firstinspires.ftc.teamcode.aarre.src.Riser;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -9,15 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
+public class RiserUnitTests {
 
-public class AarreRiserUnitTests {
-
-    AarreRiser riser;
+    Riser riser;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
-    AarreRiserUnitTests() {
-        riser = new AarreRiser();
+    RiserUnitTests() {
+        riser = new Riser();
     }
 
     @Test

@@ -2,19 +2,19 @@ package org.firstinspires.ftc.teamcode.aarre.src;
 
 import java.util.logging.Logger;
 
-public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
+public class PowerMagnitude implements Comparable<PowerMagnitude> {
 
 	private double magnitude;
 
 	private final Logger log = Logger.getLogger(this.getClass().getName());
 
-	public AarrePowerMagnitude(double magnitude) {
+	public PowerMagnitude(double magnitude) {
 		log.entering("AarrePowerMagnitude", "AarrePowerMagnitude");
 		setProportion(magnitude);
 		log.exiting("AarrePowerMagnitude", "AarrePowerMagnitude");
 	}
 
-	public AarrePowerMagnitude(AarrePowerVector powerVector) {
+	public PowerMagnitude(PowerVector powerVector) {
 		double magnitude = powerVector.doubleValue();
 		setProportion(magnitude);
 	}
@@ -30,7 +30,7 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 	}
 
 	@Override
-	public int compareTo(AarrePowerMagnitude comparator) {
+	public int compareTo(PowerMagnitude comparator) {
 		return Double.compare(this.magnitude, comparator.doubleValue());
 	}
 
@@ -51,15 +51,15 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 	 *
 	 * @return The quotient between the two magnitudes.
 	 */
-	public double divideBy(AarrePowerMagnitude divisor) {
+	public double divideBy(PowerMagnitude divisor) {
 		return this.magnitude / divisor.doubleValue();
 	}
 
-	public boolean isGreaterThan(AarrePowerMagnitude comparator) {
+	public boolean isGreaterThan(PowerMagnitude comparator) {
 		return this.magnitude > comparator.doubleValue();
 	}
 
-	public boolean isLessThan(AarrePowerMagnitude comparator) {
+	public boolean isLessThan(PowerMagnitude comparator) {
 		return this.magnitude < comparator.doubleValue();
 	}
 
@@ -68,9 +68,9 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 		this.magnitude = magnitude;
 	}
 
-	public AarrePowerMagnitude subtract(AarrePowerMagnitude other) {
+	public PowerMagnitude subtract(PowerMagnitude other) {
 		double difference = this.magnitude - other.doubleValue();
-		return new AarrePowerMagnitude(difference);
+		return new PowerMagnitude(difference);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreIMU;
+import org.firstinspires.ftc.teamcode.aarre.src.IMU;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,15 +15,15 @@ import java.util.logging.Logger;
   Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @Disabled
-public class AarreIMUUnitTests extends LinearOpMode {
+public class IMUUnitTests extends LinearOpMode {
 
-	AarreIMU imu;
+	IMU imu;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@BeforeEach
 	public final void testConstructor() {
-		imu = new AarreIMU(this);
+		imu = new IMU(this);
 	}
 
 	/**

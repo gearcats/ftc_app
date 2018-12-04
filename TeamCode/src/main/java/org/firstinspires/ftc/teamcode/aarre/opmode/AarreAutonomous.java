@@ -32,9 +32,9 @@ package org.firstinspires.ftc.teamcode.aarre.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerMagnitude;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreRobot;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreTelemetry;
+import org.firstinspires.ftc.teamcode.aarre.src.PowerMagnitude;
+import org.firstinspires.ftc.teamcode.aarre.src.Robot;
+import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
 
 import java.util.logging.Logger;
 
@@ -48,16 +48,16 @@ import java.util.logging.Logger;
 @Autonomous(name = "Aarre Autonomous", group = "Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
-	private static final double              INCHES                = 12.0;
-	private static final double              TIMEOUT               = 5.0;
+	private static final double         INCHES                = 12.0;
+	private static final double         TIMEOUT               = 5.0;
 	// How fast to move forward or back
-	private static final AarrePowerMagnitude DRIVE_POWER_MAGNITUDE = new AarrePowerMagnitude(0.6);
+	private static final PowerMagnitude DRIVE_POWER_MAGNITUDE = new PowerMagnitude(0.6);
 	// How fast to move when turning
-	private static final AarrePowerMagnitude    TURN_POWER_MAGNITUDE  = new AarrePowerMagnitude(0.5);
-	private static final double              TEST_TIME_SECONDS     = 0.5;
-	private final        ElapsedTime         runtime               = new ElapsedTime();
-	private              AarreTelemetry      betterTelemetry;
-	private              AarreRobot          robot;
+	private static final PowerMagnitude TURN_POWER_MAGNITUDE  = new PowerMagnitude(0.5);
+	private static final double         TEST_TIME_SECONDS     = 0.5;
+	private final        ElapsedTime    runtime               = new ElapsedTime();
+	private              Telemetry      betterTelemetry;
+	private              Robot          robot;
 
 	private final Logger log = Logger.getLogger(this.getClass().getName());
 
@@ -79,7 +79,7 @@ public class AarreAutonomous extends LinearOpMode {
 		if (telemetry == null) {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
-		betterTelemetry = new AarreTelemetry(telemetry);
+		betterTelemetry = new Telemetry(telemetry);
 
 		// 'hardwareMap comes from FTC....
 		// It is only available in runOpMode
@@ -87,7 +87,7 @@ public class AarreAutonomous extends LinearOpMode {
 		if (hardwareMap == null) {
 			throw new AssertionError("Unexpected null object: hardwareMap");
 		}
-		robot = new AarreRobot(this);
+		robot = new Robot(this);
 
 		betterTelemetry.log("Initializing robot");
 

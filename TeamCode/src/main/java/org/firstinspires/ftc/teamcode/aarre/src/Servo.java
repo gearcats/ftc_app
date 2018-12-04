@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.aarre.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.logging.Logger;
@@ -16,11 +15,11 @@ import java.util.logging.Logger;
  * </ul>
  */
 
-public class AarreServo {
+public class Servo {
 
-	private final Servo          servo;
-	private       AarreTelemetry telemetry;
-	private       LinearOpMode   opMode;
+	private final com.qualcomm.robotcore.hardware.Servo servo;
+	private       Telemetry                             telemetry;
+	private       LinearOpMode                          opMode;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
@@ -32,13 +31,13 @@ public class AarreServo {
 	 * @param hardwareMap
 	 * 		The hardware map upon which the motor may be found.
 	 */
-	public AarreServo(final HardwareMap hardwareMap, final String servoName, LinearOpMode opMode) {
+	public Servo(final HardwareMap hardwareMap, final String servoName, LinearOpMode opMode) {
 
 		this.opMode = opMode;
 
-		servo = hardwareMap.get(Servo.class, servoName);
+		servo = hardwareMap.get(com.qualcomm.robotcore.hardware.Servo.class, servoName);
 
-		servo.setDirection(Servo.Direction.FORWARD);
+		servo.setDirection(com.qualcomm.robotcore.hardware.Servo.Direction.FORWARD);
 
 		// Upon construction, reset the servo to its full range of movement
 		servo.scaleRange(0.0, 1.0);
@@ -55,7 +54,8 @@ public class AarreServo {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with this instance.
 	 */
-	public AarreServo(final HardwareMap hardwareMap, final String servoName, final AarreTelemetry telemetry, final LinearOpMode opMode) {
+	public Servo(final HardwareMap hardwareMap, final String servoName, final Telemetry telemetry, final LinearOpMode
+			opMode) {
 
 		// Call the other constructor to create the underlying Servo member
 		this(hardwareMap, servoName, opMode);
@@ -69,7 +69,7 @@ public class AarreServo {
 	/**
 	 * Get the current position of this servo.
 	 * <p>
-	 * Despite its name, the {@link Servo} method {@code getPosition}
+	 * Despite its name, the {@link com.qualcomm.robotcore.hardware.Servo} method {@code getPosition}
 	 * is often wrong about the servo's position, especially if there are mechanical obstacles
 	 * stalling
 	 * the servo. Therefore, we use a different name here.
@@ -154,7 +154,7 @@ public class AarreServo {
 	 * 		An instance of @link{Servo.Direction}
 	 */
 	@SuppressWarnings("SameParameterValue")
-	void setDirection(final Servo.Direction direction) {
+	void setDirection(final com.qualcomm.robotcore.hardware.Servo.Direction direction) {
 
 		servo.setDirection(direction);
 

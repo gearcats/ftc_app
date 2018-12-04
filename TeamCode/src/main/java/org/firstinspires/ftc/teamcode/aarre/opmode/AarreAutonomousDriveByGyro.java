@@ -33,10 +33,10 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerMagnitude;
-import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerVector;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreRobot;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreTelemetry;
+import org.firstinspires.ftc.teamcode.aarre.src.PowerMagnitude;
+import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
+import org.firstinspires.ftc.teamcode.aarre.src.Robot;
+import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
 
 import java.util.logging.Logger;
 
@@ -84,23 +84,23 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 	// The can/should be tweaked to suite the specific robot drive train.
 
 	// Nominal drive speed for better accuracy
-	static final AarrePowerMagnitude DRIVE_SPEED = new AarrePowerMagnitude(0.7);
+	static final PowerMagnitude DRIVE_SPEED = new PowerMagnitude(0.7);
 
 	// Nominal turn speed for better accuracy
-	static final AarrePowerVector    TURN_SPEED  = new AarrePowerVector(0.5);
+	static final PowerVector TURN_SPEED = new PowerVector(0.5);
 
 	ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
 
-	private AarreTelemetry aarreTelemetry;
-	private AarreRobot     robot;
+	private Telemetry telemetry;
+	private Robot     robot;
 
 	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	@Override
 	public final void runOpMode() {
 
-		aarreTelemetry = new AarreTelemetry(telemetry);
-		robot = new AarreRobot(this);
+		telemetry = new Telemetry(telemetry);
+		robot = new Robot(this);
 
 		// Send telemetry message to alert driver that we are calibrating;
 		telemetry.addData(">", "Calibrating Gyro");    //

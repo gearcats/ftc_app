@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreMotor;
-import org.firstinspires.ftc.teamcode.aarre.src.AarreNonNegativeInteger;
-import org.firstinspires.ftc.teamcode.aarre.src.AarrePositiveInteger;
-import org.firstinspires.ftc.teamcode.aarre.src.AarrePowerVector;
+import org.firstinspires.ftc.teamcode.aarre.src.Motor;
+import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeInteger;
+import org.firstinspires.ftc.teamcode.aarre.src.PositiveInteger;
+import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @Autonomous(name = "Aarre Motor Unit Tests", group = "Aarre")
 @Disabled
-public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorUnitTestsInterface {
+public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTestsInterface {
 
 	private static Logger log;
 
@@ -47,95 +47,95 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		log.setLevel(Level.ALL);
 	}
 
-	private AarreMotor motor = null;
+	private Motor motor = null;
 
 	@Override
 	@Test
 	public void testGetProportionPowerNew01() {
-		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(1.0);
-		AarrePowerVector powerVectorRequested = new AarrePowerVector(0.0);
-		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector powerVectorCurrent   = new PowerVector(1.0);
+		PowerVector powerVectorRequested = new PowerVector(0.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(0.9, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
 	public void testGetPowerVectorNew02() {
-		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(-1.0);
-		AarrePowerVector powerVectorRequested = new AarrePowerVector(0.0);
-		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector powerVectorCurrent   = new PowerVector(-1.0);
+		PowerVector powerVectorRequested = new PowerVector(0.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(-0.9, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
 	public void testGetPowerVectorNew03() {
-		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(0.0);
-		AarrePowerVector powerVectorRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector powerVectorCurrent   = new PowerVector(0.0);
+		PowerVector powerVectorRequested = new PowerVector(1.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(0.1, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
 	public void testGetPowerVectorNew04() {
-		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(0.0);
-		AarrePowerVector powerVectorRequested = new AarrePowerVector(-1.0);
-		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector powerVectorCurrent   = new PowerVector(0.0);
+		PowerVector powerVectorRequested = new PowerVector(-1.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(-0.1, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
 	public void testGetPowerVectorNew05() {
-		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(1.0);
-		AarrePowerVector powerVectorRequested = new AarrePowerVector(-1.0);
-		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector powerVectorCurrent   = new PowerVector(1.0);
+		PowerVector powerVectorRequested = new PowerVector(-1.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(0.9, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
 	public void testGetPowerVectorNew06() {
-		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(-1.0);
-		AarrePowerVector powerVectorRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector powerVectorCurrent   = new PowerVector(-1.0);
+		PowerVector powerVectorRequested = new PowerVector(1.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(-0.9, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
 	public void testGetPowerVectorNew07() {
-		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(-1.0);
-		AarrePowerVector powerVectorRequested = new AarrePowerVector(-1.0);
-		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector powerVectorCurrent   = new PowerVector(-1.0);
+		PowerVector powerVectorRequested = new PowerVector(-1.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(-1.0, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
 	public void testGetPowerVectorNew08() {
-		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(0.0);
-		AarrePowerVector powerVectorRequested = new AarrePowerVector(0.0);
-		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector powerVectorCurrent   = new PowerVector(0.0);
+		PowerVector powerVectorRequested = new PowerVector(0.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(0.0, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
 	public void testGetPowerVectorNew09() {
-		AarrePowerVector powerVectorCurrent   = new AarrePowerVector(1.0);
-		AarrePowerVector powerVectorRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector powerVectorCurrent   = new PowerVector(1.0);
+		PowerVector powerVectorRequested = new PowerVector(1.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(1.0, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
 	@Override
 	@Test
 	public void testGetPowerVectorNew10() {
-		AarrePowerVector proportionPowerCurrent   = new AarrePowerVector(0.0);
-		AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew = getMotor().getPowerVectorNew(proportionPowerCurrent,
+		PowerVector proportionPowerCurrent   = new PowerVector(0.0);
+		PowerVector proportionPowerRequested = new PowerVector(1.0);
+		PowerVector proportionPowerNew = getMotor().getPowerVectorNew(proportionPowerCurrent,
 				proportionPowerRequested);
 		assertEquals(0.1, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
@@ -143,9 +143,9 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 	@Override
 	@Test
 	public void testGetPowerVectorNew11() {
-		AarrePowerVector proportionPowerCurrent   = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerRequested = new AarrePowerVector(1.0);
-		AarrePowerVector proportionPowerNew = getMotor().getPowerVectorNew(proportionPowerCurrent,
+		PowerVector proportionPowerCurrent   = new PowerVector(1.0);
+		PowerVector proportionPowerRequested = new PowerVector(1.0);
+		PowerVector proportionPowerNew = getMotor().getPowerVectorNew(proportionPowerCurrent,
 				proportionPowerRequested);
 		assertEquals(1.0, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
@@ -159,8 +159,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		  ticksMoved is less than ticksMaximum, so no reason to stop. (We haven't moved far enough
 		  yet).
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(0);
+		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(0);
 
 		/*
 		  Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
@@ -186,8 +186,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		/*
 		  We have moved farther than we intended, so it is time to stop.
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(1441);
+		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(1441);
 
 		/*
 		  Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
@@ -212,8 +212,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		/*
 		  We have not moved enough yet, so continue.
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(1439);
+		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(1439);
 
 		/*
 		  Seconds running is more than timeout, so stop.
@@ -238,8 +238,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		/*
 		 * We have not moved enough yet, so continue.
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(1439);
+		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(1439);
 
 		/*
 		 * Seconds running is less than timeout, so continue.
@@ -266,8 +266,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		/*
 		  We have moved exactly the right amount, so stop.
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(1440);
+		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(1440);
 
 		/*
 		  Seconds running is less than timeout, so continue.
@@ -293,8 +293,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		/*
 		  We have not moved the right amount, so continue.
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(14);
+		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(14);
 
 		/*
 		  Seconds running is less than timeout, so continue.
@@ -323,8 +323,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		/*
 		  We have not moved enough, so continue.
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(144);
+		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(144);
 
 		/*
 		  Seconds running is less than timeout, so continue.
@@ -348,8 +348,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		/*
 		  We have not moved enough, so continue.
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(190);
+		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(190);
 
 		/*
 		  Seconds running is less than timeout, so continue.
@@ -373,10 +373,10 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 	@Test
 	public void whenWeHaveNotMovedEnough_thenSpeedUpContinues() {
 
-		AarrePositiveInteger    ticksMaximum   = new AarrePositiveInteger(1440);
-		AarreNonNegativeInteger ticksMoved     = new AarreNonNegativeInteger(190);
-		double                  secondsTimeout = 5.0;
-		double                  secondsRunning = 4.0;
+		PositiveInteger    ticksMaximum   = new PositiveInteger(1440);
+		NonNegativeInteger ticksMoved     = new NonNegativeInteger(190);
+		double             secondsTimeout = 5.0;
+		double             secondsRunning = 4.0;
 
 		boolean result = true;
 		try {
@@ -392,8 +392,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 	@Test
 	public void whenWeHaveNotMoved_thenSpeedUpContinues() {
 
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(5040);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(0);
+		PositiveInteger    ticksMaximum = new PositiveInteger(5040);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(0);
 
 		double secondsTimeout = 5.0;
 		double secondsRunning = 4.0;
@@ -416,8 +416,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 		/*
 		 * We have moved enough (albeit in a negative direction), so stop
 		 */
-		AarrePositiveInteger    ticksMaximum = new AarrePositiveInteger(5040);
-		AarreNonNegativeInteger ticksMoved   = new AarreNonNegativeInteger(5041);
+		PositiveInteger    ticksMaximum = new PositiveInteger(5040);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(5041);
 
 		/*
 		 * Seconds running is less than timeout, so continue.
@@ -449,7 +449,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements AarreMotorU
 	}
 
 	// Subclasses should override this method to return their own special type of revHDCoreHexMotor
-	AarreMotor getMotor() {
+	Motor getMotor() {
 		return motor;
 	}
 

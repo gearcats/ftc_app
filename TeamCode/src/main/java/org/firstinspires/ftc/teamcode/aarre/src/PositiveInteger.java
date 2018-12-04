@@ -7,13 +7,13 @@ import java.util.logging.Logger;
  * <p>
  * Not all operations are supported.
  */
-public class AarrePositiveInteger {
+public class PositiveInteger {
 
 	private Integer value;
 
 	private final Logger log = Logger.getLogger(this.getClass().getCanonicalName());
 
-	public AarrePositiveInteger(int value) {
+	public PositiveInteger(int value) {
 		if (value < 1) {
 			throw new IllegalArgumentException(String.format("Value must be positive: %d", value));
 		}

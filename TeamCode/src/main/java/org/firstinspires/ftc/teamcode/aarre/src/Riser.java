@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 /**
  * This class represents the riser on the robot.
  */
-public class AarreRiser {
+public class Riser {
 
 
 	/**
@@ -30,22 +30,21 @@ public class AarreRiser {
 	/**
 	 * This value affects all methods that move the riser.
 	 */
-	private static final double              DEFAULT_SECONDS_TO_RUN_MAXIMUM = 7.0;
-	private static final AarrePowerMagnitude DEFAULT_POWER_MAGNITUDE        = new AarrePowerMagnitude(1.0);
+	private static final double         DEFAULT_SECONDS_TO_RUN_MAXIMUM = 7.0;
+	private static final PowerMagnitude DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(1.0);
 
 
-
-	private double               currentPosition;
-	private AarreMotorTorqueNADO motor;
-	private AarreTelemetry       telemetry;
-	private LinearOpMode         opMode;
+	private double          currentPosition;
+	private MotorTorqueNADO motor;
+	private Telemetry       telemetry;
+	private LinearOpMode    opMode;
 
 	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * This empty constructor is useful for testing.
 	 */
-	public AarreRiser() {
+	public Riser() {
 
 	}
 
@@ -59,7 +58,8 @@ public class AarreRiser {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with the
 	 */
-	AarreRiser(final HardwareMap hardwareMap, final String nameOfRiserMotor, final AarreTelemetry telemetry, final LinearOpMode opMode) {
+	Riser(final HardwareMap hardwareMap, final String nameOfRiserMotor, final Telemetry telemetry, final LinearOpMode
+			opMode) {
 
 		currentPosition = 0.5; // We have no idea where the riser is
 
@@ -78,9 +78,9 @@ public class AarreRiser {
 
 		this.opMode = opMode;
 
-		motor = new AarreMotorTorqueNADO(opMode, nameOfRiserMotor);
+		motor = new MotorTorqueNADO(opMode, nameOfRiserMotor);
 
-		motor.rampToPower(new AarrePowerVector(0.0));
+		motor.rampToPower(new PowerVector(0.0));
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises riser
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -128,9 +128,9 @@ public class AarreRiser {
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm.
 	 */
-	private void lowerByTime(AarrePowerMagnitude powerMagnitude, double secondsToRun) {
+	private void lowerByTime(PowerMagnitude powerMagnitude, double secondsToRun) {
 
-		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, -1);
+		PowerVector powerVector = new PowerVector(powerMagnitude, -1);
 
 		motor.runByTime(powerVector, secondsToRun);
 
@@ -161,7 +161,7 @@ public class AarreRiser {
 	 * 		for long periods of time or breaking other components by applying too much force to them
 	 * 		for too long.
 	 */
-	private void lowerByRevolutions(final AarrePowerMagnitude powerMagnitude, final double numberOfRevolutions, final
+	private void lowerByRevolutions(final PowerMagnitude powerMagnitude, final double numberOfRevolutions, final
 	double secondsTimeout) throws NoSuchMethodException {
 
 		if (numberOfRevolutions < 0.0) {
@@ -172,7 +172,7 @@ public class AarreRiser {
 		}
 
 		log.fine(String.format("Riser - Lower by revolutions, power: %f", powerMagnitude.doubleValue()));
-		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
+		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector
 				.REVERSE);
 		motor.runByRevolutions(powerVector, numberOfRevolutions, secondsTimeout);
 
@@ -184,8 +184,7 @@ public class AarreRiser {
 	private void lowerUntilStall() {
 		motor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_STALL_TIME_WINDOW);
 		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_STALL_TOLERANCE);
-		AarrePowerVector powerVector = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE,
-		                                                    AarrePowerVector.REVERSE);
+		PowerVector powerVector = new PowerVector(DEFAULT_POWER_MAGNITUDE, PowerVector.REVERSE);
 		motor.runUntilStalled(powerVector);
 	}
 
@@ -226,7 +225,7 @@ public class AarreRiser {
 	 * 		them for long periods of time or breaking other components by applying too much force to
 	 * 		them for too long.
 	 */
-	private void raiseByRevolutions(final AarrePowerMagnitude powerMagnitude, final double numberOfRevolutions, final
+	private void raiseByRevolutions(final PowerMagnitude powerMagnitude, final double numberOfRevolutions, final
 	double secondsTimeout) throws NoSuchMethodException {
 
 		log.entering(this.getClass().getCanonicalName(), "raiseByRevolutions");
@@ -243,7 +242,7 @@ public class AarreRiser {
 		}
 		log.fine(String.format("Riser - Raise by revolutions, power: %f", powerMagnitude.doubleValue()));
 
-		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
+		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector
 				.FORWARD);
 
 		log.fine(String.format("Power vector %f", powerVector.doubleValue()));
@@ -270,13 +269,13 @@ public class AarreRiser {
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm. Must be non-negative.
 	 */
-	private void raiseByTime(AarrePowerMagnitude powerMagnitude, double secondsToRun) {
+	private void raiseByTime(PowerMagnitude powerMagnitude, double secondsToRun) {
 
 		if (secondsToRun < 0.0) {
 			throw new IllegalArgumentException("secondsToRun expected to be non-negative");
 		}
 
-		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
+		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector
 				.FORWARD);
 		motor.runByTime(powerVector, secondsToRun);
 
@@ -292,8 +291,7 @@ public class AarreRiser {
 	private void raiseUntilStall() {
 		motor.setStallTimeLimitInSeconds((double) DEFAULT_MILLISECONDS_STALL_TIME_WINDOW);
 		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_STALL_TOLERANCE);
-		AarrePowerVector powerVector = new AarrePowerVector(DEFAULT_POWER_MAGNITUDE,
-		                                                    AarrePowerVector.FORWARD);
+		PowerVector powerVector = new PowerVector(DEFAULT_POWER_MAGNITUDE, PowerVector.FORWARD);
 		motor.runUntilStalled(powerVector);
 	}
 
