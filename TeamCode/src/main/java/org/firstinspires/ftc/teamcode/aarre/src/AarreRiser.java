@@ -171,7 +171,7 @@ public class AarreRiser {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 		}
 
-		log.fine(String.format("Riser - Lower by revolutions, power: %f", powerMagnitude.asDouble()));
+		log.fine(String.format("Riser - Lower by revolutions, power: %f", powerMagnitude.doubleValue()));
 		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
 				.REVERSE);
 		motor.runByRevolutions(powerVector, numberOfRevolutions, secondsTimeout);
@@ -231,7 +231,7 @@ public class AarreRiser {
 
 		log.entering(this.getClass().getCanonicalName(), "raiseByRevolutions");
 
-		log.fine(String.format("Power magnitude: %f", powerMagnitude.asDouble()));
+		log.fine(String.format("Power magnitude: %f", powerMagnitude.doubleValue()));
 		log.fine(String.format("Number of revolutions: %f", numberOfRevolutions));
 		log.fine(String.format("Seconds timeout: %f", secondsTimeout));
 
@@ -241,12 +241,12 @@ public class AarreRiser {
 		if (secondsTimeout < 0.0) {
 			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
 		}
-		log.fine(String.format("Riser - Raise by revolutions, power: %f", powerMagnitude.asDouble()));
+		log.fine(String.format("Riser - Raise by revolutions, power: %f", powerMagnitude.doubleValue()));
 
 		AarrePowerVector powerVector = new AarrePowerVector(powerMagnitude, AarrePowerVector
 				.FORWARD);
 
-		log.fine(String.format("Power vector %f", powerVector.asDouble()));
+		log.fine(String.format("Power vector %f", powerVector.doubleValue()));
 
 		motor.runByRevolutions(powerVector, numberOfRevolutions, secondsTimeout);
 

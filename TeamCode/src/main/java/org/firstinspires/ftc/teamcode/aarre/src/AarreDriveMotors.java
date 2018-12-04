@@ -295,7 +295,7 @@ public class AarreDriveMotors {
 
 				// Normalize speeds if either one exceeds +/- 1.0;
 				// TODO: Avoid allowing speeds to go outside the bounds of +/- 1.0
-				max = Math.max(leftPowerVector.asDouble(), rightPowerVector.asDouble());
+				max = Math.max(leftPowerVector.doubleValue(), rightPowerVector.doubleValue());
 				if (max > 1.0) {
 					leftPowerVector = leftPowerVector.divideBy(max);
 					rightPowerVector = rightPowerVector.divideBy(max);
@@ -492,7 +492,8 @@ public class AarreDriveMotors {
 			powerDeltaLeftMagnitude = powerDeltaLeftVector.getMagnitude();
 			powerDeltaRightMagnitude = powerDeltaRightVector.getMagnitude();
 
-			greatestPowerDeltaDouble = Math.max(powerDeltaLeftMagnitude.asDouble(), powerDeltaRightMagnitude.asDouble
+			greatestPowerDeltaDouble = Math.max(powerDeltaLeftMagnitude.doubleValue(), powerDeltaRightMagnitude
+					.doubleValue
 					());
 			greatestPowerDeltaMagnitude = new AarrePowerMagnitude(greatestPowerDeltaDouble);
 

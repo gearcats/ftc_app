@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.aarre.src;
 
-interface ConcreteMotorInterface {
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+interface ConcreteMotorInterface extends AarreMotorInterface {
+
+	DcMotor getMotor();
 
 	double getTicksPerRevolution();
 

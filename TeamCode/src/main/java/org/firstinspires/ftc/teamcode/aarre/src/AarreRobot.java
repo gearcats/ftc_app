@@ -126,7 +126,7 @@ public class AarreRobot {
 	 */
 	public void drive(AarrePowerMagnitude powerMagnitude, double leftInches, double rightInches, double secondsTimeout) throws NoSuchMethodException {
 
-		log.fine(String.format("drive: powerMagnitude: %f", powerMagnitude.asDouble()));
+		log.fine(String.format("drive: powerMagnitude: %f", powerMagnitude.doubleValue()));
 		log.fine(String.format("drive: leftInches: %f", leftInches));
 		log.fine(String.format("drive: rightInches: %f", rightInches));
 		log.fine(String.format("drive: secondsTimeout: %f", secondsTimeout));

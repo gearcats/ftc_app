@@ -23,42 +23,42 @@ class AarrePowerVectorUnitTests {
 	@Test
 	final void testAarrePowerVector02() {
 		aarrePowerVector = new AarrePowerVector(0);
-		double result = aarrePowerVector.asDouble();
+		double result = aarrePowerVector.doubleValue();
 		assertEquals(0.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector03() {
 		aarrePowerVector = new AarrePowerVector(1);
-		double result = aarrePowerVector.asDouble();
+		double result = aarrePowerVector.doubleValue();
 		assertEquals(1.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector04() {
 		aarrePowerVector = new AarrePowerVector(-1);
-		double result = aarrePowerVector.asDouble();
+		double result = aarrePowerVector.doubleValue();
 		assertEquals(-1.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector05() {
 		aarrePowerVector = new AarrePowerVector(0.0);
-		double result = aarrePowerVector.asDouble();
+		double result = aarrePowerVector.doubleValue();
 		assertEquals(0.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector06() {
 		aarrePowerVector = new AarrePowerVector(1.0);
-		double result = aarrePowerVector.asDouble();
+		double result = aarrePowerVector.doubleValue();
 		assertEquals(1.0, result);
 	}
 
 	@Test
 	final void testAarrePowerVector07() {
 		aarrePowerVector = new AarrePowerVector(-1.0);
-		double result = aarrePowerVector.asDouble();
+		double result = aarrePowerVector.doubleValue();
 		assertEquals(-1.0, result);
 	}
 
@@ -109,7 +109,7 @@ class AarrePowerVectorUnitTests {
 		AarrePowerVector aarrePowerVector1 = new AarrePowerVector(0.79);
 		AarrePowerVector aarrePowerVector2 = new AarrePowerVector(0.45);
 		AarrePowerVector aarrePowerVector3 = aarrePowerVector1.subtract(aarrePowerVector2);
-		double result = aarrePowerVector3.asDouble();
+		double           result            = aarrePowerVector3.doubleValue();
 		assertEquals(0.34, result);
 	}
 

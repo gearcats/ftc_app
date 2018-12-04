@@ -24,17 +24,17 @@ public class AarrePowerVector {
 	}
 
 	public AarrePowerVector(AarrePowerMagnitude powerMagnitude, int direction) {
-		double proportion = powerMagnitude.asDouble() * direction;
+		double proportion = powerMagnitude.doubleValue() * direction;
 		setProportion(proportion);
 	}
 
 	public AarrePowerVector(AarrePowerVector powerVector) {
-		double proportion = powerVector.asDouble();
+		double proportion = powerVector.doubleValue();
 		setProportion(proportion);
 	}
 
 	public AarrePowerVector add(AarrePowerVector other) {
-		double sum = this.proportion + other.asDouble();
+		double sum = this.proportion + other.doubleValue();
 		return new AarrePowerVector(sum);
 	}
 
@@ -51,7 +51,7 @@ public class AarrePowerVector {
 	}
 
 	public AarrePowerVector divideBy(AarrePowerVector divisor) {
-		double quotient = this.proportion / divisor.asDouble();
+		double quotient = this.proportion / divisor.doubleValue();
 		return new AarrePowerVector(quotient);
 	}
 
@@ -65,10 +65,10 @@ public class AarrePowerVector {
 	}
 
 	public boolean isGreaterThan(AarrePowerVector comparator) {
-		return this.asDouble() > comparator.asDouble();
+		return this.doubleValue() > comparator.doubleValue();
 	}
 
-	public double asDouble() {
+	public double doubleValue() {
 		return proportion;
 	}
 
@@ -79,7 +79,7 @@ public class AarrePowerVector {
 	}
 
 	AarrePowerVector multiplyBy(AarrePowerVector multiplicand) {
-		double product = this.proportion * multiplicand.asDouble();
+		double product = this.proportion * multiplicand.doubleValue();
 		return new AarrePowerVector(product);
 	}
 
@@ -87,7 +87,7 @@ public class AarrePowerVector {
 	 * Reverse the direction of this power vector
 	 */
 	public void reverseDirection() {
-		this.setProportion(-1*this.asDouble());
+		this.setProportion(-1 * this.doubleValue());
 	}
 
 	private void setProportion(double proportion) {
@@ -96,7 +96,7 @@ public class AarrePowerVector {
 	}
 
 	public AarrePowerVector subtract(AarrePowerVector other) {
-		double difference = this.proportion - other.asDouble();
+		double difference = this.proportion - other.doubleValue();
 		return new AarrePowerVector(difference);
 	}
 

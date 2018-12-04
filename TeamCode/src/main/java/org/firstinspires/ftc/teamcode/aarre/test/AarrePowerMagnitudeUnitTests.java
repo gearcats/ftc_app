@@ -39,7 +39,7 @@ class AarrePowerMagnitudeUnitTests {
 	void whenTheMagnitudeIsOne_thenAsDoubleReturnsOne() {
 		double              expected      = 1.0;
 		AarrePowerMagnitude testMagnitude = new AarrePowerMagnitude(expected);
-		double              actual        = testMagnitude.asDouble();
+		double              actual        = testMagnitude.doubleValue();
 		assertEquals(expected, actual);
 	}
 
@@ -47,7 +47,7 @@ class AarrePowerMagnitudeUnitTests {
 	void whenTheMagnitudeIsZero_thenAsDoubleReturnsZero() {
 		double              expected      = 0.0;
 		AarrePowerMagnitude testMagnitude = new AarrePowerMagnitude(expected);
-		double              actual        = testMagnitude.asDouble();
+		double              actual        = testMagnitude.doubleValue();
 		assertEquals(expected, actual);
 	}
 
@@ -59,7 +59,7 @@ class AarrePowerMagnitudeUnitTests {
 		AarrePowerMagnitude zeroMagnitude = new AarrePowerMagnitude(zero);
 		AarrePowerMagnitude oneMagnitude  = new AarrePowerMagnitude(one);
 
-		assertTrue(oneMagnitude.asDouble() > zeroMagnitude.asDouble());
+		assertTrue(oneMagnitude.doubleValue() > zeroMagnitude.doubleValue());
 	}
 
 	@Test
@@ -69,7 +69,7 @@ class AarrePowerMagnitudeUnitTests {
 		AarrePowerMagnitude zeroMagnitude = new AarrePowerMagnitude(zero);
 		AarrePowerMagnitude oneMagnitude  = new AarrePowerMagnitude(one);
 
-		assertTrue(zeroMagnitude.asDouble() < oneMagnitude.asDouble());
+		assertTrue(zeroMagnitude.doubleValue() < oneMagnitude.doubleValue());
 	}
 
 

@@ -1,6 +1,12 @@
 package org.firstinspires.ftc.teamcode.aarre.src;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 interface AarreMotorInterface {
+
+	HardwareMap getHardwareMap();
 
 	/**
 	 * The number of milliseconds in a ramp up/ramp down cycle.
@@ -11,9 +17,26 @@ interface AarreMotorInterface {
 	 */
 	int getMillisecondsPerCycle();
 
+	/**
+	 * Get the underlying DcMotor object.
+	 * <p>
+	 * The underlying DcMotor object is needed for operations such as setPower() and getCurrentPosition().
+	 *
+	 * @return
+	 */
+	DcMotor getMotor();
+
+	LinearOpMode getOpMode();
+
+	double getRevolutionsPerMinute();
+
+	double getRevolutionsPerMinute(AarrePowerMagnitude powerMagnitude);
+
 	double getTicksPerMinute();
 
 	double getTicksPerMinute(AarrePowerMagnitude powerMagnitude);
+
+	double getTicksPerRevolution();
 
 	double getTicksPerSecond();
 

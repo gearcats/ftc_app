@@ -15,7 +15,7 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 	}
 
 	public AarrePowerMagnitude(AarrePowerVector powerVector) {
-		double magnitude = powerVector.asDouble();
+		double magnitude = powerVector.doubleValue();
 		setProportion(magnitude);
 	}
 
@@ -31,10 +31,10 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 
 	@Override
 	public int compareTo(AarrePowerMagnitude comparator) {
-		return Double.compare(this.magnitude, comparator.asDouble());
+		return Double.compare(this.magnitude, comparator.doubleValue());
 	}
 
-	public double asDouble() {
+	public double doubleValue() {
 		return this.magnitude;
 	}
 
@@ -52,15 +52,15 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 	 * @return The quotient between the two magnitudes.
 	 */
 	public double divideBy(AarrePowerMagnitude divisor) {
-		return this.magnitude / divisor.asDouble();
+		return this.magnitude / divisor.doubleValue();
 	}
 
 	public boolean isGreaterThan(AarrePowerMagnitude comparator) {
-		return this.magnitude > comparator.asDouble();
+		return this.magnitude > comparator.doubleValue();
 	}
 
 	public boolean isLessThan(AarrePowerMagnitude comparator) {
-		return this.magnitude < comparator.asDouble();
+		return this.magnitude < comparator.doubleValue();
 	}
 
 	private void setProportion(double magnitude) {
@@ -69,7 +69,7 @@ public class AarrePowerMagnitude implements Comparable<AarrePowerMagnitude> {
 	}
 
 	public AarrePowerMagnitude subtract(AarrePowerMagnitude other) {
-		double difference = this.magnitude - other.asDouble();
+		double difference = this.magnitude - other.doubleValue();
 		return new AarrePowerMagnitude(difference);
 	}
 
