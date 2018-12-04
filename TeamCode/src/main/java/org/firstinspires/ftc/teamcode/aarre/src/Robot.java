@@ -20,7 +20,7 @@ import java.util.logging.*;
  */
 public class Robot {
 
-	private final Telemetry telemetry;
+	private final TelemetryPlus telemetry;
 
 	/**
 	 * These properties are package-private so methods of other classes in this package can use
@@ -70,7 +70,7 @@ public class Robot {
 	 */
 	public Robot(final LinearOpMode opMode) {
 
-		telemetry = new Telemetry(opMode.telemetry);
+		telemetry = new TelemetryPlus(opMode.telemetry);
 
 		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {
@@ -137,7 +137,7 @@ public class Robot {
 		return hardwareMap;
 	}
 
-	public Telemetry getTelemetry() {
+	public TelemetryPlus getTelemetry() {
 		return (telemetry);
 	}
 

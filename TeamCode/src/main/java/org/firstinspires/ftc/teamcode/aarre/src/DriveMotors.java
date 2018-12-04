@@ -33,7 +33,7 @@ public class DriveMotors {
 
 	private DriveMotor            leftMotor;
 	private DriveMotor            rightMotor;
-	private Telemetry             telemetry;
+	private TelemetryPlus         telemetry;
 	private HardwareMap           hardwareMap;
 	private LinearOpMode          opMode;
 	private ModernRoboticsI2cGyro gyro;
@@ -66,7 +66,7 @@ public class DriveMotors {
 
 		this.opMode = opMode;
 
-		telemetry = new Telemetry(opMode.telemetry);
+		telemetry = new TelemetryPlus(opMode.telemetry);
 
 		log.setLevel(Level.ALL);
 

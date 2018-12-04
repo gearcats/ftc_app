@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.aarre.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.aarre.src.Robot;
-import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
+import org.firstinspires.ftc.teamcode.aarre.src.TelemetryPlus;
 
 import java.util.logging.Logger;
 
@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 @Autonomous(name = "Aarre Autonomous Riser Lower", group = "Aarre")
 public class AarreAutonomousRiserLower extends LinearOpMode {
 
-	private Telemetry betterTelemetry;
-	private Robot     robot;
+	private TelemetryPlus betterTelemetryPlus;
+	private Robot         robot;
 
 	private final Logger log = Logger.getLogger(this.getClass().getName());
 
@@ -34,7 +34,7 @@ public class AarreAutonomousRiserLower extends LinearOpMode {
 		if (telemetry == null) {
 			throw new AssertionError("Unexpected null object: telemetry");
 		}
-		betterTelemetry = new Telemetry(telemetry);
+		betterTelemetryPlus = new TelemetryPlus(telemetry);
 
 		// 'hardwareMap comes from FTC....
 		// It is only available in runOpMode

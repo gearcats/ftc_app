@@ -36,7 +36,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.aarre.src.PowerMagnitude;
 import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
 import org.firstinspires.ftc.teamcode.aarre.src.Robot;
-import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
 
 import java.util.logging.Logger;
 
@@ -91,15 +90,13 @@ public class AarreAutonomousDriveByGyro extends LinearOpMode {
 
 	ModernRoboticsI2cGyro gyro = null;                    // Additional Gyro device
 
-	private Telemetry telemetry;
-	private Robot     robot;
+	private Robot robot;
 
 	private final Logger log = Logger.getLogger(this.getClass().getName());
 
 	@Override
 	public final void runOpMode() {
 
-		telemetry = new Telemetry(telemetry);
 		robot = new Robot(this);
 
 		// Send telemetry message to alert driver that we are calibrating;

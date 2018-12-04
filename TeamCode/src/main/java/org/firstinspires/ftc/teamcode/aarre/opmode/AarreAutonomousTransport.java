@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.aarre.src.Robot;
-import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
+import org.firstinspires.ftc.teamcode.aarre.src.TelemetryPlus;
 
 import java.util.logging.Logger;
 
@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 @Disabled
 public class AarreAutonomousTransport extends LinearOpMode {
 
-    private Telemetry betterTelemetry;
-    private Robot     robot;
+	private TelemetryPlus betterTelemetryPlus;
+	private Robot         robot;
 
     private final Logger log = Logger.getLogger(this.getClass().getName());
 
@@ -40,7 +40,7 @@ public class AarreAutonomousTransport extends LinearOpMode {
         if (telemetry == null)
             throw new AssertionError("Unexpected null object: telemetry");
 
-        betterTelemetry = new Telemetry(telemetry);
+	    betterTelemetryPlus = new TelemetryPlus(telemetry);
 
         // 'hardwareMap comes from FTC....
         // It is only available in runOpMode
@@ -50,7 +50,7 @@ public class AarreAutonomousTransport extends LinearOpMode {
 
         robot = new Robot(this);
 
-        betterTelemetry.log("Status", "Initializing robot");
+	    betterTelemetryPlus.log("Status", "Initializing robot");
 
         // Wait for the driver to press PLAY
         waitForStart();
@@ -61,7 +61,7 @@ public class AarreAutonomousTransport extends LinearOpMode {
             log.severe(e.toString());
         }
 
-        betterTelemetry.log("Status", "Reset complete - robot is ready for transport");
+	    betterTelemetryPlus.log("Status", "Reset complete - robot is ready for transport");
 
         // Wait until the driver presses STOP
         //noinspection StatementWithEmptyBody

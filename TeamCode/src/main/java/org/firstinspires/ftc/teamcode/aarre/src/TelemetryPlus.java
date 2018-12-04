@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * This also makes it easier to switch back and forth between calling the Telemetry.addData and
  * Telemetry.log methods in other classes.
  */
-public class Telemetry {
+public class TelemetryPlus {
 
 	private final org.firstinspires.ftc.robotcore.external.Telemetry     underlyingTelemetry;
 	private final org.firstinspires.ftc.robotcore.external.Telemetry.Log telemetryLog;
@@ -30,7 +30,7 @@ public class Telemetry {
 	 * @param telemetry
 	 * 		The underlying @link{Telemetry} instance.
 	 */
-	public Telemetry(final org.firstinspires.ftc.robotcore.external.Telemetry telemetry) {
+	public TelemetryPlus(final org.firstinspires.ftc.robotcore.external.Telemetry telemetry) {
 
 		underlyingTelemetry = telemetry;
 		underlyingTelemetry.setAutoClear(false);
@@ -50,7 +50,7 @@ public class Telemetry {
 	 * 		under a given time. If true, there will be a small delay between calls to log messages,
 	 * 		which will prevent "folded" log entries.
 	 */
-	Telemetry(final org.firstinspires.ftc.robotcore.external.Telemetry underlyingTelemetry, final boolean
+	TelemetryPlus(final org.firstinspires.ftc.robotcore.external.Telemetry underlyingTelemetry, final boolean
 			carefulLogging) {
 
 		this(underlyingTelemetry);

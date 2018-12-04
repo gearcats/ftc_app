@@ -49,9 +49,9 @@ import java.util.logging.Logger;
  */
 public class IMU {
 
-	HardwareMap  hardwareMap;
-	LinearOpMode opMode;
-	Telemetry    telemetry;
+	HardwareMap   hardwareMap;
+	LinearOpMode  opMode;
+	TelemetryPlus telemetry;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
@@ -66,7 +66,7 @@ public class IMU {
 
 		this.opMode = opMode;
 
-		telemetry = new Telemetry(opMode.telemetry);
+		telemetry = new TelemetryPlus(opMode.telemetry);
 
 		/*
 		  Set up the parameters with which we will use our IMU. Note that integration

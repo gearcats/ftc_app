@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class Servo {
 
 	private final com.qualcomm.robotcore.hardware.Servo servo;
-	private       Telemetry                             telemetry;
+	private       TelemetryPlus                         telemetry;
 	private       LinearOpMode                          opMode;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
@@ -54,7 +54,8 @@ public class Servo {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with this instance.
 	 */
-	public Servo(final HardwareMap hardwareMap, final String servoName, final Telemetry telemetry, final LinearOpMode
+	public Servo(final HardwareMap hardwareMap, final String servoName, final TelemetryPlus telemetry, final
+	LinearOpMode
 			opMode) {
 
 		// Call the other constructor to create the underlying Servo member

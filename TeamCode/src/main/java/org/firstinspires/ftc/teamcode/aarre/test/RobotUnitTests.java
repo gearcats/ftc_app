@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.aarre.src.Robot;
-import org.firstinspires.ftc.teamcode.aarre.src.Telemetry;
+import org.firstinspires.ftc.teamcode.aarre.src.TelemetryPlus;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -47,7 +47,7 @@ public class RobotUnitTests extends LinearOpMode {
 	final void testTelemetryExists() {
 
 		assertNotNull(this.telemetry);
-		Telemetry telemetry = new Telemetry(this.telemetry);
+		TelemetryPlus telemetry = new TelemetryPlus(this.telemetry);
 		assertNotNull(telemetry);
 
 	}

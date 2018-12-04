@@ -10,7 +10,7 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 	static final double REV_CORE_HEX_TICKS_PER_REVOLUTION = 224;
 
 	private final  DcMotor           motor;
-	static private Telemetry         telemetry;
+	static private TelemetryPlus     telemetry;
 	private final  LinearOpMode      opMode;
 	private final  HardwareMap       hardwareMap;
 	static         MotorRevHDCoreHex motorRevHDCoreHex;
@@ -19,7 +19,7 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 
 		this.opMode = opMode;
 
-		telemetry = new Telemetry(opMode.telemetry);
+		telemetry = new TelemetryPlus(opMode.telemetry);
 
 		/*
 		  hardwareMap will be null if we are running off-robot, but for testing purposes it is

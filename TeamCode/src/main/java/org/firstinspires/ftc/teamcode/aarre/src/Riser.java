@@ -36,7 +36,7 @@ public class Riser {
 
 	private double          currentPosition;
 	private MotorTorqueNADO motor;
-	private Telemetry       telemetry;
+	private TelemetryPlus   telemetry;
 	private LinearOpMode    opMode;
 
 	private final Logger log = Logger.getLogger(this.getClass().getName());
@@ -58,7 +58,8 @@ public class Riser {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with the
 	 */
-	Riser(final HardwareMap hardwareMap, final String nameOfRiserMotor, final Telemetry telemetry, final LinearOpMode
+	Riser(final HardwareMap hardwareMap, final String nameOfRiserMotor, final TelemetryPlus telemetry, final
+	LinearOpMode
 			opMode) {
 
 		currentPosition = 0.5; // We have no idea where the riser is

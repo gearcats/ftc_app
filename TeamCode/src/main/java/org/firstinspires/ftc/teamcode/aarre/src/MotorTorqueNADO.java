@@ -13,17 +13,17 @@ public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 
 	static MotorTorqueNADO motorTorqueNADO;
 
-	private final  DcMotor      motor;
-	static private Telemetry    telemetry;
-	private final  LinearOpMode opMode;
-	private final  HardwareMap  hardwareMap;
+	private final  DcMotor       motor;
+	static private TelemetryPlus telemetry;
+	private final  LinearOpMode  opMode;
+	private final  HardwareMap   hardwareMap;
 
 
 	public MotorTorqueNADO(LinearOpMode opMode, String motorName) {
 
 		this.opMode = opMode;
 
-		telemetry = new Telemetry(opMode.telemetry);
+		telemetry = new TelemetryPlus(opMode.telemetry);
 
 		/*
 		  hardwareMap will be null if we are running off-robot, but for testing purposes it is

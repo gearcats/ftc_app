@@ -13,10 +13,10 @@ public class Arm {
 	private static final double         SECONDS_TO_RUN_DEFAULT         = 1.0;
 	private static final double         SECONDS_BEFORE_TIMEOUT_DEFAULT = 0.1;
 
-	private Motor        motor;
-	private Telemetry    telemetry;
-	private HardwareMap  hardwareMap;
-	private LinearOpMode opMode;
+	private Motor         motor;
+	private TelemetryPlus telemetry;
+	private HardwareMap   hardwareMap;
+	private LinearOpMode  opMode;
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
@@ -43,7 +43,7 @@ public class Arm {
 
 		this.opMode = opMode;
 
-		this.telemetry = new Telemetry(opMode.telemetry);
+		this.telemetry = new TelemetryPlus(opMode.telemetry);
 
 		/*
 		  hardwareMap will be null if we are running off-robot, but for testing purposes it is
