@@ -55,7 +55,7 @@ public class AarreMotorTorqueNADO extends AarreMotor implements ConcreteMotorInt
 	}
 
 	@Override
-	public DcMotor getMotor() {
+	public final DcMotor getMotor() {
 		return motor;
 	}
 

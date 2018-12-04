@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.aarre.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class AarreDriveMotor extends AarreMotorTorqueNADO implements AarreMotorInterface, ConcreteMotorInterface {
+public class AarreDriveMotor extends AarreMotorTorqueNADO implements ConcreteMotorInterface {
 
 	/*
 	 * This is 1.0 for direct-drive wheels
@@ -19,10 +18,6 @@ public class AarreDriveMotor extends AarreMotorTorqueNADO implements AarreMotorI
 		super(opMode, motorName);
 	}
 
-	@Override
-	public DcMotor getMotor() {
-		return (DcMotor) motorTorqueNADO;
-	}
 	public double getTicksPerInch() {
 		return (getTicksPerRevolution() * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math
 				.PI);

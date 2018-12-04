@@ -46,7 +46,7 @@ public class AarreMotorRevHDCoreHex extends AarreMotor implements ConcreteMotorI
 	}
 
 	@Override
-	public DcMotor getMotor() {
+	public final DcMotor getMotor() {
 		return motor;
 	}
 
