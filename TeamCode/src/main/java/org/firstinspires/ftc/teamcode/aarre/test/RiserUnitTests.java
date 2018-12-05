@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 import org.firstinspires.ftc.teamcode.aarre.src.Riser;
 import org.junit.jupiter.api.Test;
 
-import java.util.logging.Logger;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -12,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class RiserUnitTests {
 
     Riser riser;
-
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
     RiserUnitTests() {
         riser = new Riser();
@@ -27,14 +23,11 @@ public class RiserUnitTests {
     @Test
     public void testLowerMethod() {
         assertThrows(NullPointerException.class, () -> riser.lower());
-
-        double position = riser.getCurrentPosition();
     }
 
     @Test
     public void testRaiseMethod() {
         assertThrows(NullPointerException.class, () -> riser.raise());
-        double position = riser.getCurrentPosition();
     }
 
 }

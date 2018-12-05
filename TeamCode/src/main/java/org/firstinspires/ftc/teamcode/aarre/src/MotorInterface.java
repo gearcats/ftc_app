@@ -131,7 +131,7 @@ interface MotorInterface {
 	 *
 	 * @return
 	 */
-	double getTickNumberToStartSlowDown(int tickNumberAtStartOfPeriod, PositiveInteger numberOfTicksInPeriod,
+	double getTickNumberToStartSlowDown(int tickNumberAtStartOfPeriod, NonNegativeInteger numberOfTicksInPeriod,
 	                                    PowerVector powerAtStartOfPeriod, PowerVector powerAtEndOfPeriod);
 
 	/**
@@ -148,7 +148,7 @@ interface MotorInterface {
 	 *
 	 * @return True if we should stop speeding up; false otherwise.
 	 */
-	boolean isSpeedUpToEncoderTicksDone(PositiveInteger ticksMaximum, NonNegativeDouble secondsTimeout,
+	boolean isSpeedUpToEncoderTicksDone(NonNegativeInteger ticksMaximum, NonNegativeDouble secondsTimeout,
 	                                    NonNegativeDouble secondsRunning,
 	                                    NonNegativeInteger ticksMoved) throws NoSuchMethodException;
 
@@ -173,7 +173,7 @@ interface MotorInterface {
 	 *
 	 * @return True if changing the power should start or continue. False otherwise.
 	 */
-	boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, PositiveInteger
+	boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, NonNegativeInteger
 			numberOfTicksInPeriod, PowerVector powerAtStart, PowerVector powerAtEnd);
 
 	void rampToPower(PowerVector powerVectorRequested);

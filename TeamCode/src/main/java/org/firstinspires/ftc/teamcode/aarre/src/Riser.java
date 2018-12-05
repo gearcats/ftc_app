@@ -221,8 +221,8 @@ public class Riser {
 		log.entering(this.getClass().getCanonicalName(), "raiseByRevolutions");
 
 		log.fine(String.format("Power magnitude: %f", powerMagnitude.doubleValue()));
-		log.fine(String.format("Number of revolutions: %f", numberOfRevolutions));
-		log.fine(String.format("Seconds timeout: %f", secondsTimeout));
+		log.fine(String.format("Number of revolutions: %f", numberOfRevolutions.doubleValue()));
+		log.fine(String.format("Seconds timeout: %f", secondsTimeout.doubleValue()));
 		log.fine(String.format("Power magnitude: %f", powerMagnitude.doubleValue()));
 
 		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector.FORWARD);

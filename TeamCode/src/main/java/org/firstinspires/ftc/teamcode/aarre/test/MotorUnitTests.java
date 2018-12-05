@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeDouble;
 import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeInteger;
-import org.firstinspires.ftc.teamcode.aarre.src.PositiveInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
 import org.junit.jupiter.api.Test;
 
@@ -157,7 +156,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		  ticksMoved is less than ticksMaximum, so no reason to stop. (We haven't moved far enough
 		  yet).
 		 */
-		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(1440);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(0);
 
 		/*
@@ -180,7 +179,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  We have moved farther than we intended, so it is time to stop.
 		 */
-		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(1440);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(1441);
 
 		/*
@@ -203,7 +202,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  We have not moved enough yet, so continue.
 		 */
-		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(1440);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(1439);
 
 		/*
@@ -225,7 +224,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		 * We have not moved enough yet, so continue.
 		 */
-		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(1440);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(1439);
 
 		/*
@@ -249,7 +248,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  We have moved exactly the right amount, so stop.
 		 */
-		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(1440);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(1440);
 
 		/*
@@ -271,7 +270,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  We have not moved the right amount, so continue.
 		 */
-		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(1440);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(14);
 
 		/*
@@ -297,7 +296,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  We have not moved enough, so continue.
 		 */
-		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(1440);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(144);
 
 		/*
@@ -318,7 +317,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  We have not moved enough, so continue.
 		 */
-		PositiveInteger    ticksMaximum = new PositiveInteger(1440);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(1440);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(190);
 
 		/*
@@ -336,7 +335,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 	@Test
 	public void whenWeHaveNotMovedEnough_thenSpeedUpContinues() {
 
-		PositiveInteger    ticksMaximum   = new PositiveInteger(1440);
+		NonNegativeInteger ticksMaximum   = new NonNegativeInteger(1440);
 		NonNegativeInteger ticksMoved     = new NonNegativeInteger(190);
 		NonNegativeDouble  secondsTimeout = new NonNegativeDouble(5.0);
 		NonNegativeDouble  secondsRunning = new NonNegativeDouble(4.0);
@@ -351,7 +350,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 	@Test
 	public void whenWeHaveNotMoved_thenSpeedUpContinues() {
 
-		PositiveInteger    ticksMaximum = new PositiveInteger(5040);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(5040);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(0);
 
 		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
@@ -369,7 +368,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		 * We have moved enough (albeit in a negative direction), so stop
 		 */
-		PositiveInteger    ticksMaximum = new PositiveInteger(5040);
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(5040);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(5041);
 
 		/*
@@ -393,8 +392,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		PowerVector powerVectorAtStartOfPeriod = new PowerVector(1.0);
 		PowerVector powerVectorAtEndOfPeriod   = new PowerVector(0.0);
 
-		Integer         tickNumberAtStartOfPeriod = new Integer(8);
-		PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(60);
+		Integer            tickNumberAtStartOfPeriod = new Integer(8);
+		NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(60);
 
 		getMotor().setCurrentTickNumber(8);
 

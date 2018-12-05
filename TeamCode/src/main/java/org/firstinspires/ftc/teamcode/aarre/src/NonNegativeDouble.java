@@ -16,9 +16,9 @@ public class NonNegativeDouble {
 		return value.doubleValue();
 	}
 
-	//TODO: Test for rounding.
 	public int intValue() {
-		return value.intValue();
+		int result = (int) Math.round(value);
+		return result;
 	}
 
 	public NonNegativeDouble multiplyBy(NonNegativeDouble multiplicand) {

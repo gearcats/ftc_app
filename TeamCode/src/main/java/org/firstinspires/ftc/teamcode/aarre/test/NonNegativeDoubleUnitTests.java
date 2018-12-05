@@ -32,7 +32,7 @@ class NonNegativeDoubleUnitTests {
 		NonNegativeDouble multiplicand2 = new NonNegativeDouble(double2);
 		NonNegativeDouble actual        = multiplicand1.multiplyBy(multiplicand2);
 		NonNegativeDouble expected      = new NonNegativeDouble(double1 * double2);
-		assertEquals(expected, actual);
+		assertEquals(expected.doubleValue(), actual.doubleValue());
 	}
 
 	@Test
@@ -43,7 +43,7 @@ class NonNegativeDoubleUnitTests {
 		NonNegativeInteger multiplicand2      = new NonNegativeInteger(intMultiplicand);
 		NonNegativeDouble  actual             = multiplicand1.multiplyBy(multiplicand2);
 		NonNegativeDouble  expected           = new NonNegativeDouble(doubleMultiplicand * intMultiplicand);
-		assertEquals(expected, actual);
+		assertEquals(expected.doubleValue(), actual.doubleValue());
 
 	}
 

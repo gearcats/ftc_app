@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.aarre.src;
 
+import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -218,7 +219,8 @@ public abstract class Motor implements MotorInterface {
 		return getMotor().getPower();
 	}
 
-	final public double getTickNumberToStartSlowDown(final int tickNumberAtStartOfPeriod, final PositiveInteger
+	@SuppressLint("DefaultLocale")
+	final public double getTickNumberToStartSlowDown(final int tickNumberAtStartOfPeriod, final NonNegativeInteger
 			numberOfTicksInPeriod, final PowerVector powerVectorAtStartOfPeriod, final PowerVector
 			powerVectorAtEndOfPeriod) {
 
@@ -255,13 +257,13 @@ public abstract class Motor implements MotorInterface {
 
 		final NonNegativeDouble numberOfCyclesInSlowDown = new NonNegativeDouble(magnitudeOfPowerChange.divideBy
 				(getPowerMagnitudeIncrementPerCycle()));
-		log.finer(String.format("Number of cycles in slowdown %f", numberOfCyclesInSlowDown));
+		log.finer(String.format("Number of cycles in slowdown %f", numberOfCyclesInSlowDown.doubleValue()));
 
 		final NonNegativeDouble numberOfTicksInSlowDown = new NonNegativeDouble(numberOfCyclesInSlowDown.doubleValue()
 				* getTicksPerCycle().doubleValue());
-		log.finer(String.format("Number of ticks in slowdown: %f", numberOfTicksInSlowDown));
+		log.finer(String.format("Number of ticks in slowdown: %f", numberOfTicksInSlowDown.doubleValue()));
 
-		final double numberOfTicksToChange = powerChangeDirection * numberOfTicksInSlowDown.intValue();
+		final double numberOfTicksToChange = powerChangeDirection * numberOfTicksInSlowDown.doubleValue();
 		log.finer(String.format("Number of ticks to change: %f", numberOfTicksToChange));
 
 		final double tickNumberAtEndOfPeriod = tickNumberAtStartOfPeriod + (numberOfTicksInPeriod.intValue() *
@@ -292,7 +294,7 @@ public abstract class Motor implements MotorInterface {
 	}
 
 
-	public boolean isSpeedUpToEncoderTicksDone(PositiveInteger ticksMaximum, NonNegativeDouble secondsTimeout,
+	public boolean isSpeedUpToEncoderTicksDone(NonNegativeInteger ticksMaximum, NonNegativeDouble secondsTimeout,
 	                                           NonNegativeDouble secondsRunning, NonNegativeInteger ticksMoved) {
 
 		log.entering(this.getClass().getCanonicalName(), "isSpeedUpToEncoderTicksDone");
@@ -300,8 +302,8 @@ public abstract class Motor implements MotorInterface {
 		boolean valueToReturn = false;
 
 		log.finest(String.format("ticksMaximum: %f", ticksMaximum.doubleValue()));
-		log.finest(String.format("secondsTimeout: %f", secondsTimeout));
-		log.finest(String.format("secondsRunning: %f", secondsRunning));
+		log.finest(String.format("secondsTimeout: %f", secondsTimeout.doubleValue()));
+		log.finest(String.format("secondsRunning: %f", secondsRunning.doubleValue()));
 		log.finest(String.format("ticksMoved: %f", ticksMoved.doubleValue()));
 
 		if (Math.abs(ticksMoved.intValue()) >= Math.abs(ticksMaximum.intValue())) {
@@ -328,8 +330,7 @@ public abstract class Motor implements MotorInterface {
 	}
 
 
-	public boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfTravel, int tickNumberCurrent,
-	                                               PositiveInteger numberOfTicksToTravel, PowerVector
+	public boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfTravel, int tickNumberCurrent, NonNegativeInteger numberOfTicksToTravel, PowerVector
 			                                               powerAtStartOfTravel, PowerVector powerAtEndOfTravel) {
 
 
@@ -451,12 +452,12 @@ public abstract class Motor implements MotorInterface {
 		excursion.setTicksToRotate(ticksToRotate);
 		excursion.setSecondsTimeout(secondsTimeout);
 
-		double          ticksToSpeedUpDouble = ticksToRotate.doubleValue() / 2.0;
-		int             ticksToSpeedUpInt    = (int) Math.round(ticksToSpeedUpDouble);
-		PositiveInteger ticksToSpeedUp       = new PositiveInteger(ticksToSpeedUpInt);
+		double             ticksToSpeedUpDouble = ticksToRotate.doubleValue() / 2.0;
+		int                ticksToSpeedUpInt    = (int) Math.round(ticksToSpeedUpDouble);
+		NonNegativeInteger ticksToSpeedUp       = new NonNegativeInteger(ticksToSpeedUpInt);
 
-		int             ticksToSlowDownInt = ticksToRotate.intValue() - ticksToSpeedUp.intValue();
-		PositiveInteger ticksToSlowDown    = new PositiveInteger(ticksToSlowDownInt);
+		int                ticksToSlowDownInt = ticksToRotate.intValue() - ticksToSpeedUp.intValue();
+		NonNegativeInteger ticksToSlowDown    = new NonNegativeInteger(ticksToSlowDownInt);
 
 		log.fine(String.format("Target power UP: %f", powerVector.doubleValue()));
 		rampToPower(powerVector, ticksToSpeedUp, secondsTimeout);
@@ -501,7 +502,8 @@ public abstract class Motor implements MotorInterface {
 	 * 		moves
 	 * 		enough ticks first.
 	 */
-	private void rampToPower(final PowerVector powerVectorRequested, final PositiveInteger ticksToMove, final NonNegativeDouble secondsTimeout) throws NoSuchMethodException {
+	private void rampToPower(final PowerVector powerVectorRequested, final NonNegativeInteger ticksToMove, final
+	NonNegativeDouble secondsTimeout) throws NoSuchMethodException {
 
 		log.entering(getClass().getCanonicalName(), "rampToPower");
 
@@ -541,7 +543,8 @@ public abstract class Motor implements MotorInterface {
 	 * </pre>
 	 * <p>
 	 */
-	private void slowDownToPower(final PowerVector powerVectorAtEnd, final PositiveInteger ticksToMove, final NonNegativeDouble secondsTimeout) {
+	private void slowDownToPower(final PowerVector powerVectorAtEnd, final NonNegativeInteger ticksToMove, final
+	NonNegativeDouble secondsTimeout) {
 
 		log.entering(getClass().getCanonicalName(), "slowDownToPower");
 
@@ -609,7 +612,7 @@ public abstract class Motor implements MotorInterface {
 	 * @param ticksToMove
 	 * @param tickNumberStart
 	 */
-	private void waitForSlowDown(PowerVector powerVectorAtEnd, PositiveInteger ticksToMove, int tickNumberStart) {
+	private void waitForSlowDown(PowerVector powerVectorAtEnd, NonNegativeInteger ticksToMove, int tickNumberStart) {
 		boolean     keepWaiting;
 		int         tickNumberCurrent;
 		PowerVector powerVectorCurrent;
@@ -637,7 +640,8 @@ public abstract class Motor implements MotorInterface {
 	 *     |_/
 	 * </pre>
 	 */
-	private void speedUpToPower(final PowerVector powerVectorRequested, final PositiveInteger ticksToMove, final NonNegativeDouble secondsTimeout) throws NoSuchMethodException {
+	private void speedUpToPower(final PowerVector powerVectorRequested, final NonNegativeInteger ticksToMove, final
+	NonNegativeDouble secondsTimeout) throws NoSuchMethodException {
 
 		log.entering(getClass().getName(), "speedUpToPower");
 

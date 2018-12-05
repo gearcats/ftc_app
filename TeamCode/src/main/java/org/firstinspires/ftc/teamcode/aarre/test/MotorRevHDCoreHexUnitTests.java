@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import org.firstinspires.ftc.teamcode.aarre.src.*;
+import org.firstinspires.ftc.teamcode.aarre.src.MotorRevHDCoreHex;
+import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeDouble;
+import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeInteger;
+import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -40,11 +43,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	public final void testIsRampDownToEncoderTicksRunning01() {
 
 
-		final int             tickNumberAtStartOfPeriod = 100;
-		final int             tickNumberCurrent         = 1000;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(1000);
-		final PowerVector     powerAtStart              = new PowerVector(1.0);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = 100;
+		final int                tickNumberCurrent         = 1000;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
 				tickNumberCurrent,
@@ -84,9 +87,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testIsRampDownToEncoderTicksRunning05() {
 
-		final int             tickNumberAtStartOfPeriod = 60;
-		final int             tickNumberCurrent         = 61;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
+		final int                tickNumberAtStartOfPeriod = 60;
+		final int                tickNumberCurrent         = 61;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -108,9 +111,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric05() {
 
-		final int             tickNumberAtStartOfPeriod = 60;
-		final int             tickNumberCurrent         = 61;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
+		final int                tickNumberAtStartOfPeriod = 60;
+		final int                tickNumberCurrent         = 61;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -140,8 +143,8 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		final PowerVector powerAtStart = new PowerVector(1.0);
 		final PowerVector powerAtEnd   = new PowerVector(0.0);
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(2000);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(2000);
 
 		/*
 		 * The revHDCoreHexMotor needs 10 cycles to ramp down 10 cycles in power
@@ -172,8 +175,8 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		PowerVector powerAtStart = new PowerVector(1.0);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(10000);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
 
 		/*
 		 * There are 13.44 ticks in a cycle, so the ramp should be 134.4 ticks
@@ -194,8 +197,8 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		/*
 		 * At 13.44 ticks per cycle, total ticks in ramp = 67.2
@@ -210,10 +213,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testGetTickNumberToStartSlowDown04() {
 
-		final int             tickNumberAtStartOfPeriod = 60;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(10000);
-		final PowerVector     powerAtStart              = new PowerVector(1.0);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = 60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		/*
 		 * 10 power cycles
@@ -233,8 +236,8 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Override
 	public final void testGetTickNumberToStartSlowDown08() {
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -256,10 +259,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	public final void testGetTickNumberToStartSlowDown11() {
 
 
-		final int             tickNumberAtStartOfPeriod = -60;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(1000);
-		final PowerVector     powerAtStart              = new PowerVector(1.0);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = -60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of slowing down
@@ -279,8 +282,8 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Override
 	public final void testGetTickNumberToStartSlowDown12() {
 
-		final int             tickNumberAtStartOfPeriod = 60;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
+		final int                tickNumberAtStartOfPeriod = 60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -302,10 +305,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Override
 	public final void whenThereAreEnoughTicks_thenSlowDownStartsOnTime() {
 
-		final int             tickNumberAtStartOfPeriod = -60;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(1000);
-		final PowerVector     powerAtStart              = new PowerVector(1.0);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = -60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of slowing down. Thus, at 13.44 ticks per cycle, we need 134.4 ticks for slowdown. The tick
@@ -323,10 +326,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Override
 	public final void whenThereAreNotEnoughTicks_thenSlowDownStartsTooEarly() {
 
-		final int             tickNumberAtStartOfPeriod = -60;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(100);
-		final PowerVector     powerAtStart              = new PowerVector(1.0);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = -60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(100);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of slowing down
@@ -353,11 +356,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	public final void testIsSlowDownToEncoderTicksRunning11() {
 
 
-		final int             tickNumberAtStartOfPeriod = -60;
-		final int             tickNumberCurrent         = -900;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(1000);
-		final PowerVector     powerAtStart              = new PowerVector(1.0);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = -60;
+		final int                tickNumberCurrent         = -900;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of ramp
@@ -382,9 +385,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunning08() {
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final int             tickNumberCurrent         = -61;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final int                tickNumberCurrent         = -61;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -466,9 +469,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void whenSlowDownNotStarted_thenReturnFalse() {
 
-		final int             tickNumberAtStartOfPeriod = 60;
-		final int             tickNumberCurrent         = 114;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
+		final int                tickNumberAtStartOfPeriod = 60;
+		final int                tickNumberCurrent         = 114;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -491,8 +494,8 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void whenSlowDownNotStarted_thenTickNumberToStartSlowDownIsCorrect() {
 
-		final int             tickNumberAtStartOfPeriod = 60;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
+		final int                tickNumberAtStartOfPeriod = 60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -515,9 +518,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric01() {
 
-		final int             tickNumberAtStartOfPeriod = 100;
-		final int             tickNumberCurrent         = 1000;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(1000);
+		final int                tickNumberAtStartOfPeriod = 100;
+		final int                tickNumberCurrent         = 1000;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
 
 		/*
 
@@ -547,11 +550,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric02() {
 
-		final int             tickNumberAtStartOfPeriod = 60;
-		final int             tickNumberCurrent         = 61;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(10000);
-		final PowerVector     powerAtStart              = new PowerVector(1.0);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = 60;
+		final int                tickNumberCurrent         = 61;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
@@ -563,9 +566,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric03() {
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final int             tickNumberCurrent         = 11000;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(10000);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final int                tickNumberCurrent         = 11000;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
 
 		final PowerVector powerAtStart = new PowerVector(1.0);
 		final PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -580,11 +583,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric04() {
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final int             tickNumberCurrent         = 123;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(100);
-		final PowerVector     powerAtStart              = new PowerVector(0.5);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final int                tickNumberCurrent         = 123;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(100);
+		final PowerVector        powerAtStart              = new PowerVector(0.5);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		final boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
@@ -597,11 +600,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void whenTickNumberInRange_thenSlowDownIsRunning() {
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final int             tickNumberCurrent         = 59;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
-		final PowerVector     powerAtStart              = new PowerVector(0.5);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final int                tickNumberCurrent         = 59;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
+		final PowerVector        powerAtStart              = new PowerVector(0.5);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		/*
 		 *  Period runs from tick 0 to tick 120.
@@ -619,11 +622,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric07() {
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final int             tickNumberCurrent         = -59;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
-		final PowerVector     powerAtStart              = new PowerVector(0.5);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final int                tickNumberCurrent         = -59;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
+		final PowerVector        powerAtStart              = new PowerVector(0.5);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
 				tickNumberCurrent, numberOfTicksInPeriod,
@@ -644,9 +647,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 * This is a made up example.
 		 */
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final int             tickNumberCurrent         = -11000;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(10000);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final int                tickNumberCurrent         = -11000;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
 
 		final PowerVector powerAtStart = new PowerVector(1.0);
 		final PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -662,11 +665,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric10() {
 
-		final int             tickNumberAtStartOfPeriod = -60;
-		final int             tickNumberCurrent         = -61;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(10000);
-		final PowerVector     powerAtStart              = new PowerVector(1.0);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = -60;
+		final int                tickNumberCurrent         = -61;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		boolean result = motorRevHDCoreHex.isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
 				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
@@ -683,11 +686,11 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 	public final void testIsSlowDownToEncoderTicksRunningGeneric11() {
 
 
-		final int             tickNumberAtStartOfPeriod = -60;
-		final int             tickNumberCurrent         = -900;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(1000);
-		final PowerVector     powerAtStart              = new PowerVector(1.0);
-		final PowerVector     powerAtEnd                = new PowerVector(0.0);
+		final int                tickNumberAtStartOfPeriod = -60;
+		final int                tickNumberCurrent         = -900;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		/*
 		 * Need 10 cycles of ramp
@@ -713,9 +716,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 
 		// TODO: Rename this method
 
-		final int             tickNumberAtStartOfPeriod = 0;
-		final int             tickNumberCurrent         = -61;
-		final PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(120);
+		final int                tickNumberAtStartOfPeriod = 0;
+		final int                tickNumberCurrent         = -61;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
