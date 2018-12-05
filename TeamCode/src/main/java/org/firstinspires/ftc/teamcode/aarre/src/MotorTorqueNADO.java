@@ -39,11 +39,6 @@ public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 	}
 
 	@Override
-	public final int getCurrentTickNumber() {
-		return motor.getCurrentPosition();
-	}
-
-	@Override
 	public final HardwareMap getHardwareMap() {
 		return hardwareMap;
 	}

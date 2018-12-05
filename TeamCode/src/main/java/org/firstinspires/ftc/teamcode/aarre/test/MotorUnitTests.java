@@ -383,6 +383,37 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		assertTrue(result);
 	}
 
+	/**
+	 * The tick number to start a slow down should not depend on what the current tick number is.
+	 */
+	@Test
+	public void whenCurrentTickChanges_thenTickToStartSlowDownDoesNot() {
+
+		PowerVector powerVectorAtStartOfPeriod = new PowerVector(1.0);
+		PowerVector powerVectorAtEndOfPeriod   = new PowerVector(0.0);
+
+		Integer         tickNumberAtStartOfPeriod = new Integer(8);
+		PositiveInteger numberOfTicksInPeriod     = new PositiveInteger(60);
+
+		getMotor().setCurrentTickNumber(8);
+
+		double result1 = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerVectorAtStartOfPeriod, powerVectorAtEndOfPeriod);
+
+		getMotor().setCurrentTickNumber(15);
+
+		double result2 = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerVectorAtStartOfPeriod, powerVectorAtEndOfPeriod);
+
+		assertEquals(result1, result2);
+
+	}
+
+	/**
+	 * The tick number to start a slow down should depend on the speed at the start of the slowdown but not on the
+	 * speed
+	 * in the middle of the slowdown.
+	 */
 
 	@Override
 	@Test

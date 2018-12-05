@@ -43,6 +43,15 @@ public abstract class Motor implements MotorInterface {
 
 	private PowerMagnitude powerMagnitudeIncrementPerCycle = DEFAULT_POWER_INCREMENT_PER_CYCLE;
 	private PowerMagnitude powerMagnitudeTolerance         = DEFAULT_PROPORTION_POWER_TOLERANCE;
+
+	/**
+	 * When running on bot, callers can get the current tick number as reported by the motor encoder. For testing
+	 * off-bot, however, the motor cannot report a tick number. This private field is used in conjuction with the
+	 * getCurrentTickNumber() and setCurrentTickNumber() methods to artificially set the current tick number for the
+	 * purposes of testing off-bot.
+	 */
+	private Integer currentTickNumber = new Integer(0);
+
 	private int            oldTickNumber                   = 0;
 
 	// These are defaults. The user should customize them
@@ -82,15 +91,34 @@ public abstract class Motor implements MotorInterface {
 	 * Despite its name, the {@link DcMotor} method {@code getCurrentPosition} provides almost no information about
 	 * position. Therefore, we use a different name here.
 	 *
+	 * When running on bot, callers can get the current tick number as reported by the motor encoder. For testing
+	 * off-bot, however, the motor cannot report a tick number. This private field is used in conjunction with the
+	 * getCurrentTickNumber() and setCurrentTickNumber() methods to artificially set the current tick number for
+	 * the purposes of testing off-bot.
+	 *
 	 * @return The current reading of the encoder for this motor, in ticks.
 	 */
-	public int getCurrentTickNumber() {
-		DcMotor.RunMode mode = getMotor().getMode();
-		if (mode != DcMotor.RunMode.RUN_USING_ENCODER) {
-			log.warning("Motor is not using encoder!");
+	public final int getCurrentTickNumber() {
+
+		int result;
+
+		DcMotor motor = getMotor();
+		if (motor == null) {
+			// Code is running off-bot, so return pretend number
+			result = currentTickNumber;
+		} else {
+			DcMotor.RunMode mode = getMotor().getMode();
+			if (mode != DcMotor.RunMode.RUN_USING_ENCODER) {
+				log.warning("Motor is not using encoder!");
+			}
+			result = motor.getCurrentPosition();
+			setCurrentTickNumber(Integer.valueOf(result));
 		}
-		return getMotor().getCurrentPosition();
+
+		return result;
+
 	}
+
 
 	/**
 	 * Get the number of cycles for which a ramp (slowing down/speeding up) should last
@@ -193,6 +221,7 @@ public abstract class Motor implements MotorInterface {
 		log.finer(String.format("Number of ticks in period: %d", numberOfTicksInPeriod.intValue()));
 		log.finer(String.format("Power vector at start of period: %f", powerVectorAtStartOfPeriod.doubleValue()));
 		log.finer(String.format("Power vector at end of period: %f", powerVectorAtEndOfPeriod.doubleValue()));
+		log.finer(String.format("Current tick number: %d", getCurrentTickNumber()));
 
 		PowerMagnitude powerMagnitudeAtStartOfPeriod = powerVectorAtStartOfPeriod.getMagnitude();
 		log.finer(String.format("Power magnitude at start of period: %f", powerMagnitudeAtStartOfPeriod.doubleValue
@@ -821,6 +850,18 @@ public abstract class Motor implements MotorInterface {
 			getOpMode().idle();
 		}
 		rampToPower(new PowerVector(0.0));
+	}
+
+	/**
+	 * When running on bot, callers can get the current tick number as reported by the motor encoder. For testing
+	 * off-bot, however, the motor cannot report a tick number. This private field is used in conjunction with the
+	 * getCurrentTickNumber() and setCurrentTickNumber() methods to artificially set the current tick number for the
+	 * purposes of testing off-bot.
+	 *
+	 * @param tickNumber
+	 */
+	public void setCurrentTickNumber(Integer tickNumber) {
+		currentTickNumber = tickNumber;
 	}
 
 	/**

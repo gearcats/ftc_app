@@ -36,11 +36,6 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 	}
 
 	@Override
-	public final int getCurrentTickNumber() {
-		return motor.getCurrentPosition();
-	}
-
-	@Override
 	public final DcMotor getMotor() {
 		return motor;
 	}
