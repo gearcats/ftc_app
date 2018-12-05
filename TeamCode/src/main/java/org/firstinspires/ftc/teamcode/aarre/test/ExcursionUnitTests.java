@@ -68,6 +68,12 @@ class ExcursionUnitTests {
 	}
 
 	@Test
+	public void whenExcursionIsCreated_thenYouCanGetTicksToSpeedUp() {
+		NonNegativeInteger ticksToSpeedUp = excursion.getTicksToSpeedUp();
+		assertNotNull(ticksToSpeedUp);
+	}
+
+	@Test
 	public void whenExcursionIsCreated_thenYouCanSetPowerVector() {
 		PowerVector powerVector = new PowerVector(1.0);
 		excursion.setPowerVector(powerVector);

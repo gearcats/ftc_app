@@ -445,12 +445,16 @@ public abstract class Motor implements MotorInterface {
 	 */
 	final void rampToEncoderTicks(final PowerVector powerVector, final NonNegativeInteger ticksToRotate, final NonNegativeDouble secondsTimeout) throws NoSuchMethodException {
 
+		log.entering(getClass().getCanonicalName(), "rampToEncoderTicks");
 		setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 		Excursion excursion = new Excursion();
 		excursion.setPowerVector(powerVector);
 		excursion.setTicksToRotate(ticksToRotate);
 		excursion.setSecondsTimeout(secondsTimeout);
+
+		log.finer(String.format("Ticks to speed up: %d", excursion.getTicksToSpeedUp()));
+		log.finer(String.format("Ticks to slow down: %d", excursion.getTicksToSlowDown()));
 
 		double             ticksToSpeedUpDouble = ticksToRotate.doubleValue() / 2.0;
 		int                ticksToSpeedUpInt    = (int) Math.round(ticksToSpeedUpDouble);
@@ -468,6 +472,8 @@ public abstract class Motor implements MotorInterface {
 
 		getMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		getMotor().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+		log.exiting(getClass().getCanonicalName(), "rampToEncoderTicks");
 	}
 
 

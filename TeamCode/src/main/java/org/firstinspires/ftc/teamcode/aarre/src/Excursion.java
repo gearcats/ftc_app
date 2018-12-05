@@ -44,6 +44,10 @@ public class Excursion {
 		return getSlowDown().getTicksToRotate();
 	}
 
+	public NonNegativeInteger getTicksToSpeedUp() {
+		return getSpeedUp().getTicksToRotate();
+	}
+
 	public void setPowerVector(PowerVector powerVector) {
 		this.powerVector = powerVector;
 	}
