@@ -11,9 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PowerVectorUnitTests {
 
-	private PowerVector powerVector;
+	private final Logger      javaLog = Logger.getLogger(this.getClass().getName());
+	private       PowerVector powerVector;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	@AfterEach
+	void tearDown() {
+	}
 
 	@Test
 	final void testAarrePowerVector01() {
@@ -67,8 +70,7 @@ class PowerVectorUnitTests {
 	 */
 	@Test
 	final void testAarrePowerVector08() {
-		assertThrows(IllegalArgumentException.class, () -> powerVector = new PowerVector
-				(2));
+		assertThrows(IllegalArgumentException.class, () -> powerVector = new PowerVector(2));
 
 	}
 
@@ -81,14 +83,12 @@ class PowerVectorUnitTests {
 
 	}
 
-
 	/**
 	 * Test that attempting to set an double Vector greater than 1 throws an exception.
 	 */
 	@Test
 	final void testAarrePowerVector10() {
-		assertThrows(IllegalArgumentException.class, () -> powerVector = new PowerVector
-				(1.0001));
+		assertThrows(IllegalArgumentException.class, () -> powerVector = new PowerVector(1.0001));
 
 	}
 
@@ -113,12 +113,12 @@ class PowerVectorUnitTests {
 		assertEquals(0.34, result);
 	}
 
-	@AfterEach
-	void tearDown() {
+	@Test
+	void testAdd() {
 	}
 
 	@Test
-	void testAdd() {
+	void testAsDouble() {
 	}
 
 	@Test
@@ -134,15 +134,11 @@ class PowerVectorUnitTests {
 	}
 
 	@Test
-	void testIsGreaterThan() {
-	}
-
-	@Test
-	void testAsDouble() {
-	}
-
-	@Test
 	void testGetMagnitude() {
+	}
+
+	@Test
+	void testIsGreaterThan() {
 	}
 
 	@Test

@@ -46,13 +46,12 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		log.setLevel(Level.ALL);
 	}
 
-	@Override
+	protected MotorUnitTests() {
+	}
+
 	@Test
-	public void testGetProportionPowerNew01() {
-		PowerVector powerVectorCurrent   = new PowerVector(1.0);
-		PowerVector powerVectorRequested = new PowerVector(0.0);
-		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
-		assertEquals(0.9, proportionPowerNew.doubleValue(), "Wrong proportion power");
+	@Override
+	public void runOpMode() {
 	}
 
 	@Override
@@ -147,6 +146,14 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		assertEquals(1.0, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
+	@Override
+	@Test
+	public void testGetProportionPowerNew01() {
+		PowerVector powerVectorCurrent   = new PowerVector(1.0);
+		PowerVector powerVectorRequested = new PowerVector(0.0);
+		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		assertEquals(0.9, proportionPowerNew.doubleValue(), "Wrong proportion power");
+	}
 
 	@Override
 	@Test
@@ -288,7 +295,6 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		assertFalse(result);
 	}
 
-
 	@Override
 	@Test
 	public void testIsRampUpToEncoderTicksDone07() {
@@ -326,61 +332,22 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
 		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
 
-		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-
-		assertFalse(result);
-	}
-
-	@Override
-	@Test
-	public void whenWeHaveNotMovedEnough_thenSpeedUpContinues() {
-
-		NonNegativeInteger ticksMaximum   = new NonNegativeInteger(1440);
-		NonNegativeInteger ticksMoved     = new NonNegativeInteger(190);
-		NonNegativeDouble  secondsTimeout = new NonNegativeDouble(5.0);
-		NonNegativeDouble  secondsRunning = new NonNegativeDouble(4.0);
-
-		boolean result = true;
-		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-
-		assertFalse(result);
-	}
-
-	@Override
-	@Test
-	public void whenWeHaveNotMoved_thenSpeedUpContinues() {
-
-		NonNegativeInteger ticksMaximum = new NonNegativeInteger(5040);
-		NonNegativeInteger ticksMoved   = new NonNegativeInteger(0);
-
-		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
-		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
-
-		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
-
-		assertFalse(result);
-	}
-
-	@Override
-	@Test
-	public void whenWeHaveMovedMoreThanEnough_thenSpeedUpStops() throws NoSuchMethodException {
-
-		/*
-		 * We have moved enough (albeit in a negative direction), so stop
-		 */
-		NonNegativeInteger ticksMaximum = new NonNegativeInteger(5040);
-		NonNegativeInteger ticksMoved   = new NonNegativeInteger(5041);
-
-		/*
-		 * Seconds running is less than timeout, so continue.
-		 */
-		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
-		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
-
 		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning,
 				ticksMoved);
 
-		assertTrue(result);
+		assertFalse(result);
+	}
+
+	/**
+	 * The tick number to start a slow down should depend on the speed at the start of the slowdown but not on the
+	 * speed
+	 * in the middle of the slowdown.
+	 */
+
+	@Override
+	@Test
+	public void testSetDirection() {
+		getMotor().setDirection(DcMotorSimple.Direction.REVERSE);
 	}
 
 	/**
@@ -409,23 +376,56 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 
 	}
 
-	/**
-	 * The tick number to start a slow down should depend on the speed at the start of the slowdown but not on the
-	 * speed
-	 * in the middle of the slowdown.
-	 */
+	@Override
+	@Test
+	public void whenWeHaveMovedMoreThanEnough_thenSpeedUpStops() throws NoSuchMethodException {
+
+		/*
+		 * We have moved enough (albeit in a negative direction), so stop
+		 */
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(5040);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(5041);
+
+		/*
+		 * Seconds running is less than timeout, so continue.
+		 */
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
+
+		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning,
+				ticksMoved);
+
+		assertTrue(result);
+	}
 
 	@Override
 	@Test
-	public void testSetDirection() {
-		getMotor().setDirection(DcMotorSimple.Direction.REVERSE);
+	public void whenWeHaveNotMovedEnough_thenSpeedUpContinues() {
+
+		NonNegativeInteger ticksMaximum   = new NonNegativeInteger(1440);
+		NonNegativeInteger ticksMoved     = new NonNegativeInteger(190);
+		NonNegativeDouble  secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble  secondsRunning = new NonNegativeDouble(4.0);
+
+		boolean result = true;
+		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
+
+		assertFalse(result);
 	}
 
-	@Test
 	@Override
-	public void runOpMode() {
-	}
+	@Test
+	public void whenWeHaveNotMoved_thenSpeedUpContinues() {
 
-	protected MotorUnitTests() {
+		NonNegativeInteger ticksMaximum = new NonNegativeInteger(5040);
+		NonNegativeInteger ticksMoved   = new NonNegativeInteger(0);
+
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
+
+		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning,
+				ticksMoved);
+
+		assertFalse(result);
 	}
 }

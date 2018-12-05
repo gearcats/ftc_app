@@ -4,9 +4,8 @@ import java.util.logging.Logger;
 
 public class PowerMagnitude implements Comparable<PowerMagnitude> {
 
-	private double magnitude;
-
 	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private       double magnitude;
 
 	public PowerMagnitude(double magnitude) {
 		log.entering("AarrePowerMagnitude", "AarrePowerMagnitude");
@@ -34,10 +33,6 @@ public class PowerMagnitude implements Comparable<PowerMagnitude> {
 		return Double.compare(this.magnitude, comparator.doubleValue());
 	}
 
-	public double doubleValue() {
-		return this.magnitude;
-	}
-
 	/**
 	 * Divide this power magnitude by another.
 	 * <p>
@@ -53,6 +48,10 @@ public class PowerMagnitude implements Comparable<PowerMagnitude> {
 	 */
 	public double divideBy(PowerMagnitude divisor) {
 		return this.magnitude / divisor.doubleValue();
+	}
+
+	public double doubleValue() {
+		return this.magnitude;
 	}
 
 	public boolean isGreaterThan(PowerMagnitude comparator) {

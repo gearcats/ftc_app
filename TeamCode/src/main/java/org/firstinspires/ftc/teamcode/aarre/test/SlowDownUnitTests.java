@@ -19,14 +19,14 @@ class SlowDownUnitTests extends RampUnitTests {
 	}
 
 	@Test
-	public void whenConstructorIsCalled_thenTheResultIsNotNull() {
-		assertNotNull(slowdown);
-	}
-
-	@Test
 	@BeforeEach
 	public void slowDownUnitTests() {
 		slowdown = new SlowDown();
+	}
+
+	@Test
+	public void whenConstructorIsCalled_thenTheResultIsNotNull() {
+		assertNotNull(slowdown);
 	}
 
 	@Test

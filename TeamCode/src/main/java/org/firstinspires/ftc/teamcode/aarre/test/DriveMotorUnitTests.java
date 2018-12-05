@@ -10,25 +10,35 @@ import java.util.logging.Logger;
 
 class DriveMotorUnitTests extends LinearOpMode {
 
-	DriveMotor motor;
-
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
-
-	@BeforeEach
-	void setUp() {
-		motor = new DriveMotor(this, "left");
-	}
-
-	@AfterEach
-	void tearDown() {
-	}
-
-	@Test
-	void getTicksPerInch() {
-	}
+	DriveMotor motor;
 
 	@Test
 	void createAarreMotorTorqueNADO() {
+	}
+
+	@Test
+	void getCurrentTickNumber() {
+	}
+
+	@Test
+	void getMillisecondsPerCycle() {
+	}
+
+	@Test
+	void getPower() {
+	}
+
+	@Test
+	void getPowerMagnitudeIncrementPerCycle() {
+	}
+
+	@Test
+	void getPowerVectorCurrent() {
+	}
+
+	@Test
+	void getPowerVectorNew() {
 	}
 
 	@Test
@@ -40,15 +50,27 @@ class DriveMotorUnitTests extends LinearOpMode {
 	}
 
 	@Test
-	void setRevolutionsPerMinute() {
+	void getTickNumberToStartRampDown() {
 	}
 
 	@Test
-	void setTicksPerRevolution() {
+	void getTicksPerCycle() {
 	}
 
 	@Test
-	void getMillisecondsPerCycle() {
+	void getTicksPerCycle1() {
+	}
+
+	@Test
+	void getTicksPerInch() {
+	}
+
+	@Test
+	void getTicksPerMillisecond() {
+	}
+
+	@Test
+	void getTicksPerMillisecond1() {
 	}
 
 	@Test
@@ -72,47 +94,7 @@ class DriveMotorUnitTests extends LinearOpMode {
 	}
 
 	@Test
-	void getTicksPerMillisecond() {
-	}
-
-	@Test
-	void getTicksPerMillisecond1() {
-	}
-
-	@Test
-	void getTicksPerCycle() {
-	}
-
-	@Test
-	void getTicksPerCycle1() {
-	}
-
-	@Test
-	void getCurrentTickNumber() {
-	}
-
-	@Test
-	void getPowerMagnitudeIncrementPerCycle() {
-	}
-
-	@Test
-	void getPowerVectorCurrent() {
-	}
-
-	@Test
-	void getPowerVectorNew() {
-	}
-
-	@Test
-	void getPower() {
-	}
-
-	@Test
-	void getTickNumberToStartRampDown() {
-	}
-
-	@Test
-	void isRampUpToEncoderTicksDone() {
+	void isBusy() {
 	}
 
 	@Test
@@ -120,7 +102,7 @@ class DriveMotorUnitTests extends LinearOpMode {
 	}
 
 	@Test
-	void isBusy() {
+	void isRampUpToEncoderTicksDone() {
 	}
 
 	@Test
@@ -143,6 +125,14 @@ class DriveMotorUnitTests extends LinearOpMode {
 	void runByTime() {
 	}
 
+	/**
+	 * Must override runOpMode to avoid compiler error
+	 */
+	@Test
+	@Override
+	public final void runOpMode() {
+	}
+
 	@Test
 	void runUntilStalled() {
 	}
@@ -156,15 +146,19 @@ class DriveMotorUnitTests extends LinearOpMode {
 	}
 
 	@Test
-	void setPowerMagnitudeTolerance() {
-	}
-
-	@Test
 	void setPowerMagnitudeIncrementPerCycle() {
 	}
 
 	@Test
+	void setPowerMagnitudeTolerance() {
+	}
+
+	@Test
 	void setPowerVector() {
+	}
+
+	@Test
+	void setRevolutionsPerMinute() {
 	}
 
 	@Test
@@ -184,14 +178,19 @@ class DriveMotorUnitTests extends LinearOpMode {
 	}
 
 	@Test
+	void setTicksPerRevolution() {
+	}
+
+	@BeforeEach
+	void setUp() {
+		motor = new DriveMotor(this, "left");
+	}
+
+	@Test
 	void setZeroPowerBehavior() {
 	}
 
-	/**
-	 * Must override runOpMode to avoid compiler error
-	 */
-	@Test
-	@Override
-	public final void runOpMode() {
+	@AfterEach
+	void tearDown() {
 	}
 }

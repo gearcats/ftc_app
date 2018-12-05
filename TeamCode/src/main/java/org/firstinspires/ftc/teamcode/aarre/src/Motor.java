@@ -26,40 +26,30 @@ import java.util.logging.*;
  */
 public abstract class Motor implements MotorInterface {
 
-	private static final NonNegativeInteger SECONDS_PER_MINUTE = new NonNegativeInteger(60);
-
-	private static final NonNegativeInteger MILLISECONDS_PER_SECOND = new NonNegativeInteger(1000);
-
-	private static final NonNegativeInteger MILLISECONDS_PER_CYCLE = new NonNegativeInteger(50);
-
 	// How much to increment the motor power in each cycle of power ramping (slowing down / speeding up)
-	private static final PowerMagnitude DEFAULT_POWER_INCREMENT_PER_CYCLE = new PowerMagnitude(0.1);
-
+	private static final PowerMagnitude     DEFAULT_POWER_INCREMENT_PER_CYCLE  = new PowerMagnitude(0.1);
 	// How much tolerance to allow when deciding whether we have reached a requested motor power
-	private static final PowerMagnitude DEFAULT_PROPORTION_POWER_TOLERANCE = new PowerMagnitude(0.01);
-
+	private static final PowerMagnitude     DEFAULT_PROPORTION_POWER_TOLERANCE = new PowerMagnitude(0.01);
 	// How long to allow a motor operation to continue before timing out
-	private static final NonNegativeDouble DEFAULT_SECONDS_TIMEOUT = new NonNegativeDouble(5.0);
-
-	private PowerMagnitude powerMagnitudeIncrementPerCycle = DEFAULT_POWER_INCREMENT_PER_CYCLE;
-	private PowerMagnitude powerMagnitudeTolerance         = DEFAULT_PROPORTION_POWER_TOLERANCE;
-
+	private static final NonNegativeDouble  DEFAULT_SECONDS_TIMEOUT            = new NonNegativeDouble(5.0);
+	private static final NonNegativeInteger MILLISECONDS_PER_CYCLE             = new NonNegativeInteger(50);
+	private static final NonNegativeInteger MILLISECONDS_PER_SECOND            = new NonNegativeInteger(1000);
+	private static final NonNegativeInteger SECONDS_PER_MINUTE                 = new NonNegativeInteger(60);
 	/**
 	 * When running on bot, callers can get the current tick number as reported by the motor encoder. For testing
 	 * off-bot, however, the motor cannot report a tick number. This private field is used in conjuction with the
 	 * getCurrentTickNumber() and setCurrentTickNumber() methods to artificially set the current tick number for the
 	 * purposes of testing off-bot.
 	 */
-	private Integer currentTickNumber = new Integer(0);
-	private Integer oldTickNumber     = new Integer(0);
-
+	private              Integer            currentTickNumber                  = new Integer(0);
+	static               Logger             log;
+	private              Integer            oldTickNumber                      = new Integer(0);
+	private              PowerMagnitude     powerMagnitudeIncrementPerCycle    = DEFAULT_POWER_INCREMENT_PER_CYCLE;
+	private              PowerMagnitude     powerMagnitudeTolerance            = DEFAULT_PROPORTION_POWER_TOLERANCE;
+	private              NonNegativeInteger stallDetectionToleranceInTicks     = new NonNegativeInteger(5);
 	// These are defaults. The user should customize them
-	private NonNegativeInteger stallTimeLimitInMilliseconds   = new NonNegativeInteger(100);
-	private NonNegativeInteger stallDetectionToleranceInTicks = new NonNegativeInteger(5);
-
-	private ElapsedTime timeStalledInMilliseconds = null;
-
-	static Logger log;
+	private              NonNegativeInteger stallTimeLimitInMilliseconds       = new NonNegativeInteger(100);
+	private              ElapsedTime        timeStalledInMilliseconds          = null;
 
 	static {
 
@@ -119,6 +109,9 @@ public abstract class Motor implements MotorInterface {
 
 	}
 
+	public NonNegativeInteger getMillisecondsPerCycle() {
+		return MILLISECONDS_PER_CYCLE;
+	}
 
 	/**
 	 * Get the number of cycles for which a ramp (slowing down/speeding up) should last
@@ -130,10 +123,10 @@ public abstract class Motor implements MotorInterface {
 	 * @param ticksToMove
 	 * @param powerVectorCurrent
 	 * @param powerVectorRequested
+	 *
 	 * @return
 	 */
-	public NonNegativeInteger getNumberOfCycles(NonNegativeInteger ticksToMove, PowerVector powerVectorCurrent, PowerVector
-			powerVectorRequested) {
+	public NonNegativeInteger getNumberOfCycles(NonNegativeInteger ticksToMove, PowerVector powerVectorCurrent, PowerVector powerVectorRequested) {
 
 		// The magnitude of the current and requested power
 		PowerMagnitude powerMagnitudeCurrent   = powerVectorCurrent.getMagnitude();
@@ -175,6 +168,13 @@ public abstract class Motor implements MotorInterface {
 
 	}
 
+	public Integer getOldTickNumber() {
+		return oldTickNumber;
+	}
+
+	final public double getPower() {
+		return getMotor().getPower();
+	}
 
 	public final PowerMagnitude getPowerMagnitudeIncrementPerCycle() {
 		return this.powerMagnitudeIncrementPerCycle;
@@ -215,10 +215,6 @@ public abstract class Motor implements MotorInterface {
 
 	}
 
-	final public double getPower() {
-		return getMotor().getPower();
-	}
-
 	@SuppressLint("DefaultLocale")
 	final public double getTickNumberToStartSlowDown(final int tickNumberAtStartOfPeriod, final NonNegativeInteger
 			numberOfTicksInPeriod, final PowerVector powerVectorAtStartOfPeriod, final PowerVector
@@ -241,8 +237,7 @@ public abstract class Motor implements MotorInterface {
 
 		if (powerMagnitudeAtStartOfPeriod.doubleValue() <= powerMagnitudeAtEndOfPeriod.doubleValue()) {
 			throw new IllegalArgumentException("When slowing down, the magnitude of the " + "power at the start " +
-					"of the slowdown must be greater " + "than the magnitude of the power at the end " + "of " + "the " +
-					"" + "" + "" + "" + "" + "slowdown" + ".");
+					"of the slowdown must be greater " + "than the magnitude of the power at the end " + "of " + "the " + "" + "" + "" + "" + "" + "" + "slowdown" + ".");
 		}
 
 		PowerVector powerChangeVector = powerVectorAtStartOfPeriod.subtract(powerVectorAtEndOfPeriod);
@@ -278,6 +273,39 @@ public abstract class Motor implements MotorInterface {
 		return tickNumberToStartSlowDown;
 	}
 
+	public NonNegativeDouble getTicksPerCycle() {
+		return new NonNegativeDouble(getTicksPerMillisecond().doubleValue() * getMillisecondsPerCycle().doubleValue());
+	}
+
+	public NonNegativeDouble getTicksPerCycle(PowerMagnitude powerMagnitude) {
+		return new NonNegativeDouble(getTicksPerMillisecond(powerMagnitude).doubleValue() * getMillisecondsPerCycle()
+				.doubleValue());
+	}
+
+	public NonNegativeDouble getTicksPerMillisecond() {
+		return new NonNegativeDouble(getTicksPerSecond().doubleValue() / MILLISECONDS_PER_SECOND.doubleValue());
+	}
+
+	public NonNegativeDouble getTicksPerMillisecond(PowerMagnitude powerMagnitude) {
+		return new NonNegativeDouble(getTicksPerSecond(powerMagnitude).doubleValue() / MILLISECONDS_PER_SECOND
+				.doubleValue());
+	}
+
+	public NonNegativeDouble getTicksPerMinute() {
+		return getTicksPerRevolution().multiplyBy(getRevolutionsPerMinute());
+	}
+
+	public NonNegativeDouble getTicksPerMinute(PowerMagnitude powerMagnitude) {
+		return getTicksPerRevolution().multiplyBy(getRevolutionsPerMinute(powerMagnitude));
+	}
+
+	public NonNegativeDouble getTicksPerSecond() {
+		return new NonNegativeDouble(getTicksPerMinute().doubleValue() / SECONDS_PER_MINUTE.doubleValue());
+	}
+
+	public NonNegativeDouble getTicksPerSecond(PowerMagnitude powerMagnitude) {
+		return new NonNegativeDouble(getTicksPerMinute(powerMagnitude).doubleValue() / SECONDS_PER_MINUTE.doubleValue());
+	}
 
 	/**
 	 * Get the number of milliseconds for which the motor has been stalled.
@@ -293,6 +321,45 @@ public abstract class Motor implements MotorInterface {
 		return (int) Math.round(msStalledDbl);
 	}
 
+	/**
+	 * Determine whether the motor is busy.
+	 *
+	 * @return Returns true if the motor is currently advancing or retreating to a target position.
+	 */
+	final boolean isBusy() {
+		return getMotor().isBusy();
+	}
+
+	public boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfTravel, int tickNumberCurrent,
+	                                               NonNegativeInteger numberOfTicksToTravel, PowerVector
+			                                               powerAtStartOfTravel, PowerVector powerAtEndOfTravel) {
+
+
+		log.entering(getClass().getCanonicalName(), "isSlowDownToEncoderTicksRunning");
+
+		log.finer(String.format("Tick number at start of travel: %d", tickNumberAtStartOfTravel));
+		log.finer(String.format("Current tick number: %d", tickNumberCurrent));
+		log.finer(String.format("Number of ticks to travel: %d", numberOfTicksToTravel.intValue()));
+		log.finer(String.format("Power vector at start of travel: %f", powerAtStartOfTravel.doubleValue()));
+		log.finer(String.format("Power vector at end of travel: %f", powerAtEndOfTravel.doubleValue()));
+
+		double tickNumberAtEndOfTravel = tickNumberAtStartOfTravel + numberOfTicksToTravel.doubleValue();
+
+		boolean result = false;
+
+		double tickNumberToStartSlowDown = getTickNumberToStartSlowDown(tickNumberAtStartOfTravel,
+				numberOfTicksToTravel, powerAtStartOfTravel, powerAtEndOfTravel);
+
+		log.finer(String.format("Tick number to start slowdown: %f", tickNumberToStartSlowDown));
+
+		if (((double) tickNumberCurrent >= tickNumberToStartSlowDown) && ((double) tickNumberCurrent <=
+				tickNumberAtEndOfTravel)) {
+			result = true;
+		}
+
+		log.exiting(getClass().getCanonicalName(), "isSlowDownToEncoderTicksRunning");
+		return result;
+	}
 
 	public boolean isSpeedUpToEncoderTicksDone(NonNegativeInteger ticksMaximum, NonNegativeDouble secondsTimeout,
 	                                           NonNegativeDouble secondsRunning, NonNegativeInteger ticksMoved) {
@@ -328,46 +395,6 @@ public abstract class Motor implements MotorInterface {
 		log.exiting(this.getClass().getCanonicalName(), "isSpeedUpToEncoderTicksDone");
 		return valueToReturn;
 	}
-
-
-	public boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfTravel, int tickNumberCurrent, NonNegativeInteger numberOfTicksToTravel, PowerVector
-			                                               powerAtStartOfTravel, PowerVector powerAtEndOfTravel) {
-
-
-		log.entering(getClass().getCanonicalName(), "isSlowDownToEncoderTicksRunning");
-
-		log.finer(String.format("Tick number at start of travel: %d", tickNumberAtStartOfTravel));
-		log.finer(String.format("Current tick number: %d", tickNumberCurrent));
-		log.finer(String.format("Number of ticks to travel: %d", numberOfTicksToTravel.intValue()));
-		log.finer(String.format("Power vector at start of travel: %f", powerAtStartOfTravel.doubleValue()));
-		log.finer(String.format("Power vector at end of travel: %f", powerAtEndOfTravel.doubleValue()));
-
-		double tickNumberAtEndOfTravel = tickNumberAtStartOfTravel + numberOfTicksToTravel.doubleValue();
-
-		boolean result = false;
-
-		double tickNumberToStartSlowDown = getTickNumberToStartSlowDown(tickNumberAtStartOfTravel,
-				numberOfTicksToTravel, powerAtStartOfTravel, powerAtEndOfTravel);
-
-		log.finer(String.format("Tick number to start slowdown: %f", tickNumberToStartSlowDown));
-
-		if (((double) tickNumberCurrent >= tickNumberToStartSlowDown) && ((double) tickNumberCurrent <= tickNumberAtEndOfTravel)) {
-			result = true;
-		}
-
-		log.exiting(getClass().getCanonicalName(), "isSlowDownToEncoderTicksRunning");
-		return result;
-	}
-
-	/**
-	 * Determine whether the motor is busy.
-	 *
-	 * @return Returns true if the motor is currently advancing or retreating to a target position.
-	 */
-	final boolean isBusy() {
-		return getMotor().isBusy();
-	}
-
 
 	/**
 	 * Detect whether the motor is stalled.
@@ -419,7 +446,6 @@ public abstract class Motor implements MotorInterface {
 		return stalled;
 
 	}
-
 
 	/**
 	 * Rotate this motor a certain number of ticks from its current position, speeding up at the beginning and slowing
@@ -475,7 +501,6 @@ public abstract class Motor implements MotorInterface {
 
 		log.exiting(getClass().getCanonicalName(), "rampToEncoderTicks");
 	}
-
 
 	/**
 	 * Ramp the motor power up (or down) gradually to the requested proportion.
@@ -536,171 +561,6 @@ public abstract class Motor implements MotorInterface {
 			// No change
 		}
 		log.exiting(getClass().getCanonicalName(), "rampToPower");
-	}
-
-	/**
-	 * When ramping "down", the power change starts at the end of the motion, something like this:
-	 *
-	 * <pre>
-	 * >_____
-	 *       \
-	 *        \
-	 *         \
-	 *          -|
-	 * </pre>
-	 * <p>
-	 */
-	private void slowDownToPower(final PowerVector powerVectorAtEnd, final NonNegativeInteger ticksToMove, final
-	NonNegativeDouble secondsTimeout) {
-
-		log.entering(getClass().getCanonicalName(), "slowDownToPower");
-
-		log.finer(String.format("Target power at end: %f", powerVectorAtEnd.doubleValue()));
-
-		boolean keepGoing;
-		int     tickNumberStart;
-		int     currentTickNumber;
-
-		PowerVector powerVectorCurrent;
-		PowerVector powerVectorNew;
-
-		ElapsedTime runtimeSinceChange;
-		double      millisecondsSinceChange;
-
-		ElapsedTime runtimeFromStart = new ElapsedTime();
-		double      secondsFromStart = runtimeFromStart.seconds();
-
-		tickNumberStart = getCurrentTickNumber();
-
-		waitForSlowDown(powerVectorAtEnd, ticksToMove, tickNumberStart);
-
-		/*
-		 * Ramp down
-		 */
-		keepGoing = true;
-		while (secondsFromStart < secondsTimeout.doubleValue() && keepGoing && getOpMode().opModeIsActive()) {
-
-			getOpMode().idle();
-			currentTickNumber = getCurrentTickNumber();
-
-			powerVectorCurrent = getPowerVectorCurrent();
-			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorAtEnd);
-
-			setPowerVector(powerVectorNew);
-
-			log.finer(String.format("Milliseconds elapsed %f", runtimeFromStart.milliseconds()));
-			log.finer(String.format("Current tick number: %d", currentTickNumber));
-			log.finer(String.format("New power: %f", powerVectorNew.doubleValue()));
-
-			/*
-			 * Wait for next power change
-			 */
-			runtimeSinceChange = new ElapsedTime();
-			millisecondsSinceChange = 0.0;
-			while ((millisecondsSinceChange < MILLISECONDS_PER_CYCLE.doubleValue()) && getOpMode().opModeIsActive()) {
-				// Wait until it is time for next power increment
-				getOpMode().idle();
-				millisecondsSinceChange = runtimeSinceChange.milliseconds();
-			}
-
-			secondsFromStart = runtimeFromStart.seconds();
-
-			keepGoing = isSlowDownToEncoderTicksRunning(tickNumberStart, currentTickNumber, ticksToMove,
-					powerVectorCurrent, powerVectorAtEnd);
-
-		}
-		log.exiting(getClass().getCanonicalName(), "slowDownToPower");
-	}
-
-	/**
-	 * Wait until it is time to begin slowing down power to the motor.
-	 *
-	 * @param powerVectorAtEnd
-	 * @param ticksToMove
-	 * @param tickNumberStart
-	 */
-	private void waitForSlowDown(PowerVector powerVectorAtEnd, NonNegativeInteger ticksToMove, int tickNumberStart) {
-		boolean     keepWaiting;
-		int         tickNumberCurrent;
-		PowerVector powerVectorCurrent;
-
-		/*
-		 * Wait for the right time to start slowing down
-		 */
-		keepWaiting = true;
-		while (keepWaiting && getOpMode().opModeIsActive()) {
-			getOpMode().idle();
-			tickNumberCurrent = getCurrentTickNumber();
-			powerVectorCurrent = getPowerVectorCurrent();
-			keepWaiting = !isSlowDownToEncoderTicksRunning(tickNumberStart, tickNumberCurrent, ticksToMove,
-					powerVectorCurrent, powerVectorAtEnd);
-		}
-	}
-
-	/**
-	 * When speeding up, the power change starts at the beginning of the motion, something like this:
-	 *
-	 * <pre>
-	 *          _____>
-	 *         /
-	 *        /
-	 *     |_/
-	 * </pre>
-	 */
-	private void speedUpToPower(final PowerVector powerVectorRequested, final NonNegativeInteger ticksToMove, final
-	NonNegativeDouble secondsTimeout) throws NoSuchMethodException {
-
-		log.entering(getClass().getName(), "speedUpToPower");
-
-		log.fine(String.format("Target power: %f", powerVectorRequested.doubleValue()));
-		log.fine(String.format("Target ticks: %d", ticksToMove.intValue()));
-
-		ElapsedTime runtimeSinceChange;
-
-		ElapsedTime       runtimeTotal;
-		NonNegativeDouble secondsRunning;
-
-		int tickNumberCurrent;
-		int tickNumberStart;
-
-		PowerVector       powerVectorNew;
-		NonNegativeDouble millisecondsSinceChange;
-
-		tickNumberStart = getCurrentTickNumber();
-		log.fine(String.format("Starting tick number: %d", tickNumberStart));
-
-		NonNegativeInteger ticksMoved = new NonNegativeInteger(0);
-
-		runtimeTotal = new ElapsedTime();
-		secondsRunning = new NonNegativeDouble(runtimeTotal.seconds());
-
-		while (!isSpeedUpToEncoderTicksDone(ticksToMove, secondsTimeout, secondsRunning, ticksMoved)) {
-
-			PowerVector powerVectorCurrent = this.getPowerVectorCurrent();
-			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
-			setPowerVector(powerVectorNew);
-
-			runtimeSinceChange = new ElapsedTime();
-			millisecondsSinceChange = new NonNegativeDouble(0.0);
-
-			// Wait until it is time for next power increment
-			while ((millisecondsSinceChange.doubleValue() < MILLISECONDS_PER_CYCLE.doubleValue()) && getOpMode()
-					.opModeIsActive()) {
-				getOpMode().idle();
-				millisecondsSinceChange = new NonNegativeDouble(runtimeSinceChange.milliseconds());
-			}
-
-			tickNumberCurrent = getCurrentTickNumber();
-			ticksMoved = new NonNegativeInteger(Math.abs(tickNumberCurrent - tickNumberStart));
-			secondsRunning = new NonNegativeDouble(runtimeTotal.seconds());
-
-			log.fine(String.format("Seconds elapsed %f", secondsRunning));
-			log.fine(String.format("Current tick number: %d", tickNumberCurrent));
-			log.fine(String.format("Ticks moved: %d", ticksMoved.intValue()));
-			log.fine(String.format("New power: %f", powerVectorNew.doubleValue()));
-		}
-		log.exiting(getClass().getName(), "speedUpToPower");
-
 	}
 
 	/**
@@ -844,7 +704,6 @@ public abstract class Motor implements MotorInterface {
 
 	}
 
-
 	/**
 	 * Run this motor until it stalls
 	 *
@@ -895,12 +754,16 @@ public abstract class Motor implements MotorInterface {
 		getMotor().setMode(mode);
 	}
 
-	public void setPowerMagnitudeTolerance(PowerMagnitude powerMagnitude) {
-		powerMagnitudeTolerance = powerMagnitude;
+	public void setOldTickNumber(Integer oldTickNumber) {
+		this.oldTickNumber = oldTickNumber;
 	}
 
 	public void setPowerMagnitudeIncrementPerCycle(PowerMagnitude powerMagnitude) {
 		powerMagnitudeIncrementPerCycle = powerMagnitude;
+	}
+
+	public void setPowerMagnitudeTolerance(PowerMagnitude powerMagnitude) {
+		powerMagnitudeTolerance = powerMagnitude;
 	}
 
 	/**
@@ -944,57 +807,171 @@ public abstract class Motor implements MotorInterface {
 		getMotor().setTargetPosition(targetPositionTicks);
 	}
 
-
 	void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
 		getMotor().setZeroPowerBehavior(zeroPowerBehavior);
 	}
 
-	public NonNegativeInteger getMillisecondsPerCycle() {
-		return MILLISECONDS_PER_CYCLE;
+	/**
+	 * When ramping "down", the power change starts at the end of the motion, something like this:
+	 *
+	 * <pre>
+	 * >_____
+	 *       \
+	 *        \
+	 *         \
+	 *          -|
+	 * </pre>
+	 * <p>
+	 */
+	private void slowDownToPower(final PowerVector powerVectorAtEnd, final NonNegativeInteger ticksToMove, final
+	NonNegativeDouble secondsTimeout) {
+
+		log.entering(getClass().getCanonicalName(), "slowDownToPower");
+
+		log.finer(String.format("Target power at end: %f", powerVectorAtEnd.doubleValue()));
+
+		boolean keepGoing;
+		int     tickNumberStart;
+		int     currentTickNumber;
+
+		PowerVector powerVectorCurrent;
+		PowerVector powerVectorNew;
+
+		ElapsedTime runtimeSinceChange;
+		double      millisecondsSinceChange;
+
+		ElapsedTime runtimeFromStart = new ElapsedTime();
+		double      secondsFromStart = runtimeFromStart.seconds();
+
+		tickNumberStart = getCurrentTickNumber();
+
+		waitForSlowDown(powerVectorAtEnd, ticksToMove, tickNumberStart);
+
+		/*
+		 * Ramp down
+		 */
+		keepGoing = true;
+		while (secondsFromStart < secondsTimeout.doubleValue() && keepGoing && getOpMode().opModeIsActive()) {
+
+			getOpMode().idle();
+			currentTickNumber = getCurrentTickNumber();
+
+			powerVectorCurrent = getPowerVectorCurrent();
+			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorAtEnd);
+
+			setPowerVector(powerVectorNew);
+
+			log.finer(String.format("Milliseconds elapsed %f", runtimeFromStart.milliseconds()));
+			log.finer(String.format("Current tick number: %d", currentTickNumber));
+			log.finer(String.format("New power: %f", powerVectorNew.doubleValue()));
+
+			/*
+			 * Wait for next power change
+			 */
+			runtimeSinceChange = new ElapsedTime();
+			millisecondsSinceChange = 0.0;
+			while ((millisecondsSinceChange < MILLISECONDS_PER_CYCLE.doubleValue()) && getOpMode().opModeIsActive()) {
+				// Wait until it is time for next power increment
+				getOpMode().idle();
+				millisecondsSinceChange = runtimeSinceChange.milliseconds();
+			}
+
+			secondsFromStart = runtimeFromStart.seconds();
+
+			keepGoing = isSlowDownToEncoderTicksRunning(tickNumberStart, currentTickNumber, ticksToMove,
+					powerVectorCurrent, powerVectorAtEnd);
+
+		}
+		log.exiting(getClass().getCanonicalName(), "slowDownToPower");
 	}
 
-	public NonNegativeDouble getTicksPerMinute() {
-		return getTicksPerRevolution().multiplyBy(getRevolutionsPerMinute());
+	/**
+	 * When speeding up, the power change starts at the beginning of the motion, something like this:
+	 *
+	 * <pre>
+	 *          _____>
+	 *         /
+	 *        /
+	 *     |_/
+	 * </pre>
+	 */
+	private void speedUpToPower(final PowerVector powerVectorRequested, final NonNegativeInteger ticksToMove, final
+	NonNegativeDouble secondsTimeout) throws NoSuchMethodException {
+
+		log.entering(getClass().getName(), "speedUpToPower");
+
+		log.fine(String.format("Target power: %f", powerVectorRequested.doubleValue()));
+		log.fine(String.format("Target ticks: %d", ticksToMove.intValue()));
+
+		ElapsedTime runtimeSinceChange;
+
+		ElapsedTime       runtimeTotal;
+		NonNegativeDouble secondsRunning;
+
+		int tickNumberCurrent;
+		int tickNumberStart;
+
+		PowerVector       powerVectorNew;
+		NonNegativeDouble millisecondsSinceChange;
+
+		tickNumberStart = getCurrentTickNumber();
+		log.fine(String.format("Starting tick number: %d", tickNumberStart));
+
+		NonNegativeInteger ticksMoved = new NonNegativeInteger(0);
+
+		runtimeTotal = new ElapsedTime();
+		secondsRunning = new NonNegativeDouble(runtimeTotal.seconds());
+
+		while (!isSpeedUpToEncoderTicksDone(ticksToMove, secondsTimeout, secondsRunning, ticksMoved)) {
+
+			PowerVector powerVectorCurrent = this.getPowerVectorCurrent();
+			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+			setPowerVector(powerVectorNew);
+
+			runtimeSinceChange = new ElapsedTime();
+			millisecondsSinceChange = new NonNegativeDouble(0.0);
+
+			// Wait until it is time for next power increment
+			while ((millisecondsSinceChange.doubleValue() < MILLISECONDS_PER_CYCLE.doubleValue()) && getOpMode()
+					.opModeIsActive()) {
+				getOpMode().idle();
+				millisecondsSinceChange = new NonNegativeDouble(runtimeSinceChange.milliseconds());
+			}
+
+			tickNumberCurrent = getCurrentTickNumber();
+			ticksMoved = new NonNegativeInteger(Math.abs(tickNumberCurrent - tickNumberStart));
+			secondsRunning = new NonNegativeDouble(runtimeTotal.seconds());
+
+			log.fine(String.format("Seconds elapsed %f", secondsRunning));
+			log.fine(String.format("Current tick number: %d", tickNumberCurrent));
+			log.fine(String.format("Ticks moved: %d", ticksMoved.intValue()));
+			log.fine(String.format("New power: %f", powerVectorNew.doubleValue()));
+		}
+		log.exiting(getClass().getName(), "speedUpToPower");
+
 	}
 
-	public NonNegativeDouble getTicksPerMinute(PowerMagnitude powerMagnitude) {
-		return getTicksPerRevolution().multiplyBy(getRevolutionsPerMinute(powerMagnitude));
-	}
+	/**
+	 * Wait until it is time to begin slowing down power to the motor.
+	 *
+	 * @param powerVectorAtEnd
+	 * @param ticksToMove
+	 * @param tickNumberStart
+	 */
+	private void waitForSlowDown(PowerVector powerVectorAtEnd, NonNegativeInteger ticksToMove, int tickNumberStart) {
+		boolean     keepWaiting;
+		int         tickNumberCurrent;
+		PowerVector powerVectorCurrent;
 
-
-	public NonNegativeDouble getTicksPerSecond() {
-		return new NonNegativeDouble(getTicksPerMinute().doubleValue() / SECONDS_PER_MINUTE.doubleValue());
-	}
-
-	public NonNegativeDouble getTicksPerSecond(PowerMagnitude powerMagnitude) {
-		return new NonNegativeDouble(getTicksPerMinute(powerMagnitude).doubleValue() / SECONDS_PER_MINUTE.doubleValue
-				());
-	}
-
-	public NonNegativeDouble getTicksPerMillisecond() {
-		return new NonNegativeDouble(getTicksPerSecond().doubleValue() / MILLISECONDS_PER_SECOND.doubleValue());
-	}
-
-	public NonNegativeDouble getTicksPerMillisecond(PowerMagnitude powerMagnitude) {
-		return new NonNegativeDouble(getTicksPerSecond(powerMagnitude).doubleValue() / MILLISECONDS_PER_SECOND
-				.doubleValue());
-	}
-
-	public NonNegativeDouble getTicksPerCycle() {
-		return new NonNegativeDouble(getTicksPerMillisecond().doubleValue() * getMillisecondsPerCycle().doubleValue());
-	}
-
-	public NonNegativeDouble getTicksPerCycle(PowerMagnitude powerMagnitude) {
-		return new NonNegativeDouble(getTicksPerMillisecond(powerMagnitude).doubleValue() * getMillisecondsPerCycle()
-				.doubleValue());
-	}
-
-
-	public Integer getOldTickNumber() {
-		return oldTickNumber;
-	}
-
-	public void setOldTickNumber(Integer oldTickNumber) {
-		this.oldTickNumber = oldTickNumber;
+		/*
+		 * Wait for the right time to start slowing down
+		 */
+		keepWaiting = true;
+		while (keepWaiting && getOpMode().opModeIsActive()) {
+			getOpMode().idle();
+			tickNumberCurrent = getCurrentTickNumber();
+			powerVectorCurrent = getPowerVectorCurrent();
+			keepWaiting = !isSlowDownToEncoderTicksRunning(tickNumberStart, tickNumberCurrent, ticksToMove, powerVectorCurrent, powerVectorAtEnd);
+		}
 	}
 }

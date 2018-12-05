@@ -66,7 +66,7 @@ public class Excursion {
 
 	public void setTicksToRotate(NonNegativeInteger ticksToRotate) {
 		this.ticksToRotate = ticksToRotate;
-		NonNegativeInteger ticksToSpeedUp  = new NonNegativeInteger((int) Math.round(ticksToRotate.doubleValue() /
+		NonNegativeInteger ticksToSpeedUp = new NonNegativeInteger((int) Math.round(ticksToRotate.doubleValue() /
 				2.0));
 		NonNegativeInteger ticksToSlowDown = new NonNegativeInteger(ticksToRotate.intValue() - ticksToSpeedUp.intValue
 				());

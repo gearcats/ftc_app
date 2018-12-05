@@ -41,25 +41,23 @@ import java.util.logging.Logger;
 /**
  * This file contains Aarre's experimental code for the autonomous mode
  * <p>
- * To avoid issuing an error on the phones, any OpMode class must be
- * declared public.
+ * To avoid issuing an error on the phones, any OpMode class must be declared public.
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 @Autonomous(name = "Aarre Autonomous", group = "Aarre")
 public class AarreAutonomous extends LinearOpMode {
 
-	private static final double         INCHES                = 12.0;
-	private static final double         TIMEOUT               = 5.0;
 	// How fast to move forward or back
 	private static final PowerMagnitude DRIVE_POWER_MAGNITUDE = new PowerMagnitude(0.6);
+	private static final double         INCHES                = 12.0;
+	private static final double         TEST_TIME_SECONDS     = 0.5;
+	private static final double         TIMEOUT               = 5.0;
 	// How fast to move when turning
 	private static final PowerMagnitude TURN_POWER_MAGNITUDE  = new PowerMagnitude(0.5);
-	private static final double         TEST_TIME_SECONDS     = 0.5;
-	private final        ElapsedTime    runtime               = new ElapsedTime();
 	private              TelemetryPlus  betterTelemetryPlus;
+	private final        Logger         log                   = Logger.getLogger(this.getClass().getName());
 	private              Robot          robot;
-
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private final        ElapsedTime    runtime               = new ElapsedTime();
 
 	public AarreAutonomous() {
 	}
@@ -67,8 +65,7 @@ public class AarreAutonomous extends LinearOpMode {
 	/**
 	 * Properties inherited from LinearOpMode include:
 	 * <p>
-	 * hardwareMap
-	 * telemetry
+	 * hardwareMap telemetry
 	 */
 	@Override
 	public final void runOpMode() {

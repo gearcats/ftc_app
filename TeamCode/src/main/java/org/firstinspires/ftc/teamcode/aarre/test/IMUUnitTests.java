@@ -21,11 +21,6 @@ public class IMUUnitTests extends LinearOpMode {
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
-	@BeforeEach
-	public final void testConstructor() {
-		imu = new IMU(this);
-	}
-
 	/**
 	 * Must override runOpMode to avoid compiler error
 	 */
@@ -33,6 +28,11 @@ public class IMUUnitTests extends LinearOpMode {
 	@Override
 	public final void runOpMode() {
 		stop();
+	}
+
+	@BeforeEach
+	public final void testConstructor() {
+		imu = new IMU(this);
 	}
 
 }

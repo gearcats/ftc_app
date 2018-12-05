@@ -12,27 +12,23 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class DriveMotorsUnitTests extends LinearOpMode {
 
-	private DriveMotors motors;
-
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
-
-
-	@BeforeEach
-	void setUp() {
-		motors = new DriveMotors(this);
-	}
+	private final Logger      javaLog = Logger.getLogger(this.getClass().getName());
+	private       DriveMotors motors;
 
 	@Test
-	void testNewAarreArmObjectNotNull() {
-		assertNotNull(motors);
-	}
-
-	@Test
-	void getPowerIncrementAbsolute() {
+	void drive() {
 	}
 
 	@Test
 	void getCycleLengthInMilliseconds() {
+	}
+
+	@Test
+	void getError() {
+	}
+
+	@Test
+	void getPowerIncrementAbsolute() {
 	}
 
 	@Test
@@ -41,14 +37,6 @@ class DriveMotorsUnitTests extends LinearOpMode {
 
 	@Test
 	void getSteer() {
-	}
-
-	@Test
-	void drive() {
-	}
-
-	@Test
-	void getError() {
 	}
 
 	@Test
@@ -75,6 +63,18 @@ class DriveMotorsUnitTests extends LinearOpMode {
 	void rampPowerTo1() {
 	}
 
+	/**
+	 * Must override runOpMode to avoid compiler error
+	 */
+	@Test
+	@Override
+	public final void runOpMode() {
+	}
+
+	@Test
+	void setCycleLengthInMilliseconds() {
+	}
+
 	@Test
 	void setPowerIncrement() {
 
@@ -85,20 +85,18 @@ class DriveMotorsUnitTests extends LinearOpMode {
 	}
 
 	@Test
-	void setCycleLengthInMilliseconds() {
-	}
-
-	@Test
 	void setPowerMagnitudeTolerance() {
 		PowerMagnitude powerMagnitudeTolerance = new PowerMagnitude(0.0001);
 		motors.setPowerMagnitudeTolerance(powerMagnitudeTolerance);
 	}
 
-	/**
-	 * Must override runOpMode to avoid compiler error
-	 */
+	@BeforeEach
+	void setUp() {
+		motors = new DriveMotors(this);
+	}
+
 	@Test
-	@Override
-	public final void runOpMode() {
+	void testNewAarreArmObjectNotNull() {
+		assertNotNull(motors);
 	}
 }

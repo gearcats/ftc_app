@@ -19,284 +19,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @Disabled
 public class MotorTorqueNADOUnitTests extends MotorUnitTests implements ConcreteMotorUnitTestsInterface {
 
+	Logger          javaLog         = Logger.getLogger(this.getClass().getName());
 	MotorTorqueNADO torqueNADOMotor = new MotorTorqueNADO(this, "left");
-
-	Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Override
 	public MotorTorqueNADO getMotor() {
 		return torqueNADOMotor;
 	}
-
-	@Test
-	public final void testGetTicksPerCycle01() {
-		NonNegativeDouble ticksPerCycle = getMotor().getTicksPerCycle();
-		assertEquals(120.0, ticksPerCycle.doubleValue());
-	}
-
-	@Test
-	public final void testGetTicksPerMillisecond01() {
-		NonNegativeDouble ticksPerMillisecond = getMotor().getTicksPerMillisecond();
-		assertEquals(2.4, ticksPerMillisecond.doubleValue());
-	}
-
-	@Test
-	public final void testGetTicksPerSecond01() {
-		NonNegativeDouble ticksPerSecond = getMotor().getTicksPerSecond();
-		assertEquals(2400.0, ticksPerSecond.doubleValue());
-	}
-
-	@Test
-	public final void testGetTicksPerMinute01() {
-		NonNegativeDouble ticksPerMinute = getMotor().getTicksPerMinute();
-		assertEquals(144000.0, ticksPerMinute.doubleValue());
-	}
-
-	@Test
-	@Override
-	public final void testGetTickNumberToStartSlowDown01() {
-
-		final PowerVector powerAtStart = new PowerVector(1.0);
-		final PowerVector powerAtEnd   = new PowerVector(0.0);
-
-		final int                tickNumberAtStartOfPeriod = 0;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(2000);
-
-		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
-		                                                         numberOfTicksInPeriod,
-		                                                         powerAtStart, powerAtEnd);
-
-		assertEquals(800, actual);
-	}
-
-	@Test
-	public final void testIsSlowDownToEncoderTicksRunningGeneric05() {
-
-		final int                tickNumberAtStartOfPeriod = 60;
-		final int                tickNumberCurrent         = 61;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
-
-		PowerVector powerAtStart = new PowerVector(0.5);
-		PowerVector powerAtEnd   = new PowerVector(0.0);
-
-		/*
-		 *  The period goes from tick 60 to tick 180.
-		 *  We are at tick 61.
-		 *
-		 *  We need 5 cycles for slowing down
-		 *
-		 *  The TorqueNADO needs 120 * 5 cycles = 600 ticks, so it should start at tick 180-600=-420and still be
-		 *  slowing down. The Rev HD Core Hex needs 13.44 * 5 cycles = 67 ticks, so it should start at tick
-		 *  180-67=113 not be going yet.
-		 *
-		 */
-
-
-		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
-
-		assertTrue(result);
-	}
-
-	/**
-	 * Test calculating when to start a ramp down in a 10000-tick period.
-	 */
-	@Test
-	@Override
-	public final void testGetTickNumberToStartSlowDown02() {
-
-		/*
-		 * A power difference of 1.0 requires 10 cycles of ramp.
-		 */
-		PowerVector powerAtStart = new PowerVector(1.0);
-		PowerVector powerAtEnd   = new PowerVector(0.0);
-
-		int                      tickNumberAtStartOfPeriod = 0;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
-
-		/*
-		 * There are 120 ticks in a cycle, so the ramp should be 1200 ticks
-		 */
-		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
-				powerAtStart, powerAtEnd);
-
-		/*
-		 * Subtracting 1200 ticks from the total of 10000 should give us 8800 ticks
-		 */
-		assertEquals(8800, actual);
-	}
-
-
-	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns false when the revHDCoreHexMotor is not close
-	 * enough to
-	 * the target tick number.
-	 */
-	@Test
-	@Override
-	public final void testGetTickNumberToStartSlowDown04() {
-
-		final int                tickNumberAtStartOfPeriod = 60;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
-		final PowerVector        powerAtStart              = new PowerVector(1.0);
-		final PowerVector        powerAtEnd                = new PowerVector(0.0);
-
-		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
-		                                                   numberOfTicksInPeriod, powerAtStart,
-		                                                   powerAtEnd);
-
-		assertEquals(8860, result);
-	}
-
-	@Test
-	@Override
-	public final void testGetTickNumberToStartSlowDown12() {
-
-		final int                tickNumberAtStartOfPeriod = 60;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
-
-		PowerVector powerAtStart = new PowerVector(0.5);
-		PowerVector powerAtEnd   = new PowerVector(0.0);
-
-		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
-		                                                   numberOfTicksInPeriod, powerAtStart,
-		                                                   powerAtEnd);
-
-		assertEquals(-420, result);
-	}
-
-	/**
-	 * Test calculating when to start a ramp down in a 10000-tick period.
-	 */
-	@Test
-	@Override
-	public final void testGetTickNumberToStartSlowDown03() {
-
-		/*
-		 * A power difference of 1.0 requires 5 cycles of ramp.
-		 * There are 120 ticks in a cycle.
-		 * The ramp must be 600 ticks long
-		 * 600 - 120 = -480
-		 */
-		PowerVector powerAtStart = new PowerVector(0.5);
-		PowerVector powerAtEnd   = new PowerVector(0.0);
-
-		final int                tickNumberAtStartOfPeriod = 0;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
-
-
-		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
-		                                                         numberOfTicksInPeriod,
-		                                                         powerAtStart, powerAtEnd);
-
-		assertEquals(-480, actual);
-	}
-
-
-	@Test
-	@Override
-	public final void testGetTickNumberToStartSlowDown08() {
-
-		final int                tickNumberAtStartOfPeriod = 0;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
-
-		PowerVector powerAtStart = new PowerVector(0.5);
-		PowerVector powerAtEnd   = new PowerVector(0.0);
-
-		/*
-		 * Power change requires 5 cycles
-		 * Each cycle is 120 ticks
-		 * 120 * 5 = 600
-		 * We need to start ramp down at tick 120 - 600 ticks = -480 ticks
-		 */
-		final double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
-				powerAtStart, powerAtEnd);
-
-		assertEquals(-480, result);
-	}
-
-
-
-	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the
-	 * target tick number (negative numbers)
-	 */
-	@Test
-	@Override
-	public final void testGetTickNumberToStartSlowDown11() {
-
-
-		final int                tickNumberAtStartOfPeriod = -60;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
-		final PowerVector        powerAtStart              = new PowerVector(1.0);
-		final PowerVector        powerAtEnd                = new PowerVector(0.0);
-
-		/*
-		 * Need 10 cycles of ramp
-		 * At 120 ticks per cycle
-		 * Need -1200 ticks
-		 * Tick number at end of period = -1060
-		 * Would need to start ramp at -1060 + 1200 tics = -260 ticks
-		 */
-
-		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
-		                                                   numberOfTicksInPeriod, powerAtStart,
-		                                                   powerAtEnd);
-
-		assertEquals(-260, result);
-	}
-
-
-	@Test
-	@Override
-	public final void whenThereAreEnoughTicks_thenSlowDownStartsOnTime() {
-
-		final int                tickNumberAtStartOfPeriod = -60;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
-		final PowerVector        powerAtStart              = new PowerVector(1.0);
-		final PowerVector        powerAtEnd                = new PowerVector(0.0);
-
-		/*
-		 * Need 10 cycles of ramp
-		 * At 120 ticks per cycle
-		 * Need 1200 ticks
-		 * Tick number at start of period = -60
-		 * Tick number at end of period = 9940
-		 * Would need to start ramp at 9940 - 1200 ticks = 8740 ticks
-		 */
-
-		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
-				powerAtStart, powerAtEnd);
-
-		assertEquals(8740, result);
-	}
-
-
-	@Test
-	@Override
-	public final void whenThereAreNotEnoughTicks_thenSlowDownStartsTooEarly() {
-
-		final int                tickNumberAtStartOfPeriod = -60;
-		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
-		final PowerVector        powerAtStart              = new PowerVector(1.0);
-		final PowerVector        powerAtEnd                = new PowerVector(0.0);
-
-		/*
-		 * Need 10 cycles of ramp
-		 * At 120 ticks per cycle
-		 * Need 1200 ticks
-		 * Tick number at start of period = -60
-		 * Tick number at end of period = 940
-		 * Would need to start ramp at 940 - 1200 ticks = -260 ticks
-		 */
-
-		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
-		                                                   numberOfTicksInPeriod, powerAtStart,
-		                                                   powerAtEnd);
-
-		assertEquals(-260, result);
-	}
-
 
 	@Override
 	@Test
@@ -354,33 +83,182 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		assertEquals(10, numCycles.intValue());
 	}
 
-
 	@Test
-	public final void whenSlowDownNotStarted_thenReturnFalse() {
+	@Override
+	public final void testGetTickNumberToStartSlowDown01() {
+
+		final PowerVector powerAtStart = new PowerVector(1.0);
+		final PowerVector powerAtEnd   = new PowerVector(0.0);
+
+		final int                tickNumberAtStartOfPeriod = 0;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(2000);
+
+		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+		assertEquals(800, actual);
+	}
+
+	/**
+	 * Test calculating when to start a ramp down in a 10000-tick period.
+	 */
+	@Test
+	@Override
+	public final void testGetTickNumberToStartSlowDown02() {
+
+		/*
+		 * A power difference of 1.0 requires 10 cycles of ramp.
+		 */
+		PowerVector powerAtStart = new PowerVector(1.0);
+		PowerVector powerAtEnd   = new PowerVector(0.0);
+
+		int                      tickNumberAtStartOfPeriod = 0;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
+
+		/*
+		 * There are 120 ticks in a cycle, so the ramp should be 1200 ticks
+		 */
+		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+		/*
+		 * Subtracting 1200 ticks from the total of 10000 should give us 8800 ticks
+		 */
+		assertEquals(8800, actual);
+	}
+
+	/**
+	 * Test calculating when to start a ramp down in a 10000-tick period.
+	 */
+	@Test
+	@Override
+	public final void testGetTickNumberToStartSlowDown03() {
+
+		/*
+		 * A power difference of 1.0 requires 5 cycles of ramp.
+		 * There are 120 ticks in a cycle.
+		 * The ramp must be 600 ticks long
+		 * 600 - 120 = -480
+		 */
+		PowerVector powerAtStart = new PowerVector(0.5);
+		PowerVector powerAtEnd   = new PowerVector(0.0);
+
+		final int                tickNumberAtStartOfPeriod = 0;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
+
+
+		final double actual = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+		assertEquals(-480, actual);
+	}
+
+	/**
+	 * Test that isSlowDownToEncoderTicksRunning returns false when the revHDCoreHexMotor is not close enough to the
+	 * target tick number.
+	 */
+	@Test
+	@Override
+	public final void testGetTickNumberToStartSlowDown04() {
 
 		final int                tickNumberAtStartOfPeriod = 60;
-		final int                tickNumberCurrent         = 114;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
+
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerAtStart, powerAtEnd);
+
+		assertEquals(8860, result);
+	}
+
+	@Test
+	@Override
+	public final void testGetTickNumberToStartSlowDown08() {
+
+		final int                tickNumberAtStartOfPeriod = 0;
 		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
 
 		PowerVector powerAtStart = new PowerVector(0.5);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
 
 		/*
-		 *  The period runs from 60 - 174 ticks.
-		 *  There are 5 cycles
-		 *
-		 *  For TorqueNADO, this would be 120 * 5 = 600 ticks, and the slow down would start at 174-600 ticks = -426
-		 *  ticks and still be running --> true
-		 *
-		 *  For REV HD Core Hex, this would be 13.44 * 5 = 67.2 ticks, and the slow down would start at tick
-		 *  number 174 - 67.2 = 106.8 and would not have started yet --> false
+		 * Power change requires 5 cycles
+		 * Each cycle is 120 ticks
+		 * 120 * 5 = 600
+		 * We need to start ramp down at tick 120 - 600 ticks = -480 ticks
 		 */
-		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		final double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-		assertTrue(result);
+		assertEquals(-480, result);
 	}
 
+	/**
+	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the target
+	 * tick number (negative numbers)
+	 */
+	@Test
+	@Override
+	public final void testGetTickNumberToStartSlowDown11() {
+
+
+		final int                tickNumberAtStartOfPeriod = -60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
+
+		/*
+		 * Need 10 cycles of ramp
+		 * At 120 ticks per cycle
+		 * Need -1200 ticks
+		 * Tick number at end of period = -1060
+		 * Would need to start ramp at -1060 + 1200 tics = -260 ticks
+		 */
+
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+		assertEquals(-260, result);
+	}
+
+	@Test
+	@Override
+	public final void testGetTickNumberToStartSlowDown12() {
+
+		final int                tickNumberAtStartOfPeriod = 60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
+
+		PowerVector powerAtStart = new PowerVector(0.5);
+		PowerVector powerAtEnd   = new PowerVector(0.0);
+
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerAtStart, powerAtEnd);
+
+		assertEquals(-420, result);
+	}
+
+	@Test
+	public final void testGetTicksPerCycle01() {
+		NonNegativeDouble ticksPerCycle = getMotor().getTicksPerCycle();
+		assertEquals(120.0, ticksPerCycle.doubleValue());
+	}
+
+	@Test
+	public final void testGetTicksPerMillisecond01() {
+		NonNegativeDouble ticksPerMillisecond = getMotor().getTicksPerMillisecond();
+		assertEquals(2.4, ticksPerMillisecond.doubleValue());
+	}
+
+	@Test
+	public final void testGetTicksPerMinute01() {
+		NonNegativeDouble ticksPerMinute = getMotor().getTicksPerMinute();
+		assertEquals(144000.0, ticksPerMinute.doubleValue());
+	}
+
+	@Test
+	public final void testGetTicksPerSecond01() {
+		NonNegativeDouble ticksPerSecond = getMotor().getTicksPerSecond();
+		assertEquals(2400.0, ticksPerSecond.doubleValue());
+	}
 
 	@Override
 	@Test
@@ -441,8 +319,8 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		final PowerVector powerAtStart = new PowerVector(1.0);
 		final PowerVector powerAtEnd   = new PowerVector(0.0);
 
-		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
 	}
@@ -457,36 +335,40 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		final PowerVector        powerAtStart              = new PowerVector(0.5);
 		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
-		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertFalse(result);
 	}
 
-
-	@Override
 	@Test
-	public final void whenTickNumberInRange_thenSlowDownIsRunning() {
+	public final void testIsSlowDownToEncoderTicksRunningGeneric05() {
 
-		final int                tickNumberAtStartOfPeriod = 0;
-		final int                tickNumberCurrent         = 59;
+		final int                tickNumberAtStartOfPeriod = 60;
+		final int                tickNumberCurrent         = 61;
 		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
-		final PowerVector        powerAtStart              = new PowerVector(0.5);
-		final PowerVector        powerAtEnd                = new PowerVector(0.0);
+
+		PowerVector powerAtStart = new PowerVector(0.5);
+		PowerVector powerAtEnd   = new PowerVector(0.0);
 
 		/*
-		 *  Period runs from 0 to 120.
-		 *  Need 5 cycles.
-		 *  At 120 ticks per cycle, that is 600 ticks.
-		 *  Last tick is number 120
-		 *  Ramp down would start at tick number 120-600 = -480 and still be going
+		 *  The period goes from tick 60 to tick 180.
+		 *  We are at tick 61.
+		 *
+		 *  We need 5 cycles for slowing down
+		 *
+		 *  The TorqueNADO needs 120 * 5 cycles = 600 ticks, so it should start at tick 180-600=-420and still be
+		 *  slowing down. The Rev HD Core Hex needs 13.44 * 5 cycles = 67 ticks, so it should start at tick
+		 *  180-67=113 not be going yet.
+		 *
 		 */
-		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
 	}
-
 
 	@Override
 	@Test
@@ -512,7 +394,6 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		assertTrue(result);
 	}
 
-
 	@Override
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric09() {
@@ -532,12 +413,10 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		final PowerVector powerAtEnd   = new PowerVector(0.0);
 
 		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-				tickNumberCurrent, numberOfTicksInPeriod,
-					powerAtStart, powerAtEnd);
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 		assertFalse(result);
 
 	}
-
 
 	@Override
 	@Test
@@ -550,17 +429,14 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		final PowerVector        powerAtEnd                = new PowerVector(0.0);
 
 		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-				tickNumberCurrent, numberOfTicksInPeriod,
-					powerAtStart, powerAtEnd);
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 		assertFalse(result);
 
 	}
 
-
 	/**
 	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the target
-	 * tick number
-	 * (negative numbers)
+	 * tick number (negative numbers)
 	 */
 	@Test
 	public final void testIsSlowDownToEncoderTicksRunningGeneric11() {
@@ -585,11 +461,106 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		 */
 
 		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
-				tickNumberCurrent, numberOfTicksInPeriod,
-					powerAtStart, powerAtEnd);
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 		assertFalse(result);
 	}
 
+	@Test
+	public final void whenSlowDownNotStarted_thenReturnFalse() {
+
+		final int                tickNumberAtStartOfPeriod = 60;
+		final int                tickNumberCurrent         = 114;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
+
+		PowerVector powerAtStart = new PowerVector(0.5);
+		PowerVector powerAtEnd   = new PowerVector(0.0);
+
+		/*
+		 *  The period runs from 60 - 174 ticks.
+		 *  There are 5 cycles
+		 *
+		 *  For TorqueNADO, this would be 120 * 5 = 600 ticks, and the slow down would start at 174-600 ticks = -426
+		 *  ticks and still be running --> true
+		 *
+		 *  For REV HD Core Hex, this would be 13.44 * 5 = 67.2 ticks, and the slow down would start at tick
+		 *  number 174 - 67.2 = 106.8 and would not have started yet --> false
+		 */
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+		assertTrue(result);
+	}
+
+	@Test
+	@Override
+	public final void whenThereAreEnoughTicks_thenSlowDownStartsOnTime() {
+
+		final int                tickNumberAtStartOfPeriod = -60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(10000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
+
+		/*
+		 * Need 10 cycles of ramp
+		 * At 120 ticks per cycle
+		 * Need 1200 ticks
+		 * Tick number at start of period = -60
+		 * Tick number at end of period = 9940
+		 * Would need to start ramp at 9940 - 1200 ticks = 8740 ticks
+		 */
+
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerAtStart, powerAtEnd);
+
+		assertEquals(8740, result);
+	}
+
+	@Test
+	@Override
+	public final void whenThereAreNotEnoughTicks_thenSlowDownStartsTooEarly() {
+
+		final int                tickNumberAtStartOfPeriod = -60;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(1000);
+		final PowerVector        powerAtStart              = new PowerVector(1.0);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
+
+		/*
+		 * Need 10 cycles of ramp
+		 * At 120 ticks per cycle
+		 * Need 1200 ticks
+		 * Tick number at start of period = -60
+		 * Tick number at end of period = 940
+		 * Would need to start ramp at 940 - 1200 ticks = -260 ticks
+		 */
+
+		double result = getMotor().getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod, numberOfTicksInPeriod,
+				powerAtStart, powerAtEnd);
+
+		assertEquals(-260, result);
+	}
+
+	@Override
+	@Test
+	public final void whenTickNumberInRange_thenSlowDownIsRunning() {
+
+		final int                tickNumberAtStartOfPeriod = 0;
+		final int                tickNumberCurrent         = 59;
+		final NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(120);
+		final PowerVector        powerAtStart              = new PowerVector(0.5);
+		final PowerVector        powerAtEnd                = new PowerVector(0.0);
+
+		/*
+		 *  Period runs from 0 to 120.
+		 *  Need 5 cycles.
+		 *  At 120 ticks per cycle, that is 600 ticks.
+		 *  Last tick is number 120
+		 *  Ramp down would start at tick number 120-600 = -480 and still be going
+		 */
+		final boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod,
+				tickNumberCurrent, numberOfTicksInPeriod, powerAtStart, powerAtEnd);
+
+		assertTrue(result);
+	}
 
 	@Override
 	@Test
@@ -615,8 +586,7 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 		 */
 
 		boolean result = getMotor().isSlowDownToEncoderTicksRunning(tickNumberAtStartOfPeriod, tickNumberCurrent,
-				numberOfTicksInPeriod,
-					powerAtStart, powerAtEnd);
+				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertTrue(result);
 

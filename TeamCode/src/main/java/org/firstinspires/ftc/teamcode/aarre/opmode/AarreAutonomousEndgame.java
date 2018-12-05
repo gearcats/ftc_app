@@ -9,33 +9,26 @@ import org.firstinspires.ftc.teamcode.aarre.src.TelemetryPlus;
 import java.util.logging.Logger;
 
 /**
- * This file contains Aarre's experimental code to autonomously put the robot in
- * the state that it should be in at the end of the user period just before
- * latching to the lander. This includes:
+ * This file contains Aarre's experimental code to autonomously put the robot in the state that it should be in at the
+ * end of the user period just before latching to the lander. This includes:
  * <p>
- * 1. The arm must be down
- * 2. The riser must be up
- * 3. The hook must be up
+ * 1. The arm must be down 2. The riser must be up 3. The hook must be up
  * <p>
- * To avoid issuing an error on the phones, any OpMode class must be
- * declared public.
+ * To avoid issuing an error on the phones, any OpMode class must be declared public.
  */
 
 @Autonomous(name = "Aarre Autonomous Endgame", group = "Aarre")
 @Disabled
 public class AarreAutonomousEndgame extends LinearOpMode {
 
-	private TelemetryPlus betterTelemetryPlus;
-	private Robot         robot;
-
-
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private       TelemetryPlus betterTelemetryPlus;
+	private final Logger        log = Logger.getLogger(this.getClass().getName());
+	private       Robot         robot;
 
 	/**
 	 * Properties inherited from LinearOpMode include:
 	 * <p>
-	 * hardwareMap
-	 * telemetry
+	 * hardwareMap telemetry
 	 */
 	@Override
 	public final void runOpMode() {

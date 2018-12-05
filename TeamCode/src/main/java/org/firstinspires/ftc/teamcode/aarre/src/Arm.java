@@ -9,11 +9,10 @@ public class Arm {
 
 	private static final PowerMagnitude    DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(1.0);
 	private static final NonNegativeDouble SECONDS_BEFORE_TIMEOUT_DEFAULT = new NonNegativeDouble(1.0);
-
-	private MotorRevHDCoreHex motor;
-	private TelemetryPlus     telemetry;
-	private HardwareMap       hardwareMap;
-	private LinearOpMode      opMode;
+	private              HardwareMap       hardwareMap;
+	private              MotorRevHDCoreHex motor;
+	private              LinearOpMode      opMode;
+	private              TelemetryPlus     telemetry;
 
 	/**
 	 * This empty constructor is useful for testing.
@@ -46,8 +45,7 @@ public class Arm {
 		hardwareMap = opMode.hardwareMap;
 		if (hardwareMap == null) {
 			motor = null;
-		}
-		else {
+		} else {
 			motor = new MotorRevHDCoreHex(opMode, nameOfArmMotor);
 		}
 

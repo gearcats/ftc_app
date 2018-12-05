@@ -20,17 +20,24 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Disabled
 public class RobotUnitTests extends LinearOpMode {
 
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 	/**
 	 * Test AarreRobot
 	 * <p>
-	 * We can't break this up into different methods because the tests depend on overriding the FTC
-	 * runOpMode() method. Properties inherited from LinearOpMode include: - hardwareMap -
-	 * telemetry
+	 * We can't break this up into different methods because the tests depend on overriding the FTC runOpMode() method.
+	 * Properties inherited from LinearOpMode include: - hardwareMap - telemetry
 	 */
 
 	Robot robot;
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	/**
+	 * Must override runOpMode to avoid compiler error
+	 */
+	@Test
+	@Override
+	public final void runOpMode() {
+
+	}
 
 	@Test
 	final void testConstructor() {
@@ -49,15 +56,6 @@ public class RobotUnitTests extends LinearOpMode {
 		assertNotNull(this.telemetry);
 		TelemetryPlus telemetry = new TelemetryPlus(this.telemetry);
 		assertNotNull(telemetry);
-
-	}
-
-	/**
-	 * Must override runOpMode to avoid compiler error
-	 */
-	@Test
-	@Override
-	public final void runOpMode() {
 
 	}
 

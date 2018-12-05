@@ -9,25 +9,25 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RiserUnitTests {
 
-    Riser riser;
+	Riser riser;
 
-    RiserUnitTests() {
-        riser = new Riser();
-    }
+	RiserUnitTests() {
+		riser = new Riser();
+	}
 
-    @Test
-    public void testNewAarreRiserObjectNotNull() {
-        assertNotNull(riser);
-    }
+	@Test
+	public void testLowerMethod() {
+		assertThrows(NullPointerException.class, () -> riser.lower());
+	}
 
-    @Test
-    public void testLowerMethod() {
-        assertThrows(NullPointerException.class, () -> riser.lower());
-    }
+	@Test
+	public void testNewAarreRiserObjectNotNull() {
+		assertNotNull(riser);
+	}
 
-    @Test
-    public void testRaiseMethod() {
-        assertThrows(NullPointerException.class, () -> riser.raise());
-    }
+	@Test
+	public void testRaiseMethod() {
+		assertThrows(NullPointerException.class, () -> riser.raise());
+	}
 
 }

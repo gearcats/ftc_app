@@ -12,45 +12,24 @@ class PowerMagnitudeUnitTests {
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Test
-	void whenValueIsNegative_thenCannotConstructMagnitude() {
-		double testValue = -1.0;
-		assertThrows(IllegalArgumentException.class, () -> {
-			new PowerMagnitude(testValue);
-		});
-	}
-
-	@Test
-	void whenValueIsPositive_thenCanConstructMagnitude() {
-		double testValue = 1.0;
-		new PowerMagnitude(testValue);
-	}
-
-	@Test
-	void whenValueIsZero_thenCanConstructMagnitude() {
-		double testValue = 0.0;
-		new PowerMagnitude(testValue);
-	}
-
-	@Test
 	void compareTo() {
 	}
 
 	@Test
-	void whenTheMagnitudeIsOne_thenAsDoubleReturnsOne() {
-		double         expected      = 1.0;
-		PowerMagnitude testMagnitude = new PowerMagnitude(expected);
-		double         actual        = testMagnitude.doubleValue();
-		assertEquals(expected, actual);
+	void isLessThan() {
 	}
 
 	@Test
-	void whenTheMagnitudeIsZero_thenAsDoubleReturnsZero() {
-		double         expected      = 0.0;
-		PowerMagnitude testMagnitude = new PowerMagnitude(expected);
-		double         actual        = testMagnitude.doubleValue();
-		assertEquals(expected, actual);
+	void subtract() {
 	}
 
+	@Test
+	void testDivideBy() {
+		PowerMagnitude testMagnitude1 = new PowerMagnitude(1.0);
+		PowerMagnitude testMagnitude2 = new PowerMagnitude(0.5);
+		double         result         = testMagnitude1.divideBy(testMagnitude2);
+		assertEquals(2.0, result);
+	}
 
 	@Test
 	final void whenMagnitudesAre0and1_thenComparisonIsCorrect() {
@@ -72,13 +51,40 @@ class PowerMagnitudeUnitTests {
 		assertTrue(zeroMagnitude.doubleValue() < oneMagnitude.doubleValue());
 	}
 
+	@Test
+	void whenTheMagnitudeIsOne_thenAsDoubleReturnsOne() {
+		double         expected      = 1.0;
+		PowerMagnitude testMagnitude = new PowerMagnitude(expected);
+		double         actual        = testMagnitude.doubleValue();
+		assertEquals(expected, actual);
+	}
 
 	@Test
-	void testDivideBy() {
-		PowerMagnitude testMagnitude1 = new PowerMagnitude(1.0);
-		PowerMagnitude testMagnitude2 = new PowerMagnitude(0.5);
-		double         result         = testMagnitude1.divideBy(testMagnitude2);
-		assertEquals(2.0, result);
+	void whenTheMagnitudeIsZero_thenAsDoubleReturnsZero() {
+		double         expected      = 0.0;
+		PowerMagnitude testMagnitude = new PowerMagnitude(expected);
+		double         actual        = testMagnitude.doubleValue();
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void whenValueIsNegative_thenCannotConstructMagnitude() {
+		double testValue = -1.0;
+		assertThrows(IllegalArgumentException.class, () -> {
+			new PowerMagnitude(testValue);
+		});
+	}
+
+	@Test
+	void whenValueIsPositive_thenCanConstructMagnitude() {
+		double testValue = 1.0;
+		new PowerMagnitude(testValue);
+	}
+
+	@Test
+	void whenValueIsZero_thenCanConstructMagnitude() {
+		double testValue = 0.0;
+		new PowerMagnitude(testValue);
 	}
 
 	@Test
@@ -99,13 +105,5 @@ class PowerMagnitudeUnitTests {
 		PowerMagnitude oneMagnitude  = new PowerMagnitude(one);
 
 		assertTrue(zeroMagnitude.isLessThan(oneMagnitude));
-	}
-
-	@Test
-	void isLessThan() {
-	}
-
-	@Test
-	void subtract() {
 	}
 }

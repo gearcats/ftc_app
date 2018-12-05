@@ -15,17 +15,17 @@ public class PositiveIntegerUnitTests {
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Test
-	public void whenConstructorArgumentPositive_thenNoProblem() {
-		int randomPositiveInteger = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
-		new PositiveInteger(randomPositiveInteger);
-	}
-
-	@Test
 	public void whenConstructorArgumentNegative_thenExceptionThrown() {
 		int randomNegativeInteger = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, -1);
 		assertThrows(IllegalArgumentException.class, () -> {
 			new PositiveInteger(randomNegativeInteger);
 		});
+	}
+
+	@Test
+	public void whenConstructorArgumentPositive_thenNoProblem() {
+		int randomPositiveInteger = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE);
+		new PositiveInteger(randomPositiveInteger);
 	}
 
 	@Test

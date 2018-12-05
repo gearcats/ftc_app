@@ -13,8 +13,11 @@ public class NonNegativeIntegerUnitTests {
 
 
 	@Test
-	public void whenConstructorArgumentZero_thenNoProblem() {
-		new NonNegativeInteger(0);
+	public void whenConstructorArgumentNegative_thenExceptionThrown() {
+		int randomNegativeInteger = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, 0);
+		assertThrows(IllegalArgumentException.class, () -> {
+			new NonNegativeInteger(randomNegativeInteger);
+		});
 	}
 
 	@Test
@@ -24,11 +27,8 @@ public class NonNegativeIntegerUnitTests {
 	}
 
 	@Test
-	public void whenConstructorArgumentNegative_thenExceptionThrown() {
-		int randomNegativeInteger = ThreadLocalRandom.current().nextInt(Integer.MIN_VALUE, 0);
-		assertThrows(IllegalArgumentException.class, () -> {
-			new NonNegativeInteger(randomNegativeInteger);
-		});
+	public void whenConstructorArgumentZero_thenNoProblem() {
+		new NonNegativeInteger(0);
 	}
 
 	@Test

@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 interface MotorInterface {
 
+	int getCurrentTickNumber();
+
 	HardwareMap getHardwareMap();
 
 	/**
@@ -26,55 +28,19 @@ interface MotorInterface {
 	 */
 	DcMotor getMotor();
 
-	LinearOpMode getOpMode();
-
-	NonNegativeDouble getRevolutionsPerMinute();
-
-	NonNegativeDouble getRevolutionsPerMinute(PowerMagnitude powerMagnitude);
-
-	NonNegativeDouble getTicksPerMinute();
-
-	NonNegativeDouble getTicksPerMinute(PowerMagnitude powerMagnitude);
-
-	NonNegativeDouble getTicksPerRevolution();
-
-	NonNegativeDouble getTicksPerSecond();
-
-	NonNegativeDouble getTicksPerSecond(PowerMagnitude powerMagnitude);
-
-	/**
-	 * @return The number of ticks in a millisecond at maximum power.
-	 */
-	NonNegativeDouble getTicksPerMillisecond();
-
-	/**
-	 * @param powerMagnitude
-	 * 		The magnitude of motor power for which the caller wants to know the number of ticks in a power change
-	 * 		cycle.
-	 *
-	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude
-	 */
-	NonNegativeDouble getTicksPerMillisecond(PowerMagnitude powerMagnitude);
-
-	/**
-	 * @return The number of ticks in a power change cycle at maximum power
-	 */
-	NonNegativeDouble getTicksPerCycle();
-
-	/**
-	 * Get the number of ticks in a power change cycle at a given power magnitude.
-	 *
-	 * @param powerMagnitude
-	 * 		The magnitude of motor power for which the caller wants the number of ticks in a power change cycle.
-	 *
-	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude.
-	 */
-	NonNegativeDouble getTicksPerCycle(PowerMagnitude powerMagnitude);
-
-	int getCurrentTickNumber();
-
 	NonNegativeInteger getNumberOfCycles(NonNegativeInteger ticksToMove, PowerVector powerVectorCurrent, PowerVector
 			powerVectorRequested);
+
+	LinearOpMode getOpMode();
+
+	double getPower();
+
+	/**
+	 * Get the magnitude by which the motor power will increment when ramping up or down.
+	 *
+	 * @return The magnitude by which the motor power will increment when ramping up or down.
+	 */
+	PowerMagnitude getPowerMagnitudeIncrementPerCycle();
 
 	/**
 	 * Get the current proportion of power
@@ -99,7 +65,9 @@ interface MotorInterface {
 	 */
 	PowerVector getPowerVectorNew(PowerVector powerVectorCurrent, PowerVector powerVectorRequested);
 
-	double getPower();
+	NonNegativeDouble getRevolutionsPerMinute();
+
+	NonNegativeDouble getRevolutionsPerMinute(PowerMagnitude powerMagnitude);
 
 	/**
 	 * Calculate when (what tick number) to start a ramp down.
@@ -135,22 +103,43 @@ interface MotorInterface {
 	                                    PowerVector powerAtStartOfPeriod, PowerVector powerAtEndOfPeriod);
 
 	/**
-	 * Determine whether to stop speeding up.
-	 *
-	 * @param ticksMaximum
-	 * 		The maximum number of ticks that rampToEncoderTicks is supposed to move.
-	 * @param secondsTimeout
-	 * 		The maximum number of seconds for which rampToEncoderTicks is supposed to run.
-	 * @param secondsRunning
-	 * 		The number of seconds for which rampToEncoderTicks has been running.
-	 * @param ticksMoved
-	 * 		The number of ticks by which rampToEncoderTicks has already moved.
-	 *
-	 * @return True if we should stop speeding up; false otherwise.
+	 * @return The number of ticks in a power change cycle at maximum power
 	 */
-	boolean isSpeedUpToEncoderTicksDone(NonNegativeInteger ticksMaximum, NonNegativeDouble secondsTimeout,
-	                                    NonNegativeDouble secondsRunning,
-	                                    NonNegativeInteger ticksMoved) throws NoSuchMethodException;
+	NonNegativeDouble getTicksPerCycle();
+
+	/**
+	 * Get the number of ticks in a power change cycle at a given power magnitude.
+	 *
+	 * @param powerMagnitude
+	 * 		The magnitude of motor power for which the caller wants the number of ticks in a power change cycle.
+	 *
+	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude.
+	 */
+	NonNegativeDouble getTicksPerCycle(PowerMagnitude powerMagnitude);
+
+	/**
+	 * @return The number of ticks in a millisecond at maximum power.
+	 */
+	NonNegativeDouble getTicksPerMillisecond();
+
+	/**
+	 * @param powerMagnitude
+	 * 		The magnitude of motor power for which the caller wants to know the number of ticks in a power change
+	 * 		cycle.
+	 *
+	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude
+	 */
+	NonNegativeDouble getTicksPerMillisecond(PowerMagnitude powerMagnitude);
+
+	NonNegativeDouble getTicksPerMinute();
+
+	NonNegativeDouble getTicksPerMinute(PowerMagnitude powerMagnitude);
+
+	NonNegativeDouble getTicksPerRevolution();
+
+	NonNegativeDouble getTicksPerSecond();
+
+	NonNegativeDouble getTicksPerSecond(PowerMagnitude powerMagnitude);
 
 	/**
 	 * Determine whether a slowdown should be running.
@@ -160,8 +149,9 @@ interface MotorInterface {
 	 * period
 	 *
 	 * @param tickNumberAtStartOfPeriod
-	 * 		The motor encoder tick number at which the period (including both the ramp and the portion at speed
-	 * 		before the ramp started).
+	 * 		The motor encoder tick number at which the period (including both the ramp and the portion at speed before
+	 * 		the
+	 * 		ramp started).
 	 * @param tickNumberCurrent
 	 * 		The current motor encoder tick number.
 	 * @param numberOfTicksInPeriod
@@ -176,6 +166,24 @@ interface MotorInterface {
 	boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfPeriod, int tickNumberCurrent, NonNegativeInteger
 			numberOfTicksInPeriod, PowerVector powerAtStart, PowerVector powerAtEnd);
 
+	/**
+	 * Determine whether to stop speeding up.
+	 *
+	 * @param ticksMaximum
+	 * 		The maximum number of ticks that rampToEncoderTicks is supposed to move.
+	 * @param secondsTimeout
+	 * 		The maximum number of seconds for which rampToEncoderTicks is supposed to run.
+	 * @param secondsRunning
+	 * 		The number of seconds for which rampToEncoderTicks has been running.
+	 * @param ticksMoved
+	 * 		The number of ticks by which rampToEncoderTicks has already moved.
+	 *
+	 * @return True if we should stop speeding up; false otherwise.
+	 */
+	boolean isSpeedUpToEncoderTicksDone(NonNegativeInteger ticksMaximum, NonNegativeDouble secondsTimeout,
+	                                    NonNegativeDouble secondsRunning, NonNegativeInteger ticksMoved) throws
+			NoSuchMethodException;
+
 	void rampToPower(PowerVector powerVectorRequested);
 
 	void rampToPower(PowerVector powerVectorRequested, PowerMagnitude powerIncrementMagnitude, NonNegativeInteger
@@ -188,13 +196,6 @@ interface MotorInterface {
 	 * 		The magnitude by which the motor should increment when ramping power up or down.
 	 */
 	void setPowerMagnitudeIncrementPerCycle(PowerMagnitude powerMagnitude);
-
-	/**
-	 * Get the magnitude by which the motor power will increment when ramping up or down.
-	 *
-	 * @return The magnitude by which the motor power will increment when ramping up or down.
-	 */
-	PowerMagnitude getPowerMagnitudeIncrementPerCycle();
 
 	/**
 	 * Set the magnitude within which we will consider the requested motor power to have been reached.

@@ -17,28 +17,23 @@ import java.util.logging.*;
 public class DriveMotors {
 
 	// Defaults
-	private static final double DEFAULT_HEADING_THRESHOLD          = 1.0;
-	private static final double DEFAULT_P_DRIVE_COEFFICIENT        = 0.15; // Larger is more responsive but less stable
-	private static final double DEFAULT_P_TURN_COEFFICIENT         = 0.1;  // Larger is more responsive but less stable
-	private static final double DEFAULT_POWER_INCREMENT_ABSOLUTE   = 0.1;
-	private static final double DEFAULT_PROPORTION_POWER_TOLERANCE = 0.01;
-	private static final int    DEFAULT_MILLISECONDS_CYCLE_LENGTH  = 50;
-
+	private static final double                DEFAULT_HEADING_THRESHOLD          = 1.0;
+	private static final int                   DEFAULT_MILLISECONDS_CYCLE_LENGTH  = 50;
+	private static final double                DEFAULT_POWER_INCREMENT_ABSOLUTE   = 0.1;
+	private static final double                DEFAULT_PROPORTION_POWER_TOLERANCE = 0.01;
+	private static final double                DEFAULT_P_DRIVE_COEFFICIENT        = 0.15; // Larger is more responsive but less stable
+	private static final double                DEFAULT_P_TURN_COEFFICIENT         = 0.1;  // Larger is more responsive but less stable
+	private static       int                   cycleLengthInMilliseconds          = DEFAULT_MILLISECONDS_CYCLE_LENGTH;
+	private              ModernRoboticsI2cGyro gyro;
+	private              HardwareMap           hardwareMap;
+	private              DriveMotor            leftMotor;
+	static               Logger                log;
+	private              LinearOpMode          opMode;
 	// Private fields
-	private static PowerMagnitude powerIncrementAbsolute    = new PowerMagnitude
-			(DEFAULT_POWER_INCREMENT_ABSOLUTE);
-	private static int            cycleLengthInMilliseconds = DEFAULT_MILLISECONDS_CYCLE_LENGTH;
-	private static PowerMagnitude powerMagnitudeTolerance   = new PowerMagnitude
-			(DEFAULT_PROPORTION_POWER_TOLERANCE);
-
-	private DriveMotor            leftMotor;
-	private DriveMotor            rightMotor;
-	private TelemetryPlus         telemetry;
-	private HardwareMap           hardwareMap;
-	private LinearOpMode          opMode;
-	private ModernRoboticsI2cGyro gyro;
-
-	static Logger log;
+	private static       PowerMagnitude        powerIncrementAbsolute             = new PowerMagnitude(DEFAULT_POWER_INCREMENT_ABSOLUTE);
+	private static       PowerMagnitude        powerMagnitudeTolerance            = new PowerMagnitude(DEFAULT_PROPORTION_POWER_TOLERANCE);
+	private              DriveMotor            rightMotor;
+	private              TelemetryPlus         telemetry;
 
 	static {
 		log = Logger.getLogger(Motor.class.getName());
@@ -110,35 +105,6 @@ public class DriveMotors {
 		}
 
 
-
-	}
-
-	public static PowerMagnitude getPowerIncrementAbsolute() {
-		return powerIncrementAbsolute;
-	}
-
-	public static int getCycleLengthInMilliseconds() {
-		return cycleLengthInMilliseconds;
-	}
-
-	public static PowerMagnitude getPowerMagnitudeTolerance() {
-		return powerMagnitudeTolerance;
-	}
-
-	/**
-	 * Get desired steering force.
-	 *
-	 * @param error
-	 * 		Error angle in robot relative degrees
-	 * @param proportionalGainCoefficient
-	 * 		Proportional Gain Coefficient
-	 *
-	 * @return Desired steering force.  +/- 1 range.  +ve = steer left
-	 * 		<p>
-	 * 		TODO: Eliminate use of Range.clip here
-	 */
-	public static PowerVector getSteer(final double error, final double proportionalGainCoefficient) {
-		return new PowerVector(Range.clip(error * proportionalGainCoefficient, -1.0, 1.0));
 	}
 
 	/**
@@ -214,6 +180,10 @@ public class DriveMotors {
 
 	}
 
+	public static int getCycleLengthInMilliseconds() {
+		return cycleLengthInMilliseconds;
+	}
+
 	/**
 	 * getError determines the error between the target angle and the robot's current heading
 	 *
@@ -237,6 +207,30 @@ public class DriveMotors {
 			robotError += 360.0;
 		}
 		return robotError;
+	}
+
+	public static PowerMagnitude getPowerIncrementAbsolute() {
+		return powerIncrementAbsolute;
+	}
+
+	public static PowerMagnitude getPowerMagnitudeTolerance() {
+		return powerMagnitudeTolerance;
+	}
+
+	/**
+	 * Get desired steering force.
+	 *
+	 * @param error
+	 * 		Error angle in robot relative degrees
+	 * @param proportionalGainCoefficient
+	 * 		Proportional Gain Coefficient
+	 *
+	 * @return Desired steering force.  +/- 1 range.  +ve = steer left
+	 * 		<p>
+	 * 		TODO: Eliminate use of Range.clip here
+	 */
+	public static PowerVector getSteer(final double error, final double proportionalGainCoefficient) {
+		return new PowerVector(Range.clip(error * proportionalGainCoefficient, -1.0, 1.0));
 	}
 
 	/**
@@ -366,8 +360,7 @@ public class DriveMotors {
 	 * 		forward.
 	 * 		If a relative angle is required, add/subtract from current heading.
 	 */
-	public void gyroTurn(final PowerVector powerVectorRequested, final double angle) throws
-			NoSuchMethodException {
+	public void gyroTurn(final PowerVector powerVectorRequested, final double angle) throws NoSuchMethodException {
 
 		// keep looping while we are still active, and not on heading.
 		while (opMode.opModeIsActive() && !isOnHeading(powerVectorRequested, angle, DEFAULT_P_TURN_COEFFICIENT)) {
@@ -497,8 +490,7 @@ public class DriveMotors {
 			powerDeltaRightMagnitude = powerDeltaRightVector.getMagnitude();
 
 			greatestPowerDeltaDouble = Math.max(powerDeltaLeftMagnitude.doubleValue(), powerDeltaRightMagnitude
-					.doubleValue
-					());
+					.doubleValue());
 			greatestPowerDeltaMagnitude = new PowerMagnitude(greatestPowerDeltaDouble);
 
 			leftMotor.setPowerVector(powerVectorNewLeft);
@@ -508,12 +500,14 @@ public class DriveMotors {
 
 		}
 
-		log.exiting(getClass().getName(), getClass().getMethod("rampPowerTo", PowerVector.class, PowerVector
-				.class).getName());
+		log.exiting(getClass().getName(), getClass().getMethod("rampPowerTo", PowerVector.class, PowerVector.class).getName());
 
 
 	}
 
+	public void setCycleLengthInMilliseconds(int cycleLengthInMilliseconds) {
+		this.cycleLengthInMilliseconds = cycleLengthInMilliseconds;
+	}
 
 	public void setPowerIncrement(double increment) {
 		PowerMagnitude powerMagnitudeIncrement = new PowerMagnitude(increment);
@@ -522,10 +516,6 @@ public class DriveMotors {
 
 	public void setPowerIncrement(PowerMagnitude powerIncrementAbsolute) {
 		this.powerIncrementAbsolute = powerIncrementAbsolute;
-	}
-
-	public void setCycleLengthInMilliseconds(int cycleLengthInMilliseconds) {
-		this.cycleLengthInMilliseconds = cycleLengthInMilliseconds;
 	}
 
 	public void setPowerMagnitudeTolerance(PowerMagnitude powerMagnitudeTolerance) {

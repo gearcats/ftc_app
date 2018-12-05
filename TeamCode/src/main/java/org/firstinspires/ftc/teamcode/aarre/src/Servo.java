@@ -17,11 +17,10 @@ import java.util.logging.Logger;
 
 public class Servo {
 
+	private final Logger                                javaLog = Logger.getLogger(this.getClass().getName());
+	private       LinearOpMode                          opMode;
 	private final com.qualcomm.robotcore.hardware.Servo servo;
 	private       TelemetryPlus                         telemetry;
-	private       LinearOpMode                          opMode;
-
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	/**
 	 * Construct an instance of AarreMotor without telemetry.
@@ -54,9 +53,7 @@ public class Servo {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with this instance.
 	 */
-	public Servo(final HardwareMap hardwareMap, final String servoName, final TelemetryPlus telemetry, final
-	LinearOpMode
-			opMode) {
+	public Servo(final HardwareMap hardwareMap, final String servoName, final TelemetryPlus telemetry, final LinearOpMode opMode) {
 
 		// Call the other constructor to create the underlying Servo member
 		this(hardwareMap, servoName, opMode);
@@ -66,24 +63,6 @@ public class Servo {
 		this.opMode = opMode;
 
 	}
-
-	/**
-	 * Get the current position of this servo.
-	 * <p>
-	 * Despite its name, the {@link com.qualcomm.robotcore.hardware.Servo} method {@code getPosition}
-	 * is often wrong about the servo's position, especially if there are mechanical obstacles
-	 * stalling
-	 * the servo. Therefore, we use a different name here.
-	 *
-	 * @return The current (purported) position of this server in the interval [0,1]
-	 */
-	@SuppressWarnings("WeakerAccess")
-	public final double getPurportedPosition() {
-
-		return servo.getPosition();
-
-	}
-
 
 	/**
 	 * Turn the servo forward to its maximum position.
@@ -106,6 +85,21 @@ public class Servo {
 
 	}
 
+	/**
+	 * Get the current position of this servo.
+	 * <p>
+	 * Despite its name, the {@link com.qualcomm.robotcore.hardware.Servo} method {@code getPosition} is often wrong
+	 * about the servo's position, especially if there are mechanical obstacles stalling the servo. Therefore, we use a
+	 * different name here.
+	 *
+	 * @return The current (purported) position of this server in the interval [0,1]
+	 */
+	@SuppressWarnings("WeakerAccess")
+	public final double getPurportedPosition() {
+
+		return servo.getPosition();
+
+	}
 
 	/**
 	 * Reverse the servo to its lowerUntilStalled limit
@@ -147,9 +141,9 @@ public class Servo {
 	/**
 	 * Set the servo direction.
 	 * <p>
-	 * The servo direction is set to @link{Servo.Direction.FORWARD} by default. If the servo is
-	 * turning the
-	 * "wrong way," then set it to @link{Servo.Direction.REVERSE}
+	 * The servo direction is set to @link{Servo.Direction.FORWARD} by default. If the servo is turning the "wrong
+	 * way,"
+	 * then set it to @link{Servo.Direction.REVERSE}
 	 *
 	 * @param direction
 	 * 		An instance of @link{Servo.Direction}
@@ -165,9 +159,9 @@ public class Servo {
 	 * Set the servo position.
 	 *
 	 * @param position
-	 * 		Where to set the servo relative to its available range.
-	 * 		A value in the interval [0,1] where 0 is the minimum available position
-	 * 		and 1 is the maximum available position.
+	 * 		Where to set the servo relative to its available range. A value in the interval [0,1] where 0 is the
+	 * 		minimum
+	 * 		available position and 1 is the maximum available position.
 	 */
 	private void setPosition(final double position) {
 

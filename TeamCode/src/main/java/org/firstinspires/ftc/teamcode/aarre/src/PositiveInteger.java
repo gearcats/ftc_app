@@ -9,9 +9,8 @@ import java.util.logging.Logger;
  */
 public class PositiveInteger {
 
-	private Integer value;
-
-	private final Logger log = Logger.getLogger(this.getClass().getCanonicalName());
+	private final Logger  log = Logger.getLogger(this.getClass().getCanonicalName());
+	private       Integer value;
 
 	public PositiveInteger(int value) {
 		if (value < 1) {

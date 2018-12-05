@@ -10,11 +10,10 @@ public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 	private static final NonNegativeDouble TORQUENADO_REVOLUTIONS_PER_MINUTE = new NonNegativeDouble(100);
 
 	private static final NonNegativeDouble TORQUENADO_TICKS_PER_REVOLUTION = new NonNegativeDouble(1440);
-
-	private final  DcMotor       motor;
-	static private TelemetryPlus telemetry;
-	private final  LinearOpMode  opMode;
-	private final  HardwareMap   hardwareMap;
+	private final        HardwareMap       hardwareMap;
+	private final        DcMotor           motor;
+	private final        LinearOpMode      opMode;
+	static private       TelemetryPlus     telemetry;
 
 
 	public MotorTorqueNADO(LinearOpMode opMode, String motorName) {

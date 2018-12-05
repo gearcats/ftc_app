@@ -6,13 +6,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 
-	static final NonNegativeDouble REV_CORE_HEX_REVOLUTIONS_PER_MINUTE = new NonNegativeDouble(72);
-	static final NonNegativeDouble REV_CORE_HEX_TICKS_PER_REVOLUTION   = new NonNegativeDouble(224);
-
-	private final  DcMotor           motor;
-	static private TelemetryPlus     telemetry;
-	private final  LinearOpMode      opMode;
+	static final   NonNegativeDouble REV_CORE_HEX_REVOLUTIONS_PER_MINUTE = new NonNegativeDouble(72);
+	static final   NonNegativeDouble REV_CORE_HEX_TICKS_PER_REVOLUTION   = new NonNegativeDouble(224);
 	private final  HardwareMap       hardwareMap;
+	private final  DcMotor           motor;
+	private final  LinearOpMode      opMode;
+	static private TelemetryPlus     telemetry;
 
 	public MotorRevHDCoreHex(LinearOpMode opMode, final String motorName) {
 
@@ -36,6 +35,11 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 	}
 
 	@Override
+	public final HardwareMap getHardwareMap() {
+		return hardwareMap;
+	}
+
+	@Override
 	public final DcMotor getMotor() {
 		return motor;
 	}
@@ -43,11 +47,6 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 	@Override
 	public LinearOpMode getOpMode() {
 		return opMode;
-	}
-
-	@Override
-	public final HardwareMap getHardwareMap() {
-		return hardwareMap;
 	}
 
 	@Override

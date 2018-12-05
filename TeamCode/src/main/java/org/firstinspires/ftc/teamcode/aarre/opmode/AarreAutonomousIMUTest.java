@@ -18,10 +18,9 @@ import java.util.logging.Logger;
 @Disabled
 public class AarreAutonomousIMUTest extends LinearOpMode {
 
-	Robot         robot;
 	TelemetryPlus betterTelemetryPlus;
-
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	Robot robot;
 
 	@Override
 	public void runOpMode() {

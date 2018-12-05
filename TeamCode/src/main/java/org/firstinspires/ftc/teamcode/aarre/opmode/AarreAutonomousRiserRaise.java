@@ -14,16 +14,14 @@ import java.util.logging.Logger;
 @Autonomous(name = "Aarre Autonomous Riser Raise", group = "Aarre")
 public class AarreAutonomousRiserRaise extends LinearOpMode {
 
-	private TelemetryPlus betterTelemetryPlus;
-	private Robot         robot;
-
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private       TelemetryPlus betterTelemetryPlus;
+	private final Logger        log = Logger.getLogger(this.getClass().getName());
+	private       Robot         robot;
 
 	/**
 	 * Properties inherited from LinearOpMode include:
 	 * <p>
-	 * hardwareMap
-	 * telemetry
+	 * hardwareMap telemetry
 	 */
 	@Override
 	public final void runOpMode() {

@@ -10,21 +10,18 @@ import java.util.Date;
 import java.util.logging.*;
 
 /**
- * This file contains Aarre's experimental code to initialize the robot. It defines all the specific
- * hardware for the 2018-2019 robot.
+ * This file contains Aarre's experimental code to initialize the robot. It defines all the specific hardware for the
+ * 2018-2019 robot.
  * <p>
- * Pulling it out into a separate class makes it possible to use the same code from different
- * OpModes (such as {@link AarreAutonomous}and {@link AarreAutonomousReady}).
+ * Pulling it out into a separate class makes it possible to use the same code from different OpModes (such as {@link
+ * AarreAutonomous}and {@link AarreAutonomousReady}).
  * <p>
  * This is NOT an OpMode itself.
  */
 public class Robot {
 
-	private final TelemetryPlus telemetry;
-
 	/**
-	 * These properties are package-private so methods of other classes in this package can use
-	 * them.
+	 * These properties are package-private so methods of other classes in this package can use them.
 	 * <p>
 	 * TODO: Implement getters and setters to keep these properties private.
 	 */
@@ -32,13 +29,13 @@ public class Robot {
 
 	Arm         arm;
 	DriveMotors driveMotors;
-	IMU         imu;
-	Riser       riser;
-	Servo       hookServo;
-	CRServo     scoopServo;
 	HardwareMap hardwareMap;
-
+	Servo       hookServo;
+	IMU         imu;
 	static Logger log;
+	Riser       riser;
+	CRServo     scoopServo;
+	private final TelemetryPlus telemetry;
 
 	static {
 		log = Logger.getLogger(Robot.class.getName());
@@ -116,12 +113,14 @@ public class Robot {
 	/**
 	 * Move the robot.
 	 *
-	 * @param powerMagnitude The magnitude of power to apply to the wheels.
-	 * @param leftInches The number of inches to move the left wheel. Negative values will move
-	 *                      the left wheel in reverse.
-	 * @param rightInches The number of inches to move the right wheel. Negative values will move
-	 *                      the right wheel in reverse.
-	 * @param secondsTimeout Stop after this many seconds even if move not fully executed.
+	 * @param powerMagnitude
+	 * 		The magnitude of power to apply to the wheels.
+	 * @param leftInches
+	 * 		The number of inches to move the left wheel. Negative values will move the left wheel in reverse.
+	 * @param rightInches
+	 * 		The number of inches to move the right wheel. Negative values will move the right wheel in reverse.
+	 * @param secondsTimeout
+	 * 		Stop after this many seconds even if move not fully executed.
 	 */
 	public void drive(PowerMagnitude powerMagnitude, double leftInches, double rightInches, double secondsTimeout)
 			throws NoSuchMethodException {
@@ -141,10 +140,9 @@ public class Robot {
 		return (telemetry);
 	}
 
-	public void gyroDrive(PowerMagnitude powerMagnitude, double inchesDirectionAndDistance,
-	                      double secondsTime) throws NoSuchMethodException {
-		driveMotors.gyroDrive(powerMagnitude
-				, inchesDirectionAndDistance, secondsTime);
+	public void gyroDrive(PowerMagnitude powerMagnitude, double inchesDirectionAndDistance, double secondsTime) throws
+			NoSuchMethodException {
+		driveMotors.gyroDrive(powerMagnitude, inchesDirectionAndDistance, secondsTime);
 	}
 
 	public void gyroHold(PowerVector powerVector, double degreesHeading, double secondsTime) throws
@@ -173,8 +171,9 @@ public class Robot {
 	}
 
 	/**
-	 * Lower the riser to its downward (least extended) position. This is the position that it will
-	 * need to be in at the beginning of the autonomous game when it is hanging from the lander.
+	 * Lower the riser to its downward (least extended) position. This is the position that it will need to be in at
+	 * the
+	 * beginning of the autonomous game when it is hanging from the lander.
 	 */
 	public void lowerRiser() throws NoSuchMethodException {
 		riser.lower();
@@ -197,25 +196,23 @@ public class Robot {
 	}
 
 	/**
-	 * Raise the riser to its upward (most extended) position. This is the position that it will
-	 * need to be in near the end of the game just before it latches on to the lander.
+	 * Raise the riser to its upward (most extended) position. This is the position that it will need to be in near the
+	 * end of the game just before it latches on to the lander.
 	 */
 	public void raiseRiser() throws NoSuchMethodException {
 		riser.raise();
 	}
 
 	/**
-	 * Put the robot in the state it should be in at the end of the
-	 * game, when it is preparing to latch to the lander.
+	 * Put the robot in the state it should be in at the end of the game, when it is preparing to latch to the lander.
 	 *
 	 * <ul>
 	 * <li>The arm is lowered.</li>
 	 * <li>The riser is raised, as it would need to be when attaching to the lander.</li>
 	 * <li>The hook is raised, as it would need to be when attaching to the lander.</li>
 	 * </ul>
-	 *
-	 * The difference between this and {@code readyForTransportation} is that this
-	 * mode raises the hook.
+	 * <p>
+	 * The difference between this and {@code readyForTransportation} is that this mode raises the hook.
 	 */
 	public void readyForAutonomousEndgame() throws NoSuchMethodException {
 		lowerArm();
@@ -231,9 +228,8 @@ public class Robot {
 	 * <li>The riser is lowered, as it would be when attached to the lander.</li>
 	 * <li>The hook is raised, as it would be when attached to the lander.</li>
 	 * </ul>
-	 *
-	 * The difference between this and {@code readyForTransportation} is that this
-	 * mode raises the hook.
+	 * <p>
+	 * The difference between this and {@code readyForTransportation} is that this mode raises the hook.
 	 */
 	public void readyForAutonomousGame() throws NoSuchMethodException {
 		lowerArm();
@@ -249,9 +245,8 @@ public class Robot {
 	 * <li>The riser is lowered, which is its most compact position.</li>
 	 * <li>The hook is lowered, which is its most compact position.</li>
 	 * </ul>
-	 *
-	 * The difference between this and {@code readyForAutonomousGame} is that
-	 * this mode lowers the hook.
+	 * <p>
+	 * The difference between this and {@code readyForAutonomousGame} is that this mode lowers the hook.
 	 */
 	public void readyForTransportation() throws NoSuchMethodException {
 		lowerArm();

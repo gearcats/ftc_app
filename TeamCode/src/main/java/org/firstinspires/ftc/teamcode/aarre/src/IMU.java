@@ -39,28 +39,24 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 /**
- * {@link IMU} gives a short demo on how to use the BNO055 Inertial Motion Unit (IMU) from
- * AdaFruit.
+ * {@link IMU} gives a short demo on how to use the BNO055 Inertial Motion Unit (IMU) from AdaFruit.
  * <p>
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name. Remove or comment
+ * out the @Disabled line to add this opmode to the Driver Station OpMode list
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
 public class IMU {
 
-	HardwareMap   hardwareMap;
-	LinearOpMode  opMode;
-	TelemetryPlus telemetry;
-
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
-
-	// The IMU sensor object
-	BNO055IMU imu;
-
 	// State used for updating telemetry
 	Orientation  angles;
 	Acceleration gravity;
+	HardwareMap  hardwareMap;
+	// The IMU sensor object
+	BNO055IMU    imu;
+	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	LinearOpMode  opMode;
+	TelemetryPlus telemetry;
 
 	public IMU(LinearOpMode opMode) {
 
@@ -103,13 +99,6 @@ public class IMU {
 
 	}
 
-	/**
-	 * Public method allows other objects to update the IMU telemetry.
-	 */
-	public void updateTelemetry() {
-		telemetry.update();
-	}
-
 	void composeTelemetry() {
 
 		/*
@@ -120,22 +109,19 @@ public class IMU {
 			// Acquiring the angles is relatively expensive; we don't want
 			// to do that in each of the three items that need that info, as that's
 			// three times the necessary expense.
-			angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit
-					.DEGREES);
+			angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 			gravity = imu.getGravity();
 		});
 
-		telemetry.addLine().addData("status", () -> imu.getSystemStatus().toShortString()).addData
-				("Calibration", () -> imu.getCalibrationStatus().toString());
+		telemetry.addLine().addData("status", () -> imu.getSystemStatus().toShortString()).addData("Calibration", ()
+				-> imu.getCalibrationStatus().toString());
 
-		telemetry.addLine().addData("heading", () -> formatAngle(angles.angleUnit, angles
-				.firstAngle)).addData("roll", () -> formatAngle(angles.angleUnit, angles
-				.secondAngle)).addData("pitch", () -> formatAngle(angles.angleUnit, angles
-				.thirdAngle));
+		telemetry.addLine().addData("heading", () -> formatAngle(angles.angleUnit, angles.firstAngle)).addData("roll",
+				() -> formatAngle(angles.angleUnit, angles.secondAngle)).addData("pitch", () -> formatAngle(angles
+				.angleUnit, angles.thirdAngle));
 
-		telemetry.addLine().addData("Gravity", () -> gravity.toString()).addData("mag", () ->
-				String.format(Locale.getDefault(), "%.3f", Math.sqrt(
-				gravity.xAccel * gravity.xAccel + gravity.yAccel * gravity.yAccel +
+		telemetry.addLine().addData("Gravity", () -> gravity.toString()).addData("mag", () -> String.format(Locale
+				.getDefault(), "%.3f", Math.sqrt(gravity.xAccel * gravity.xAccel + gravity.yAccel * gravity.yAccel +
 				gravity.zAccel * gravity.zAccel)));
 	}
 
@@ -145,5 +131,12 @@ public class IMU {
 
 	String formatDegrees(double degrees) {
 		return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+	}
+
+	/**
+	 * Public method allows other objects to update the IMU telemetry.
+	 */
+	public void updateTelemetry() {
+		telemetry.update();
 	}
 }

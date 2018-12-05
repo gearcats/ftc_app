@@ -4,12 +4,10 @@ import java.util.logging.Logger;
 
 public class PowerVector {
 
-	private double proportion;
-
-	public static final int FORWARD = 1;
-	public static final int REVERSE = -1;
-
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	public static final int    FORWARD = 1;
+	public static final int    REVERSE = -1;
+	private final       Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private             double proportion;
 
 	public PowerVector() {
 
@@ -60,22 +58,22 @@ public class PowerVector {
 		return new PowerVector(quotient);
 	}
 
-	int getDirection() {
-		return (int)Math.signum(this.proportion);
-	}
-
-	public boolean isGreaterThan(PowerVector comparator) {
-		return this.doubleValue() > comparator.doubleValue();
-	}
-
 	public double doubleValue() {
 		return proportion;
+	}
+
+	int getDirection() {
+		return (int) Math.signum(this.proportion);
 	}
 
 	PowerMagnitude getMagnitude() {
 
 		return new PowerMagnitude(Math.abs(this.proportion));
 
+	}
+
+	public boolean isGreaterThan(PowerVector comparator) {
+		return this.doubleValue() > comparator.doubleValue();
 	}
 
 	PowerVector multiplyBy(PowerVector multiplicand) {

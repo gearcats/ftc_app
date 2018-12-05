@@ -17,27 +17,23 @@ public class Riser {
 	 * These values affect the methods that move the riser by using the encoder to run until stall.
 	 */
 	private static final NonNegativeInteger DEFAULT_MILLISECONDS_STALL_TIME_WINDOW = new NonNegativeInteger(200);
-	private static final NonNegativeInteger DEFAULT_TICKS_STALL_TOLERANCE          = new NonNegativeInteger(15);
-
+	private static final PowerMagnitude     DEFAULT_POWER_MAGNITUDE                = new PowerMagnitude(1.0);
 	/**
 	 * These values affect the methods that move the riser by using the encoder to run a fixed number of revolutions.
 	 */
-	private static final NonNegativeDouble DEFAULT_REVOLUTIONS_LOWER = new NonNegativeDouble(7.0);
-	private static final NonNegativeDouble DEFAULT_REVOLUTIONS_RAISE = new NonNegativeDouble(7.0);
+	private static final NonNegativeDouble  DEFAULT_REVOLUTIONS_LOWER              = new NonNegativeDouble(7.0);
+	private static final NonNegativeDouble  DEFAULT_REVOLUTIONS_RAISE              = new NonNegativeDouble(7.0);
 
 	/**
 	 * These values affects all methods that move the riser.
 	 */
-	private static final NonNegativeDouble DEFAULT_SECONDS_TO_RUN_MAXIMUM = new NonNegativeDouble(7.0);
-	private static final PowerMagnitude    DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(1.0);
-
-
-	private double          currentPosition;
-	private MotorTorqueNADO motor;
-	private TelemetryPlus   telemetry;
-	private LinearOpMode    opMode;
-
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private static final NonNegativeDouble  DEFAULT_SECONDS_TO_RUN_MAXIMUM = new NonNegativeDouble(7.0);
+	private static final NonNegativeInteger DEFAULT_TICKS_STALL_TOLERANCE  = new NonNegativeInteger(15);
+	private              double             currentPosition;
+	private final        Logger             log                            = Logger.getLogger(this.getClass().getName());
+	private              MotorTorqueNADO    motor;
+	private              LinearOpMode       opMode;
+	private              TelemetryPlus      telemetry;
 
 	/**
 	 * This empty constructor is useful for testing.
@@ -109,31 +105,6 @@ public class Riser {
 	}
 
 	/**
-	 * Lower the riser for the default amount of time.
-	 */
-	private void lowerByTime() {
-		lowerByTime(DEFAULT_POWER_MAGNITUDE, DEFAULT_SECONDS_TO_RUN_MAXIMUM);
-	}
-
-	/**
-	 * Lower the riser for a fixed amount of time.
-	 *
-	 * @param powerMagnitude
-	 * 		Proportion of power to apply to motor. Must be non-negative. To raise the riser use raiseByTime().
-	 * @param secondsToRun
-	 * 		The number of seconds for which to raise the arm.
-	 */
-	private void lowerByTime(PowerMagnitude powerMagnitude, NonNegativeDouble secondsToRun) {
-
-		PowerVector powerVector = new PowerVector(powerMagnitude, -1);
-
-		motor.runByTime(powerVector, secondsToRun);
-
-		currentPosition = 0.0;
-	}
-
-
-	/**
 	 * Lower the riser by revolutions using default parameters
 	 */
 	private void lowerByRevolutions() throws NoSuchMethodException {
@@ -164,6 +135,30 @@ public class Riser {
 		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector.REVERSE);
 		motor.runByRevolutions(powerVector, numberOfRevolutions, secondsTimeout);
 
+	}
+
+	/**
+	 * Lower the riser for the default amount of time.
+	 */
+	private void lowerByTime() {
+		lowerByTime(DEFAULT_POWER_MAGNITUDE, DEFAULT_SECONDS_TO_RUN_MAXIMUM);
+	}
+
+	/**
+	 * Lower the riser for a fixed amount of time.
+	 *
+	 * @param powerMagnitude
+	 * 		Proportion of power to apply to motor. Must be non-negative. To raise the riser use raiseByTime().
+	 * @param secondsToRun
+	 * 		The number of seconds for which to raise the arm.
+	 */
+	private void lowerByTime(PowerMagnitude powerMagnitude, NonNegativeDouble secondsToRun) {
+
+		PowerVector powerVector = new PowerVector(powerMagnitude, -1);
+
+		motor.runByTime(powerVector, secondsToRun);
+
+		currentPosition = 0.0;
 	}
 
 	/**

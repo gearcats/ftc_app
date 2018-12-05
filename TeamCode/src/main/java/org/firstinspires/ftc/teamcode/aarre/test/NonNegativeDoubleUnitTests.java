@@ -10,18 +10,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class NonNegativeDoubleUnitTests {
 
 	@Test
-	@BeforeEach
-	public void whenNonNegativeDoubleConstructed_thenValueIs0() {
-		NonNegativeDouble actual = new NonNegativeDouble();
-		assertEquals(0.0, actual.doubleValue());
-	}
-
-	@Test
 	public void whenGettingIntValue_thenAnswerIsCorrect() {
 		int               expected   = 1;
 		NonNegativeDouble testObject = new NonNegativeDouble(expected);
 		int               actual     = testObject.intValue();
 		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void whenMultiplyingByNonNegativeInteger_thenAnswerIsCorrect() {
+		double             doubleMultiplicand = 5.0;
+		int                intMultiplicand    = 6;
+		NonNegativeDouble  multiplicand1      = new NonNegativeDouble(doubleMultiplicand);
+		NonNegativeInteger multiplicand2      = new NonNegativeInteger(intMultiplicand);
+		NonNegativeDouble  actual             = multiplicand1.multiplyBy(multiplicand2);
+		NonNegativeDouble  expected           = new NonNegativeDouble(doubleMultiplicand * intMultiplicand);
+		assertEquals(expected.doubleValue(), actual.doubleValue());
+
 	}
 
 	@Test
@@ -36,15 +41,10 @@ class NonNegativeDoubleUnitTests {
 	}
 
 	@Test
-	public void whenMultiplyingByNonNegativeInteger_thenAnswerIsCorrect() {
-		double             doubleMultiplicand = 5.0;
-		int                intMultiplicand    = 6;
-		NonNegativeDouble  multiplicand1      = new NonNegativeDouble(doubleMultiplicand);
-		NonNegativeInteger multiplicand2      = new NonNegativeInteger(intMultiplicand);
-		NonNegativeDouble  actual             = multiplicand1.multiplyBy(multiplicand2);
-		NonNegativeDouble  expected           = new NonNegativeDouble(doubleMultiplicand * intMultiplicand);
-		assertEquals(expected.doubleValue(), actual.doubleValue());
-
+	@BeforeEach
+	public void whenNonNegativeDoubleConstructed_thenValueIs0() {
+		NonNegativeDouble actual = new NonNegativeDouble();
+		assertEquals(0.0, actual.doubleValue());
 	}
 
 

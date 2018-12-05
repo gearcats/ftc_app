@@ -18,10 +18,9 @@ import java.util.logging.Logger;
 @Disabled
 public class AarreAutonomousDriveTest extends LinearOpMode {
 
-	private TelemetryPlus betterTelemetryPlus;
-	private Robot         robot;
-
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private       TelemetryPlus betterTelemetryPlus;
+	private final Logger        log = Logger.getLogger(this.getClass().getName());
+	private       Robot         robot;
 
 	public AarreAutonomousDriveTest() {
 	}
@@ -29,9 +28,7 @@ public class AarreAutonomousDriveTest extends LinearOpMode {
 	/**
 	 * Properties and methods inherited from LinearOpMode include:
 	 * <p>
-	 * hardwareMap
-	 * opModeIsActive
-	 * telemetry
+	 * hardwareMap opModeIsActive telemetry
 	 */
 	@Override
 	public final void runOpMode() {

@@ -14,11 +14,11 @@ public class AutonomousDriveByGyroUnitTests {
 
 	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
-    @Test
-    public void testNewGyroObjectNotNull() {
-        AarreAutonomousDriveByGyro driveByGyro = new AarreAutonomousDriveByGyro();
-        assertNotNull(driveByGyro);
-    }
+	@Test
+	public void testNewGyroObjectNotNull() {
+		AarreAutonomousDriveByGyro driveByGyro = new AarreAutonomousDriveByGyro();
+		assertNotNull(driveByGyro);
+	}
 
 
 }

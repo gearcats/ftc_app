@@ -14,10 +14,9 @@ import java.util.logging.Logger;
 @Autonomous(name = "Aarre Autonomous Arm Raise", group = "Aarre")
 public class AarreAutonomousArmRaise extends LinearOpMode {
 
-	private TelemetryPlus betterTelemetryPlus;
-	private Robot         robot;
-
-	private final Logger log = Logger.getLogger(this.getClass().getName());
+	private       TelemetryPlus betterTelemetryPlus;
+	private final Logger        log = Logger.getLogger(this.getClass().getName());
+	private       Robot         robot;
 
 	/**
 	 * Properties inherited from LinearOpMode include:

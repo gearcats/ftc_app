@@ -9,9 +9,8 @@ import java.util.logging.Logger;
  */
 public class NonNegativeInteger {
 
-	private Integer value;
-
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
+	private final Logger  javaLog = Logger.getLogger(this.getClass().getName());
+	private       Integer value;
 
 	public NonNegativeInteger(int value) {
 		if (value < 0) {

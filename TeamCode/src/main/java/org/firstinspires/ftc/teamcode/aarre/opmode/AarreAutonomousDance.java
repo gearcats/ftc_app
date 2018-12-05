@@ -21,9 +21,8 @@ import java.util.logging.*;
 public class AarreAutonomousDance extends LinearOpMode {
 
 	private TelemetryPlus betterTelemetryPlus;
+	static  Logger        log;
 	private Robot         robot;
-
-	static Logger log;
 
 	static {
 		log = Logger.getLogger(AarreAutonomousDance.class.getName());

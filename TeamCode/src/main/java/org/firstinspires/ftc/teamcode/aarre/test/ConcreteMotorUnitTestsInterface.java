@@ -3,13 +3,11 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 import org.junit.jupiter.api.Test;
 
 /**
- * This interface declares revHDCoreHexMotor-related unit tests that depend on which kind of revHDCoreHexMotor is
- * being tested. For example,
- * because the TorqueNADO revHDCoreHexMotor and the REV HD Core Hex revHDCoreHexMotor have different characteristics
- * (e.g., number of ticks per
- * revolution), they need separate unit tests. Their tests should both implement this interface, though. Motor-related
- * tests whose results do not depend on the specific kind of revHDCoreHexMotor are declared in {@link
- * MotorUnitTestsInterface}.
+ * This interface declares revHDCoreHexMotor-related unit tests that depend on which kind of revHDCoreHexMotor is being
+ * tested. For example, because the TorqueNADO revHDCoreHexMotor and the REV HD Core Hex revHDCoreHexMotor have
+ * different characteristics (e.g., number of ticks per revolution), they need separate unit tests. Their tests should
+ * both implement this interface, though. Motor-related tests whose results do not depend on the specific kind of
+ * revHDCoreHexMotor are declared in {@link MotorUnitTestsInterface}.
  */
 interface ConcreteMotorUnitTestsInterface extends MotorUnitTestsInterface {
 
@@ -58,8 +56,7 @@ interface ConcreteMotorUnitTestsInterface extends MotorUnitTestsInterface {
 
 	/**
 	 * Test that isSlowDownToEncoderTicksRunning returns true when the revHDCoreHexMotor is close enough to the target
-	 * tick number
-	 * (negative numbers)
+	 * tick number (negative numbers)
 	 */
 	@Test
 	public void testGetTickNumberToStartSlowDown11();
@@ -70,12 +67,11 @@ interface ConcreteMotorUnitTestsInterface extends MotorUnitTestsInterface {
 	@Test
 	public void testGetTickNumberToStartSlowDown12();
 
-	/**
-	 * Test that slowing down should be in progress when enough ticks have passed to start slowing but not enough have
-	 * passed to reach the target.
-	 */
 	@Test
-	void testIsSlowDownToEncoderTicksRunningGeneric05();
+	public void testGetTicksPerCycle01();
+
+	@Test
+	public void testGetTicksPerMinute01();
 
 	/**
 	 * Test that slowing down should be in effect if the current tick number is close enough to the target tick number.
@@ -109,6 +105,12 @@ interface ConcreteMotorUnitTestsInterface extends MotorUnitTestsInterface {
 	@Test
 	void testIsSlowDownToEncoderTicksRunningGeneric04();
 
+	/**
+	 * Test that slowing down should be in progress when enough ticks have passed to start slowing but not enough have
+	 * passed to reach the target.
+	 */
+	@Test
+	void testIsSlowDownToEncoderTicksRunningGeneric05();
 
 	/**
 	 * Test that slowing down should not be running when the target tick number is negative and the current tick number
@@ -125,8 +127,8 @@ interface ConcreteMotorUnitTestsInterface extends MotorUnitTestsInterface {
 	void testIsSlowDownToEncoderTicksRunningGeneric09();
 
 	/**
-	 * Test that isSlowDownToEncoderTicksRunning returns false when the revHDCoreHexMotor is not close enough to the target tick
-	 * number (negative numbers)
+	 * Test that isSlowDownToEncoderTicksRunning returns false when the revHDCoreHexMotor is not close enough to the
+	 * target tick number (negative numbers)
 	 */
 	@Test
 	void testIsSlowDownToEncoderTicksRunningGeneric10();
@@ -135,20 +137,14 @@ interface ConcreteMotorUnitTestsInterface extends MotorUnitTestsInterface {
 	void testIsSlowDownToEncoderTicksRunningGeneric11();
 
 	@Test
-	public void whenThereAreNotEnoughTicks_thenSlowDownStartsTooEarly();
-
-	@Test
 	public void whenThereAreEnoughTicks_thenSlowDownStartsOnTime();
 
 	@Test
-	public void testGetTicksPerCycle01();
-
-	@Test
-	public void testGetTicksPerMinute01();
-
-	@Test
-	public void whenTickNumberOutsidePeriod_thenExceptionThrown();
+	public void whenThereAreNotEnoughTicks_thenSlowDownStartsTooEarly();
 
 	@Test
 	public void whenTickNumberInRange_thenSlowDownIsRunning();
+
+	@Test
+	public void whenTickNumberOutsidePeriod_thenExceptionThrown();
 }

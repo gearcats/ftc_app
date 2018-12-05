@@ -3,25 +3,23 @@ package org.firstinspires.ftc.teamcode.aarre.src;
 import java.util.logging.Logger;
 
 /**
- * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData
- * methods.
+ * Wrap Telemetry class to provide Telemetry.log methods with same interface as Telemetry.addData methods.
  * <p>
- * This makes it easier to log messages to both the driver station phone and the robot controller
- * log. This is convenient because it (a) allows visibility into more messages than fit on the
- * driver station phone and (b) provides a longer-lasting record of messages than the driver station
- * phone, which resets after 30 seconds in the autonomous mode.
+ * This makes it easier to log messages to both the driver station phone and the robot controller log. This is
+ * convenient because it (a) allows visibility into more messages than fit on the driver station phone and (b) provides
+ * a longer-lasting record of messages than the driver station phone, which resets after 30 seconds in the autonomous
+ * mode.
  * <p>
- * This also makes it easier to switch back and forth between calling the Telemetry.addData and
- * Telemetry.log methods in other classes.
+ * This also makes it easier to switch back and forth between calling the Telemetry.addData and Telemetry.log methods in
+ * other classes.
  */
 public class TelemetryPlus {
 
-	private final org.firstinspires.ftc.robotcore.external.Telemetry     underlyingTelemetry;
+	private       boolean                                                carefulLogging;
+	private final Logger                                                 javaLog = Logger.getLogger(this.getClass()
+			.getName());
 	private final org.firstinspires.ftc.robotcore.external.Telemetry.Log telemetryLog;
-
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
-
-	private boolean carefulLogging;
+	private final org.firstinspires.ftc.robotcore.external.Telemetry     underlyingTelemetry;
 
 
 	/**
@@ -45,10 +43,11 @@ public class TelemetryPlus {
 	 * @param underlyingTelemetry
 	 * 		The underlying @link{Telemetry} instance.
 	 * @param carefulLogging
-	 * 		Whether to do logging "carefully." If false, there will be no delays between calls to log
-	 * 		messages, which can result in "folded" log entries where more than one log entry is listed
-	 * 		under a given time. If true, there will be a small delay between calls to log messages,
-	 * 		which will prevent "folded" log entries.
+	 * 		Whether to do logging "carefully." If false, there will be no delays between calls to log messages, which
+	 * 		can
+	 * 		result in "folded" log entries where more than one log entry is listed under a given time. If true, there
+	 * 		will
+	 * 		be a small delay between calls to log messages, which will prevent "folded" log entries.
 	 */
 	TelemetryPlus(final org.firstinspires.ftc.robotcore.external.Telemetry underlyingTelemetry, final boolean
 			carefulLogging) {
@@ -59,11 +58,10 @@ public class TelemetryPlus {
 	}
 
 	/**
-	 * In addition to items and lines, a telemetry may also contain a list of actions. When the
-	 * telemetry is to be updated, these actions are evaluated before the telemetry lines are
-	 * composed just prior to transmission. A typical use of such actions is to initialize some
-	 * state variable, parts of which are subsequently displayed in items. This can help avoid
-	 * needless re-evaluation. Actions are cleared with clearAll(), and can be removed with
+	 * In addition to items and lines, a telemetry may also contain a list of actions. When the telemetry is to be
+	 * updated, these actions are evaluated before the telemetry lines are composed just prior to transmission. A
+	 * typical use of such actions is to initialize some state variable, parts of which are subsequently displayed in
+	 * items. This can help avoid needless re-evaluation. Actions are cleared with clearAll(), and can be removed with
 	 * removeAction().
 	 *
 	 * @param action
@@ -78,8 +76,8 @@ public class TelemetryPlus {
 	/**
 	 * Add a simple string to telemetry.
 	 * <p>
-	 * In this class, all items added to telemetry are also logged, both to the driver station
-	 * screen and to the robot controller log file.
+	 * In this class, all items added to telemetry are also logged, both to the driver station screen and to the robot
+	 * controller log file.
 	 *
 	 * @param caption
 	 * 		A caption for the telemetry entry.
@@ -96,8 +94,8 @@ public class TelemetryPlus {
 	/**
 	 * Add a formatted string to telemetry.
 	 * <p>
-	 * In this class, all items added to telemetry are also logged, both to the driver station
-	 * screen and to the robot controller log file.
+	 * In this class, all items added to telemetry are also logged, both to the driver station screen and to the robot
+	 * controller log file.
 	 *
 	 * @param caption
 	 * 		A caption for the telemetry entry.
@@ -123,8 +121,8 @@ public class TelemetryPlus {
 	/**
 	 * Append a simple message to the log.
 	 * <p>
-	 * All other methods should ultimately call this one, because it also appends the message to the
-	 * robot controller log.
+	 * All other methods should ultimately call this one, because it also appends the message to the robot controller
+	 * log.
 	 *
 	 * @param message
 	 * 		The message to append to the log.
@@ -187,8 +185,7 @@ public class TelemetryPlus {
 	 * @param args
 	 * 		Arguments to the printf-formatted message.
 	 */
-	public void log(final java.lang.String caption, final java.lang.String message, final java.lang
-			.Object... args) {
+	public void log(final java.lang.String caption, final java.lang.String message, final java.lang.Object... args) {
 
 		final String logMessage = caption + ": " + message;
 		log(logMessage, args);
