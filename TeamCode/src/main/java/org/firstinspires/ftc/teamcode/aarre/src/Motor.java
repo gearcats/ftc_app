@@ -439,6 +439,8 @@ public abstract class Motor implements MotorInterface {
 
 		setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+		Excursion excursion = new Excursion();
+
 		double          ticksToSpeedUpDouble = ticksToRotate.doubleValue() / 2.0;
 		int             ticksToSpeedUpInt    = (int) Math.round(ticksToSpeedUpDouble);
 		PositiveInteger ticksToSpeedUp       = new PositiveInteger(ticksToSpeedUpInt);
