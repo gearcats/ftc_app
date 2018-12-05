@@ -14,24 +14,22 @@ public class Riser {
 
 
 	/**
-	 * These values affect the methods that move the riser by using the encoder
-	 * to run until stall.
+	 * These values affect the methods that move the riser by using the encoder to run until stall.
 	 */
-	private static final int    DEFAULT_MILLISECONDS_STALL_TIME_WINDOW = 200;
-	private static final int    DEFAULT_TICKS_STALL_TOLERANCE          = 15;
+	private static final NonNegativeInteger DEFAULT_MILLISECONDS_STALL_TIME_WINDOW = new NonNegativeInteger(200);
+	private static final NonNegativeInteger DEFAULT_TICKS_STALL_TOLERANCE          = new NonNegativeInteger(15);
 
 	/**
-	 * These values affect the methods that move the riser by using the
-	 * encoder to run a fixed number of revolutions.
+	 * These values affect the methods that move the riser by using the encoder to run a fixed number of revolutions.
 	 */
-	private static final double DEFAULT_REVOLUTIONS_LOWER = 7.0;
-	private static final double DEFAULT_REVOLUTIONS_RAISE = 7.0;
+	private static final NonNegativeDouble DEFAULT_REVOLUTIONS_LOWER = new NonNegativeDouble(7.0);
+	private static final NonNegativeDouble DEFAULT_REVOLUTIONS_RAISE = new NonNegativeDouble(7.0);
 
 	/**
-	 * This value affects all methods that move the riser.
+	 * These values affects all methods that move the riser.
 	 */
-	private static final double         DEFAULT_SECONDS_TO_RUN_MAXIMUM = 7.0;
-	private static final PowerMagnitude DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(1.0);
+	private static final NonNegativeDouble DEFAULT_SECONDS_TO_RUN_MAXIMUM = new NonNegativeDouble(7.0);
+	private static final PowerMagnitude    DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(1.0);
 
 
 	private double          currentPosition;
@@ -58,9 +56,7 @@ public class Riser {
 	 * @param telemetry
 	 * 		An instance of AarreTelemetry to associate with the
 	 */
-	Riser(final HardwareMap hardwareMap, final String nameOfRiserMotor, final TelemetryPlus telemetry, final
-	LinearOpMode
-			opMode) {
+	Riser(final HardwareMap hardwareMap, final String nameOfRiserMotor, final TelemetryPlus telemetry, final LinearOpMode opMode) {
 
 		currentPosition = 0.5; // We have no idea where the riser is
 
@@ -89,13 +85,12 @@ public class Riser {
 	}
 
 	/**
-	 * Best guess at current position of the riser. (We can't know exactly where the riser is
-	 * because the riser starts in an unknown physical position upon software initialization and
-	 * does not store any state information.) A value of 0.0 indicates that we believe the riser is
-	 * fully lowered, and a value of 1.0 indicates that we believe the riser is fully raised. The
-	 * riser generally should be either fully lowered or fully raised (except when it is in motion),
-	 * so values in the middle when the riser is stationary suggest uncertainty about where the
-	 * riser really is.
+	 * Best guess at current position of the riser. (We can't know exactly where the riser is because the riser starts
+	 * in an unknown physical position upon software initialization and does not store any state information.) A value
+	 * of 0.0 indicates that we believe the riser is fully lowered, and a value of 1.0 indicates that we believe the
+	 * riser is fully raised. The riser generally should be either fully lowered or fully raised (except when it is in
+	 * motion), so values in the middle when the riser is stationary suggest uncertainty about where the riser really
+	 * is.
 	 */
 	public double getCurrentPosition() {
 		return currentPosition;
@@ -124,12 +119,11 @@ public class Riser {
 	 * Lower the riser for a fixed amount of time.
 	 *
 	 * @param powerMagnitude
-	 * 		Proportion of power to apply to motor. Must be non-negative. To raise the riser use
-	 * 		raiseByTime().
+	 * 		Proportion of power to apply to motor. Must be non-negative. To raise the riser use raiseByTime().
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm.
 	 */
-	private void lowerByTime(PowerMagnitude powerMagnitude, double secondsToRun) {
+	private void lowerByTime(PowerMagnitude powerMagnitude, NonNegativeDouble secondsToRun) {
 
 		PowerVector powerVector = new PowerVector(powerMagnitude, -1);
 
@@ -150,31 +144,24 @@ public class Riser {
 	 * Lower the riser by a certain number of revolutions of the motor shaft
 	 *
 	 * @param powerMagnitude
-	 * 		Apply this proportion of power to the motor. In this method (where we have already
-	 * 		specified by the method name that the intent is to "lowerUntilStalled" the riser), we
-	 * 		expect this value to be non-negative. It tells us how much power to apply, not which
-	 * 		direction to apply it.
+	 * 		Apply this proportion of power to the motor. In this method (where we have already specified by the method
+	 * 		name
+	 * 		that the intent is to "lowerUntilStalled" the riser), we expect this value to be non-negative. It tells us
+	 * 		how
+	 * 		much power to apply, not which direction to apply it.
 	 * @param numberOfRevolutions
 	 * 		Turn the motor shaft this number of revolutions. Also always non-negative.
 	 * @param secondsTimeout
-	 * 		Shut off the motor after this many seconds regardless of whether it has reached the
-	 * 		requested number of revolutions. The idea is to prevent burning out motors by stalling them
-	 * 		for long periods of time or breaking other components by applying too much force to them
-	 * 		for too long.
+	 * 		Shut off the motor after this many seconds regardless of whether it has reached the requested number of
+	 * 		revolutions. The idea is to prevent burning out motors by stalling them for long periods of time or
+	 * 		breaking
+	 * 		other components by applying too much force to them for too long.
 	 */
-	private void lowerByRevolutions(final PowerMagnitude powerMagnitude, final double numberOfRevolutions, final
-	double secondsTimeout) throws NoSuchMethodException {
-
-		if (numberOfRevolutions < 0.0) {
-			throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
-		}
-		if (secondsTimeout < 0.0) {
-			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
-		}
+	private void lowerByRevolutions(final PowerMagnitude powerMagnitude, final NonNegativeDouble numberOfRevolutions,
+	                                final NonNegativeDouble secondsTimeout) throws NoSuchMethodException {
 
 		log.fine(String.format("Riser - Lower by revolutions, power: %f", powerMagnitude.doubleValue()));
-		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector
-				.REVERSE);
+		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector.REVERSE);
 		motor.runByRevolutions(powerVector, numberOfRevolutions, secondsTimeout);
 
 	}
@@ -216,35 +203,29 @@ public class Riser {
 	 * Raise the riser by a certain number of motor shaft revolutions.
 	 *
 	 * @param powerMagnitude
-	 * 		Apply this proportion of power to the motor. In this method (to "raiseUntilStalled" the
-	 * 		riser), we expect this value to be non-negative.
+	 * 		Apply this proportion of power to the motor. In this method (to "raiseUntilStalled" the riser), we expect
+	 * 		this
+	 * 		value to be non-negative.
 	 * @param numberOfRevolutions
 	 * 		Turn the motor shaft this number of revolutions.
 	 * @param secondsTimeout
-	 * 		Shut off the motor shuts off after this many seconds regardless of whether it has reached
-	 * 		the requested number of revolutions. The idea is to prevent burning out motors by stalling
-	 * 		them for long periods of time or breaking other components by applying too much force to
-	 * 		them for too long.
+	 * 		Shut off the motor shuts off after this many seconds regardless of whether it has reached the requested
+	 * 		number
+	 * 		of revolutions. The idea is to prevent burning out motors by stalling them for long periods of time or
+	 * 		breaking
+	 * 		other components by applying too much force to them for too long.
 	 */
-	private void raiseByRevolutions(final PowerMagnitude powerMagnitude, final double numberOfRevolutions, final
-	double secondsTimeout) throws NoSuchMethodException {
+	private void raiseByRevolutions(final PowerMagnitude powerMagnitude, final NonNegativeDouble numberOfRevolutions,
+	                                final NonNegativeDouble secondsTimeout) throws NoSuchMethodException {
 
 		log.entering(this.getClass().getCanonicalName(), "raiseByRevolutions");
 
 		log.fine(String.format("Power magnitude: %f", powerMagnitude.doubleValue()));
 		log.fine(String.format("Number of revolutions: %f", numberOfRevolutions));
 		log.fine(String.format("Seconds timeout: %f", secondsTimeout));
+		log.fine(String.format("Power magnitude: %f", powerMagnitude.doubleValue()));
 
-		if (numberOfRevolutions < 0.0) {
-			throw new IllegalArgumentException("numberOfRevolutions expected to be non-negative");
-		}
-		if (secondsTimeout < 0.0) {
-			throw new IllegalArgumentException("secondsTimeout expected to be non-negative");
-		}
-		log.fine(String.format("Riser - Raise by revolutions, power: %f", powerMagnitude.doubleValue()));
-
-		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector
-				.FORWARD);
+		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector.FORWARD);
 
 		log.fine(String.format("Power vector %f", powerVector.doubleValue()));
 
@@ -265,19 +246,13 @@ public class Riser {
 	 * Raise the riser for a fixed amount of time.
 	 *
 	 * @param powerMagnitude
-	 * 		Proportion of power to apply to motor. Must be non-negative. To lower the arm use
-	 * 		lowerByTime().
+	 * 		Proportion of power to apply to motor. Must be non-negative. To lower the arm use lowerByTime().
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm. Must be non-negative.
 	 */
-	private void raiseByTime(PowerMagnitude powerMagnitude, double secondsToRun) {
+	private void raiseByTime(PowerMagnitude powerMagnitude, NonNegativeDouble secondsToRun) {
 
-		if (secondsToRun < 0.0) {
-			throw new IllegalArgumentException("secondsToRun expected to be non-negative");
-		}
-
-		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector
-				.FORWARD);
+		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector.FORWARD);
 		motor.runByTime(powerVector, secondsToRun);
 
 		currentPosition = 1.0;
@@ -286,11 +261,11 @@ public class Riser {
 	/**
 	 * Raise the riser to its upward position while avoiding stalling the riser motor.
 	 * <p>
-	 * This method does not work very well. The riser motor does not really 'stall'. Instead, it
-	 * continues to run irregularly as it attempts to push the riser higher than it can go.
+	 * This method does not work very well. The riser motor does not really 'stall'. Instead, it continues to run
+	 * irregularly as it attempts to push the riser higher than it can go.
 	 */
 	private void raiseUntilStall() {
-		motor.setStallTimeLimitInSeconds((double) DEFAULT_MILLISECONDS_STALL_TIME_WINDOW);
+		motor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_STALL_TIME_WINDOW);
 		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_STALL_TOLERANCE);
 		PowerVector powerVector = new PowerVector(DEFAULT_POWER_MAGNITUDE, PowerVector.FORWARD);
 		motor.runUntilStalled(powerVector);

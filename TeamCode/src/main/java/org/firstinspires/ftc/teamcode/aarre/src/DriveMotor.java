@@ -19,7 +19,7 @@ public class DriveMotor extends MotorTorqueNADO implements ConcreteMotorInterfac
 	}
 
 	public double getTicksPerInch() {
-		return (getTicksPerRevolution() * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math
+		return (getTicksPerRevolution().doubleValue() * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math
 				.PI);
 	}
 

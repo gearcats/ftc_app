@@ -6,12 +6,18 @@ package org.firstinspires.ftc.teamcode.aarre.src;
  */
 public class Excursion {
 
-	private SlowDown slowdown;
-	private SpeedUp  speedup;
+	private PowerVector        powerVector;
+	private NonNegativeDouble  secondsTimeout;
+	private SlowDown           slowdown;
+	private SpeedUp            speedup;
+	private NonNegativeInteger ticksToRotate;
 
 	public Excursion() {
+		setPowerVector(new PowerVector(0.0));
+		setSecondsTimeout(new NonNegativeDouble(0.0));
 		setSlowDown(new SlowDown());
 		setSpeedUp(new SpeedUp());
+		setTicksToRotate(new NonNegativeInteger(1));
 	}
 
 	public SpeedUp getSpeedUp() {
@@ -28,5 +34,29 @@ public class Excursion {
 
 	public void setSlowDown(SlowDown slowdown) {
 		this.slowdown = slowdown;
+	}
+
+	public PowerVector getPowerVector() {
+		return powerVector;
+	}
+
+	public void setPowerVector(PowerVector powerVector) {
+		this.powerVector = powerVector;
+	}
+
+	public NonNegativeInteger getTicksToRotate() {
+		return ticksToRotate;
+	}
+
+	public void setTicksToRotate(NonNegativeInteger ticksToRotate) {
+		this.ticksToRotate = ticksToRotate;
+	}
+
+	public NonNegativeDouble getSecondsTimeout() {
+		return secondsTimeout;
+	}
+
+	public void setSecondsTimeout(NonNegativeDouble secondsTimeout) {
+		this.secondsTimeout = secondsTimeout;
 	}
 }

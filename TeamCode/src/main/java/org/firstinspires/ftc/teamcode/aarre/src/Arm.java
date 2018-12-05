@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Arm {
 
-	private static final PowerMagnitude DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(1.0);
-	private static final double         SECONDS_BEFORE_TIMEOUT_DEFAULT = 1.0;
+	private static final PowerMagnitude    DEFAULT_POWER_MAGNITUDE        = new PowerMagnitude(1.0);
+	private static final NonNegativeDouble SECONDS_BEFORE_TIMEOUT_DEFAULT = new NonNegativeDouble(1.0);
 
 	private MotorRevHDCoreHex motor;
 	private TelemetryPlus     telemetry;
@@ -66,8 +66,8 @@ public class Arm {
 	}
 
 	private void lowerByRamp() throws NoSuchMethodException {
-		PowerVector     powerVector           = new PowerVector(DEFAULT_POWER_MAGNITUDE, -1);
-		PositiveInteger numberOfTicksToRotate = new PositiveInteger(120); // TODO: Eliminate magic #
+		PowerVector        powerVector           = new PowerVector(DEFAULT_POWER_MAGNITUDE, -1);
+		NonNegativeInteger numberOfTicksToRotate = new NonNegativeInteger(120); // TODO: Eliminate magic #
 		motor.rampToEncoderTicks(powerVector, numberOfTicksToRotate, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 
@@ -79,8 +79,8 @@ public class Arm {
 	}
 
 	private void raiseByRamp() throws NoSuchMethodException {
-		PowerVector powerVector = new PowerVector(DEFAULT_POWER_MAGNITUDE, PowerVector.FORWARD);
-		PositiveInteger numberOfTicksToRotate = new PositiveInteger(120); // TODO: Eliminate magic #
+		PowerVector        powerVector           = new PowerVector(DEFAULT_POWER_MAGNITUDE, PowerVector.FORWARD);
+		NonNegativeInteger numberOfTicksToRotate = new NonNegativeInteger(120); // TODO: Eliminate magic #
 		motor.rampToEncoderTicks(powerVector, numberOfTicksToRotate, SECONDS_BEFORE_TIMEOUT_DEFAULT);
 	}
 

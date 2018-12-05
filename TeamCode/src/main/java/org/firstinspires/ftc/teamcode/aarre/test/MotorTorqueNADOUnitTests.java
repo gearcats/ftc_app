@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import org.firstinspires.ftc.teamcode.aarre.src.MotorTorqueNADO;
-import org.firstinspires.ftc.teamcode.aarre.src.PositiveInteger;
-import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
+import org.firstinspires.ftc.teamcode.aarre.src.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -29,26 +27,26 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 
 	@Test
 	public final void testGetTicksPerCycle01() {
-		double ticksPerCycle = getMotor().getTicksPerCycle();
-		assertEquals(120.0, ticksPerCycle);
+		NonNegativeDouble ticksPerCycle = getMotor().getTicksPerCycle();
+		assertEquals(120.0, ticksPerCycle.doubleValue());
 	}
 
 	@Test
 	public final void testGetTicksPerMillisecond01() {
-		double ticksPerMillisecond = getMotor().getTicksPerMillisecond();
-		assertEquals(2.4, ticksPerMillisecond);
+		NonNegativeDouble ticksPerMillisecond = getMotor().getTicksPerMillisecond();
+		assertEquals(2.4, ticksPerMillisecond.doubleValue());
 	}
 
 	@Test
 	public final void testGetTicksPerSecond01() {
-		double ticksPerSecond = getMotor().getTicksPerSecond();
-		assertEquals(2400.0, ticksPerSecond);
+		NonNegativeDouble ticksPerSecond = getMotor().getTicksPerSecond();
+		assertEquals(2400.0, ticksPerSecond.doubleValue());
 	}
 
 	@Test
 	public final void testGetTicksPerMinute01() {
-		double ticksPerMinute = getMotor().getTicksPerMinute();
-		assertEquals(144000.0, ticksPerMinute);
+		NonNegativeDouble ticksPerMinute = getMotor().getTicksPerMinute();
+		assertEquals(144000.0, ticksPerMinute.doubleValue());
 	}
 
 	@Test
@@ -301,52 +299,56 @@ public class MotorTorqueNADOUnitTests extends MotorUnitTests implements Concrete
 	@Test
 	public final void testGetNumberOfCycles01() {
 
-		int         ticksToMove              = 1440;
-		PowerVector currentPower             = new PowerVector(1.0);
-		PowerVector proportionPowerRequested = new PowerVector(0.0);
+		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
+		PowerVector        currentPower             = new PowerVector(1.0);
+		PowerVector        proportionPowerRequested = new PowerVector(0.0);
 
-		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		NonNegativeInteger numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower,
+				proportionPowerRequested);
 
-		assertEquals(10, numCycles);
+		assertEquals(10, numCycles.intValue());
 	}
 
 	@Override
 	@Test
 	public final void testGetNumberOfCycles02() {
 
-		int         ticksToMove              = 1440;
-		PowerVector currentPower             = new PowerVector(0.1);
-		PowerVector proportionPowerRequested = new PowerVector(0.0);
+		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
+		PowerVector        currentPower             = new PowerVector(0.1);
+		PowerVector        proportionPowerRequested = new PowerVector(0.0);
 
-		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		NonNegativeInteger numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower,
+				proportionPowerRequested);
 
-		assertEquals(1, numCycles);
+		assertEquals(1, numCycles.intValue());
 	}
 
 	@Override
 	@Test
 	public final void testGetNumberOfCycles03() {
 
-		int         ticksToMove              = 1440;
-		PowerVector currentPower             = new PowerVector(-0.1);
-		PowerVector proportionPowerRequested = new PowerVector(0.0);
+		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
+		PowerVector        currentPower             = new PowerVector(-0.1);
+		PowerVector        proportionPowerRequested = new PowerVector(0.0);
 
-		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		NonNegativeInteger numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower,
+				proportionPowerRequested);
 
-		assertEquals(1, numCycles);
+		assertEquals(1, numCycles.intValue());
 	}
 
 	@Override
 	@Test
 	public final void testGetNumberOfCycles04() {
 
-		int         ticksToMove              = 1440;
-		PowerVector currentPower             = new PowerVector(-1.0);
-		PowerVector proportionPowerRequested = new PowerVector(0.0);
+		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
+		PowerVector        currentPower             = new PowerVector(-1.0);
+		PowerVector        proportionPowerRequested = new PowerVector(0.0);
 
-		int numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
+		NonNegativeInteger numCycles = getMotor().getNumberOfCycles(ticksToMove, currentPower,
+				proportionPowerRequested);
 
-		assertEquals(10, numCycles);
+		assertEquals(10, numCycles.intValue());
 	}
 
 

@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 
-	static final double REV_CORE_HEX_REVOLUTIONS_PER_MINUTE = 72;
-	static final double REV_CORE_HEX_TICKS_PER_REVOLUTION = 224;
+	static final NonNegativeDouble REV_CORE_HEX_REVOLUTIONS_PER_MINUTE = new NonNegativeDouble(72);
+	static final NonNegativeDouble REV_CORE_HEX_TICKS_PER_REVOLUTION   = new NonNegativeDouble(224);
 
 	private final  DcMotor           motor;
 	static private TelemetryPlus     telemetry;
@@ -51,17 +51,17 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 	}
 
 	@Override
-	public double getRevolutionsPerMinute() {
+	public NonNegativeDouble getRevolutionsPerMinute() {
 		return REV_CORE_HEX_REVOLUTIONS_PER_MINUTE;
 	}
 
 	@Override
-	public double getRevolutionsPerMinute(PowerMagnitude powerMagnitude) {
-		return getRevolutionsPerMinute() * powerMagnitude.doubleValue();
+	public NonNegativeDouble getRevolutionsPerMinute(PowerMagnitude powerMagnitude) {
+		return new NonNegativeDouble(getRevolutionsPerMinute().doubleValue() * powerMagnitude.doubleValue());
 	}
 
 	@Override
-	public double getTicksPerRevolution() {
+	public NonNegativeDouble getTicksPerRevolution() {
 		return REV_CORE_HEX_TICKS_PER_REVOLUTION;
 	}
 

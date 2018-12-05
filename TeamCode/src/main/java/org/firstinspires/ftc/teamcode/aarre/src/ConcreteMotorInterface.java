@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.aarre.src;
 
 interface ConcreteMotorInterface extends MotorInterface {
 
-	double getTicksPerRevolution();
+	NonNegativeDouble getTicksPerRevolution();
 
-	double getRevolutionsPerMinute();
+	NonNegativeDouble getRevolutionsPerMinute();
 
-	double getRevolutionsPerMinute(PowerMagnitude powerMagnitude);
+	NonNegativeDouble getRevolutionsPerMinute(PowerMagnitude powerMagnitude);
 
 }

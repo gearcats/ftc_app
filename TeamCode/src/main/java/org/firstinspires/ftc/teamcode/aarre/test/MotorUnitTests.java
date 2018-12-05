@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeDouble;
 import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.PositiveInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
@@ -162,8 +163,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
 		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 0.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(0.0);
 
 		boolean result = true;
 
@@ -185,8 +186,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  Seconds running is less than timeout, so no reason to stop. (We haven't timed out yet.)
 		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 0.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(0.0);
 
 		boolean result = false;
 
@@ -208,8 +209,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  Seconds running is more than timeout, so stop.
 		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 6.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(6.0);
 
 		boolean result = false;
 		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
@@ -230,8 +231,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		 * Seconds running is less than timeout, so continue.
 		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 4.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
 
 		boolean result = true;
 
@@ -254,8 +255,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 4.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
 
 		boolean result = false;
 
@@ -276,8 +277,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 4.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
 
 		boolean result = true;
 
@@ -302,8 +303,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 4.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
 
 		boolean result = true;
 		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
@@ -323,8 +324,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		  Seconds running is less than timeout, so continue.
 		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 4.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
 
 		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
@@ -337,8 +338,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 
 		PositiveInteger    ticksMaximum   = new PositiveInteger(1440);
 		NonNegativeInteger ticksMoved     = new NonNegativeInteger(190);
-		double             secondsTimeout = 5.0;
-		double             secondsRunning = 4.0;
+		NonNegativeDouble  secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble  secondsRunning = new NonNegativeDouble(4.0);
 
 		boolean result = true;
 		result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
@@ -353,8 +354,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		PositiveInteger    ticksMaximum = new PositiveInteger(5040);
 		NonNegativeInteger ticksMoved   = new NonNegativeInteger(0);
 
-		double secondsTimeout = 5.0;
-		double secondsRunning = 4.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
 
 		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning, ticksMoved);
 
@@ -374,8 +375,8 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 		/*
 		 * Seconds running is less than timeout, so continue.
 		 */
-		double secondsTimeout = 5.0;
-		double secondsRunning = 4.0;
+		NonNegativeDouble secondsTimeout = new NonNegativeDouble(5.0);
+		NonNegativeDouble secondsRunning = new NonNegativeDouble(4.0);
 
 		boolean result = getMotor().isSpeedUpToEncoderTicksDone(ticksMaximum, secondsTimeout, secondsRunning,
 				ticksMoved);

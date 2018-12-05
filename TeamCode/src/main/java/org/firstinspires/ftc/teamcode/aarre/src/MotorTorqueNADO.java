@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 
-	private static final double TORQUENADO_REVOLUTIONS_PER_MINUTE = 100;
+	private static final NonNegativeDouble TORQUENADO_REVOLUTIONS_PER_MINUTE = new NonNegativeDouble(100);
 
-	private static final int TORQUENADO_TICKS_PER_REVOLUTION = 1440;
+	private static final NonNegativeDouble TORQUENADO_TICKS_PER_REVOLUTION = new NonNegativeDouble(1440);
 
 	private final  DcMotor       motor;
 	static private TelemetryPlus telemetry;
@@ -54,17 +54,17 @@ public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 	}
 
 	@Override
-	public double getRevolutionsPerMinute() {
+	public NonNegativeDouble getRevolutionsPerMinute() {
 		return TORQUENADO_REVOLUTIONS_PER_MINUTE;
 	}
 
 	@Override
-	public double getRevolutionsPerMinute(PowerMagnitude powerMagnitude) {
-		return getRevolutionsPerMinute() * powerMagnitude.doubleValue();
+	public NonNegativeDouble getRevolutionsPerMinute(PowerMagnitude powerMagnitude) {
+		return new NonNegativeDouble(getRevolutionsPerMinute().doubleValue() * powerMagnitude.doubleValue());
 	}
 
 	@Override
-	public double getTicksPerRevolution() {
+	public NonNegativeDouble getTicksPerRevolution() {
 		return TORQUENADO_TICKS_PER_REVOLUTION;
 	}
 
