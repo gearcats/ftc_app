@@ -12,17 +12,6 @@ class ExcursionUnitTests {
 	private Excursion excursion;
 
 	@Test
-	@BeforeEach
-	public void whenExcursionIsCreated_thenTheResultIsNotNull() {
-		excursion = new Excursion();
-		assertNotNull(excursion);
-	}
-
-	/*
-	 *TEST GETTERS
-	 */
-
-	@Test
 	public void whenExcursionIsCreated_thenPowerVectorIs0() {
 		PowerVector powerVector = excursion.getPowerVector();
 		assertNotNull(powerVector);
@@ -36,10 +25,30 @@ class ExcursionUnitTests {
 	}
 
 	@Test
+	@BeforeEach
+	public void whenExcursionIsCreated_thenTheResultIsNotNull() {
+		excursion = new Excursion();
+		assertNotNull(excursion);
+	}
+
+	@Test
 	public void whenExcursionIsCreated_thenTicksToRotateIs1() {
 		NonNegativeInteger ticksToRotate = excursion.getTicksToRotate();
 		assertNotNull(ticksToRotate);
 		assertEquals(1, ticksToRotate.intValue());
+	}
+
+	@Test
+	public void whenExcursionIsCreated_thenTicksToSlowDownIsNotNull() {
+		NonNegativeInteger actual = excursion.getTicksToSlowDown();
+		assertNotNull(actual);
+	}
+
+	@Test
+	public void whenExcursionIsCreated_thenTicksToSlowDownIsZero() {
+		int expected = 0;
+		int actual   = excursion.getTicksToSlowDown().intValue();
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -52,9 +61,11 @@ class ExcursionUnitTests {
 		assertNotNull(excursion.getSpeedUp());
 	}
 
-	/*
-	 *TEST SETTERS
-	 */
+	@Test
+	public void whenExcursionIsCreated_thenYouCanGetTicksToSlowDown() {
+		NonNegativeInteger ticksToSlowDown = excursion.getTicksToSlowDown();
+		assertNotNull(ticksToSlowDown);
+	}
 
 	@Test
 	public void whenExcursionIsCreated_thenYouCanSetPowerVector() {
@@ -88,6 +99,16 @@ class ExcursionUnitTests {
 		assertEquals(ticksToRotate, ticksToRotateReturned);
 	}
 
+	@Test
+	public void whenTicksToRotateIsSet_thenYouCanGetTicksToSlowDown() {
+		int                expected      = 600;
+		int                total         = 2 * expected;
+		NonNegativeInteger ticksToRotate = new NonNegativeInteger(total);
+		excursion.setTicksToRotate(ticksToRotate);
+		NonNegativeInteger result = excursion.getTicksToSlowDown();
+		int                actual = result.intValue();
+		assertEquals(expected, actual);
+	}
 
 
 }

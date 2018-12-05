@@ -29,6 +29,6 @@ public class NonNegativeInteger {
 	}
 
 	public String toString() {
-		return String.format("%f", this.value);
+		return String.format("%d", this.value.intValue());
 	}
 }

@@ -460,6 +460,7 @@ public abstract class Motor implements MotorInterface {
 		NonNegativeInteger ticksToSlowDown    = new NonNegativeInteger(ticksToSlowDownInt);
 
 		log.fine(String.format("Target power UP: %f", powerVector.doubleValue()));
+
 		rampToPower(powerVector, ticksToSpeedUp, secondsTimeout);
 
 		log.fine(String.format("Target power DOWN: %f", 0.0));

@@ -20,43 +20,53 @@ public class Excursion {
 		setTicksToRotate(new NonNegativeInteger(1));
 	}
 
-	public SpeedUp getSpeedUp() {
-		return speedup;
-	}
-
-	public void setSpeedUp(SpeedUp speedup) {
-		this.speedup = speedup;
-	}
-
-	public SlowDown getSlowDown() {
-		return slowdown;
-	}
-
-	public void setSlowDown(SlowDown slowdown) {
-		this.slowdown = slowdown;
-	}
-
 	public PowerVector getPowerVector() {
 		return powerVector;
-	}
-
-	public void setPowerVector(PowerVector powerVector) {
-		this.powerVector = powerVector;
-	}
-
-	public NonNegativeInteger getTicksToRotate() {
-		return ticksToRotate;
-	}
-
-	public void setTicksToRotate(NonNegativeInteger ticksToRotate) {
-		this.ticksToRotate = ticksToRotate;
 	}
 
 	public NonNegativeDouble getSecondsTimeout() {
 		return secondsTimeout;
 	}
 
+	public SlowDown getSlowDown() {
+		return slowdown;
+	}
+
+	public SpeedUp getSpeedUp() {
+		return speedup;
+	}
+
+	public NonNegativeInteger getTicksToRotate() {
+		return ticksToRotate;
+	}
+
+	public NonNegativeInteger getTicksToSlowDown() {
+		return getSlowDown().getTicksToRotate();
+	}
+
+	public void setPowerVector(PowerVector powerVector) {
+		this.powerVector = powerVector;
+	}
+
 	public void setSecondsTimeout(NonNegativeDouble secondsTimeout) {
 		this.secondsTimeout = secondsTimeout;
+	}
+
+	public void setSlowDown(SlowDown slowdown) {
+		this.slowdown = slowdown;
+	}
+
+	public void setSpeedUp(SpeedUp speedup) {
+		this.speedup = speedup;
+	}
+
+	public void setTicksToRotate(NonNegativeInteger ticksToRotate) {
+		this.ticksToRotate = ticksToRotate;
+		NonNegativeInteger ticksToSpeedUp  = new NonNegativeInteger((int) Math.round(ticksToRotate.doubleValue() /
+				2.0));
+		NonNegativeInteger ticksToSlowDown = new NonNegativeInteger(ticksToRotate.intValue() - ticksToSpeedUp.intValue
+				());
+		getSpeedUp().setTicksToRotate(ticksToSpeedUp);
+		getSlowDown().setTicksToRotate(ticksToSlowDown);
 	}
 }

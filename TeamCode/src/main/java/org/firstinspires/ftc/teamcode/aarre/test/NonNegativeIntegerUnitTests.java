@@ -4,7 +4,6 @@ import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeInteger;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class NonNegativeIntegerUnitTests {
 
-
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 
 	@Test
 	public void whenConstructorArgumentZero_thenNoProblem() {
@@ -49,6 +46,15 @@ public class NonNegativeIntegerUnitTests {
 		NonNegativeInteger aarrePositiveInteger  = new NonNegativeInteger(randomPositiveInteger);
 		int                returnValue           = aarrePositiveInteger.intValue();
 		assertEquals(randomPositiveInteger, returnValue);
+	}
+
+	@Test
+	public void whenToStringCalled_thenReturnsCorrectValue() {
+		int                testValue  = ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE);
+		NonNegativeInteger testObject = new NonNegativeInteger(testValue);
+		String             expected   = String.format("%d", testValue);
+		String             result     = testObject.toString();
+		assertEquals(expected, result);
 	}
 
 
