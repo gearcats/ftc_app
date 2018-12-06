@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.aarre.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import org.firstinspires.ftc.teamcode.aarre.src.MotorRevHDCoreHex;
-import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeDouble;
-import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeInteger;
-import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
+import org.firstinspires.ftc.teamcode.aarre.src.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -42,8 +39,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		PowerVector        currentPower             = new PowerVector(1.0);
 		PowerVector        proportionPowerRequested = new PowerVector(0.0);
 
-		NonNegativeInteger numCycles = motorRevHDCoreHex.getNumberOfCycles(ticksToMove, currentPower,
-				proportionPowerRequested);
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+		NonNegativeInteger numCycles = slowdown.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(10, numCycles.intValue());
 	}
@@ -56,8 +54,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		PowerVector        currentPower             = new PowerVector(0.1);
 		PowerVector        proportionPowerRequested = new PowerVector(0.0);
 
-		NonNegativeInteger numCycles = motorRevHDCoreHex.getNumberOfCycles(ticksToMove, currentPower,
-				proportionPowerRequested);
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+		NonNegativeInteger numCycles = slowdown.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(1, numCycles.intValue());
 	}
@@ -70,8 +69,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		PowerVector        currentPower             = new PowerVector(-0.1);
 		PowerVector        proportionPowerRequested = new PowerVector(0.0);
 
-		NonNegativeInteger numCycles = motorRevHDCoreHex.getNumberOfCycles(ticksToMove, currentPower,
-				proportionPowerRequested);
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+		NonNegativeInteger numCycles = slowdown.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(1, numCycles.intValue());
 	}
@@ -84,8 +84,9 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		PowerVector        currentPower             = new PowerVector(-1.0);
 		PowerVector        proportionPowerRequested = new PowerVector(0.0);
 
-		NonNegativeInteger numCycles = motorRevHDCoreHex.getNumberOfCycles(ticksToMove, currentPower,
-				proportionPowerRequested);
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+		NonNegativeInteger numCycles = slowdown.getNumberOfCycles(ticksToMove, currentPower, proportionPowerRequested);
 
 		assertEquals(10, numCycles.intValue());
 	}
@@ -113,7 +114,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 * 2000 - 134.4 = 1865.6
 		 */
 
-		final double actual = motorRevHDCoreHex.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+
+		final double actual = slowdown.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertEquals(1865.6, actual, 0.01);
@@ -134,7 +138,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		/*
 		 * There are 13.44 ticks in a cycle, so the ramp should be 134.4 ticks
 		 */
-		final double actual = motorRevHDCoreHex.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+
+		final double actual = slowdown.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		/*
@@ -156,7 +163,10 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 * At 13.44 ticks per cycle, total ticks in ramp = 67.2
 		 * 120 - 67.2 = 52.8
 		 */
-		final double actual = motorRevHDCoreHex.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+
+		final double actual = slowdown.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
 		assertEquals(52.8, actual, 0.01);
@@ -177,10 +187,13 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 *
 		 * 10060 - 134.4 = 9925.6
 		 */
-		double result = motorRevHDCoreHex.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+
+		final double actual = slowdown.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-		assertEquals(9925.6, result, 0.01);
+		assertEquals(9925.6, actual, 0.01);
 	}
 
 	@Test
@@ -199,10 +212,13 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 * 13.44 * 5 = 67.2
 		 * We need to start ramp down at tick 120 - 67.2 ticks = 52.8 ticks
 		 */
-		final double result = motorRevHDCoreHex.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+
+		final double actual = slowdown.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-		assertEquals(52.8, result);
+		assertEquals(52.8, actual);
 	}
 
 	@Test
@@ -223,10 +239,13 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 * Would need to start ramp at 940 - 134.4 tics = 805.6 ticks
 		 */
 
-		double result = motorRevHDCoreHex.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+
+		final double actual = slowdown.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-		assertEquals(805.6, result);
+		assertEquals(805.6, actual);
 	}
 
 	@Test
@@ -246,17 +265,15 @@ public class MotorRevHDCoreHexUnitTests extends MotorUnitTests implements Concre
 		 * Tick number at end of period is 60 + 120 = 180.
 		 * Tick to start is 180 - 67.2 = 112.8
 		 */
-		double result = motorRevHDCoreHex.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
+		SlowDown slowdown = new SlowDown();
+		slowdown.setMotor(motorRevHDCoreHex);
+
+		final double actual = slowdown.getTickNumberToStartSlowDown(tickNumberAtStartOfPeriod,
 				numberOfTicksInPeriod, powerAtStart, powerAtEnd);
 
-		assertEquals(112.8, result);
+		assertEquals(112.8, actual);
 	}
 
-	@Test
-	public final void testGetTicksPerCycle01() {
-		double ticksPerCycle = motorRevHDCoreHex.getTicksPerCycle().doubleValue();
-		assertEquals(13.44, ticksPerCycle, 0.001);
-	}
 
 	@Test
 	public final void testGetTicksPerMillisecond01() {
