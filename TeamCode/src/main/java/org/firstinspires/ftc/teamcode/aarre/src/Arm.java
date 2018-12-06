@@ -49,7 +49,7 @@ public class Arm {
 			motor = new MotorRevHDCoreHex(opMode, nameOfArmMotor);
 		}
 
-		motor.rampToPower(new PowerVector(0.0));
+		motor.setPowerVector(new PowerVector(0.0));
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises arm
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

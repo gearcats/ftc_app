@@ -73,7 +73,7 @@ public class Riser {
 
 		motor = new MotorTorqueNADO(opMode, nameOfRiserMotor);
 
-		motor.rampToPower(new PowerVector(0.0));
+		motor.setPowerVector(new PowerVector(0.0));
 		motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 		motor.setDirection(DcMotorSimple.Direction.FORWARD);  // Positive power raises riser
 		motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -140,7 +140,7 @@ public class Riser {
 	/**
 	 * Lower the riser for the default amount of time.
 	 */
-	private void lowerByTime() {
+	private void lowerByTime() throws NoSuchMethodException {
 		lowerByTime(DEFAULT_POWER_MAGNITUDE, DEFAULT_SECONDS_TO_RUN_MAXIMUM);
 	}
 
@@ -152,7 +152,8 @@ public class Riser {
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm.
 	 */
-	private void lowerByTime(PowerMagnitude powerMagnitude, NonNegativeDouble secondsToRun) {
+	private void lowerByTime(PowerMagnitude powerMagnitude, NonNegativeDouble secondsToRun) throws
+			NoSuchMethodException {
 
 		PowerVector powerVector = new PowerVector(powerMagnitude, -1);
 
@@ -164,7 +165,7 @@ public class Riser {
 	/**
 	 * Lower the riser to its downward position while avoiding stalling the riser motor
 	 */
-	private void lowerUntilStall() {
+	private void lowerUntilStall() throws NoSuchMethodException {
 		motor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_STALL_TIME_WINDOW);
 		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_STALL_TOLERANCE);
 		PowerVector powerVector = new PowerVector(DEFAULT_POWER_MAGNITUDE, PowerVector.REVERSE);
@@ -233,7 +234,7 @@ public class Riser {
 	/**
 	 * Raise the riser for the default amount of time.
 	 */
-	private void raiseByTime() {
+	private void raiseByTime() throws NoSuchMethodException {
 		raiseByTime(DEFAULT_POWER_MAGNITUDE, DEFAULT_SECONDS_TO_RUN_MAXIMUM);
 	}
 
@@ -245,25 +246,13 @@ public class Riser {
 	 * @param secondsToRun
 	 * 		The number of seconds for which to raise the arm. Must be non-negative.
 	 */
-	private void raiseByTime(PowerMagnitude powerMagnitude, NonNegativeDouble secondsToRun) {
+	private void raiseByTime(PowerMagnitude powerMagnitude, NonNegativeDouble secondsToRun) throws
+			NoSuchMethodException {
 
 		PowerVector powerVector = new PowerVector(powerMagnitude, PowerVector.FORWARD);
 		motor.runByTime(powerVector, secondsToRun);
 
 		currentPosition = 1.0;
-	}
-
-	/**
-	 * Raise the riser to its upward position while avoiding stalling the riser motor.
-	 * <p>
-	 * This method does not work very well. The riser motor does not really 'stall'. Instead, it continues to run
-	 * irregularly as it attempts to push the riser higher than it can go.
-	 */
-	private void raiseUntilStall() {
-		motor.setStallTimeLimitInMilliseconds(DEFAULT_MILLISECONDS_STALL_TIME_WINDOW);
-		motor.setStallDetectionToleranceInTicks(DEFAULT_TICKS_STALL_TOLERANCE);
-		PowerVector powerVector = new PowerVector(DEFAULT_POWER_MAGNITUDE, PowerVector.FORWARD);
-		motor.runUntilStalled(powerVector);
 	}
 
 }

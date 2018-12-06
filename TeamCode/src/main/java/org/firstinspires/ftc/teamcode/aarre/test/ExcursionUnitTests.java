@@ -13,14 +13,14 @@ class ExcursionUnitTests {
 
 	@Test
 	public void whenExcursionIsCreated_thenPowerVectorIs0() {
-		PowerVector powerVector = excursion.getPowerVector();
+		PowerVector powerVector = excursion.getTargetPower();
 		assertNotNull(powerVector);
 		assertEquals(0.0, powerVector.doubleValue());
 	}
 
 	@Test
 	public void whenExcursionIsCreated_thenSecondsTimeoutIs1() {
-		NonNegativeDouble secondsTimeout = excursion.getSecondsTimeout();
+		NonNegativeDouble secondsTimeout = excursion.getTimeoutSeconds();
 		assertEquals(0.0, secondsTimeout.doubleValue());
 	}
 
@@ -76,8 +76,8 @@ class ExcursionUnitTests {
 	@Test
 	public void whenExcursionIsCreated_thenYouCanSetPowerVector() {
 		PowerVector powerVector = new PowerVector(1.0);
-		excursion.setPowerVector(powerVector);
-		PowerVector powerVectorReturned = excursion.getPowerVector();
+		excursion.setTargetPower(powerVector);
+		PowerVector powerVectorReturned = excursion.getTargetPower();
 		assertEquals(powerVector, powerVectorReturned);
 	}
 

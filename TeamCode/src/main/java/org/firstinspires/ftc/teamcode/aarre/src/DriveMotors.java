@@ -18,21 +18,38 @@ public class DriveMotors {
 
 	// Defaults
 	private static final double                DEFAULT_HEADING_THRESHOLD          = 1.0;
+
 	private static final int                   DEFAULT_MILLISECONDS_CYCLE_LENGTH  = 50;
+
 	private static final double                DEFAULT_POWER_INCREMENT_ABSOLUTE   = 0.1;
+
 	private static final double                DEFAULT_PROPORTION_POWER_TOLERANCE = 0.01;
-	private static final double                DEFAULT_P_DRIVE_COEFFICIENT        = 0.15; // Larger is more responsive but less stable
-	private static final double                DEFAULT_P_TURN_COEFFICIENT         = 0.1;  // Larger is more responsive but less stable
+
+	private static final double DEFAULT_P_DRIVE_COEFFICIENT = 0.15; // Larger is more responsive
+	// but less stable
+
+	private static final double DEFAULT_P_TURN_COEFFICIENT = 0.1;  // Larger is more responsive
+	// but less stable
+
 	private static       int                   cycleLengthInMilliseconds          = DEFAULT_MILLISECONDS_CYCLE_LENGTH;
+
 	private              ModernRoboticsI2cGyro gyro;
+
 	private              HardwareMap           hardwareMap;
+
 	private              DriveMotor            leftMotor;
+
 	static               Logger                log;
+
 	private              LinearOpMode          opMode;
+
 	// Private fields
-	private static       PowerMagnitude        powerIncrementAbsolute             = new PowerMagnitude(DEFAULT_POWER_INCREMENT_ABSOLUTE);
-	private static       PowerMagnitude        powerMagnitudeTolerance            = new PowerMagnitude(DEFAULT_PROPORTION_POWER_TOLERANCE);
+	private static PowerMagnitude powerIncrementAbsolute = new PowerMagnitude(DEFAULT_POWER_INCREMENT_ABSOLUTE);
+
+	private static PowerMagnitude powerMagnitudeTolerance = new PowerMagnitude(DEFAULT_PROPORTION_POWER_TOLERANCE);
+
 	private              DriveMotor            rightMotor;
+
 	private              TelemetryPlus         telemetry;
 
 	static {
@@ -169,8 +186,7 @@ public class DriveMotors {
 		}
 
 		// Stop all motion;
-		leftMotor.rampToPower(new PowerVector(0.0));
-		rightMotor.rampToPower(new PowerVector(0.0));
+		this.rampPowerTo(new PowerVector(0.0));
 
 		// Turn off RUN_TO_POSITION
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -345,8 +361,7 @@ public class DriveMotors {
 		}
 
 		// Stop all motion;
-		leftMotor.rampToPower(new PowerVector(0.0));
-		rightMotor.rampToPower(new PowerVector(0.0));
+		this.rampPowerTo(new PowerVector(0.0));
 	}
 
 	/**
@@ -477,11 +492,12 @@ public class DriveMotors {
 
 		while ((greatestPowerDeltaMagnitude.isGreaterThan(powerMagnitudeTolerance)) && opMode.opModeIsActive()) {
 
-			powerVectorCurrentLeft = leftMotor.getPowerVectorCurrent();
-			powerVectorCurrentRight = rightMotor.getPowerVectorCurrent();
+			powerVectorCurrentLeft = leftMotor.getCurrentPowerVector();
+			powerVectorCurrentRight = rightMotor.getCurrentPowerVector();
 
-			powerVectorNewLeft = leftMotor.getPowerVectorNew(powerVectorRequestedLeft, powerVectorCurrentLeft);
-			powerVectorNewRight = rightMotor.getPowerVectorNew(powerVectorRequestedRight, powerVectorCurrentRight);
+
+			powerVectorNewLeft = Ramp.getPowerVectorNew(powerVectorRequestedLeft, powerVectorCurrentLeft);
+			powerVectorNewRight = Ramp.getPowerVectorNew(powerVectorRequestedRight, powerVectorCurrentRight);
 
 			powerDeltaLeftVector = powerVectorRequestedLeft.subtract(powerVectorCurrentLeft);
 			powerDeltaRightVector = powerVectorRequestedRight.subtract(powerVectorCurrentRight);
@@ -500,7 +516,8 @@ public class DriveMotors {
 
 		}
 
-		log.exiting(getClass().getName(), getClass().getMethod("rampPowerTo", PowerVector.class, PowerVector.class).getName());
+		log.exiting(getClass().getName(), getClass().getMethod("rampPowerTo", PowerVector.class, PowerVector.class)
+				.getName());
 
 
 	}

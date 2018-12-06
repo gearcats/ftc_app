@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeDouble;
 import org.firstinspires.ftc.teamcode.aarre.src.NonNegativeInteger;
 import org.firstinspires.ftc.teamcode.aarre.src.PowerVector;
+import org.firstinspires.ftc.teamcode.aarre.src.Ramp;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -59,7 +60,7 @@ public abstract class MotorUnitTests extends LinearOpMode implements MotorUnitTe
 	public void testGetPowerVectorNew02() {
 		PowerVector powerVectorCurrent   = new PowerVector(-1.0);
 		PowerVector powerVectorRequested = new PowerVector(0.0);
-		PowerVector proportionPowerNew   = getMotor().getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
+		PowerVector proportionPowerNew   = Ramp.getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 		assertEquals(-0.9, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
