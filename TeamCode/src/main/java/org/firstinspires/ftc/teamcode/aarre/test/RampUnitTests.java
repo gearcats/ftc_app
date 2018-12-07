@@ -114,7 +114,24 @@ public abstract class RampUnitTests {
 		assertEquals(0.9, proportionPowerNew.doubleValue(), "Wrong proportion power");
 	}
 
+	@Test
+	public void whenCurrentTickNumberIsSet_thenGetReturnsTheSameValue() {
 
+		int expected = 100;
+		getRamp().setCurrentTickNumber(expected);
+		int actual = getRamp().getCurrentTickNumber();
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void whenPowerAtStartOfPeriodIsSet_thenGetReturnsTheSameValue() {
+
+		PowerVector expected = new PowerVector(0.0);
+		getRamp().setInitialPower(expected);
+		PowerVector actual = getRamp().getPowerVectorAtStartOfPeriod();
+		assertEquals(expected, actual);
+
+	}
 
 
 

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.aarre.src;
 
-import java.util.logging.Logger;
-
 /**
  * Separate out the portions of the Vuforia code that do not depend on running on the robot so that we can unit test
  * them off-bot.
@@ -9,5 +7,4 @@ import java.util.logging.Logger;
 
 public class Vuforia {
 
-	private final Logger javaLog = Logger.getLogger(this.getClass().getName());
 }

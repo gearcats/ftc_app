@@ -72,34 +72,30 @@ public class SlowDown extends Ramp {
 	 * @return
 	 */
 	@SuppressLint("DefaultLocale")
-	final public double getTickNumberToStartSlowDown(final int tickNumberAtStartOfPeriod, final NonNegativeInteger
-			numberOfTicksInPeriod, final PowerVector powerVectorAtStartOfPeriod, final PowerVector
-			powerVectorAtEndOfPeriod) {
+	final public double getTickNumberToStartSlowDown() {
 
 		slowDownLog.entering(getClass().getCanonicalName(), "getTickNumberToStartSlowDown");
 
-		slowDownLog.finer(String.format("Tick number at start of period: %d", tickNumberAtStartOfPeriod));
-		slowDownLog.finer(String.format("Number of ticks in period: %d", numberOfTicksInPeriod.intValue()));
-		slowDownLog.finer(String.format("Power vector at start of period: %f", powerVectorAtStartOfPeriod.doubleValue
-				()));
-		slowDownLog.finer(String.format("Power vector at end of period: %f", powerVectorAtEndOfPeriod.doubleValue()));
-		slowDownLog.finer(String.format("Current tick number: %d", getMotor().getCurrentTickNumber()));
+		slowDownLog.finer(String.format("Tick number at start of period: %d", getInitialTickNumber()));
+		slowDownLog.finer(String.format("Number of ticks in period: %d", getTicksToRotate().intValue()));
+		slowDownLog.finer(String.format("Power vector at start of period: %f", getInitialPower().doubleValue()));
+		slowDownLog.finer(String.format("Power vector at end of period: %f", getTargetPower().doubleValue()));
+		slowDownLog.finer(String.format("Current tick number: %d", getCurrentTickNumber()));
 
-		PowerMagnitude powerMagnitudeAtStartOfPeriod = powerVectorAtStartOfPeriod.getMagnitude();
+		PowerMagnitude powerMagnitudeAtStartOfPeriod = getInitialPower().getMagnitude();
 		slowDownLog.finer(String.format("Power magnitude at start of period: %f", powerMagnitudeAtStartOfPeriod
 				.doubleValue()));
 
-		PowerMagnitude powerMagnitudeAtEndOfPeriod = powerVectorAtEndOfPeriod.getMagnitude();
+		PowerMagnitude powerMagnitudeAtEndOfPeriod = getTargetPower().getMagnitude();
 		slowDownLog.finer(String.format("Power magnitude at end of period: %f", powerMagnitudeAtEndOfPeriod
 				.doubleValue()));
 
 		if (powerMagnitudeAtStartOfPeriod.doubleValue() <= powerMagnitudeAtEndOfPeriod.doubleValue()) {
-			throw new IllegalArgumentException("When slowing down, the magnitude of the " + "power at the start " +
-					"of the slowdown must be greater " + "than the magnitude of the power at the end " + "of " + "the " +
-					"" + "" + "" + "" + "" + "" + "" + "" + "" + "slowdown" + ".");
+			throw new IllegalArgumentException("When slowing down, the magnitude of the power at the start " + "of the" +
+					" slowdown must be greater than the magnitude of the power at the end of the " + "slowdown.");
 		}
 
-		PowerVector powerChangeVector = powerVectorAtStartOfPeriod.subtract(powerVectorAtEndOfPeriod);
+		PowerVector powerChangeVector = getInitialPower().subtract(getTargetPower());
 		slowDownLog.finer(String.format("Power change vector: %f", powerChangeVector.doubleValue()));
 
 		PowerMagnitude magnitudeOfPowerChange = powerChangeVector.getMagnitude();
@@ -120,7 +116,7 @@ public class SlowDown extends Ramp {
 		final double numberOfTicksToChange = powerChangeDirection * numberOfTicksInSlowDown.doubleValue();
 		slowDownLog.finer(String.format("Number of ticks to change: %f", numberOfTicksToChange));
 
-		final double tickNumberAtEndOfPeriod = tickNumberAtStartOfPeriod + (numberOfTicksInPeriod.intValue() *
+		final double tickNumberAtEndOfPeriod = getInitialTickNumber() + (getTicksToRotate().intValue() *
 				powerChangeDirection);
 		slowDownLog.finer(String.format("Tick number at end of period: %f", tickNumberAtEndOfPeriod));
 
@@ -133,30 +129,27 @@ public class SlowDown extends Ramp {
 	}
 
 
-	public boolean isSlowDownToEncoderTicksRunning(int tickNumberAtStartOfTravel, int tickNumberCurrent,
-	                                               NonNegativeInteger numberOfTicksToTravel, PowerVector
-			                                               powerAtStartOfTravel, PowerVector powerAtEndOfTravel) {
-
+	public boolean isSlowDownToEncoderTicksRunning() {
 
 		slowDownLog.entering(getClass().getCanonicalName(), "isSlowDownToEncoderTicksRunning");
 
-		slowDownLog.finer(String.format("Tick number at start of travel: %d", tickNumberAtStartOfTravel));
-		slowDownLog.finer(String.format("Current tick number: %d", tickNumberCurrent));
-		slowDownLog.finer(String.format("Number of ticks to travel: %d", numberOfTicksToTravel.intValue()));
-		slowDownLog.finer(String.format("Power vector at start of travel: %f", powerAtStartOfTravel.doubleValue()));
-		slowDownLog.finer(String.format("Power vector at end of travel: %f", powerAtEndOfTravel.doubleValue()));
+		// Store the current tick number because, on the robot, it changes very rapidly
+		final int currentTickNumber = getCurrentTickNumber();
 
-		double tickNumberAtEndOfTravel = tickNumberAtStartOfTravel + numberOfTicksToTravel.doubleValue();
+		slowDownLog.finer(String.format("Tick number at start of travel: %d", getInitialTickNumber()));
+		slowDownLog.finer(String.format("Current tick number: %d", getCurrentTickNumber()));
+		slowDownLog.finer(String.format("Number of ticks to travel: %d", getTicksToRotate().intValue()));
+		slowDownLog.finer(String.format("Power vector at start of travel: %f", getInitialPower().doubleValue()));
+		slowDownLog.finer(String.format("Power vector at end of travel: %f", getTargetPower().doubleValue()));
 
 		boolean result = false;
 
-		double tickNumberToStartSlowDown = getTickNumberToStartSlowDown(tickNumberAtStartOfTravel,
-				numberOfTicksToTravel, powerAtStartOfTravel, powerAtEndOfTravel);
+		double tickNumberToStartSlowDown = getTickNumberToStartSlowDown();
 
 		slowDownLog.finer(String.format("Tick number to start slowdown: %f", tickNumberToStartSlowDown));
 
-		if (((double) tickNumberCurrent >= tickNumberToStartSlowDown) && ((double) tickNumberCurrent <=
-				tickNumberAtEndOfTravel)) {
+		if (((double) currentTickNumber >= getTickNumberToStartSlowDown()) && ((double) currentTickNumber <=
+				getTargetTickNumber())) {
 			result = true;
 		}
 
@@ -233,8 +226,7 @@ public class SlowDown extends Ramp {
 
 			secondsFromStart = runtimeFromStart.seconds();
 
-			keepGoing = isSlowDownToEncoderTicksRunning(tickNumberStart, currentTickNumber, ticksToMove,
-					powerVectorCurrent, powerVectorAtEnd);
+			keepGoing = isSlowDownToEncoderTicksRunning();
 
 		}
 		slowDownLog.exiting(getClass().getCanonicalName(), "slowDownToPower");
@@ -261,8 +253,7 @@ public class SlowDown extends Ramp {
 			getOpMode().idle();
 			tickNumberCurrent = getCurrentTickNumber();
 			powerVectorCurrent = getPowerVectorCurrent();
-			keepWaiting = !isSlowDownToEncoderTicksRunning(tickNumberStart, tickNumberCurrent, ticksToMove,
-					powerVectorCurrent, powerVectorAtEnd);
+			keepWaiting = !isSlowDownToEncoderTicksRunning();
 		}
 	}
 

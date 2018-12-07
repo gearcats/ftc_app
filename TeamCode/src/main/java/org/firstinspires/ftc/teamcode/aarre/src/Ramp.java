@@ -26,6 +26,21 @@ public abstract class Ramp {
 	 */
 	private static final PowerMagnitude DEFAULT_POWER_INCREMENT_PER_RAMP_CYCLE = new PowerMagnitude(0.1);
 
+	/**
+	 * The motor's current position as set by the user for testing purposes.
+	 */
+	private int currentTickNumber;
+
+	/**
+	 * The power at the beginning of the ramp
+	 */
+	private PowerVector initialPower;
+
+	/**
+	 * The tick number at the beginning of the period
+	 */
+	private int initialTickNumber;
+
 	private NonNegativeInteger millisecondsPerRampCycle = DEFAULT_MILLISECONDS_PER_RAMP_CYCLE;
 
 	private Motor motor;
@@ -39,7 +54,11 @@ public abstract class Ramp {
 	 */
 	private static Logger speedUpLog;
 
+	/**
+	 * The power at the end of the ramp
+	 */
 	private PowerVector targetPower;
+
 
 	private NonNegativeInteger ticksToRotate;
 
@@ -95,12 +114,41 @@ public abstract class Ramp {
 		}
 	}
 
-	protected int getCurrentTickNumber() {
-		return getMotor().getCurrentTickNumber();
+	/**
+	 * Get the current position of the motor.
+	 *
+	 * If running on-bot, then this method will return the actual tick number according to the encoder of the motor
+	 * attached to this ramp. When running off-bot, it will return the last tick number that was set using the
+	 * setCurrentTickNumber() method. This artificial current tick number is useful for testing.
+	 *
+	 * @return An integer that either indicates the actual position of the motor or represents
+	 */
+	public int getCurrentTickNumber() {
+		int result;
+		if (isOnBot()) {
+			result = getMotor().getCurrentTickNumber();
+		} else {
+			result = currentTickNumber;
+		}
+		return result;
 	}
 
 	protected HardwareMap getHardwareMap() {
 		return getOpMode().hardwareMap;
+	}
+
+	/**
+	 * The power at the start of the ramp
+	 */
+	public PowerVector getInitialPower() {
+		return initialPower;
+	}
+
+	/**
+	 * The tick number at the beginning of the ramp
+	 */
+	public int getInitialTickNumber() {
+		return initialTickNumber;
 	}
 
 	public NonNegativeInteger getMillisecondsPerRampCycle() {
@@ -236,6 +284,11 @@ public abstract class Ramp {
 	}
 
 
+	public int getTargetTickNumber() {
+		return getInitialTickNumber() + getTicksToRotate().intValue();
+	}
+
+
 	public NonNegativeDouble getTicksPerCycle() {
 		return new NonNegativeDouble(getMotor().getTicksPerMillisecond().doubleValue() * getMillisecondsPerRampCycle()
 				.doubleValue());
@@ -263,6 +316,16 @@ public abstract class Ramp {
 	 */
 	public PowerMagnitude getTolerance() {
 		return tolerance;
+	}
+
+	/**
+	 * Is the program running on the robot?
+	 *
+	 * @return True if we are running on the robot, false otherwise (typically in a test environment).
+	 */
+	public boolean isOnBot() {
+		// TODO: Figure out how to know whether we are running on the robot
+		return true;
 	}
 
 	void rampToPower() throws NoSuchMethodException {
@@ -402,6 +465,28 @@ public abstract class Ramp {
 
 		}
 
+	}
+
+	/**
+	 * Set the current position of the motor for testing purposes.
+	 *
+	 * Note this does not actually turn the motor. Rather it sets an internal field that holds the last value set,
+	 * which
+	 * can be retrieved by the getCurrentTickNumber() method. The purpose of this is to allow for off-bot testing of
+	 * methods that require a current tick number.
+	 *
+	 * @param currentTickNumber
+	 */
+	public void setCurrentTickNumber(int currentTickNumber) {
+		this.currentTickNumber = currentTickNumber;
+	}
+
+	public void setInitialPower(PowerVector initialPower) {
+		this.initialPower = initialPower;
+	}
+
+	public void setInitialTickNumber(int initialTickNumber) {
+		this.initialTickNumber = initialTickNumber;
 	}
 
 	public void setMillisecondsPerRampCycle(NonNegativeInteger millisecondsPerRampCycle) {

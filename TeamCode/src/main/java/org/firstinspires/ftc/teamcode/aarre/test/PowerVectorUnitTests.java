@@ -83,6 +83,7 @@ class PowerVectorUnitTests {
 
 	}
 
+
 	/**
 	 * Test that attempting to set an double Vector greater than 1 throws an exception.
 	 */
@@ -132,6 +133,7 @@ class PowerVectorUnitTests {
 	@Test
 	void testGetDirection() {
 	}
+
 
 	@Test
 	void testGetMagnitude() {
