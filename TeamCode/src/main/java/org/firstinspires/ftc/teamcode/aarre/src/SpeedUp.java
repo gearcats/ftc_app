@@ -115,7 +115,7 @@ public class SpeedUp extends Ramp {
 
 		while (!isSpeedUpToEncoderTicksDone(ticksToMove, secondsTimeout, secondsRunning, ticksMoved)) {
 
-			PowerVector powerVectorCurrent = this.getPowerVectorCurrent();
+			PowerVector powerVectorCurrent = this.getCurrentPower();
 			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorRequested);
 			setTargetPower(powerVectorNew);
 

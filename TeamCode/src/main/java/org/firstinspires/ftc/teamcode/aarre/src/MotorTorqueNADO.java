@@ -16,6 +16,15 @@ public class MotorTorqueNADO extends Motor implements ConcreteMotorInterface {
 	static private       TelemetryPlus     telemetry;
 
 
+	/**
+	 * No-argument constructor for testing.
+	 */
+	public MotorTorqueNADO() {
+		hardwareMap = null;
+		motor = null;
+		opMode = null;
+	}
+
 	public MotorTorqueNADO(LinearOpMode opMode, String motorName) {
 
 		this.opMode = opMode;

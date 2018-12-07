@@ -162,6 +162,18 @@ public abstract class Ramp {
 		return motor;
 	}
 
+	public PowerVector getCurrentPower() {
+		return new PowerVector(getMotor().getCurrentPowerVector());
+	}
+
+	public LinearOpMode getOpMode() {
+		return opMode;
+	}
+
+	public static PowerMagnitude getPowerMagnitudeIncrementPerRampCycle() {
+		return powerMagnitudeIncrementPerRampCycle;
+	}
+
 	/**
 	 * Get the number of cycles for which a ramp (slowing down/speeding up) should last
 	 * <p>
@@ -175,12 +187,11 @@ public abstract class Ramp {
 	 *
 	 * @return
 	 */
-	public NonNegativeInteger getNumberOfCycles(NonNegativeInteger ticksToMove, PowerVector powerVectorCurrent,
-	                                            PowerVector powerVectorRequested) {
+	public NonNegativeInteger getNumberOfCycles() {
 
 		// The magnitude of the current and requested power
-		PowerMagnitude powerMagnitudeCurrent   = powerVectorCurrent.getMagnitude();
-		PowerMagnitude powerMagnitudeRequested = powerVectorRequested.getMagnitude();
+		PowerMagnitude powerMagnitudeCurrent   = getCurrentPower().getMagnitude();
+		PowerMagnitude powerMagnitudeRequested = getTargetPower().getMagnitude();
 
 		// Calculate the average number of ticks per cycle during the ramp
 		double            currentMagnitude      = powerMagnitudeCurrent.doubleValue();
@@ -192,7 +203,7 @@ public abstract class Ramp {
 				averagePowerMagnitude.doubleValue());
 
 		// The magnitude of the power change over the ramp
-		PowerVector    powerVectorChangeOverRamp    = powerVectorRequested.subtract(powerVectorCurrent);
+		PowerVector    powerVectorChangeOverRamp    = getTargetPower().subtract(getCurrentPower());
 		PowerMagnitude powerMagnitudeChangeOverRamp = powerVectorChangeOverRamp.getMagnitude();
 
 		// The number of cycles required to change power as much as requested
@@ -205,9 +216,9 @@ public abstract class Ramp {
 		// Return the number of cycles to change power or number of cycles to reach ticks,
 		// whichever is lower
 		NonNegativeDouble cyclesToChange = numCyclesRequiredToChangePower;
-		if (potentialTicksInRamp.doubleValue() > ticksToMove.doubleValue()) {
+		if (potentialTicksInRamp.doubleValue() > getTicksToRotate().doubleValue()) {
 			// TODO: Doesn't this assume that the motor is operating at full power?
-			NonNegativeDouble numCyclesRequiredToMoveTicks = new NonNegativeDouble(ticksToMove.doubleValue() /
+			NonNegativeDouble numCyclesRequiredToMoveTicks = new NonNegativeDouble(getTicksToRotate().doubleValue() /
 					getTicksPerCycle().doubleValue());
 			cyclesToChange = numCyclesRequiredToMoveTicks;
 		}
@@ -216,18 +227,6 @@ public abstract class Ramp {
 		NonNegativeInteger wholeCyclesToChange = new NonNegativeInteger(cyclesToChange.intValue());
 		return wholeCyclesToChange;
 
-	}
-
-	public LinearOpMode getOpMode() {
-		return opMode;
-	}
-
-	public static PowerMagnitude getPowerMagnitudeIncrementPerRampCycle() {
-		return powerMagnitudeIncrementPerRampCycle;
-	}
-
-	public PowerVector getPowerVectorCurrent() {
-		return new PowerVector(getMotor().getCurrentPowerVector());
 	}
 
 	/**
@@ -332,7 +331,6 @@ public abstract class Ramp {
 		rampToPower(targetPower, ticksToRotate, timeoutSeconds);
 	}
 
-
 	/**
 	 * Ramp the motor power up (or down) gradually to the requested amount until ticksMaximum or secondsTimeout has
 	 * been
@@ -362,7 +360,7 @@ public abstract class Ramp {
 		PowerMagnitude powerMagnitudeRequested = powerVectorRequested.getMagnitude();
 		speedUpLog.finer(String.format("Power magnitude requested: %f", powerMagnitudeRequested.doubleValue()));
 
-		PowerVector powerVectorCurrent = this.getPowerVectorCurrent();
+		PowerVector powerVectorCurrent = this.getCurrentPower();
 		speedUpLog.finer(String.format("Power vector current: %f", powerVectorCurrent.doubleValue()));
 		PowerMagnitude powerMagnitudeCurrent = powerVectorCurrent.getMagnitude();
 		speedUpLog.finer(String.format("Power magnitude current: %f", powerMagnitudeCurrent.doubleValue()));
@@ -431,7 +429,7 @@ public abstract class Ramp {
 		while ((magnitudeOfLastPowerChange.isGreaterThan(powerToleranceMagnitude)) && getOpMode().opModeIsActive()) {
 
 			speedUpLog.fine("Op mode is active");
-			powerVectorCurrent = getPowerVectorCurrent();
+			powerVectorCurrent = getCurrentPower();
 
 			vectorOfLastPowerChange = powerVectorRequested.subtract(powerVectorCurrent);
 			magnitudeOfLastPowerChange = vectorOfLastPowerChange.getMagnitude();

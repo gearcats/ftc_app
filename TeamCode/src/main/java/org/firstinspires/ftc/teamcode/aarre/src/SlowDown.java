@@ -203,7 +203,7 @@ public class SlowDown extends Ramp {
 			getOpMode().idle();
 			currentTickNumber = getCurrentTickNumber();
 
-			powerVectorCurrent = getPowerVectorCurrent();
+			powerVectorCurrent = getCurrentPower();
 			powerVectorNew = getPowerVectorNew(powerVectorCurrent, powerVectorAtEnd);
 
 			setTargetPower(powerVectorNew);
@@ -252,7 +252,7 @@ public class SlowDown extends Ramp {
 		while (keepWaiting && getOpMode().opModeIsActive()) {
 			getOpMode().idle();
 			tickNumberCurrent = getCurrentTickNumber();
-			powerVectorCurrent = getPowerVectorCurrent();
+			powerVectorCurrent = getCurrentPower();
 			keepWaiting = !isSlowDownToEncoderTicksRunning();
 		}
 	}

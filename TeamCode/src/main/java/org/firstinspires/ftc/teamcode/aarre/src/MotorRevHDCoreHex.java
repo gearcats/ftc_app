@@ -13,6 +13,15 @@ public class MotorRevHDCoreHex extends Motor implements ConcreteMotorInterface {
 	private final  LinearOpMode      opMode;
 	static private TelemetryPlus     telemetry;
 
+	/**
+	 * No-argument constructor for testing
+	 */
+	public MotorRevHDCoreHex() {
+		hardwareMap = null;
+		motor = null;
+		opMode = null;
+	}
+
 	public MotorRevHDCoreHex(LinearOpMode opMode, final String motorName) {
 
 		this.opMode = opMode;
