@@ -1045,18 +1045,21 @@ class SlowDownUnitTests extends RampUnitTests {
 	@Test
 	public void whenCurrentTickChanges_thenTickToStartSlowDownDoesNot() {
 
-		PowerVector powerVectorAtStartOfPeriod = new PowerVector(1.0);
-		PowerVector powerVectorAtEndOfPeriod   = new PowerVector(0.0);
+		PowerVector powerAtStart = new PowerVector(1.0);
+		PowerVector powerAtEnd   = new PowerVector(0.0);
 
 		Integer            tickNumberAtStartOfPeriod = new Integer(8);
 		NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(60);
 
-		slowdown.setCurrentTickNumber(8);
+		slowdown.setInitialTickNumber(tickNumberAtStartOfPeriod);
+		slowdown.setTicksToRotate(numberOfTicksInPeriod);
+		slowdown.setInitialPower(powerAtStart);
+		slowdown.setTargetPower(powerAtEnd);
 
+		slowdown.setCurrentTickNumber(8);
 		double result1 = slowdown.getTickNumberToStartSlowDown();
 
 		slowdown.setCurrentTickNumber(15);
-
 		double result2 = slowdown.getTickNumberToStartSlowDown();
 
 		assertEquals(result1, result2);

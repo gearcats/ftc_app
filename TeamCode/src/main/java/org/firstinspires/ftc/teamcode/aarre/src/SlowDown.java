@@ -40,6 +40,11 @@ public class SlowDown extends Ramp {
 		slowDownLog.setLevel(Level.ALL);
 	}
 
+	final NonNegativeDouble getNnumberOfTicksInSlowDown() {
+		NonNegativeDouble result;
+		result = new NonNegativeDouble(getNumberOfCycles().doubleValue() * getTicksPerCycle().doubleValue());
+		return result;
+	}
 
 	/**
 	 * Calculate when (what tick number) to start a ramp down.

@@ -6,6 +6,18 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 interface MotorInterface {
 
+	// How much tolerance to allow when deciding whether we have reached a requested motor power
+	static final PowerMagnitude DEFAULT_PROPORTION_POWER_TOLERANCE = new PowerMagnitude(0.01);
+
+	// How long to allow a motor operation to continue before timing out
+	static final NonNegativeDouble DEFAULT_SECONDS_TIMEOUT = new NonNegativeDouble(5.0);
+
+	static final NonNegativeInteger MILLISECONDS_PER_SECOND = new NonNegativeInteger(1000);
+
+	static final NonNegativeInteger SECONDS_PER_MINUTE = new NonNegativeInteger(60);
+
+	public PowerVector getCurrentPowerVector();
+
 	int getCurrentTickNumber();
 
 	HardwareMap getHardwareMap();
@@ -21,36 +33,23 @@ interface MotorInterface {
 
 	LinearOpMode getOpMode();
 
-	public PowerVector getCurrentPowerVector();
+	public NonNegativeDouble getRevolutionsPerMinute(PowerMagnitude powerMagnitude);
 
-	NonNegativeDouble getRevolutionsPerMinute();
+	public NonNegativeDouble getRevolutionsPerMinute();
 
-	NonNegativeDouble getRevolutionsPerMinute(PowerMagnitude powerMagnitude);
+	public NonNegativeDouble getTicksPerMillisecond(PowerMagnitude powerMagnitude);
 
+	public NonNegativeDouble getTicksPerMillisecond();
 
-	/**
-	 * @return The number of ticks in a millisecond at maximum power.
-	 */
-	NonNegativeDouble getTicksPerMillisecond();
+	public NonNegativeDouble getTicksPerMinute();
 
-	/**
-	 * @param powerMagnitude
-	 * 		The magnitude of motor power for which the caller wants to know the number of ticks in a power change
-	 * 		cycle.
-	 *
-	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude
-	 */
-	NonNegativeDouble getTicksPerMillisecond(PowerMagnitude powerMagnitude);
+	public NonNegativeDouble getTicksPerMinute(PowerMagnitude powerMagnitude);
 
-	NonNegativeDouble getTicksPerMinute();
+	public NonNegativeDouble getTicksPerRevolution();
 
-	NonNegativeDouble getTicksPerMinute(PowerMagnitude powerMagnitude);
+	public NonNegativeDouble getTicksPerSecond();
 
-	NonNegativeDouble getTicksPerRevolution();
-
-	NonNegativeDouble getTicksPerSecond();
-
-	NonNegativeDouble getTicksPerSecond(PowerMagnitude powerMagnitude);
+	public NonNegativeDouble getTicksPerSecond(PowerMagnitude powerMagnitude);
 
 	/**
 	 * Set the power level of the motor without ramping.

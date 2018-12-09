@@ -154,6 +154,9 @@ public abstract class Ramp {
 	 * The power at the start of the ramp
 	 */
 	public PowerVector getInitialPower() {
+		if (initialPower == null) {
+			throw new IllegalStateException("Initial power not set");
+		}
 		return initialPower;
 	}
 
@@ -298,8 +301,10 @@ public abstract class Ramp {
 
 
 	public NonNegativeDouble getTicksPerCycle() {
-		return new NonNegativeDouble(getMotor().getTicksPerMillisecond().doubleValue() * getMillisecondsPerRampCycle()
-				.doubleValue());
+		double ticksPerMs = getMotor().getTicksPerMillisecond().doubleValue();
+		double msPerCycle = getMillisecondsPerRampCycle().doubleValue();
+		double result     = ticksPerMs * msPerCycle;
+		return new NonNegativeDouble(result);
 	}
 
 	public NonNegativeDouble getTicksPerCycle(PowerMagnitude powerMagnitude) {

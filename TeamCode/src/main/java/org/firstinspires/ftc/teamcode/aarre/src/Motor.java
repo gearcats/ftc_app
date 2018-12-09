@@ -26,16 +26,6 @@ import java.util.logging.*;
 public abstract class Motor implements MotorInterface {
 
 
-	// How much tolerance to allow when deciding whether we have reached a requested motor power
-	private static final PowerMagnitude DEFAULT_PROPORTION_POWER_TOLERANCE = new PowerMagnitude(0.01);
-
-	// How long to allow a motor operation to continue before timing out
-	private static final NonNegativeDouble DEFAULT_SECONDS_TIMEOUT = new NonNegativeDouble(5.0);
-
-	private static final NonNegativeInteger MILLISECONDS_PER_SECOND = new NonNegativeInteger(1000);
-
-	private static final NonNegativeInteger SECONDS_PER_MINUTE = new NonNegativeInteger(60);
-
 	private PowerVector currentPower = new PowerVector(0);
 
 	/**
@@ -139,17 +129,23 @@ public abstract class Motor implements MotorInterface {
 
 	}
 
-	public Integer getOldTickNumber() {
-		return oldTickNumber;
-	}
-
-	public NonNegativeDouble getTicksPerMillisecond() {
-		return new NonNegativeDouble(getTicksPerSecond().doubleValue() / MILLISECONDS_PER_SECOND.doubleValue());
-	}
-
+	/**
+	 * @param powerMagnitude
+	 * 		The magnitude of motor power for which the caller wants to know the number of ticks in a power change
+	 * 		cycle.
+	 *
+	 * @return The number of ticks in a power change cycle when the motor is operating at powerMagnitude
+	 */
 	public NonNegativeDouble getTicksPerMillisecond(PowerMagnitude powerMagnitude) {
 		return new NonNegativeDouble(getTicksPerSecond(powerMagnitude).doubleValue() / MILLISECONDS_PER_SECOND
 				.doubleValue());
+	}
+
+	/**
+	 * @return The number of ticks in a millisecond at maximum power.
+	 */
+	public NonNegativeDouble getTicksPerMillisecond() {
+		return new NonNegativeDouble(getTicksPerSecond().doubleValue() / MILLISECONDS_PER_SECOND.doubleValue());
 	}
 
 	public NonNegativeDouble getTicksPerMinute() {
@@ -167,6 +163,9 @@ public abstract class Motor implements MotorInterface {
 	public NonNegativeDouble getTicksPerSecond(PowerMagnitude powerMagnitude) {
 		return new NonNegativeDouble(getTicksPerMinute(powerMagnitude).doubleValue() / SECONDS_PER_MINUTE.doubleValue
 				());
+	}
+	public Integer getOldTickNumber() {
+		return oldTickNumber;
 	}
 
 	/**

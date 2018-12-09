@@ -17,7 +17,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetNumberOfCycles01_Hex() {
+	public final void testGetNumberOfCycles01_whenMotorIsREVHexCoreHD() {
 
 		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
 		PowerVector        currentPower             = new PowerVector(1.0);
@@ -38,7 +38,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetNumberOfCycles01_Torque() {
+	public final void testGetNumberOfCycles01_whenMotorIsTorqueNADO() {
 
 		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
 		PowerVector        currentPower             = new PowerVector(1.0);
@@ -59,7 +59,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetNumberOfCycles02_Hex() {
+	public final void testGetNumberOfCycles02_whenMotorIsREVHexCoreHD() {
 
 		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
 		PowerVector        currentPower             = new PowerVector(0.1);
@@ -80,7 +80,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetNumberOfCycles02_Torque() {
+	public final void testGetNumberOfCycles02_whenMotorIsTorqueNADO() {
 
 		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
 		PowerVector        currentPower             = new PowerVector(0.1);
@@ -101,7 +101,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetNumberOfCycles03_Hex() {
+	public final void testGetNumberOfCycles03_whenMotorIsREVHexCoreHD() {
 
 		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
 		PowerVector        currentPower             = new PowerVector(-0.1);
@@ -122,7 +122,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetNumberOfCycles03_Torque() {
+	public final void testGetNumberOfCycles03_whenMotorIsTorqueNADO() {
 
 		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
 		PowerVector        currentPower             = new PowerVector(-0.1);
@@ -143,7 +143,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetNumberOfCycles04_Hex() {
+	public final void testGetNumberOfCycles04_whenMotorIsREVHexCoreHD() {
 
 		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
 		PowerVector        currentPower             = new PowerVector(-1.0);
@@ -164,7 +164,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetNumberOfCycles04_Torque() {
+	public final void testGetNumberOfCycles04_whenMotorIsTorqueNADO() {
 
 		NonNegativeInteger ticksToMove              = new NonNegativeInteger(1440);
 		PowerVector        currentPower             = new PowerVector(-1.0);
@@ -273,7 +273,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetTicksPerCycle_Hex() {
+	public final void testGetTicksPerCycle_whenMotorIsREVHexCoreHD() {
 
 		MotorRevHDCoreHex motor = new MotorRevHDCoreHex();
 		getRamp().setMotor(motor);
@@ -283,7 +283,7 @@ public abstract class RampUnitTests {
 	}
 
 	@Test
-	public final void testGetTicksPerCycle_Torque() {
+	public final void testGetTicksPerCycle_whenMotorIsTorqueNADO() {
 
 		MotorTorqueNADO motor = new MotorTorqueNADO();
 		getRamp().setMotor(motor);
