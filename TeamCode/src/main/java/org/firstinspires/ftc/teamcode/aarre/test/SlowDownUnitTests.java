@@ -1043,7 +1043,7 @@ class SlowDownUnitTests extends RampUnitTests {
 	 * The tick number to start a slow down should not depend on what the current tick number is.
 	 */
 	@Test
-	public void whenCurrentTickChanges_thenTickToStartSlowDownDoesNot() {
+	public void whenCurrentTickChanges_thenTickToStartSlowDownDoesNot_givenMotorIsHex() {
 
 		PowerVector powerAtStart = new PowerVector(1.0);
 		PowerVector powerAtEnd   = new PowerVector(0.0);
@@ -1051,6 +1051,39 @@ class SlowDownUnitTests extends RampUnitTests {
 		Integer            tickNumberAtStartOfPeriod = new Integer(8);
 		NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(60);
 
+		MotorRevHDCoreHex motor = new MotorRevHDCoreHex();
+
+		slowdown.setMotor(motor);
+		slowdown.setInitialTickNumber(tickNumberAtStartOfPeriod);
+		slowdown.setTicksToRotate(numberOfTicksInPeriod);
+		slowdown.setInitialPower(powerAtStart);
+		slowdown.setTargetPower(powerAtEnd);
+
+		slowdown.setCurrentTickNumber(8);
+		double result1 = slowdown.getTickNumberToStartSlowDown();
+
+		slowdown.setCurrentTickNumber(15);
+		double result2 = slowdown.getTickNumberToStartSlowDown();
+
+		assertEquals(result1, result2);
+
+	}
+
+	/**
+	 * The tick number to start a slow down should not depend on what the current tick number is.
+	 */
+	@Test
+	public void whenCurrentTickChanges_thenTickToStartSlowDownDoesNot_givenMotorIsTorqueNADO() {
+
+		PowerVector powerAtStart = new PowerVector(1.0);
+		PowerVector powerAtEnd   = new PowerVector(0.0);
+
+		Integer            tickNumberAtStartOfPeriod = new Integer(8);
+		NonNegativeInteger numberOfTicksInPeriod     = new NonNegativeInteger(60);
+
+		MotorTorqueNADO motor = new MotorTorqueNADO();
+
+		slowdown.setMotor(motor);
 		slowdown.setInitialTickNumber(tickNumberAtStartOfPeriod);
 		slowdown.setTicksToRotate(numberOfTicksInPeriod);
 		slowdown.setInitialPower(powerAtStart);
