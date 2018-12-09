@@ -36,11 +36,15 @@ public abstract class Motor implements MotorInterface {
 
 	private static final NonNegativeInteger SECONDS_PER_MINUTE = new NonNegativeInteger(60);
 
+	private PowerVector currentPower = new PowerVector(0);
+
 	/**
 	 * When running on bot, callers can get the current tick number as reported by the motor encoder. For testing
-	 * off-bot, however, the motor cannot report a tick number. This private field is used in conjuction with the
+	 * off-bot, however, the motor cannot report a tick number. This private field is used in conjunction with the
 	 * getCurrentTickNumber() and setCurrentTickNumber() methods to artificially set the current tick number for the
 	 * purposes of testing off-bot.
+	 *
+	 * TODO: Consider using Mockito for this purpose instead
 	 */
 	private Integer currentTickNumber = new Integer(0);
 
@@ -80,11 +84,25 @@ public abstract class Motor implements MotorInterface {
 		log.setLevel(Level.ALL);
 	}
 
+	/**
+	 * When running on-bot, callers can get the current power as reported by the motor. For testing off-bot, however,
+	 * the motor cannot report its power. This private field is used in conjunction with the getCurrentPower() and
+	 * setCurrentPower() methods to artificially set the power for the purposes of testing off-bot.
+	 *
+	 * TODO: Consider using Mockito for this purpose instead
+	 */
 	public final PowerVector getCurrentPowerVector() {
-		DcMotor     motor              = getMotor();
-		double      powerDbl           = motor.getPower();
-		PowerVector currentPowerVector = new PowerVector(powerDbl);
-		return currentPowerVector;
+
+		PowerVector result;
+		DcMotor     motor = getMotor();
+
+		if (motor == null) {
+			result = currentPower;
+		} else {
+			double powerDbl = motor.getPower();
+			result = new PowerVector(powerDbl);
+		}
+		return result;
 	}
 
 	/**
@@ -346,6 +364,19 @@ public abstract class Motor implements MotorInterface {
 		}
 		setPowerVector(new PowerVector(0.0));
 	}
+
+
+	/**
+	 * When running on bot, callers can get the true current motor power. For testing off-bot, however, we cannot
+	 * set or
+	 * get power from the motor.
+	 *
+	 * TODO: Consider using Mockito for this instead.
+	 */
+	public void setCurrentPower(PowerVector currentPower) {
+		this.currentPower = currentPower;
+	}
+
 
 	/**
 	 * When running on bot, callers can get the current tick number as reported by the motor encoder. For testing

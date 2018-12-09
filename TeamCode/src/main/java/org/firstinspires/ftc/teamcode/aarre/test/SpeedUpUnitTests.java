@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SpeedUpUnitTests extends RampUnitTests {
 
-	SpeedUp speedup;
+	private SpeedUp speedup;
 
 	@Test
 	@BeforeEach

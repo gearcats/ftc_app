@@ -19,6 +19,7 @@ class SlowDownUnitTests extends RampUnitTests {
 	@BeforeEach
 	public void slowDownUnitTests() {
 		slowdown = new SlowDown();
+		assertNotNull(slowdown);
 	}
 
 	@Test

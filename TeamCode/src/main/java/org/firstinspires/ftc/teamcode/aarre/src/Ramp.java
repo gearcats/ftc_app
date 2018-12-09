@@ -27,6 +27,11 @@ public abstract class Ramp {
 	private static final PowerMagnitude DEFAULT_POWER_INCREMENT_PER_RAMP_CYCLE = new PowerMagnitude(0.1);
 
 	/**
+	 * The motor's current power as set by the user for testing purposes.
+	 */
+	private PowerVector currentPowerVector;
+
+	/**
 	 * The motor's current position as set by the user for testing purposes.
 	 */
 	private int currentTickNumber;
@@ -114,6 +119,14 @@ public abstract class Ramp {
 		}
 	}
 
+	public PowerVector getCurrentPower() {
+		return new PowerVector(getMotor().getCurrentPowerVector());
+	}
+
+	public PowerVector getCurrentPowerVector() {
+		return currentPowerVector;
+	}
+
 	/**
 	 * Get the current position of the motor.
 	 *
@@ -160,18 +173,6 @@ public abstract class Ramp {
 	 */
 	public Motor getMotor() {
 		return motor;
-	}
-
-	public PowerVector getCurrentPower() {
-		return new PowerVector(getMotor().getCurrentPowerVector());
-	}
-
-	public LinearOpMode getOpMode() {
-		return opMode;
-	}
-
-	public static PowerMagnitude getPowerMagnitudeIncrementPerRampCycle() {
-		return powerMagnitudeIncrementPerRampCycle;
 	}
 
 	/**
@@ -227,6 +228,14 @@ public abstract class Ramp {
 		NonNegativeInteger wholeCyclesToChange = new NonNegativeInteger(cyclesToChange.intValue());
 		return wholeCyclesToChange;
 
+	}
+
+	public LinearOpMode getOpMode() {
+		return opMode;
+	}
+
+	public static PowerMagnitude getPowerMagnitudeIncrementPerRampCycle() {
+		return powerMagnitudeIncrementPerRampCycle;
 	}
 
 	/**
@@ -465,6 +474,14 @@ public abstract class Ramp {
 
 	}
 
+	public void setCurrentPower(PowerVector powerVector) {
+		this.setCurrentPowerVector(powerVector);
+	}
+
+	public void setCurrentPowerVector(PowerVector currentPowerVector) {
+		this.currentPowerVector = currentPowerVector;
+	}
+
 	/**
 	 * Set the current position of the motor for testing purposes.
 	 *
@@ -475,12 +492,13 @@ public abstract class Ramp {
 	 *
 	 * @param currentTickNumber
 	 */
-	public void setCurrentTickNumber(int currentTickNumber) {
-		this.currentTickNumber = currentTickNumber;
+	public void setCurrentTickNumber(int tickNumber) {
+		this.currentTickNumber = tickNumber;
 	}
 
 	public void setInitialPower(PowerVector initialPower) {
 		this.initialPower = initialPower;
+		this.setCurrentPower(initialPower);
 	}
 
 	public void setInitialTickNumber(int initialTickNumber) {
