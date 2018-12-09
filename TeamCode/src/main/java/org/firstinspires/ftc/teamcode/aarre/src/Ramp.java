@@ -333,7 +333,11 @@ public abstract class Ramp {
 	 */
 	public boolean isOnBot() {
 		// TODO: Figure out how to know whether we are running on the robot
-		return true;
+		boolean result = true;
+		if (getMotor() == null) {
+			result = false;
+		}
+		return result;
 	}
 
 	void rampToPower() throws NoSuchMethodException {
